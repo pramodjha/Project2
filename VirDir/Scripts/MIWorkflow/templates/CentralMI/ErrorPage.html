@@ -1,0 +1,28 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+<script src="{% static 'jquery/jquery311.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/navbar0.css' %}" type="text/css" />
+<link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+
+{% endblock %}
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-6 col-md-4 col-lg-12">
+
+  <p><label class="fontstyle4 fontsize15  fontfamilycambria widtdsize35per"> Error </label></p>
+  <p><label class="fontstyle4 fontsize15  fontfamilycambria widtdsize35per">   Something went wrong </label></p>
+
+</div>
+{% endblock %}

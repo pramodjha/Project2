@@ -1,0 +1,116 @@
+@media (min-width: 768px) {
+  /*------------------------font_Color------------------------------------------------*/
+
+.fontstyle1{color: #999999;}
+.fonthoverstyle1{color: #595959;}
+.fontsytle2{color: #cc8800;}
+.fonthoverstyle2{color: #008020;}
+.fontsytle3{color:#b37700;}
+.fonthoverstyle3{color: #ffaa00;}
+.fontstyle4{color: #cc8800;}
+.fonthoverstyle4{color: #ff6666;}
+.fontstyle5 {color:#404040;}
+.fonthoverstyle5{color: #a6a6a6;}
+.fontstyle6 {color:#000066;}
+.fonthoverstyle6{color: #9999ff;}
+.fontstyle7 {color: #993d00;}
+.fonthoverstyle7{color: #ffb380;}
+.fontstyle8 {color: #660066;}
+.fonthoverstyle8 {color: #ff99ff;}
+.fontstyle9 {color: #4d4d33;}
+.fonthoverstyle9 {color:#e0e0d1;}
+.fontstyle10 {color: #333333;}
+.fonthoverstyle10 {color:#333333;}
+
+/*-----------------------------font_Family-------------------------------------------*/
+.fontfamilycambria{font-family: Cambria;}
+.fontfamilycalibri{font-family: calibri;}
+/*-----------------------------font_Align-------------------------------------------*/
+.fontstyletextalignleft {text-align: left;}
+.fontstyletextalignright {text-align: right;}
+.fontstyletextaligncenter {text-align: center;}
+/*-----------------------------font_margin-------------------------------------------*/
+.fontstyletextmarginleft2per {margin-left: 2%;}
+.fontstyletextmarginleftp5er {margin-left: 5%;}
+.fontstyletextmarginleftp10er {margin-left: 10%;}
+.fontstyletextmarginleftp15er {margin-left: 15%;}
+.fontstyletextmarginleft25per {margin-left: 25%;}
+.fontstyletextmarginleftp35er {margin-left: 35%;}
+.fontstyletextmarginleftp45er {margin-left: 45%;}
+.fontstyletextmarginleftp55er {margin-left: 55%;}
+.fontstyletextmarginright2per {margin-right: 2%;}
+.fontstyletextmarginright5er {margin-right: 5%;}
+.fontstyletextmarginright10er {margin-right: 10%;}
+.fontstyletextmarginright15er {margin-right: 15%;}
+.fontstyletextmarginright25er {margin-right: 25%;}
+.fontstyletextmarginright35er {margin-right: 35%;}
+.fontstyletextmarginright45er {margin-right: 45%;}
+/*-----------------------------font_size-------------------------------------------*/
+.fontsize2{font-size: 2px;}
+.fontsize5{font-size: 5px;}
+.fontsize8{font-size: 8px;}
+.fontsize10{font-size: 10px;}
+.fontsize11{font-size: 11px;}
+.fontsize12{font-size: 12px;}
+.fontsize13{font-size: 13px;}
+.fontsize14{font-size: 14px;}
+.fontsize15{font-size: 15px;}
+.fontsize20{font-size: 20px;}
+.fontsize25{font-size: 25px;}
+.fontsize30{font-size: 30px;}
+.fontsize35{font-size: 35px;}
+.fontsize40{font-size: 40px;}
+/*-----------------------------font_border-------------------------------------------*/
+.borderstyledotted {border-bottom-style: dotted;}
+.bordercolor1 {border-bottom-color: #005266;
+               border-right-color: #005266;
+               border-left-color: #005266;
+               border-top-color: #005266;
+             }
+.bordercolor2 {border-bottom-color:  #cc8800;
+              border-right-color:  #cc8800;
+              border-left-color:  #cc8800;
+              border-top-color:  #cc8800;
+            }
+
+
+
+
+.bordercolorbottom1 {border-bottom-color: #cc7a00;}
+.borderwidthsize1px {border-bottom-width: 1px;}
+.borderwidthsize2px {border-bottom-width: 2px;}
+.borderwidthsize1px {border-bottom-width: 1px;}
+.borderwidthsize3px {border-bottom-width: 3px;}
+/*-----------------------------font_border-------------------------------------------*/
+.backgroundcolor1 {background-color: #333333;}
+.backgroundcolor2 {background-color: #005266;}
+.backgroundcolor3 {background-color: #5900b3;}
+.backgroundcolor4 {background-color: #602060;}
+.backgroundcolor5 {background-color: #737373;}
+.backgroundcolor6 {background-color: #e6e6e6;}
+.backgroundcolor7 {background-color:  #804000;}
+.backgroundcolor8 {background-color: #cc5200;}
+/*-----------------------------Box_shadow-------------------------------------------*/
+.shadow1 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow2 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow3 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow4 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow5 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow6 {box-shadow: 0px 0px 3px 5px #003d4sd;}
+.shadow7 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow8 {box-shadow: 0px 0px 3px 5px #003d4d;}
+/*-----------------------------width-------------------------------------------*/
+.widthsize10per {width: 10%}
+.widthsize15per {width: 15%}
+.widthsize20per {width: 20%}
+
+}
+
+.datetime-input {
+  background-color: #005266;
+}
+
+
+.position {
+  position:fixed;
+}

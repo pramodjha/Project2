@@ -1,0 +1,144 @@
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {height: 100%}
+
+/* Set gray background color and 100% height */
+.sidenav {
+  background-color: #f1f1f1;
+  height: 100%;
+}
+
+.navbar-brand,
+.navbar-inverse li  a{
+
+line-height: 50px;
+height: 30px;
+padding-top: 0;
+
+}
+
+/* On small screens, set height to 'auto' for the grid */
+@media screen and (max-width: 768px) {
+  .row.content {height: auto;}
+}
+
+@media (min-width: 768px) {
+.navbar-nav.navbar-center {
+position: absolute;
+left: 50%;
+transform: translatex(-50%);
+}
+}
+
+#radiobutton1{
+display: inline-block;
+margin-top: 10px;
+}
+
+#table1{margin-top: 55px;
+margin-bottom: 10px;
+margin-right: 0px;
+margin-left: 0px;
+}
+.glyphicon-filter{
+float:right
+}
+
+
+.btn1{
+background-color: #222222;
+border-color: #222222;
+color: #999999;
+margin-top: 10PX;
+width: 100PX;
+height:30px;
+}
+
+
+.btn1:hover{
+background-color: #555555;
+border-color: #555555;
+color: #999999;
+margin-top: 10PX;
+width: 100PX;
+height:30px;
+}
+
+
+.btn2 {
+background-color: #222222;
+border-color: #222222;
+color: #999999;
+margin-top: 10PX;
+width: 100PX;
+height:30px;
+text-align: center;
+}
+
+
+.btn2:hover{
+background-color: #333333;
+border-color: #333333;
+color: #999999;
+margin-top: 10PX;
+width: 100PX;
+height:30px;
+text-align: center;
+}
+
+.btn3{
+background-color: #222222;
+border-color: #222222;
+color: #999999;
+margin-top: 10PX;
+width: 100PX;
+height:30px;
+}
+
+.btn3:hover{
+background-color: #555555;
+border-color: #333333;
+color: #999999;
+margin-top: 10PX;
+width: 100PX;
+height:30px;
+}
+
+
+.btn_associate{
+background-color: #222222;
+border-color: #222222;
+color: #999999;
+margin-top: 10PX;
+width: 200PX;
+height:30px;
+}
+
+
+
+.edit{
+margin-top: 70PX;
+}
+
+.chart rect {
+fill: steelblue;
+}
+.chart text {
+fill: white;
+font: 10px sans-serif;
+text-anchor: middle;
+}
+
+body {
+background-color: #e6e6e6;
+}
+
+.table-fit {
+white-space: nowrap;
+width: 1%;
+}
+
+#holder{margin-top: 100px;
+margin-bottom: 10px;
+margin-right: 0px;
+margin-left: 0px;
+}

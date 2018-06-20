@@ -1,0 +1,77 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-2 col-md-4 col-lg-12">
+  <h class="fontstyle1 fontsize20 fontfamilycambria widthsize15per"> Edit Task Detail</h>
+  <form method="post" id="trackingform" action="" data-subcategories-url="{% url 'ajax_load_subcategories' %}" novalidate>
+ {% csrf_token %}
+
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Registered Date</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.registerdatetime }}</span></div>
+      <div><label  class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Tracking Date</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.trackingdatetime }}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Associate Name</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.mimember }}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Team Name</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.teamdetail }}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Category</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.requestcategorys }}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Sub-Category</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.requestsubcategory  }}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request ID</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.requestdetail   }}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Report </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.reports}}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Task</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.task}}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">OT (IF Any)</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.options}}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Descritpion</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.description_text   }}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Total Time</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.totaltime}}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Comments</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.comments}}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Start Datetime</label ><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.startdatetime}}</span></div>
+      <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">End Datetime</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.stopdatetime }}</span></div>
+<div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize15per">Submit</button></div>
+  </tr></br>
+  </tbody>
+  </table>
+</form>
+
+</tr></br>
+</tbody>
+</table>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+$("#id_requestcategorys").change(function () {
+   var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
+   var category_id = $(this).val();  // get the selected country ID from the HTML input
+   $.ajax({                       // initialize an AJAX request
+     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'categories': category_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_requestsubcategory").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+
+
+</script>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+</body>
+</html>

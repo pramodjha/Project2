@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+{% load bootstrap3 %}
+{% load staticfiles %}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'css/navbar0.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/fontstyle.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/table.css' %}" type="text/css" />
+<script src="{% static 'jquery/jquery311.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/navbar0.css' %}" type="text/css" />
+<link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js"></script>
+
+</head>
+<!-- _________________________________________________________________________ -->
+
+{% block admin %}
+{% endblock %}
+<!-- _________________________________________________________________________ -->
+
+{% block style %}
+{% endblock %}
+<!-- _________________________________________________________________________ -->
+
+  <body class="body">
+<div class="top-container">
+  <!-- Top fixed nav bar -->
+  <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              {% block navblockleft %}
+              {% endblock %}
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+              <ul class="nav navbar-nav navbar-right">
+                {% block navblockright %}
+                {% endblock %}
+              </ul>
+          </div>
+      </div>
+  </nav>
+</div>
+
+{% block navblockfilterform %}
+{% endblock %}
+
+  <div class="container maincontent1">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-bottom" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarCollapse1">
+                <ul class="nav navbar-nav navbar-left">
+                  {% block footer %}
+                    {% endblock %}
+                   </ul>
+                 </ul>
+             </div>
+         </div>
+      </nav>
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+$('[data-toggle=offcanvas]').click(function () {
+if ($('.sidebar-offcanvas').css('background-color') == 'rgb(255, 255, 255)') {
+  $('.list-group-item').attr('tabindex', '-1');
+} else {
+  $('.list-group-item').attr('tabindex', '');
+}
+$('.row-offcanvas').toggleClass('active');
+
+});
+});
+
+</script>
+
+{% block javascript %}
+
+{% endblock %}
+
+</body>
+</html>

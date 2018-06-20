@@ -1,0 +1,36 @@
+{% if authority == "manager" %}
+<li {% if activetab1 == 'allrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">All </a></li>
+<li {% if activetab1 == 'unapproved' %} class="active" {%else%} {% endif %}><a href="{% url 'unapproved' %}">Unapproved </a></li>
+<li {% if activetab1 == 'approved' %} class="active" {%else%} {% endif %}><a href="{% url 'approved' %}">Approved </a></li>
+<li {% if activetab1 == 'assigned' %} class="active" {%else%} {% endif %}><a href="{% url 'assigned' %}">Assigned </a></li>
+<li {% if activetab1 == 'overview' %} class="active" {%else%} {% endif %}><a href="{% url 'overview' %}">Overview </a></li>
+<li {% if activetab1 == 'estimate' %} class="active" {%else%} {% endif %}><a href="{% url 'estimate' %}">Estimate </a></li>
+<li {% if activetab1 == 'wip' %} class="active" {%else%} {% endif %}><a href="{% url 'wip' %}">WIP </a></li>
+<li {% if activetab1 == 'completed' %} class="active" {%else%} {% endif %}><a href="{% url 'completed' %}">Completed </a></li>
+<li {% if activetab1 == 'rejected' %} class="active" {%else%} {% endif %}><a href="{% url 'rejected' %}">Rejected </a></li>
+{% elif authority == "authoriser" %}
+<li {% if activetab1 == 'unapproved' %} class="active" {%else%} {% endif %}><a href="{% url 'unapproved' %}">Unapproved </a></li>
+{% elif authority == "miteam" %}
+<li {% if activetab1 == 'allrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">All </a></li>
+<li {% if activetab1 == 'unapproved' %} class="active" {%else%} {% endif %}><a href="{% url 'unapproved' %}">Unapproved </a></li>
+<li {% if activetab1 == 'approved' %} class="active" {%else%} {% endif %}><a href="{% url 'approved' %}">Approved </a></li>
+<li {% if activetab1 == 'assigned' %} class="active" {%else%} {% endif %}><a href="{% url 'assigned' %}">Assigned </a></li>
+<li {% if activetab1 == 'overview' %} class="active" {%else%} {% endif %}><a href="{% url 'overview' %}">Overview </a></li>
+<li {% if activetab1 == 'estimate' %} class="active" {%else%} {% endif %}><a href="{% url 'estimate' %}">Estimate </a></li>
+<li {% if activetab1 == 'wip' %} class="active" {%else%} {% endif %}><a href="{% url 'wip' %}">WIP </a></li>
+<li {% if activetab1 == 'completed' %} class="active" {%else%} {% endif %}><a href="{% url 'completed' %}">Completed </a></li>
+<li {% if activetab1 == 'rejected' %} class="active" {%else%} {% endif %}><a href="{% url 'rejected' %}">Rejected </a></li>
+{% elif authority == "associate" %}
+<li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>
+<li {% if activetab1 == 'whatwedo' %} class="active" {%else%} {% endif %}><a href="{% url 'whatwedo' %}">What we do? </a></li>
+<li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
+<li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
+<li {% if activetab1 == 'comm_sugg' %} class="active" {%else%} {% endif %}><a href="{% url 'comm_sugg' %}">Comments & Suggestion </a></li>
+{% else  %}
+<li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>
+<li {% if activetab1 == 'whatwedo' %} class="active" {%else%} {% endif %}><a href="{% url 'whatwedo' %}">What we do? </a></li>
+<li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
+<li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
+<li {% if activetab1 == 'comm_sugg' %} class="active" {%else%} {% endif %}><a href="{% url 'comm_sugg' %}">Comments & Suggestion </a></li>
+
+{% endif %}

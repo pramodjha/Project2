@@ -1,0 +1,43 @@
+from django.conf.urls import include,url
+from . import views
+
+urlpatterns = [
+
+	url(r'^$',views.index, name = 'home'),
+	url(r'^allrequest',views.All_request, name = 'allrequest'),
+	url(r'^about_team',views.about_team, name = 'aboutteam'),
+	url(r'^what_we_do',views.whatwedo, name = 'whatwedo'),
+	url(r'^governance_process',views.governanceprocess, name = 'governanceprocess'),
+	url(r'^success_stories',views.successstories, name = 'successstories'),
+	url(r'^comm_sugg',views.comm_sugg, name = 'comm_sugg'),
+	url(r'^requestunapproved',views.unapproved, name = 'unapproved'),
+	url(r'^requestapproved',views.approved, name = 'approved'),
+	url(r'^requestassigned',views.assigned, name = 'assigned'),
+	url(r'^requestoverview',views.overview, name = 'overview'),
+	url(r'^requestestimate',views.estimate, name = 'estimate'),
+	url(r'^requestwip',views.wip, name = 'wip'),
+	url(r'^requestcompleted',views.completed, name = 'completed'),
+	url(r'^requestrejected',views.rejected, name = 'rejected'),
+	url(r'^request',views.RequestFormTemplate, name = 'loginrequest'),
+	url(r'^status',views.check_status, name = 'checkstatus'),
+	url(r'^thankyou/(?P<requestid>\d+)$',views.typage, name = 'ty'),
+	url(r'^authorised/(?P<requestid>\d+)$',views.AuthorisedFormTemplate, name = 'authform'),
+	url(r'^assignedform/(?P<requestid>\d+)$',views.RequestassigneddetailFormTemplate, name = 'assignedform'),
+	url(r'^overview/(?P<requestid>\d+)$',views.OverviewFormTemplate, name = 'overviewform'),
+	url(r'^report/',views.ReportForm, name = 'report'),
+	url(r'^estimation/(?P<requestid>\d+)$',views.EstimationFormTemplate, name = 'estimationform'),
+	url(r'^estimationar/(?P<requestid>\d+)$',views.EstimationAcceptanceFormTemplate, name = 'estimationformar'),
+	url(r'^completed/(?P<requestid>\d+)$',views.CompletedFormTemplate, name = 'completedform'),
+	url(r'^rupdate/(?P<requestid>\d+)$',views.RequestdetailUpdate, name = 'rupdate'),
+	url(r'^signup/', views.sign_up, name='signup'),
+    url(r'^signin/', views.sign_in, name='signin'),
+	url(r'^signout/', views.sign_out, name='signout'),
+	url(r'^tracker', views.TimeTracker, name='timetracker'),
+	url(r'^sd', views.setdate, name='sdate'),
+	url(r'^viewTracker/(?P<requestid>\d+)$', views.ViewTracker, name='viewtracker'),
+	url(r'^editTracker/(?P<requestid>\d+)$', views.EditTracker, name='edittracker'),
+	url(r'^ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
+	url(r'^ajax/load-datevalues/', views.load_datevalues, name='ajax_load_datavalues'),
+	url(r'^ajax/load-tables/', views.load_tables, name='ajax_load_tables'),
+
+	]
