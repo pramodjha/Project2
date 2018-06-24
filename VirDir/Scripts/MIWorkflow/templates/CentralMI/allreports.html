@@ -1,0 +1,68 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+  <div class="col-sm-6 col-md-4 col-lg-12">
+    <span class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Report Details</span><span class="fontstyle4 fontsize15 fontfamilycambria widthsize30per"> Click on ID to log Error & Report Name to log Feedback</span>
+    <table  class="table" id="example" style="width:100%">
+      <thead class="thead">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+        <td >Report ID</td>
+        <td >Registered Date</td>
+        <td >Report Name</td>
+        <td >Report Frequency</td>
+        <td >Delivery Days</td>
+        <td >Delivery Times</td>
+        <td >Primary Owner</td>
+        <td >Secondary Owner</td>
+        <td >Description</td>
+        </tr>
+      </thead>
+      <tbody class="tbody">
+    {%for data in model %}
+      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'errorlog' data.reportid %}">{{data.reportid}} </a> </td>
+        <td>{{data.registereddate }}</td>
+        <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'feedback' data.reportid %}">{{data.name }}</a> </td>
+        <td>{{data.frequency }}</td>
+        <td>{{data.deliverydays }}</td>
+        <td>{{data.deliverytime }}</td>
+        <td>{{data.primaryowner }}</td>
+        <td>{{data.secondaryowner }}</td>
+        <td>{{data.description }}</td>
+        {% endfor %}
+      </tr></br>
+    </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $('#example').DataTable(
+    {
+      fixedHeader: true
+    });
+
+} );
+</script>
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

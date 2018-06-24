@@ -1,5 +1,5 @@
 from django import forms
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime
@@ -125,4 +125,19 @@ class ReportsForm(forms.ModelForm):
 class EmaildetailForm(forms.ModelForm):
     class Meta():
         model = Emaildetail
+        fields = '__all__'
+
+class ErrorlogForm(forms.ModelForm):
+    class Meta():
+        model = Errorlog
+        fields = '__all__'
+
+class FeedbackForm(forms.ModelForm):
+    class Meta():
+        model = Feedback
+        fields = '__all__'
+
+class OtDetailForm(forms.ModelForm):
+    class Meta():
+        model = OtDetail
         fields = '__all__'

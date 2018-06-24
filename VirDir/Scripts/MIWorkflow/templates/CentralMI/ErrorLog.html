@@ -1,0 +1,36 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+
+{% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <form class="form" method="POST" action="" >
+  {% csrf_token %}
+  <div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Error Log</label></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Login Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.errorlog_date}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Occurance Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.error_occurancedate}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Report Name </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.error_report}} </span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Reported by</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.error_reportedby}}</div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Error Reported Team</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_reportedteam}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Reported To </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_reportedto}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Reported Type</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_type}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Decription</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_description }}</span></div>
+  <div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
+</form>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

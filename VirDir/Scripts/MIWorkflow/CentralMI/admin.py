@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus
+
 
 admin.site.register(Mimember)
 admin.site.register(Estimationdetail)
@@ -41,3 +42,9 @@ admin.site.register(Emaildetail)
 admin.site.register(TimeDetail)
 admin.site.register(Fielddetail)
 admin.site.register(Filteroption)
+admin.site.register(Errortype)
+admin.site.register(Errorlog)
+admin.site.register(Feedback)
+admin.site.register(FeedbackQuestion)
+admin.site.register(OtDetail)
+admin.site.register(OtStatus)

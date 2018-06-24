@@ -1,0 +1,32 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+
+{% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <form class="form" method="POST" action="" >
+  {% csrf_token %}
+  <div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> OT Details</label></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> TimeTracker ID </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.timetrackers}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Start Date-time </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.ot_startdatetime}} </span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> End Date-time</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.ot_enddatetime}}</div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">OT hours</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form.ot_hrs}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> OT Status </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.ot_status}}</span></div>
+</form>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

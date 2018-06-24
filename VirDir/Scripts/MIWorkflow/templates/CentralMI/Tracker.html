@@ -63,6 +63,7 @@
        <th>OT</th>
        <th>Time(Min)</th>
        <th>Save</th>
+
        <th class="hidden">Start/Stop</th>
        </tr>
        <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
@@ -99,7 +100,7 @@
    <table  class="table" >
    <thead class="thead1">
    <tr class="backgroundcolor1 fontstyle4 fontsize12 fontfamilycambria widthsize25per">
-     <td class="hidden">Tracking ID</td>
+     <td >Tracking ID</td>
      <td class="hidden">Registered Date</td>
      <td class="hidden">Tracking Date</td>
      <td class="hidden">Associate Name</td>
@@ -121,7 +122,7 @@
    <tbody class="tbody1">
    {%for data in model %}
    <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
-     <td class="hidden">{{form.timetrackerid }}</td>
+     <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'otform' data.timetrackerid %}">{{data.timetrackerid }} </a> </td>
      <td class="hidden">{{data.registerdatetime    }}</td>
      <td class="hidden">{{data.trackingdatetime }}</td>
      <td class="hidden">{{data.mimember }}</td>
@@ -145,6 +146,7 @@
 </div>
 </div>
 <script>
+
 $("#id_requestcategorys").change(function () {
    var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
    var category_id = $(this).val();  // get the selected country ID from the HTML input
