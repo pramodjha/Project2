@@ -1,46 +1,46 @@
-<table id="table2" class="table table-striped" id="datatable" >
-<tbody>
-  <tr>
-    <th class="hidden">Tracking ID</th>
-    <th class="hidden">Registered Date</th>
-    <th class="hidden">Tracking Date</th>
-    <th>Associate Name</th>
-    <th>Team Name</th>
-    <th>Request Category</th>
-    <th>Request Sub-Category</th>
-    <th>Request ID</th>
-    <th>Task</th>
-    <th>OT (IF Any)</th>
-    <th>Descritpion</th>
-    <th>Total Time (Minutes)</th>
-    <th>Comments</th>
-    <th>Start-Time</th>
-    <th>Stop-Time</th>
-    <th>Edit</th>
-
-    </tr>
+<table  id="table3" class="table" >
+<thead class="thead1">
+<tr class="backgroundcolor1 fontstyle4 fontsize12 fontfamilycambria widthsize25per">
+  <td >Tracking ID</td>
+  <td class="hidden">Registered Date</td>
+  <td class="hidden">Tracking Date</td>
+  <td class="hidden">Associate Name</td>
+  <td class="hidden">Team Name</td>
+  <td>Request Category</td>
+  <td>Request Sub-Category</td>
+  <td>Core_Non-Core</td>
+  <td>Request ID</td>
+  <td>Reports</td>
+  <td>Task</td>
+  <td>OT</td>
+  <td class="hidden">Descritpion</td>
+  <td>Total Time (Min)</td>
+  <td class="hidden">Start-Time</td>
+  <td class="hidden">Stop-Time</td>
+  <td>View</td>
+  </tr>
+</thead>
+<tbody class="tbody1">
 {%for data in model %}
-  <tr>
-    <td class="hidden">{{form.timetrackerid }}</td>
-    <td class="hidden">{{data.registerdatetime    }}</td>
-    <td class="hidden">{{data.trackingdatetime }}</td>
-    <td>{{data.mimember }}</td>
-    <td>{{data.teamdetail }}</td>
-    <td>{{data.requestcategorys }}</td>
-    <td>{{data.requestsubcategory.requestsubcategory  }}</td>
-    <td>{{data.requestdetail   }}</td>
-    <td>{{data.task  }}</td>
-    <td>{{data.options   }}</td>
-    <td>{{data.description_text   }}</td>
-    <td>{{data.totaltime }}</td>
-    <td>{{data.comments    }}</td>
-    <td>{{data.startdatetime  }}</td>
-    <td >{{data.stopdatetime   }}</td>
-    <td> <a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> </td>
-
-    {% endfor %}
-
-
+<tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+  <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'otform' data.timetrackerid %}">{{data.timetrackerid }} </a> </td>
+  <td class="hidden">{{data.registerdatetime    }}</td>
+  <td class="hidden">{{data.trackingdatetime }}</td>
+  <td class="hidden">{{data.mimember }}</td>
+  <td class="hidden">{{data.teamdetail }}</td>
+  <td>{{data.requestcategorys }}</td>
+  <td>{{data.requestsubcategory.requestsubcategory  }}</td>
+  <td>{{data.requestsubcategory.core_noncore  }}</td>
+  <td>{{data.requestdetail   }}</td>
+  <td>{{data.reports }}</td>
+  <td>{{data.task  }}</td>
+  <td>{{data.options   }}</td>
+  <td class="hidden">{{data.description_text   }}</td>
+  <td>{{data.totaltime }}</td>
+  <td class="hidden">{{data.startdatetime  }}</td>
+  <td class="hidden">{{data.stopdatetime   }}</td>
+  <td> <a href="{% url 'viewtracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> </td>
+  {% endfor %}
 </tr></br>
 </tbody>
 </table>

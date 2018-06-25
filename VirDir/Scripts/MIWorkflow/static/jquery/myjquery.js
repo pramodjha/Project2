@@ -7,7 +7,6 @@ $("#id_trackingdatetime").ready(function() {
    });
 });
 
-
 $("#setdate").click(function () {
     var datevalue = $("#id_trackingdatetime").val() // get the selected country ID from the HTML input
     console.log(datevalue)
@@ -30,6 +29,22 @@ $("#setdate").click(function () {
           });
 
 
+  $("#id_startdate").ready(function() {
+     $('.datetime-input').datepicker ({
+       dateFormat: 'yy-mm-dd',
+       changeMonth: true,
+       changeYear: true
+     });
+  });
+
+
+    $("#id_enddate").ready(function() {
+       $('.datetime-input').datepicker ({
+         dateFormat: 'yy-mm-dd',
+         changeMonth: true,
+         changeYear: true
+       });
+    });
 
 // $("#id_trackingdatetime").change(function () {
   //  var url = $("#datatable").attr("ajax_load_datevalues");  // get the url of the `load_cities` view

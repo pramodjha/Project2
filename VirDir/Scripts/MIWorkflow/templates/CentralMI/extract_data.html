@@ -1,0 +1,210 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<script src="{% static 'jquery/myjquery.js' %}"></script>
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+<form class="form" method="POST" action="" >
+{% csrf_token %}
+<div class="row">
+<div class="col-sm-2 col-md-4 col-lg-12">
+ <table id="table1" class="table table-striped" >
+ <tbody>
+   <form method="post" id="trackingform1" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
+    {% csrf_token %}
+
+     <th>DataModel</th>
+     <th>Start Date-time</th>
+     <th>End Date-time</th>
+     <th>Team</th>
+     <th>Member</th>
+     <th>Save</th>
+     </tr>
+     <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+       <td>{{form.datachoice }}</td>
+       <td>{{form.startdate }}</td>
+       <td>{{form.enddate  }}</td>
+       <td>{{form.team }}</td>
+       <td>{{form.member }}</td>
+       <td><button id="submitbutton" type="submit">Submit</button></td>
+     </form>
+
+ </tr></br>
+ </tbody>
+ </table>
+
+</div>
+</div>
+
+<div class="col-sm-6 col-md-4 col-lg-12">
+  <table  class="table" id="example" style="width:100%">
+    <thead class="thead">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+
+    {% if reportno == "1" %}
+    {% elif reportno == "2" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif reportno == "3" %}
+      <td>timetrackerid</td>
+      <td>registerdatetime</td>
+      <td>trackingdatetime </td>
+      <td>mimember</td>
+      <td>teamdetail </td>
+      <td>requestcategorys </td>
+      <td>requestsubcategory </td>
+      <td>task </td>
+      <td>requestdetail </td>
+      <td>description_text </td>
+      <td>totaltime</td>
+      <td>comments</td>
+      <td>startdatetime</td>
+      <td>stopdatetime </td>
+      <td>reports </td>
+      {% elif reportno == "4" %}
+      <td>error_id </td>
+      <td>errorlog_date </td>
+      <td>error_occurancedate</td>
+      <td>error_report </td>
+      <td>error_reportedby </td>
+      <td>error_reportedteam </td>
+      <td>error_reportedto </td>
+      <td>error_type </td>
+      <td>error_description </td>
+
+      {% elif reportno == "5" %}
+      <td>ot_id </td>
+      <td>timetrackers </td>
+      <td>ot_startdatetime </td>
+      <td>ot_enddatetime </td>
+      <td>ot_hrs </td>
+      <td>ot_status </td>
+      {% endif %}
+    </tr>
+
+
+    {%  if activetab1 == "extractdatafilter1" %}
+    </thead>
+    <tbody class="tbody">
+
+
+  {%for data in model %}
+  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+
+  {% if reportno == "1" %}
+      {% elif reportno == "2" %}
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif reportno == "3" %}
+      <td>{{data.timetrackerid }}</td>
+      <td>{{data.registerdatetime }}</td>
+      <td>{{data.trackingdatetime }}</td>
+      <td>{{data.mimember }}</td>
+      <td>{{data.teamdetail }}</td>
+      <td>{{data.requestcategorys }}</td>
+      <td>{{data.requestsubcategory }}</td>
+      <td>{{data.task }}</td>
+      <td>{{data.requestdetail }}</td>
+      <td>{{data.description_text }}</td>
+      <td>{{data.totaltime }}</td>
+      <td>{{data.comments }}</td>
+      <td>{{data.startdatetime }}</td>
+      <td>{{data.stopdatetime }}</td>
+      <td>{{data.reports }}</td>
+
+      {% elif reportno == "4" %}
+      <td>{{data.error_id }}</td>
+      <td>{{data.errorlog_date }}</td>
+      <td>{{data.error_occurancedate }}</td>
+      <td>{{data.error_report }}</td>
+      <td>{{data.error_reportedby }}</td>
+      <td>{{data.error_reportedteam }}</td>
+      <td>{{data.error_reportedto }}</td>
+      <td>{{data.error_type }}</td>
+      <td>{{data.error_description }}</td>
+      {% elif reportno == "5" %}
+      <td>{{data.ot_id }}</td>
+      <td>{{data.timetrackers }}</td>
+      <td>{{data.ot_startdatetime }}</td>
+      <td>{{data.ot_enddatetime }}</td>
+      <td>{{data.ot_hrs }}</td>
+      <td>{{data.ot_status }}</td>
+
+      {% endif %}
+
+      {% endfor %}
+
+    </tr></br>
+
+
+  </tbody>
+  </table>
+<script>
+
+$("#id_team").change(function () {
+   var url = $("#trackingform1").attr("data-mimember-url");  // get the url of the `load_cities` view
+   var member_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(member_id)
+   $.ajax({                       // initialize an AJAX request
+     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'member_id': member_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_member").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+
+
+  $("#submitbutton").click(function () {
+      var datevalue = $("#id_startdate").val() // get the selected country ID from the HTML input
+      $.ajax({
+          type: "GET",
+          url: "{% url 'ajax_load_datavalues' %}",  // URL to your view that serves new info
+          data: {'datev': datevalue}
+      })
+      .done(function(response) {
+          $('#table2').html(response);
+          console.log(response)
+      });
+    });
+  </script>
+
+
+
+
+  {%  elif activetab1 == "summary" %}
+  {% endif %}
+
+
+</div>
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

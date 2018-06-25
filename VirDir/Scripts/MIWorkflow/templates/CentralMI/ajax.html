@@ -4,7 +4,6 @@
 {% block javascript %}
  {% endblock %}
 
-
 {% block style %}
 <link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
 {% endblock %}
@@ -18,13 +17,9 @@
     </form>
 </div>
 
-
-
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
-
-
 
 $("#id_requestcategorys").change(function () {
    var url = $("#personForm").attr("data-cities-url");  // get the url of the `load_cities` view

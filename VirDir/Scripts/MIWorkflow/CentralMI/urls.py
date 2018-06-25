@@ -9,7 +9,8 @@ urlpatterns = [
 	url(r'^errordetail/',views.Error_detail, name = 'errordetail'),
 	url(r'^otdetail/',views.OT_detail, name = 'otdetail'),
 	url(r'^summary_tracker/',views.summary_tracker, name = 'summary'),
-	url(r'^extract_data/',views.extract_data, name = 'extractdata'),
+	url(r'^extract_data_filter/',views.filterdata, name = 'extractdatafilter'),
+	url(r'^extract_data_filter1/',views.filterdata, name = 'extractdatafilter1'),
 	url(r'^feedback/(?P<reportid>\d+)$',views.feedback, name = 'feedback'),
 	url(r'^about_team',views.about_team, name = 'aboutteam'),
 	url(r'^what_we_do',views.whatwedo, name = 'whatwedo'),
@@ -49,6 +50,7 @@ urlpatterns = [
 	url(r'^viewTracker/(?P<requestid>\d+)$', views.ViewTracker, name='viewtracker'),
 	url(r'^editTracker/(?P<requestid>\d+)$', views.EditTracker, name='edittracker'),
 	url(r'^ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
+	url(r'^ajax/load-mimember/', views.load_mimember, name='ajax_load_mimember'),
 	url(r'^ajax/load-datevalues/', views.load_datevalues, name='ajax_load_datavalues'),
 	url(r'^ajax/load-tables/', views.load_tables, name='ajax_load_tables'),
 

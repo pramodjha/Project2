@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail
 from django.core import serializers
 from django.shortcuts import redirect
@@ -155,6 +155,7 @@ def All_request(request):
     data = data_extraction(request,parameter1="'All'",parameter2="'All'")
     return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
 
+
 @login_required
 def unapproved(request):
     authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='unapproved')
@@ -246,13 +247,57 @@ def OT_detail(request):
 
 @login_required
 def summary_tracker(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='timetracker',footer='summary')
-    return render(request, 'CentralMI/index.html',{'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+    authority, activetab, activetab1, username, info, sd= create_session(request, header='extractdatafilter',footer='summary')
+    form = SearchForm()
+    return render(request, 'CentralMI/extract_data.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
 
-@login_required
-def extract_data(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='timetracker',footer='extractdata')
-    return render(request, 'CentralMI/index.html',{'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+
+def filterdata(request):
+    authority, activetab, activetab1, username, info, sd= create_session(request, header='extractdatafilter',footer='extractdatafilter1')
+    form = SearchForm()
+    if request.method == 'POST':
+        form =  SearchForm(request.POST)
+        if form.is_valid():
+            reportno = form.cleaned_data['datachoice']
+            startdate = form.cleaned_data['startdate']
+            enddate = form.cleaned_data['enddate']
+            team = form.cleaned_data['team']
+            member = form.cleaned_data['member']
+            if team == None and member == None:
+                if reportno == str(2):
+                    model = Requestdetail.objects.all()
+                elif reportno == str(3):
+                    model = Timetrackers.objects.all()
+                elif reportno == str(4):
+                    model = Errorlog.objects.all()
+                elif reportno == str(5):
+                    model = OtDetail.objects.all()
+                elif reportno == str(1):
+                    model=  ''
+                else:
+                    model = ''
+            elif team != None and member == None:
+                teamno = Teamdetail.objects.filter(teamname__in=[team]).values_list('teamid',flat=True).distinct()
+                userno = Mimember.objects.filter(teamdetail__in=list(teamno)).values_list('mimemberid',flat=True).distinct()
+                trackerid = Timetrackers.objects.filter(mimember__in=list(userno)).values_list('timetrackerid',flat=True).distinct()
+                if reportno == str(2):
+                    model = Requestdetail.objects.filter(username__in=list(userno))
+                elif reportno == str(3):
+                    model = Timetrackers.objects.filter(mimember__in=list(userno))
+                elif reportno == str(4):
+                    model = Errorlog.objects.filter(error_reportedto__in=list(userno))
+                elif reportno == str(5):
+                    model = OtDetail.objects.filter(mimember__in=list(trackerid))
+                elif reportno == str(1):
+                    model=  ''
+                else:
+                    model = ''
+            print(startdate)
+            print(enddate)
+            return render(request, 'CentralMI/extract_data.html',{'model':model,'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno})
+        return render(request, 'CentralMI/extract_data.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+    return render(request, 'CentralMI/extract_data.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+
 
 @login_required
 def feedback(request,reportid):
@@ -1003,11 +1048,9 @@ def ViewTracker(request,requestid):
 @login_required
 def load_datevalues(request):
     try:
-        activetab = 'timetracker'
-        newdate = request.session.get('setdate')
-        username = request.user.username
+        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
         mimemberid = User.objects.get(username=username).pk
-        model = Timetrackers.objects.filter(mimember__in=[mimemberid]).filter(trackingdatetime=newdate)
+        model = Timetrackers.objects.filter(mimember__in=[mimemberid]).filter(trackingdatetime=sd)
         return render(request, 'CentralMI/rebuilding_datevalues.html', {'model': model,'activetab':activetab})
     except:
         pagename = "report"
@@ -1017,23 +1060,34 @@ def load_datevalues(request):
 @login_required
 def load_subcategories(request):
     try:
-        activetab = 'timetracker'
+        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
         category_id = request.GET.get('categories')
+        print(category_id)
         subcategories = Requestsubcategory.objects.filter(requestcategorys_id=category_id)
+        print(subcategories)
         return render(request, 'CentralMI/rebuilding_subcategories.html', {'subcategories': subcategories,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
         return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
 
+
+@login_required
+def load_mimember(request):
+#    authority, activetab, activetab1, username, info, sd = create_session(request, header='extractdatafilter1',footer='tracker')
+    mimember_id = request.GET.get('member_id')
+    print(mimember_id)
+    mimember = Mimember.objects.filter(teamdetail__in=[mimember_id])
+    print(mimember)
+    return render(request, 'CentralMI/rebuilding_mimember.html', {'mimember': mimember})
+
+
 @login_required
 def load_tables(request):
     try:
-        activetab = 'timetracker'
-        newdate = request.session.get('setdate')
-        username = request.user.username
+        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
         mimemberid = User.objects.get(username=username).pk
-        form = TimetrackersForm(initial={'trackingdatetime':newdate})
+        form = TimetrackersForm(initial={'trackingdatetime':sd})
         model = Timetrackers.objects.filter(mimember__in=[mimemberid])
         return render(request, 'CentralMI/rebuilding_datevalues.html', {'form':form,'model': model,'activetab':activetab})
     except:

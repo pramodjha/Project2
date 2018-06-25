@@ -12,16 +12,15 @@
 {% endblock %}
 
 {% block navblockfilterform %}
+{% include "filter_panel.html" %}
 {% endblock %}
 
 {% block content %}
 <div class="row">
   <div class="col-sm-6 col-md-4 col-lg-2">
     <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Workingdays</label>
-    {% for key, value in dv.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
+    {{form}}
+    </div>
   <div class="col-sm-6 col-md-4 col-lg-2">
     <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days OT</label>
     {% for key, value in dvOT.items %}
@@ -46,9 +45,6 @@
     <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
     {% endfor %}
   </div>
-</div>
-  <div class="row">
-
   <div class="col-sm-6 col-md-4 col-lg-2">
     <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks </label>
     {% for key, value in wv.items %}
@@ -79,16 +75,12 @@
     <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
     {% endfor %}
   </div>
-</div>
-  <div class="row">
-
   <div class="col-sm-6 col-md-4 col-lg-2">
     <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months </label>
     {% for key, value in mv.items %}
     <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
     {% endfor %}
   </div>
-
   <div class="col-sm-6 col-md-4 col-lg-2">
     <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months OT </label>
     {% for key, value in mvOT.items %}

@@ -1,6 +1,9 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<script src="{% static 'jquery/myjquery.js' %}"></script>
+
 {% endblock %}
 
 {% block navblockleft %}
@@ -97,7 +100,7 @@
 <div class="row">
 <div class="col-sm-2 col-md-4 col-lg-12">
 
-   <table  class="table" >
+   <table id="table3" class="table" >
    <thead class="thead1">
    <tr class="backgroundcolor1 fontstyle4 fontsize12 fontfamilycambria widthsize25per">
      <td >Tracking ID</td>
@@ -171,7 +174,7 @@ $("#submitbutton").click(function () {
         data: {'datev': datevalue}
     })
     .done(function(response) {
-        $('#table2').html(response);
+        $('#table3').html(response);
         console.log(response)
     });
   });
@@ -179,6 +182,7 @@ $("#submitbutton").click(function () {
 $(document).ready(function(){
     $('#myTable').dataTable();
 });
+
 </script>
 </div>
 

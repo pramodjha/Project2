@@ -141,3 +141,22 @@ class OtDetailForm(forms.ModelForm):
     class Meta():
         model = OtDetail
         fields = '__all__'
+
+REPORT_CHOICES = (
+    (1, ("None")),
+    (2, ("Workflow")),
+    (3, ("TimeTracker")),
+    (4, ("ErrorLog")),
+    (5, ("OT"))
+    )
+class SearchForm(forms.Form):
+    datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="", initial=1, widget=forms.Select(), required=True)
+    startdate = forms.DateTimeField(initial=datetime.now(), required=False)
+    enddate = forms.DateTimeField(initial=datetime.now(), required=False)
+    team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
+    member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
+
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.fields['startdate'].widget.attrs['class']  = 'datetime-input'
+        self.fields['enddate'].widget.attrs['class']  = 'datetime-input'
