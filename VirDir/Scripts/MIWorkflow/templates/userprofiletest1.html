@@ -1,16 +1,11 @@
-{% if authority == "manager" %}
-<li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
-<li {% if activetab == 'workflow' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">Workflow </a></li>
-<li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
-<li {% if activetab == 'checkstatus' %} class="active" {%else%} {% endif %}><a href="{% url 'checkstatus' %}">Check Status </a></li>
-<li {% if activetab == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Time Tracker </a></li>
-<li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
-<li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign Out </a></li>
-<li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}">Admin  </a></li>
-{% elif authority == "authoriser" %}
-<li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
-<li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign Out </a></li>
-{% elif authority == "miteam" %}
+{%if activetab == "signin" %}
+<li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign In </a></li>
+<li {% if activetab == 'signup' %} class="active" {%else%} {% endif %}><a href="{% url 'signup' %}">Sign Up </a></li>
+{% elif activetab == "signup" %}
+<li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign In </a></li>
+<li {% if activetab == 'signup' %} class="active" {%else%} {% endif %}><a href="{% url 'signup' %}">Sign Up </a></li>
+{% else %}
+{% if authority == "Group1" %}
 <li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
 <li {% if activetab == 'workflow' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">Workflow </a></li>
 <li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
@@ -18,11 +13,29 @@
 <li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'report' %}">Report </a></li>
 <li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
 <li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign Out </a></li>
-{% elif authority == "associate" %}
+<li {% if activetab == 'admin' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}">Admin  </a></li>
+{% elif authority == "Group2" %}
+<li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
+<li {% if activetab == 'workflow' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">Workflow </a></li>
+<li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
+<li {% if activetab == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Time Tracker </a></li>
+<li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'report' %}">Report </a></li>
+<li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
+<li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign Out </a></li>
+{% elif authority == "Group3" %}
 <li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
 <li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
-<li {% if activetab == 'checkstatus' %} class="active" {%else%} {% endif %}><a href="{% url 'checkstatus' %}">Check Status </a></li>
+{% elif authority == "Group4" %}
+<li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
+<li {% if activetab == 'workflow' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">Workflow </a></li>
+<li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
+<li {% if activetab == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Time Tracker </a></li>
+<li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'report' %}">Report </a></li>
+<li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
 <li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign Out </a></li>
 {% else %}
+<li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
+<li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
 <li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign Out </a></li>
+{% endif %}
 {% endif %}

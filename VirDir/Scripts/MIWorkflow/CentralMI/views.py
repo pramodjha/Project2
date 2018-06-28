@@ -39,15 +39,28 @@ MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
 
 @login_required
-def create_session(request,header=None,footer=None):
-    username = request.user.username
-    sd = request.session.get('setdate')
-    info = vistorinfo_output(username,sd)
-    info.getinfo()
-    info.is_member()
-    authority = info.permission
+def create_session(request,header=None,footer=None,loginpage=None):
+    try:
+        username = request.user.username
+    except:
+        pass
+    try:
+        sd = request.session.get('setdate')
+    except:
+        pass
+    try:
+        info = vistorinfo_output(username,sd)
+        info.getinfo()
+        info.is_member()
+    except:
+        pass
+    try:
+        authority = info.permission
+    except:
+        authority = ''
     request.session['activeheader'] = header
     request.session['activefooter'] = footer
+    request.session['loginpage'] = loginpage
     activetab = request.session.get('activeheader')
     activetab1 = request.session.get('activefooter')
     return authority, activetab, activetab1, username, info, sd
@@ -82,6 +95,7 @@ def setdate(request):
 
 
 def sign_up(request):
+    authority, activetab, activetab1, username, info, sd = create_session(request, header='signup',footer='')
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -111,25 +125,26 @@ def sign_up(request):
                 return render(request,'CentralMI/ErrorPage.html')
         else:
             form = UserRegistrationForm()
-        return render(request, 'CentralMI/signup.html', {'form' : form})
+        return render(request, 'CentralMI/signup.html', {'form' : form,'activetab':activetab})
     else:
         form = UserRegistrationForm()
-    return render(request, 'CentralMI/signup.html', {'form' : form})
+    return render(request, 'CentralMI/signup.html', {'form' : form,'activetab':activetab})
 
 
 def sign_in(request):
+    authority, activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
     if request.method == 'POST':
         form =  UsersigninForm(request.POST)
         if form.is_valid():
             userObj = form.cleaned_data
             username =  userObj['username']
             password =  userObj['password']
+
             print(password)
             if (User.objects.filter(username=username).exists()):
                 user = authenticate(username = username, password = password)
                 try:
                     login(request, user)
-                    authority, activetab, activetab1, username, info, sd = create_session(request, header='home',footer='')
                     return index(request)
 
                 except:
@@ -140,10 +155,10 @@ def sign_in(request):
                 return render(request,'CentralMI/ErrorPage.html')
         else:
             form =  UsersigninForm()
-            return render(request, 'CentralMI/signin.html', {'form' : form})
+            return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab})
     else:
         form =  UsersigninForm()
-        return render(request, 'CentralMI/signin.html', {'form' : form})
+        return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab})
 
 def sign_out(request):
     request.session.delete()
@@ -667,7 +682,7 @@ def typage(request,requestid):
             model8 = Completeddetail.objects.all().get(requestdetail=requestid)
         except:
             model8 = "nothing"
-        return render(request, 'CentralMI/ThankYou.html',{'detail1':model1,'detail2':model2,'detail3':model3,'detail4':model4,'detail5':model5,'detail6':model6,'detail7':model7,'detail8':model8,'username':username,'authority':info.permission})
+        return render(request, 'CentralMI/ThankYou.html',{'detail1':model1,'detail2':model2,'detail3':model3,'detail4':model4,'detail5':model5,'detail6':model6,'detail7':model7,'detail8':model8,'username':username,'authority':authority})
     except:
         return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
 
@@ -684,7 +699,7 @@ def RequestdetailUpdate(request,requestid):
         else:
             pagename = "report"
             errormsg1 = "Something went Wrong"
-            return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
+            return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
     return render(request, 'CentralMI/RequestForm.html',{'form':form})
 
 
@@ -780,7 +795,7 @@ class vistorinfo_output(object):
         self.noncore = noncore
 
     def is_member(self):
-        for grpname in ['associate','authoriser','miteam','manager']:
+        for grpname in ['Group1','Group2','Group3','Group4']:
             self.groupname = Group.objects.get(name=grpname).user_set.filter(username=self.username)
             try:
                 self.groupname = self.groupname[0]
@@ -974,7 +989,7 @@ def TimeTracker(request):
             if inst.requestcategorys == None or inst.requestsubcategory == None or inst.totaltime == None or (inst.requestdetail!=None and inst.reports!=None):
                 form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
                 model = info.modelTracker
-                return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'authority':info.permission,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1})
+                return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'authority':authority,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1})
             else:
                 inst.save()
             form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
@@ -1019,12 +1034,12 @@ def EditTracker(request,requestid):
             else:
                 pagename = "report"
                 errormsg1 = "Something went Wrong"
-                return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
-        return render(request, 'CentralMI/TrackerEdit.html', {'form':form,'model':model, 'username':username,'authority':info.permission,'activetab':activetab})
+                return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/TrackerEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
 
 
 @login_required
@@ -1038,12 +1053,12 @@ def ViewTracker(request,requestid):
         info.is_member()
         model = Timetrackers.objects.filter(pk=requestid)
         if request.method == 'POST':
-            return render(request, 'CentralMI/TrackerView.html', {'model':model, 'username':username,'authority':info.permission,'activetab':activetab})
-        return render(request, 'CentralMI/TrackerView.html', {'model':model, 'username':username,'authority':info.permission,'activetab':activetab})
+            return render(request, 'CentralMI/TrackerView.html', {'model':model, 'username':username,'authority':authority,'activetab':activetab})
+        return render(request, 'CentralMI/TrackerView.html', {'model':model, 'username':username,'authority':authority,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
 
 @login_required
 def load_datevalues(request):
@@ -1055,7 +1070,7 @@ def load_datevalues(request):
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
 
 @login_required
 def load_subcategories(request):
@@ -1069,7 +1084,7 @@ def load_subcategories(request):
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
 
 
 @login_required
@@ -1093,4 +1108,4 @@ def load_tables(request):
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':info.permission,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})

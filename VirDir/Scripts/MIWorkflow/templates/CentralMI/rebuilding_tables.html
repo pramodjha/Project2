@@ -57,8 +57,8 @@
        <th>Team Name</th>
        <th>Request Category</th>
        <th>Request Sub-Category</th>
-       <th>Request ID</th>
-       <th>Reports</th>
+      <!--       <th>Request ID</th> -->
+       <th>Reports / Projects</th>
        <th>Task</th>
        <th>OT</th>
        <th>Time(Min)</th>
@@ -74,8 +74,8 @@
          <td>{{form.teamdetail }}</td>
          <td>{{form.requestcategorys }}</td>
          <td>{{form.requestsubcategory  }}</td>
-         <td>{{form.requestdetail }}</td>
-         <td>{{form.reports }}</td>
+              <!--       <td>{{form.requestdetail }}</td> -->
+              <td>{{form.reports }}</td>
          <td>{{form.task}}</td>
          <td>{{form.options}}</td>
          <td class="hidden">{{form.description_text   }}</td>
@@ -108,8 +108,8 @@
      <td>Request Category</td>
      <td>Request Sub-Category</td>
      <td>Core_Non-Core</td>
-     <td>Request ID</td>
-     <td>Reports</td>
+  <!--   <td>Request ID</td> -->
+     <td>Reports / Projects</td>
      <td>Task</td>
      <td>OT</td>
      <td class="hidden">Descritpion</td>
@@ -130,7 +130,7 @@
      <td>{{data.requestcategorys }}</td>
      <td>{{data.requestsubcategory.requestsubcategory  }}</td>
      <td>{{data.requestsubcategory.core_noncore  }}</td>
-     <td>{{data.requestdetail   }}</td>
+     <!--       <td>{{form.requestdetail }}</td> -->
      <td>{{data.reports }}</td>
      <td>{{data.task  }}</td>
      <td>{{data.options   }}</td>
