@@ -1,4 +1,5 @@
 from django import forms
+from bootstrap3_datetime.widgets import DateTimePicker
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -9,6 +10,7 @@ class UserRegistrationForm(forms.Form):
     username = forms.CharField(required = True, label = 'Username', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter Username'}) )
     email = forms.EmailField(required = True, label = 'Email', max_length = 32, widget=forms.EmailInput(attrs={'placeholder': 'Enter Email ID'}))
     password = forms.CharField(required = True, label = 'Password', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Enter Password'}))
+    password1 = forms.CharField(required = True, label = 'Password1', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Enter Password (Again)'}))
     firstname = forms.CharField(required = True, label = 'firstname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter First Name'}))
     lastname = forms.CharField(required = True, label = 'lastname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter Last Name'}))
 
@@ -131,6 +133,11 @@ class ErrorlogForm(forms.ModelForm):
     class Meta():
         model = Errorlog
         fields = '__all__'
+    #error_occurancedate = forms.DateField(widget=DateTimePicker(options={"format": "YYYY-MM-DD"}))
+    #def __init__(self, *args, **kwargs):
+     #  super(ErrorlogForm, self).__init__(*args, **kwargs)
+      # self.fields['error_report'].widget.attrs['disabled'] = ''
+       #self.fields['error_report'].required  = False
 
 class FeedbackForm(forms.ModelForm):
     class Meta():
@@ -151,8 +158,8 @@ REPORT_CHOICES = (
     )
 class SearchForm(forms.Form):
     datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="", initial=1, widget=forms.Select(), required=True)
-    startdate = forms.DateTimeField(initial=datetime.now(), required=False)
-    enddate = forms.DateTimeField(initial=datetime.now(), required=False)
+    startdate = forms.DateField(initial=datetime.now(), required=False)
+    enddate = forms.DateField(initial=datetime.now(), required=False)
     team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
     member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
 
@@ -160,3 +167,8 @@ class SearchForm(forms.Form):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['startdate'].widget.attrs['class']  = 'datetime-input'
         self.fields['enddate'].widget.attrs['class']  = 'datetime-input'
+
+class FForm(forms.Form):
+    team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
+    member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
+    

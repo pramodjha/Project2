@@ -1,4 +1,7 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
@@ -13,22 +16,64 @@
 
 
 {% block content %}
+<form class="form" method="POST" action="" class='form-inline '>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
 <div class="col-sm-12 col-md-12 col-lg-12">
-  <form class="form" method="POST" action="" >
-  {% csrf_token %}
-  <div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Add Reports</label></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Registered Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.registereddate}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Report Name </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.name}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Report Frequency </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.frequency}} </span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Delivery Days</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.deliverydays}}</div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Due Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.deliverytime}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Delivery Time (Before)</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.delivery_time}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Primary Owner</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.primaryowner}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Secondary Owner</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.secondaryowner }}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Report Description </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.description}}</span></div>
-  <div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
-</form>
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Add Report</h3>
 </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-6">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Registered Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.registereddate  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Report Type'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.report_type  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Report Name'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden" >{% bootstrap_field form.name  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Report Frequency'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.frequency  show_label=False placeholder='Error Reported By'   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Delivery Days'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.deliverydays  show_label=False  placeholder='Error Reported Team' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Due Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.deliverytime  show_label=False placeholder='Error Reported By'   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Delivery Time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.delivery_time  show_label=False placeholder='Error Reported By'   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Primary Owner'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 backgroundcolor2">{% bootstrap_field form.primaryowner  show_label=False placeholder='Error Description' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Secondary Owner'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 backgroundcolor2">{% bootstrap_field form.secondaryowner  show_label=False placeholder='Error Description' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Report Description'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 backgroundcolor2">{% bootstrap_field form.description  show_label=False placeholder='Error Description' %}</span>
+</div>
+</div>
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+</div>
+</form>
+
+
 
 {% endblock %}
 

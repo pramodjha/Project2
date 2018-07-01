@@ -1,5 +1,4 @@
-
 <option value="">---------</option>
-{% for member in mimember %}
-<option value="{{ member.mimemberid }}">{{ member }}</option>
+{% for m in mimembers %}
+<option value="{{ m.mimemberid }}">{{ m.username }}</option>
 {% endfor %}

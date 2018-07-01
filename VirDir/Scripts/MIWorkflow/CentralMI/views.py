@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FForm
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail
 from django.core import serializers
 from django.shortcuts import redirect
@@ -40,27 +40,17 @@ MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
 @login_required
 def create_session(request,header=None,footer=None,loginpage=None):
-    try:
-        username = request.user.username
-    except:
-        pass
-    try:
-        sd = request.session.get('setdate')
-    except:
-        pass
-    try:
-        info = vistorinfo_output(username,sd)
-        info.getinfo()
-        info.is_member()
-    except:
-        pass
+    username = request.user.username
+    sd = request.session.get('setdate')
+    info = vistorinfo_output(username,sd)
+    info.getinfo()
+    info.is_member()
     try:
         authority = info.permission
     except:
         authority = ''
     request.session['activeheader'] = header
     request.session['activefooter'] = footer
-    request.session['loginpage'] = loginpage
     activetab = request.session.get('activeheader')
     activetab1 = request.session.get('activefooter')
     return authority, activetab, activetab1, username, info, sd
@@ -93,9 +83,9 @@ def setdate(request):
     except:
         return render(request, 'CentralMI/ErrorPage.html')
 
-
 def sign_up(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='signup',footer='')
+    #authority, activetab, activetab1, username, info, sd = create_session(request, header='signup',footer='')
+    activetab = 'signup'
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -132,7 +122,11 @@ def sign_up(request):
 
 
 def sign_in(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
+    except:
+        activetab = 'signin'
+        authority = ''
     if request.method == 'POST':
         form =  UsersigninForm(request.POST)
         if form.is_valid():
@@ -155,10 +149,10 @@ def sign_in(request):
                 return render(request,'CentralMI/ErrorPage.html')
         else:
             form =  UsersigninForm()
-            return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab})
+            return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab,'authority':authority})
     else:
         form =  UsersigninForm()
-        return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab})
+        return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab,'authority':authority})
 
 def sign_out(request):
     request.session.delete()
@@ -169,7 +163,6 @@ def All_request(request):
     authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='allrequest')
     data = data_extraction(request,parameter1="'All'",parameter2="'All'")
     return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
-
 
 @login_required
 def unapproved(request):
@@ -233,7 +226,7 @@ def Error_Log(request,reportid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return render(request, 'CentralMI/ErrorLog.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1,'successmsg':successmsg})
+            return HttpResponseRedirect(reverse('errordetail'))
     return render(request, 'CentralMI/ErrorLog.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
 
 def Error_detail(request):
@@ -244,8 +237,8 @@ def Error_detail(request):
 
 @login_required
 def ot_form(request,trackerid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='otdetail')
-    form = OtDetailForm(initial={'timetrackers':trackerid})
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='')
+    form = OtDetailForm(initial={'timetrackers':trackerid,'ot_status':1})
     if request.method == 'POST':
         form =  OtDetailForm(request.POST)
         if form.is_valid():
@@ -280,13 +273,13 @@ def filterdata(request):
             member = form.cleaned_data['member']
             if team == None and member == None:
                 if reportno == str(2):
-                    model = Requestdetail.objects.all()
+                    model = Requestdetail.objects.filter(requestraiseddate__range=[startdate, enddate])
                 elif reportno == str(3):
-                    model = Timetrackers.objects.all()
+                    model = Timetrackers.objects.filter(trackingdatetime__range=[startdate, enddate])
                 elif reportno == str(4):
-                    model = Errorlog.objects.all()
+                    model = Errorlog.objects.filter(error_occurancedate__range=[startdate, enddate])
                 elif reportno == str(5):
-                    model = OtDetail.objects.all()
+                    model = OtDetail.objects.filter(ot_startdatetime__range=[startdate, enddate])
                 elif reportno == str(1):
                     model=  ''
                 else:
@@ -296,13 +289,13 @@ def filterdata(request):
                 userno = Mimember.objects.filter(teamdetail__in=list(teamno)).values_list('mimemberid',flat=True).distinct()
                 trackerid = Timetrackers.objects.filter(mimember__in=list(userno)).values_list('timetrackerid',flat=True).distinct()
                 if reportno == str(2):
-                    model = Requestdetail.objects.filter(username__in=list(userno))
+                    model = Requestdetail.objects.filter(username__in=list(userno)).filter(requestraiseddate__range=[startdate, enddate])
                 elif reportno == str(3):
-                    model = Timetrackers.objects.filter(mimember__in=list(userno))
+                    model = Timetrackers.objects.filter(mimember__in=list(userno)).filter(trackingdatetime__range=[startdate, enddate])
                 elif reportno == str(4):
-                    model = Errorlog.objects.filter(error_reportedto__in=list(userno))
+                    model = Errorlog.objects.filter(error_reportedto__in=list(userno)).filter(error_occurancedate__range=[startdate, enddate])
                 elif reportno == str(5):
-                    model = OtDetail.objects.filter(mimember__in=list(trackerid))
+                    model = OtDetail.objects.filter(timetrackers__in=list(trackerid)).filter(ot_startdatetime__range=[startdate, enddate])
                 elif reportno == str(1):
                     model=  ''
                 else:
@@ -401,7 +394,6 @@ def RequestFormTemplate(request):
             inst1 = form1.save(commit=False)
             inst1.requestdetail = inst
             inst1.save()
-
             dataforemail(username=inst.username,
                         requestid = inst.requestid,
                         sub_user='Request registered successfully',
@@ -423,11 +415,11 @@ def RequestFormTemplate(request):
 
 @login_required
 def AuthorisedFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='',footer='unapproved')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='unapproved')
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Authorisedetail.objects.all().get(requestdetail=requestid)
-        return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+        return HttpResponseRedirect(reverse('unapproved'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
@@ -452,18 +444,18 @@ def AuthorisedFormTemplate(request,requestid):
                         sub_manager='Request ID ' + str(requestid) + ' need to be assigned ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + ' has been ' + str(inst1.statusdetail) + ' , hence no futher action required',
                         L1_manager='Request has authorised and it is with MI-Team to assign',
                         request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+                return HttpResponseRedirect(reverse('unapproved'))
             else:
                 return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/AuthorisedForm.html',{'form':form, 'form1':form1,'authority':authority,'activetab1':activetab1})
+        return render(request, 'CentralMI/AuthorisedForm.html',{'form':form, 'form1':form1,'authority':authority,'activetab':activetab,'activetab1':activetab1})
 
 @login_required
 def RequestassigneddetailFormTemplate(request, requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='',footer='approved')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='approved')
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Assigneddetail.objects.all().get(requestdetail=requestid)
-        return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+        return HttpResponseRedirect(reverse('approved'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
@@ -490,21 +482,21 @@ def RequestassigneddetailFormTemplate(request, requestid):
                         L1_manager='Next Step is to take overview of request',
                         request_status=str(inst1.statusdetail))
 
-                return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+                return HttpResponseRedirect(reverse('approved'))
 
             else:
                 return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/AssignedForm.html',{'form':form,'form1':form1,'authority':authority,'activetab1':activetab1})
+        return render(request, 'CentralMI/AssignedForm.html',{'form':form,'form1':form1,'authority':authority,'activetab1':activetab1,'activetab':activetab})
 
 
 
 @login_required
 def OverviewFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='',footer='assigned')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='assigned')
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Overviewdetail.objects.all().get(requestdetail=requestid)
-        return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+        return HttpResponseRedirect(reverse('assigned'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
@@ -529,18 +521,18 @@ def OverviewFormTemplate(request,requestid):
                         sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
                         L1_manager='Next Step is with MI-Team to provide estimation in hours',
                         request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+                return HttpResponseRedirect(reverse('assigned'))
             else:
                 return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/OverviewForm.html',{'form':form,'form1':form1,'username':username,'authority':authority,'activetab1':activetab1})
+        return render(request, 'CentralMI/OverviewForm.html',{'form':form,'form1':form1,'username':username,'authority':authority,'activetab1':activetab1,'activetab':activetab})
 
 @login_required
 def EstimationFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='',footer='overview')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='overview')
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Estimationdetail.objects.all().get(requestdetail=requestid)
-        return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+        return HttpResponseRedirect(reverse('overview'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
@@ -565,21 +557,20 @@ def EstimationFormTemplate(request,requestid):
                         sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
                         L1_manager='Next Step is with Requester to Accept/Reject estimation',
                         request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+                return HttpResponseRedirect(reverse('overview'))
             else:
                 pagename = "estimate"
                 errormsg1 = "Something went Wrong"
                 return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/EstimationForm.html',{'form':form, 'form1':form1, 'username': username,'authority':authority,'activetab1':activetab1})
+        return render(request, 'CentralMI/EstimationForm.html',{'form':form, 'form1':form1, 'username': username,'authority':authority,'activetab1':activetab1,'activetab':activetab})
 
 @login_required
 def EstimationAcceptanceFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='',footer='estimate')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
     userid = User.objects.get(username=username).pk
-
     try:
         DataModel= Acceptrejectdetail.objects.all().get(requestdetail=requestid)
-        return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+        return HttpResponseRedirect(reverse('estimate'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
@@ -604,18 +595,18 @@ def EstimationAcceptanceFormTemplate(request,requestid):
                         sub_manager= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
                         L1_manager="Estimation has been Accepted, it's moved to WIP bucket"  if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
                         request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+                return HttpResponseRedirect(reverse('estimate'))
             else:
                 return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/EstAcceptRejectForm.html',{'form':form, 'form1':form1, 'username': username,'authority':authority,'activetab1':activetab1})
+        return render(request, 'CentralMI/EstAcceptRejectForm.html',{'form':form, 'form1':form1, 'username': username,'authority':authority,'activetab1':activetab1,'activetab':activetab})
 
 @login_required
 def CompletedFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='',footer='wip')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Completeddetail.objects.all().get(requestdetail=requestid)
-        return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+        return HttpResponseRedirect(reverse('wip'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
@@ -641,17 +632,17 @@ def CompletedFormTemplate(request,requestid):
                         sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
                         L1_manager='Request been completed',
                         request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+                return HttpResponseRedirect(reverse('wip'))
             else:
                 return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/CompletedForm.html',{'form':form, 'form1':form1, 'username': username,'activetab1':activetab1,'authority':authority})
+        return render(request, 'CentralMI/CompletedForm.html',{'form':form, 'form1':form1, 'username': username,'activetab1':activetab1,'authority':authority,'activetab':activetab})
 
 
 
 @login_required
 def typage(request,requestid):
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
     try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='',footer='')
         model1 = Requestdetail.objects.all().get(requestid=requestid)
         try:
             model2 = Authorisedetail.objects.all().get(requestdetail=requestid)
@@ -682,9 +673,9 @@ def typage(request,requestid):
             model8 = Completeddetail.objects.all().get(requestdetail=requestid)
         except:
             model8 = "nothing"
-        return render(request, 'CentralMI/ThankYou.html',{'detail1':model1,'detail2':model2,'detail3':model3,'detail4':model4,'detail5':model5,'detail6':model6,'detail7':model7,'detail8':model8,'username':username,'authority':authority})
+        return render(request, 'CentralMI/ThankYou.html',{'detail1':model1,'detail2':model2,'detail3':model3,'detail4':model4,'detail5':model5,'detail6':model6,'detail7':model7,'detail8':model8,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
     except:
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1,'activetab':activetab,'activetab1':activetab1})
 
 
 def RequestdetailUpdate(request,requestid):
@@ -703,36 +694,40 @@ def RequestdetailUpdate(request,requestid):
     return render(request, 'CentralMI/RequestForm.html',{'form':form})
 
 
+def filterform(request):
+    form = FForm()
+    if request.method == 'POST':
+        form =  SearchForm(request.POST)
+        if form.is_valid():
+            team = form.cleaned_data['team']
+            member = form.cleaned_data['member']
+            request.session['globalteam'] = team
+            request.session['globalmember'] = member
+    globalteam = request.session.get('globalteam')
+    globalmember = request.session.get('globalmember')
+    return globalteam, globalmember
+
+
+
 @login_required
 def index(request):
     authority, activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
-    username = request.user.username
-    sd = request.session.get('setdate')
-    info = vistorinfo_output(username,sd)
+    mv = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=2)
+    wv = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=2)
+    dv = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=2)
+    mvOT = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=1)
+    wvOT = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=1)
+    dvOT = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=1)
+    mvcore = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2)
+    wvcore = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2)
+    dvcore = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2)
+    mvutilisation = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
+    wvutilisation = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
+    dvutilisation = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
 
-    try:
-        authority =  authority
-    except:
-        authority =  ''
-    try:
-        mv = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=2)
-        wv = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=2)
-        dv = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=2)
-        mvOT = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=1)
-        wvOT = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=1)
-        dvOT = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=1)
-        mvcore = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2)
-        wvcore = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2)
-        dvcore = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2)
-        mvutilisation = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
-        wvutilisation = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
-        dvutilisation = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
-
-        return render(request, 'CentralMI/index.html',{'username':username,'authority':authority,
-        'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,
-        'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,'activetab':activetab})
-    except:
-        return render(request, 'CentralMI/ErrorPage.html')
+    return render(request, 'CentralMI/index.html',{'username':username,'authority':authority,
+    'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,
+    'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,'activetab':activetab})
 
 def dataforemail(username=None,requestid=None,sub_user=None,L1_user=None,sub_auth=None,L1_auth=None,sub_miteam=None,L1_miteam=None,sub_manager=None,L1_manager=None,request_status=None):
     userid = User.objects.get(username=username).pk
@@ -790,7 +785,8 @@ class vistorinfo_output(object):
         self.OT_Yes = OT_Yes
         self.OT_No = OT_No
         self.sumfield1 = sumfield1
-        self.mimemberid = User.objects.get(username=self.username).pk
+        user_id = User.objects.get(username=self.username).pk
+        self.mimemberid = Mimember.objects.get(username=user_id).mimemberid
         self.core = core
         self.noncore = noncore
 
@@ -805,7 +801,7 @@ class vistorinfo_output(object):
 
     def getinfo(self):
         self.mimemberid = self.mimemberid
-        self.teamname = Mimember.objects.get(username=self.mimemberid).teamdetail
+        self.teamname = Mimember.objects.get(mimemberid=self.mimemberid).teamdetail
         self.teamid = Teamdetail.objects.get(teamname=self.teamname).pk
         self.coreid = Requestsubcategory.objects.filter(core_noncore__in=[self.core]).values_list('pk', flat=True).distinct()
         self.noncoreid = Requestsubcategory.objects.filter(core_noncore__in=[self.noncore]).values_list('pk', flat=True).distinct()
@@ -973,7 +969,6 @@ def TimeTracker(request):
     requestid_onassign = Assigneddetail.objects.filter(assignedto__in=[info.mimemberid]).values_list('requestdetail',flat=True).distinct()
     requestid_onstatus = Requeststatusdetail.objects.filter(statusdetail__in=[4,5,6,7,8]).values_list('requestdetail',flat=True).distinct()
     requestid_filter = Requestdetail.objects.filter(requestid__in=list(requestid_onassign)).filter(requestid__in=list(requestid_onstatus)).values_list('requestid',flat=True).distinct()
-    print(requestid_filter)
     form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'startdatetime':starttime,'stopdatetime':stoptime})
     form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
     form.fields['reports'].queryset = Reports.objects.all()
@@ -1015,12 +1010,7 @@ def TimeTracker(request):
 @login_required
 def EditTracker(request,requestid):
     try:
-        activetab = 'timetracker'
-        username = request.user.username
-        sd = request.session.get('setdate')
-        info = vistorinfo_output(username,sd)
-        info.getinfo()
-        info.is_member()
+        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
         e = Timetrackers.objects.get(pk=requestid)
         model = Timetrackers.objects.filter(pk=requestid)
         form = TimetrackersForm(instance=e)
@@ -1089,13 +1079,11 @@ def load_subcategories(request):
 
 @login_required
 def load_mimember(request):
-#    authority, activetab, activetab1, username, info, sd = create_session(request, header='extractdatafilter1',footer='tracker')
-    mimember_id = request.GET.get('member_id')
+    mimember_id = request.GET.get('mimemberid')
     print(mimember_id)
-    mimember = Mimember.objects.filter(teamdetail__in=[mimember_id])
-    print(mimember)
-    return render(request, 'CentralMI/rebuilding_mimember.html', {'mimember': mimember})
-
+    mimembers = Mimember.objects.filter(teamdetail__in=[mimember_id])
+    print(mimembers)
+    return render(request, 'CentralMI/rebuilding_mimember.html', {'mimembers': mimembers})
 
 @login_required
 def load_tables(request):

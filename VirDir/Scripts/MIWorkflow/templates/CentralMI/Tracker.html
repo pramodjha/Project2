@@ -141,7 +141,7 @@
      <td>{{data.totaltime }}</td>
      <td class="hidden">{{data.startdatetime  }}</td>
      <td class="hidden">{{data.stopdatetime   }}</td>
-     <td> <a href="{% url 'viewtracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> </td>
+     <td> <a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> </td>
      {% endfor %}
    </tr></br>
    </tbody>
@@ -179,9 +179,6 @@ $("#submitbutton").click(function () {
     });
   });
 
-$(document).ready(function(){
-    $('#myTable').dataTable();
-});
 
 </script>
 </div>

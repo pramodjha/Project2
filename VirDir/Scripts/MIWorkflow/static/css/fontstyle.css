@@ -1,3 +1,22 @@
+body .btn-default{
+  color: #999999;
+  background-color: #333333;
+  border-color: #333333;
+}
+
+label {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 15px;
+}
+
+h1 {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 20px;
+
+}
+
 @media (min-width: 768px) {
   /*------------------------font_Color------------------------------------------------*/
 

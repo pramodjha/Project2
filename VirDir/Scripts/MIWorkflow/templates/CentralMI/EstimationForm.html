@@ -1,4 +1,7 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
@@ -12,21 +15,59 @@
 
 
 {% block content %}
-<div class="col-sm-6 col-md-4 col-lg-12">
-<form class="form" action="" method="POST" >
+<form class="form" method="POST" action="" class='form-inline '>
 {% csrf_token %}
-<div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per">Estimation Detail</label></tr>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Estimated Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.estimationdate}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Estimated By </label> <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.estimatedby}} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Estimated Hours </label> <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.estimateddays}} </span></d>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Request Id</label> <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.requestdetail}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.requeststatusdate}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status By</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.username}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.statusdetail }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status ID </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.requestdetail}}</span></div>
-<div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
-</form>
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Estimation Form</h3>
 </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-6">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Estimation Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.estimationdate  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Estimated By'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.estimatedby  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Estimated Hours'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.estimateddays  show_label=False  placeholder='Error Reported Team' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Id'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.requestdetail  show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.requeststatusdate show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status By'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.username  show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.statusdetail  show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status ID'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.requestdetail  show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}
+</div>
+</div>
+</form>
+
 {% endblock %}
 {% block footer %}
 {% include "userprofilefootertest1.html" %}

@@ -1,4 +1,7 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
@@ -13,18 +16,67 @@
 
 
 {% block content %}
+<form class="form" method="POST" action="" class='form-inline '>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
 <div class="col-sm-12 col-md-12 col-lg-12">
-  <form class="form" method="POST" action="" >
-  {% csrf_token %}
-  <div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> OT Details</label></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> TimeTracker ID </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.timetrackers}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Start Date-time </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.ot_startdatetime}} </span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> End Date-time</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.ot_enddatetime}}</div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">OT hours</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form.ot_hrs}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> OT Status </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.ot_status}}</span></div>
-  <div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
-</form>
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">OT Form</h3>
 </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-6">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'TimeTracker ID'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.timetrackers  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Start Date-time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.ot_startdatetime  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'End Date-time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.ot_enddatetime  show_label=False  placeholder='Error Reported Team' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'OT hours'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.ot_hrs  show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'OT Status'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.ot_status show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}
+</div>
+</div>
+</form>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#id_ot_startdatetime").datepicker({
+    dateFormat: 'yy-mm-dd',
+     altField: '#thealtdate',
+     altFormat: 'yy-mm-dd'});
+});
+
+$(document).ready(function() {
+  $("#id_ot_enddatetime").datepicker({
+    dateFormat: 'yy-mm-dd',
+     altField: '#thealtdate',
+     altFormat: 'yy-mm-dd'});
+});
+</script>
+
+
+
+
+
+
+
 
 {% endblock %}
 

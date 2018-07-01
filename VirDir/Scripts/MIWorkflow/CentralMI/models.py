@@ -379,6 +379,18 @@ class Deliverydays(models.Model):
     def __str__(self):
         return str(self.days)
 
+class ReportType(models.Model):
+    report_typid = models.AutoField(primary_key=True)
+    report_type = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'report_type'
+    def __str__(self):
+        return str(self.report_type)
+
+
+
 class Reports(models.Model):
     reportid = models.AutoField(primary_key=True)
     registereddate = models.DateTimeField(default= datetime.datetime.now())
@@ -390,6 +402,7 @@ class Reports(models.Model):
     secondaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True,related_name='secondaryowner')
     description = models.CharField(max_length=255, blank=True, null=True)
     delivery_time = models.ForeignKey('TimeDetail', models.DO_NOTHING, db_column='delivery_time', blank=True, null=True)
+    report_type = models.ForeignKey(ReportType, models.DO_NOTHING, db_column='report_type', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -498,7 +511,7 @@ class Errortype(models.Model):
 class Errorlog(models.Model):
     error_id = models.AutoField(primary_key=True)
     errorlog_date = models.DateTimeField(default= datetime.datetime.now())
-    error_occurancedate = models.DateTimeField(default= datetime.datetime.now())
+    error_occurancedate = models.DateField(default= datetime.date.today)
     error_report = models.ForeignKey('Reports', models.DO_NOTHING, db_column='error_report')
     error_reportedby = models.CharField(max_length=50)
     error_reportedteam = models.CharField(max_length=50)
@@ -547,8 +560,8 @@ class FeedbackQuestion(models.Model):
 class OtDetail(models.Model):
     ot_id = models.AutoField(primary_key=True)
     timetrackers = models.ForeignKey('Timetrackers', models.DO_NOTHING, db_column='timetrackers')
-    ot_startdatetime = models.DateTimeField(blank=True, null=True)
-    ot_enddatetime = models.DateTimeField(blank=True, null=True)
+    ot_startdatetime = models.DateTimeField(default= datetime.date.today)
+    ot_enddatetime = models.DateTimeField(default= datetime.date.today)
     ot_hrs = models.IntegerField(blank=True, null=True)
     ot_status = models.ForeignKey('OtStatus', models.DO_NOTHING, db_column='ot_status')
 

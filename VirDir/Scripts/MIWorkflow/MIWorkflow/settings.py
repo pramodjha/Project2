@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'CentralMI',
     'bootstrap3',
     'widget_tweaks',
+    'bootstrap3_datetime',
 ]
 
 MIDDLEWARE = [

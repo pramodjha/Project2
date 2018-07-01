@@ -1,4 +1,7 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
@@ -17,8 +20,8 @@
   <form class="form" method="POST" action="" >
   {% csrf_token %}
   <div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> User Feedback </label></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Report Name </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.reports}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Feedback Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.feedback_date}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Report Name </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.reports}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Feedback Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.feedback_date}}</span></div>
   <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Select Question </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.feedback_question}} </span></div>
   <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Answer </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.feedback_integer}}</div>
   <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Answer </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.feedback_text}}</span></div>

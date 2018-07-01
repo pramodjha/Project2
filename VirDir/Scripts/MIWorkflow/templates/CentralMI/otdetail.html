@@ -31,7 +31,7 @@
       <tbody class="tbody">
     {%for data in model %}
       <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
-      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'errorlog' data.reportid %}">{{data.reportid}} </a> </td>
+        <td>{{data.reportid}}</td>
         <td>{{data.ot_id }}</td>
         <td>{{data.timetrackers }}</td>
         <td>{{data.ot_startdatetime }}</td>

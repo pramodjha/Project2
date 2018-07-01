@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 <!-- _________________________________________________________________________ -->
 {% block style %}
@@ -15,17 +18,39 @@
 {% endblock %}
 <!-- _________________________________________________________________________ -->
 {% block content %}
-<div id="id1" class = "item1">
-  <p class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> ENTER LOGIN CREDENTIAL</p>
-  <form method="POST">
-      {% csrf_token %}
-      {% if error %}
-      {{error}}
-      {% endif %}
-      <div ><label class="fontstyle4 fontsize20 fontfamilycambria widthsize10per">User Name </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize10per "> {{ form.username }}</span></div>
-      <div ><label class="fontstyle4 fontsize20 fontfamilycambria widthsize10per"> Password   </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize10per ">  {{ form.password }}</span><span><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Sign In</button></span></div>
-  </form>
+
+  <form class="form" method="POST" action="" class='form-inline '>
+  {% csrf_token %}
+  {% bootstrap_form_errors form type='non_fields' %}
+
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div >
+  <h3 class="col-sm-12 col-md-12 col-lg-12 head">ENTER LOGIN CREDENTIAL</h3>
   </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-6">
+  <div >
+  <label class="col-sm-12 col-md-12 col-lg-4  ">{% bootstrap_label 'Username'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.username  show_label=False  placeholder='Enter Username' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Password'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.password  show_label=False placeholder='Enter Password'   %}</span>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+  </div>
+  </form>
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
 <!-- _________________________________________________________________________ -->
 {% block footer %}

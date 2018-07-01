@@ -1,4 +1,7 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
@@ -13,23 +16,68 @@
 
 
 {% block content %}
-<div class="col-sm-12 col-md-12 col-lg-12">
-  <form class="form" method="POST" action="" >
+  <form class="form" method="POST" action="" class='form-inline '>
   {% csrf_token %}
-  <div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Error Log</label></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Login Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.errorlog_date}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Occurance Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.error_occurancedate}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Report Name </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.error_report}} </span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Reported by</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.error_reportedby}}</div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Error Reported Team</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_reportedteam}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Reported To </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_reportedto}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Reported Type</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_type}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Error Decription</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.error_description }}</span></div>
-  <div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
-</form>
+  {% bootstrap_form_errors form type='non_fields' %}
+
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div >
+  <h3 class="col-sm-12 col-md-12 col-lg-12 head">Error Log</h3>
+  </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-6">
+  <div >
+  <label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Error Log Date'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.errorlog_date  show_label=False layout='inline'  %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Error Occurance date'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_occurancedate  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Error Report'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 hidden" >{% bootstrap_field form.error_report  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Repoted By'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedby  show_label=False placeholder='Error Reported By'   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Reported Team'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedteam  show_label=False  placeholder='Error Reported Team' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Reported To'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedto  show_label=False  placeholder='Error Reported To' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Type'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_type  show_label=False  placeholder='Error Type' %}</span>
+  </div>
 </div>
+  <div class="col-sm-12 col-md-12 col-lg-6 fontstyle4">
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Description'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 backgroundcolor2">{% bootstrap_field form.error_description  show_label=False placeholder='Error Description' %}</span>
+  </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+</div>
+</form>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#id_error_occurancedate").datepicker({
+    dateFormat: 'yy-mm-dd',
+     altField: '#thealtdate',
+     altFormat: 'yy-mm-dd'});
+});
+</script>
 
 {% endblock %}
+
 
 {% block footer %}
 {% include "userprofilefootertest1.html" %}
