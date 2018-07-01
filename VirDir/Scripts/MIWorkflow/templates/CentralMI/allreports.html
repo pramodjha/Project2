@@ -29,6 +29,7 @@
         <td >Primary Owner</td>
         <td >Secondary Owner</td>
         <td >Description</td>
+    
         </tr>
       </thead>
       <tbody class="tbody">
@@ -43,6 +44,7 @@
         <td>{{data.primaryowner }}</td>
         <td>{{data.secondaryowner }}</td>
         <td>{{data.description }}</td>
+
         {% endfor %}
       </tr></br>
     </tbody>
@@ -55,7 +57,8 @@
 $(document).ready(function() {
     $('#example').DataTable(
     {
-      fixedHeader: true
+      fixedHeader: true,
+        "scrollX": true
     });
 
 } );

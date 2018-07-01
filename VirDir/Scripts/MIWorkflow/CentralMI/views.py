@@ -1069,6 +1069,7 @@ def load_subcategories(request):
         category_id = request.GET.get('categories')
         print(category_id)
         subcategories = Requestsubcategory.objects.filter(requestcategorys_id=category_id)
+        subcategories = Reports.objects.filter(requestcategorys_id=category_id)
         print(subcategories)
         return render(request, 'CentralMI/rebuilding_subcategories.html', {'subcategories': subcategories,'activetab':activetab})
     except:
