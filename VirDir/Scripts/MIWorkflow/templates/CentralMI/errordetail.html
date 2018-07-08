@@ -16,7 +16,6 @@
 
 {% block content %}
   <div class="col-sm-6 col-md-4 col-lg-12">
-    <span class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Error Details</span><span class="fontstyle4 fontsize15 fontfamilycambria widthsize30per"> </span>
     <table  class="table" id="example" style="width:100%">
       <thead class="thead">
       <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
@@ -53,7 +52,8 @@
 $(document).ready(function() {
     $('#example').DataTable(
     {
-      fixedHeader: true
+      fixedHeader: true,
+      
     });
 
 } );

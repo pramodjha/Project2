@@ -49,6 +49,8 @@ urlpatterns = [
 	url(r'^viewTracker/(?P<requestid>\d+)$', views.ViewTracker, name='viewtracker'),
 	url(r'^editTracker/(?P<requestid>\d+)$', views.EditTracker, name='edittracker'),
 	url(r'^ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
+	url(r'^ajax/load-activity/', views.load_activity, name='ajax_load_activity'),
+
 	url(r'^ajax/mimember_load_ajax/', views.load_mimember, name='ajax_load_mimember'),
 	url(r'^ajax/load-datevalues/', views.load_datevalues, name='ajax_load_datavalues'),
 	url(r'^ajax/load-tables/', views.load_tables, name='ajax_load_tables'),

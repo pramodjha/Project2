@@ -21,6 +21,7 @@
 {% elif authority == "Group3" %}
 <li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
 <li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
+<li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signin' %}">Sign Out </a></li>
 {% elif authority == "Group4" %}
 <li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
 <li {% if activetab == 'workflow' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">Workflow </a></li>

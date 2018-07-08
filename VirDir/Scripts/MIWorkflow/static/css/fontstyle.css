@@ -14,7 +14,50 @@ h1 {
   color: #cc8800;
   font-family: Cambria;
   font-size: 20px;
+}
 
+.headerformat {
+  color: #999999;
+  font-family: Cambria;
+  font-size: 20px;
+  width: 20%;
+}
+
+.subheaderformat {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 12px;
+  width: 20%;
+  font-style: italic;
+}
+
+.tableheaderformat {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 12px;
+  width: 20%;
+  background-color: #333333;
+
+}
+
+.box {
+  background-color: #333333;
+}
+
+.box1 {
+  background-color: #4c4c4c;
+}
+.box2 {
+  background-color: #404040;
+}
+
+
+.tablebodyformat {
+  color:  #999999;
+  font-family: Cambria;
+  font-size: 12px;
+  width: 20%;
+  background-color: #005266;
 }
 
 @media (min-width: 768px) {

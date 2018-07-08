@@ -30,6 +30,35 @@ class Acceptrejectoption(models.Model):
         db_table = 'acceptrejectoption'
 
 
+class Activity(models.Model):
+    reportid = models.AutoField(primary_key=True)
+    registereddate = models.DateTimeField()
+    name = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.ForeignKey('Frequency', models.DO_NOTHING, db_column='frequency', blank=True, null=True)
+    date_types = models.ForeignKey('DateTypes', models.DO_NOTHING, db_column='date_types', blank=True, null=True)
+    delivery_days = models.IntegerField(blank=True, null=True)
+    deliverytime = models.TimeField(blank=True, null=True)
+    teamname = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamname', blank=True, null=True)
+    primaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='primaryowner', blank=True, null=True)
+    secondaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    requestcategorys = models.ForeignKey('Requestcategorys', models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
+    activitystatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'activity'
+
+
+class Activitystatus(models.Model):
+    activitystatusid = models.AutoField(primary_key=True)
+    activitystatus = models.CharField(unique=True, max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'activitystatus'
+
+
 class Assigneddetail(models.Model):
     assignedid = models.AutoField(primary_key=True)
     assigneddate = models.DateTimeField(db_column='assignedDate')  # Field name made lowercase.
@@ -137,6 +166,24 @@ class Completeddetail(models.Model):
     class Meta:
         managed = False
         db_table = 'completeddetail'
+
+
+class DateTypes(models.Model):
+    date_typesid = models.AutoField(primary_key=True)
+    date_types = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'date_types'
+
+
+class DeliveryDays(models.Model):
+    delivery_daysid = models.AutoField(primary_key=True)
+    delivery_days = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'delivery_days'
 
 
 class Deliverydays(models.Model):
@@ -400,6 +447,24 @@ class Reports(models.Model):
         db_table = 'reports'
 
 
+class Reports1(models.Model):
+    reportid = models.AutoField(primary_key=True)
+    registereddate = models.DateTimeField()
+    name = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.ForeignKey(Frequency, models.DO_NOTHING, db_column='frequency', blank=True, null=True)
+    date_types = models.ForeignKey(DateTypes, models.DO_NOTHING, db_column='date_types', blank=True, null=True)
+    delivery_days = models.IntegerField(blank=True, null=True)
+    deliverytime = models.TimeField()
+    teamname = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamname', blank=True, null=True)
+    primaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='primaryowner', blank=True, null=True)
+    secondaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'reports1'
+
+
 class Requestcategorys(models.Model):
     requestcategoryid = models.AutoField(primary_key=True)
     requestcategorydatetime = models.DateTimeField()
@@ -500,7 +565,7 @@ class Timetrackers(models.Model):
     comments = models.CharField(max_length=255, blank=True, null=True)
     startdatetime = models.DateTimeField(blank=True, null=True)
     stopdatetime = models.DateTimeField(blank=True, null=True)
-    reports = models.ForeignKey(Reports, models.DO_NOTHING, db_column='reports', blank=True, null=True)
+    reports = models.ForeignKey(Activity, models.DO_NOTHING, db_column='reports', blank=True, null=True)
 
     class Meta:
         managed = False

@@ -1,4 +1,7 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 <script src="{% static 'jquery/jquery-ui.js' %}"></script>
@@ -17,55 +20,55 @@
 {% endblock %}
 
 {% block content %}
-<form class="form" method="POST" action="" >
+
+<form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
 {% csrf_token %}
-<div class="row">
-<div class="col-sm-2 col-md-4 col-lg-12">
- <table id="table1" class="table table-striped" >
- <tbody>
-   <form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
-      {% csrf_token %}
-    {% if authority == "Group1" %}
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <table id="table1" class="table table-striped" >
+  <tbody>
+    {% if authority == "Group2" %}
+    <thead class="tableheaderformat">
+    <tr>
      <th>DataModel</th>
      <th>Start Date</th>
      <th>End Date</th>
      <th>Team</th>
      <th>Member</th>
-     <th>Save</th>
-     </tr>
-     <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+     <th  class='submit'>Save</th>
+
+    </tr>
+    </thead>
+    <tbody class="tablebodyformat">
+     <tr class="">
        <td>{{form.datachoice }}</td>
        <td>{{form.startdate }}</td>
        <td>{{form.enddate  }}</td>
        <td>{{form.team }}</td>
        <td>{{form.member }}</td>
-       <td><button id="submitbutton" type="submit">Submit</button></td>
+       <td><button id="submitbutton" class='submit' type="submit">Submit</button></td>
+
+     </tr>
        {% else %}
-       <th>DataModel</th>
-       <th>Start Date</th>
-       <th>End Date</th>
-       <th>Team</th>
-       <th>Member</th>
-
-       <th>Save</th>
+       <thead class="tableheaderformat">
+       <tr>
+        <th>DataModel</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th  class='submit'>Save</th>
        </tr>
-       <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
-         <td>{{form.datachoice }}</td>
-         <td>{{form.startdate }}</td>
-         <td>{{form.enddate  }}</td>
-         <td>{{form.team }}</td>
-         <td>{{form.member }}</td>
-
-         <td><button id="submitbutton" type="submit">Submit</button></td>
+       </thead>
+       <tbody class="">
+        <tr class="">
+          <td>{{form.datachoice }}</td>
+          <td>{{form.startdate }}</td>
+          <td>{{form.enddate  }}</td>
+          <td><button id="submitbutton" class='submit' type="submit">Submit</button></td>
+        </tr>
          {% endif %}
+       </tbody>
+</table>
+</div>
      </form>
-
- </tr></br>
- </tbody>
- </table>
-
-</div>
-</div>
 
 <div class="col-sm-6 col-md-4 col-lg-12">
   <table  class="table" id="example" style="width:100%">

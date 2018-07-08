@@ -1,4 +1,8 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
@@ -11,24 +15,51 @@
 {% endblock %}
 
 {% block content %}
-  <div class="col-sm-6 col-md-4 col-lg-12">
-    <form class="form" method="POST" action="" >
-    {% csrf_token %}
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Request Raised Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{ form.requestraiseddate}}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Type</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.requesttypedetail}}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Priority</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.prioritydetail }}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Owner</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.username }}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Description</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.requestdescription}}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Request Status Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.requeststatusdate}}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Request Status By</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.username}}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Request Status</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.statusdetail }}</span></div>
-    <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Request Status ID </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.requestdetail}}</span></div>
-    <div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
+<form class="form" method="POST" action="" class='form-inline '>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
 
-</form>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Request Details</h3>
 </div>
-{% endblock %}
+</div>
+<div class="col-sm-12 col-md-12 col-lg-6">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Request Raised Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.requestraiseddate  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Request Type'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requesttypedetail  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Priority'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 " >{% bootstrap_field form.prioritydetail   show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Owner'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.username  show_label=False    %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Request Description'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestdescription  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.requeststatusdate  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Username'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.username  show_label=False   %}</span>
+</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+</div>
+</form>
 
+{% endblock %}
 {% block footer %}
 {% include "userprofilefootertest1.html" %}
 {% endblock %}

@@ -427,30 +427,6 @@ class TimeDetail(models.Model):
 
 
 
-class Timetrackers(models.Model):
-    timetrackerid = models.AutoField(primary_key=True)
-    registerdatetime = models.DateTimeField(default= datetime.datetime.now())
-    trackingdatetime = models.DateTimeField(default= datetime.datetime.now())
-    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    teamdetail = models.ForeignKey(Teamdetail, models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
-    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
-    requestsubcategory = models.ForeignKey(Requestsubcategory, models.DO_NOTHING, db_column='requestsubcategory', blank=True, null=True)
-    task = models.CharField(max_length=100, blank=True, null=True)
-    requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
-    options = models.ForeignKey(Options, models.DO_NOTHING, db_column='options', blank=True, null=True)
-    description_text = models.CharField(max_length=255, blank=True, null=True)
-    totaltime = models.IntegerField(blank=True, null=True)
-    comments = models.TextField(blank=True, null=True)
-    startdatetime = models.DateTimeField(blank=True, null=True)
-    stopdatetime = models.DateTimeField(blank=True, null=True)
-    reports = models.ForeignKey(Reports, models.DO_NOTHING, db_column='reports', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'timetrackers'
-
-    def __str__(self):
-        return str(self.timetrackerid)
 
 
 class Emaildetail(models.Model):
@@ -584,3 +560,74 @@ class OtStatus(models.Model):
 
     def __str__(self):
         return str(self.ot_status)
+
+
+class Activity(models.Model):
+    reportid = models.AutoField(primary_key=True)
+    registereddate = models.DateTimeField(default= datetime.datetime.now())
+    name = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.ForeignKey('Frequency', models.DO_NOTHING, db_column='frequency', blank=True, null=True)
+    date_types = models.ForeignKey('DateTypes', models.DO_NOTHING, db_column='date_types', blank=True, null=True)
+    delivery_days = models.IntegerField(blank=True, null=True)
+    deliverytime = models.TimeField(blank=True, null=True)
+    teamname = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamname', blank=True, null=True)
+    primaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='primaryowner', blank=True, null=True,related_name='activityprimaryowner')
+    secondaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True,related_name='activitysecondaryowner')
+    description = models.CharField(max_length=255, blank=True, null=True)
+    requestcategorys = models.ForeignKey('Requestcategorys', models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
+    activitystatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'activity'
+
+    def __str__(self):
+        return str(self.name)
+
+class Timetrackers(models.Model):
+    timetrackerid = models.AutoField(primary_key=True)
+    registerdatetime = models.DateTimeField(default= datetime.datetime.now())
+    trackingdatetime = models.DateTimeField(default= datetime.datetime.now())
+    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
+    teamdetail = models.ForeignKey(Teamdetail, models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
+    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
+    requestsubcategory = models.ForeignKey(Requestsubcategory, models.DO_NOTHING, db_column='requestsubcategory', blank=True, null=True)
+    task = models.CharField(max_length=100, blank=True, null=True)
+    requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
+    options = models.ForeignKey(Options, models.DO_NOTHING, db_column='options', blank=True, null=True)
+    description_text = models.CharField(max_length=255, blank=True, null=True)
+    totaltime = models.IntegerField(blank=True, null=True)
+    comments = models.TextField(blank=True, null=True)
+    startdatetime = models.DateTimeField(blank=True, null=True)
+    stopdatetime = models.DateTimeField(blank=True, null=True)
+    reports = models.ForeignKey(Activity, models.DO_NOTHING, db_column='reports', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'timetrackers'
+
+    def __str__(self):
+        return str(self.timetrackerid)
+
+
+class DateTypes(models.Model):
+    date_typesid = models.AutoField(primary_key=True)
+    date_types = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'date_types'
+
+    def __str__(self):
+        return str(self.date_types)
+
+class Activitystatus(models.Model):
+    activitystatusid = models.AutoField(primary_key=True)
+    activitystatus = models.CharField(unique=True, max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'activitystatus'
+
+    def __str__(self):
+        return str(self.activitystatus)

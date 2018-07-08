@@ -1,6 +1,7 @@
 from django import forms
 from bootstrap3_datetime.widgets import DateTimePicker
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity
+#Reports1
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime
@@ -55,11 +56,6 @@ class StatusdetailForm(forms.ModelForm):
     class Meta():
         model = Requeststatusdetail
         exclude = ['requestdetail']
-    def __init__(self, *args, **kwargs):
-        super(StatusdetailForm, self).__init__(*args, **kwargs)
-        self.fields['requeststatusdate'].widget.attrs['id']  = 'hiddenfield'
-        self.fields['username'].widget.attrs['id']  = 'hiddenfield'
-        self.fields['statusdetail'].widget.attrs['id']  = 'hiddenfield'
 
 
 
@@ -96,7 +92,13 @@ class TimetrackersForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TimetrackersForm, self).__init__(*args, **kwargs)
-        self.fields['trackingdatetime'].widget.attrs['class']  = 'datetime-input'
+        self.fields['trackingdatetime'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['requestcategorys'].widget.attrs['class']  = 'form-control'
+        self.fields['requestsubcategory'].widget.attrs['class']  = 'form-control'
+        self.fields['reports'].widget.attrs['class']  = 'form-control'
+        self.fields['task'].widget.attrs['class']  = 'form-control'
+        self.fields['options'].widget.attrs['class']  = 'form-control'
+        self.fields['totaltime'].widget.attrs['class']  = 'form-control'
 
 
 class RequestcategorysForm(forms.ModelForm):
@@ -165,10 +167,23 @@ class SearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
-        self.fields['startdate'].widget.attrs['class']  = 'datetime-input'
-        self.fields['enddate'].widget.attrs['class']  = 'datetime-input'
+        self.fields['datachoice'].widget.attrs['class']  = 'form-control'
+        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['enddate'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['team'].widget.attrs['class']  = 'form-control'
+        self.fields['member'].widget.attrs['class']  = 'form-control'
 
-class FForm(forms.Form):
-    team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
-    member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
-    
+class FilteredForm(forms.Form):
+    teamfilter = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
+    memberfilter = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
+
+#class Reports1From(forms.Form):
+#    class Meta():
+#        model = Reports1
+#        fields = '__all__'
+
+
+class ActivityForm(forms.ModelForm):
+    class Meta():
+        model = Activity
+        fields = '__all__'

@@ -1,6 +1,12 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<script src="{% static 'jquery/myjquery.js' %}"></script>
+
 {% endblock %}
 
 {% block navblockleft %}
@@ -10,55 +16,67 @@
 {% block navblockright %}
 {% include "userprofiletest1.html" %}
 {% endblock %}
-
 {% block navblockfilterform %}
 {% endblock %}
 {% block content %}
 <div class="row">
-  <div class="col-sm-2 col-md-4 col-lg-12">
+
+  <div class="col-sm-2 col-md-2 col-lg-2">
     <form method = "POST" action = "{% url 'sdate' %}">
-    {% csrf_token %}
-    <label class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">Tracking Date</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.trackingdatetime }}</span>
-    <button type="submit" id="setdate"name = "setdate" value="setdate" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Set Date<span class=""></span></button>
-    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">A:Worked(hh:mm):</span>
-    {% for key, value in dv.items %}
-    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
-    {% endfor %}
-    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">B:OT(hh:mm):</span>
-    {% for key, value in dvOT.items %}
-    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
-    {% endfor %}
-    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Total(A+B): </span>
-    {% for key, value in dvAll.items %}
-    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
-    {% endfor %}
-    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Core(hh:mm): </span>
-    {% for key, value in dvcore.items %}
-    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
-    {% endfor %}
-    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Utilisation(%): </span>
-    {% for key, value in dvutilisation.items %}
-    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
-    {% endfor %}
+      {% csrf_token %}
+      <label class="">Tracking Date</label>
+      <span class="">{{form.trackingdatetime }}</span>
+      <button type="submit" id="setdate"name = "setdate" value="setdate" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Set Date<span class=""></span></button>
     </form>
   </div>
+<div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <span class="">A:Worked(hh:mm):</span>
+    {% for key, value in dv.items %}
+    <span class="">{{value}}</span>
+    {% endfor %}
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <span class="">B:OT(hh:mm):</span>
+    {% for key, value in dvOT.items %}
+    <span class="">{{value}}</span>
+    {% endfor %}
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <span class="">Total(A+B): </span>
+    {% for key, value in dvAll.items %}
+    <span class="">{{value}}</span>
+    {% endfor %}
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+    <span class="">Core(hh:mm): </span>
+    {% for key, value in dvcore.items %}
+    <span class="">{{value}}</span>
+    {% endfor %}
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2">
+    <span class="">Utilisation(%): </span>
+    {% for key, value in dvutilisation.items %}
+    <span class="">{{value}}</span>
+    {% endfor %}
+  </div>
 </div>
-  <div class="row">
-  <div class="col-sm-2 col-md-4 col-lg-12">
+
+  <div class="col-sm-2 col-md-4 col-lg-10">
    <table id="table1" class="table table-striped" >
    <tbody>
-     <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}" novalidate>
+     <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
       {% csrf_token %}
      <tr class="backgroundcolor1 fontstyle4 fontsize12 fontfamilycambria widthsize25per">
        <th class="hidden">Tracking ID</th>
        <th class="hidden">Registered Date</th>
        <th class="hidden">Tracking Date</th>
        <th class="hidden">Associate Name</th>
-       <th>Team Name</th>
+       <th class="hidden">Team Name</th>
        <th>Request Category</th>
        <th>Request Sub-Category</th>
-      <!--       <th>Request ID</th> -->
-       <th>Reports / Projects</th>
+<!--       <th>Request ID</th> -->
+       <th>Activity</th>
        <th>Task</th>
        <th>OT</th>
        <th>Time(Min)</th>
@@ -71,11 +89,11 @@
          <td class="hidden">{{form.registerdatetime    }}</td>
          <td class="hidden">{{form.trackingdatetime }}</td>
          <td class="hidden">{{form.mimember }}</td>
-         <td>{{form.teamdetail }}</td>
+         <td class="hidden">{{form.teamdetail }}</td>
          <td>{{form.requestcategorys }}</td>
          <td>{{form.requestsubcategory  }}</td>
-              <!--       <td>{{form.requestdetail }}</td> -->
-              <td>{{form.reports }}</td>
+  <!--       <td>{{form.requestdetail }}</td> -->
+         <td>{{form.reports }}</td>
          <td>{{form.task}}</td>
          <td>{{form.options}}</td>
          <td class="hidden">{{form.description_text   }}</td>
@@ -95,11 +113,10 @@
 </div>
 
 <div class="row">
-<div class="col-sm-2 col-md-4 col-lg-12">
-
-   <table id="table3" class="table" >
-   <thead class="thead1">
-   <tr class="backgroundcolor1 fontstyle4 fontsize12 fontfamilycambria widthsize25per">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <table  class="table " id="example" style="width:100%">
+    <thead class="thead tableheaderformat">
+    <tr class="" >
      <td >Tracking ID</td>
      <td class="hidden">Registered Date</td>
      <td class="hidden">Tracking Date</td>
@@ -108,18 +125,19 @@
      <td>Request Category</td>
      <td>Request Sub-Category</td>
      <td>Core_Non-Core</td>
-  <!--   <td>Request ID</td> -->
-     <td>Reports / Projects</td>
+  <!--       <th>Request ID</th> -->
+     <td>Activity</td>
      <td>Task</td>
      <td>OT</td>
      <td class="hidden">Descritpion</td>
      <td>Total Time (Min)</td>
      <td class="hidden">Start-Time</td>
      <td class="hidden">Stop-Time</td>
-     <td>View</td>
+     <td>Edit | Add OT</td>
+
      </tr>
    </thead>
-   <tbody class="tbody1">
+   <tbody class="tbody">
    {%for data in model %}
    <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'otform' data.timetrackerid %}">{{data.timetrackerid }} </a> </td>
@@ -138,12 +156,11 @@
      <td>{{data.totaltime }}</td>
      <td class="hidden">{{data.startdatetime  }}</td>
      <td class="hidden">{{data.stopdatetime   }}</td>
-     <td> <a href="{% url 'viewtracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> </td>
+     <td> <a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus"></a> </td>
      {% endfor %}
    </tr></br>
    </tbody>
    </table>
-</div>
 </div>
 <script>
 
@@ -162,6 +179,28 @@ $("#id_requestcategorys").change(function () {
    });
  });
 
+ $("#id_requestcategorys").change(function () {
+    var url = $("#trackingform").attr("data-activity-url");  // get the url of the `load_cities` view
+    var category_id = $(this).val();  // get the selected country ID from the HTML input
+    console.log(category_id)
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+      data: {
+        'categories': category_id     // add the country id to the GET parameters
+      },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+        $("#id_reports").html(data);  // replace the contents of the city input with the data that came from the server
+      }
+    });
+  });
+
+
+  $(document).ready(function() {
+    $("#id_trackingdatetime").datepicker({
+      dateFormat: 'yy-mm-dd',
+       altField: '#thealtdate',
+       altFormat: 'yy-mm-dd'});
+  });
 
 $("#submitbutton").click(function () {
     var datevalue = $("#id_trackingdatetime").val() // get the selected country ID from the HTML input
@@ -172,23 +211,37 @@ $("#submitbutton").click(function () {
     })
     .done(function(response) {
         $('#table3').html(response);
+        console.log(response)
     });
   });
 
-$(document).ready(function(){
-    $('#myTable').dataTable();
-});
+
 
 
 </script>
-</div>
-
 
 {% endblock %}
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $('#example').DataTable(
+    {
+      fixedHeader: true,
+      searching: false,
+      paging: false
+
+    });
+
+} );
+</script>
+
+{% endblock %}
+
 {% block footer %}
 {% include "userprofilefootertest1.html" %}
 {% endblock %}
 
-
+{% block footer_right %}
+{% endblock %}
 
 </html>

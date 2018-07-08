@@ -16,10 +16,9 @@
 
 {% block content %}
   <div class="col-sm-6 col-md-4 col-lg-12">
-    <span class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> OT Details</span><span class="fontstyle4 fontsize15 fontfamilycambria widthsize30per"> </span>
     <table  class="table" id="example" style="width:100%">
-      <thead class="thead">
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <thead class="thead tableheaderformat">
+      <tr class="" >
         <td >OT ID</td>
         <td >TimeTracker Ref</td>
         <td >Start Date-Time</td>
@@ -30,7 +29,7 @@
       </thead>
       <tbody class="tbody">
     {%for data in model %}
-      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+      <tr class="tablebodyformat">
         <td>{{data.reportid}}</td>
         <td>{{data.ot_id }}</td>
         <td>{{data.timetrackers }}</td>

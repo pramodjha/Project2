@@ -5,8 +5,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FForm
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity
 from django.core import serializers
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse, reverse_lazy, resolve
@@ -350,13 +350,13 @@ def comm_sugg(request):
 @login_required
 def ReportForm(request):
     authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='addreport')
-    form = ReportsForm()
+    form = ActivityForm()
     if request.method == 'POST':
-        form = ReportsForm(request.POST)
+        form = ActivityForm(request.POST)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            form = ReportsForm()
+            form = ActivityForm()
             successmsg = 'Report has been successfully added'
             return render(request, 'CentralMI/Reports.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1,'successmsg':successmsg})
         else:
@@ -375,7 +375,7 @@ def check_status(request):
 @login_required
 def Report_Detail(request):
     authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='allreports')
-    model = Reports.objects.all()
+    model = Activity.objects.all()
     return render(request, 'CentralMI/allreports.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
 
 @login_required
@@ -386,7 +386,7 @@ def RequestFormTemplate(request):
     form1 = StatusdetailForm(initial={'statusdetail':1,'username':userid,'requestdetail':None})
     if request.method == 'POST':
         form = RequestdetailForm(request.POST)
-        form1 = StatusdetailForm(request.POST)
+        form1 = StatusdetailForm (request.POST)
         if all([form.is_valid() , form1.is_valid()]):
             inst = form.save(commit=True)
             inst.save()
@@ -693,41 +693,61 @@ def RequestdetailUpdate(request,requestid):
             return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
     return render(request, 'CentralMI/RequestForm.html',{'form':form})
 
-
-def filterform(request):
-    form = FForm()
-    if request.method == 'POST':
-        form =  SearchForm(request.POST)
-        if form.is_valid():
-            team = form.cleaned_data['team']
-            member = form.cleaned_data['member']
-            request.session['globalteam'] = team
-            request.session['globalmember'] = member
-    globalteam = request.session.get('globalteam')
-    globalmember = request.session.get('globalmember')
-    return globalteam, globalmember
+@login_required
+def filterform(request,username,authority):
+    form = FilteredForm()
+    if authority == "Group2":
+        if request.method == 'POST':
+            form =  FilteredForm(request.POST)
+            if form.is_valid():
+                teamfilter = form.cleaned_data['teamfilter']
+                memberfilter = form.cleaned_data['memberfilter']
+                if teamfilter != None and memberfilter != None:
+                    teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
+                    userid = User.objects.get(username__in=[memberfilter]).id
+                    memberid = Mimember.objects.get(username__in=[userid]).mimemberid
+                elif teamfilter != None and memberfilter == None:
+                    teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
+                    memberid = None
+                elif teamfilter == None and memberfilter == None:
+                    teamid = None
+                    memberid = None
+            else:
+                teamid = None
+                memberid = None
+                form = FilteredForm()
+        else:
+            teamid = None
+            memberid = None
+            form = FilteredForm()
+    else:
+        userid = User.objects.get(username__in=[username]).id
+        memberid = Mimember.objects.get(username__in=[userid]).mimemberid
+        teamid = Mimember.objects.get(username__in=[userid]).teamdetail
+    return teamid , memberid, form
 
 
 
 @login_required
 def index(request):
     authority, activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
-    mv = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=2)
-    wv = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=2)
-    dv = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=2)
-    mvOT = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=1)
-    wvOT = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=1)
-    dvOT = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=1)
-    mvcore = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2)
-    wvcore = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2)
-    dvcore = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2)
-    mvutilisation = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
-    wvutilisation = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
-    dvutilisation = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
+    teamid , memberid, form = filterform(request,username=username,authority=authority)
+    mv = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=2,teamdetail=teamid,member=memberid)
+    wv = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=2,teamdetail=teamid,member=memberid)
+    dv = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=2,teamdetail=teamid,member=memberid)
+    mvOT = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=1,teamdetail=teamid,member=memberid)
+    wvOT = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore=None,OT=1,teamdetail=teamid,member=memberid)
+    dvOT= info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore=None,OT=1,teamdetail=teamid,member=memberid)
+    mvcore = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2,teamdetail=teamid,member=memberid)
+    wvcore = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2,teamdetail=teamid,member=memberid)
+    dvcore = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2,teamdetail=teamid,member=memberid)
+    mvutilisation = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid)
+    wvutilisation = info.define_day_week_month1(days_range=5,range_type='weeks',values='mimember',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid)
+    dvutilisation = info.define_day_week_month1(days_range=5,range_type='days',values='mimember',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid)
 
-    return render(request, 'CentralMI/index.html',{'username':username,'authority':authority,
-    'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,
-    'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,'activetab':activetab})
+    return render(request, 'CentralMI/index.html',{'form':form,'username':username,'authority':authority,'activetab':activetab,'authority':authority,
+    'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
+    })
 
 def dataforemail(username=None,requestid=None,sub_user=None,L1_user=None,sub_auth=None,L1_auth=None,sub_miteam=None,L1_miteam=None,sub_manager=None,L1_manager=None,request_status=None):
     userid = User.objects.get(username=username).pk
@@ -799,6 +819,7 @@ class vistorinfo_output(object):
             except:
                 self.groupname = None
 
+
     def getinfo(self):
         self.mimemberid = self.mimemberid
         self.teamname = Mimember.objects.get(mimemberid=self.mimemberid).teamdetail
@@ -806,6 +827,9 @@ class vistorinfo_output(object):
         self.coreid = Requestsubcategory.objects.filter(core_noncore__in=[self.core]).values_list('pk', flat=True).distinct()
         self.noncoreid = Requestsubcategory.objects.filter(core_noncore__in=[self.noncore]).values_list('pk', flat=True).distinct()
         self.modelTracker = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd)
+
+    def errorcalculation(self):
+        pass
 
     def sumcalculationindividual(self,core_noncore=None,OT=None,sumfield='totaltime'):
         """ For Core enter 'Core' in parameter and for Non-Core enter 'noncore'"""
@@ -820,7 +844,6 @@ class vistorinfo_output(object):
             self.summarising = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd ).filter(requestsubcategory__in=list(self.core_noncore_id)).aggregate(Sum(sumfield))
         else:
             self.summarising = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd ).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).aggregate(Sum(sumfield))
-        print(self.summarising)
 
         self.summarising1 = self.summarising[sumfield+'__sum']
         if self.summarising1 == None:
@@ -861,9 +884,12 @@ class vistorinfo_output(object):
         self.length = len(dictfetchall(result))
         return self.length
 
-    def define_day_week_month1(self,days_range=None,range_type=None,year_range=0,sumfield='totaltime',values='trackingdatetime',core_noncore=None,OT=None,utilisation='No'):
+    def define_day_week_month1(self,days_range=None,range_type=None,year_range=0,sumfield='totaltime',values='trackingdatetime',core_noncore=None,OT=None,utilisation='No',teamdetail=None,member=None):
         self.key = []
         self.value = []
+        self.key1 = []
+        self.value1 = []
+
         self.days = 0
 
         for i in range(days_range):
@@ -919,17 +945,71 @@ class vistorinfo_output(object):
             if core_noncore != None:
                 self.core_noncore_id = Requestsubcategory.objects.filter(core_noncore__in=[core_noncore]).values_list('pk', flat=True).distinct()
             if core_noncore == None and OT == None:
-                self.data = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
-                self.data = self.data[sumfield+'__sum']
+                if teamdetail == None and member == None:
+                    self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member == None:
+                    self.data = Timetrackers.objects.filter(teamdetail__in=[teamdetail]).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail == None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(teamdetail__in=[teamdetail]).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                else:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+
             elif core_noncore == None and OT != None:
-                self.data = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(options=OT).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
-                self.data = self.data[sumfield+'__sum']
+                if teamdetail == None and member == None:
+                    self.data = Timetrackers.objects.filter(options=OT).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member == None:
+                    self.data = Timetrackers.objects.filter(teamdetail__in=[teamdetail]).filter(options=OT).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail == None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(options=OT).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(teamdetail__in=[teamdetail]).filter(options=OT).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                else:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(options=OT).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+
             elif core_noncore != None and OT == None:
-                self.data = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
-                self.data = self.data[sumfield+'__sum']
+                if teamdetail == None and member == None:
+                    self.data = Timetrackers.objects.filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member == None:
+                    self.data = Timetrackers.objects.filter(teamdetail__in=[teamdetail]).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail == None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(teamdetail__in=[teamdetail]).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                else:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
             else:
-                self.data = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
-                self.data = self.data[sumfield+'__sum']
+                if teamdetail == None and member == None:
+                    self.data = Timetrackers.objects.filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member == None:
+                    self.data = Timetrackers.objects.filter(teamdetail__in=[teamdetail]).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail == None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                elif teamdetail != None and member != None:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(teamdetail__in=[teamdetail]).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
+                else:
+                    self.data = Timetrackers.objects.filter(mimember__in=[member]).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).filter(trackingdatetime__range=(self.StartDate,self.EndDate)).values(self.values).aggregate(Sum(self.sumfield))
+                    self.data = self.data[sumfield+'__sum']
 
             if utilisation == 'No':
                 if self.data == None:
@@ -949,9 +1029,9 @@ class vistorinfo_output(object):
                 self.hoursmin = str(self.hours).split('.')[0]  + "." + str(self.min)  + " %"
             self.key.append(str(self.date))
             self.value.append(str(self.hoursmin))
+
         self.result = OrderedDict(zip(self.key, self.value))
         return self.result
-
 
 
 
@@ -966,18 +1046,25 @@ def TimeTracker(request):
     dvAll = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',core_noncore=None,OT=None)
     dvcore = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',core_noncore='core',OT=2)
     dvutilisation = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
+    dv_months = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=2)
+    dvOT_months = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=1)
+    dvAll_months = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore=None,OT=None)
+    dvcore_months = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2)
+    dvutilisation_months = info.define_day_week_month1(days_range=3,range_type='months',values='mimember',core_noncore='core',OT=2,utilisation='Yes')
+
+
+
     requestid_onassign = Assigneddetail.objects.filter(assignedto__in=[info.mimemberid]).values_list('requestdetail',flat=True).distinct()
     requestid_onstatus = Requeststatusdetail.objects.filter(statusdetail__in=[4,5,6,7,8]).values_list('requestdetail',flat=True).distinct()
     requestid_filter = Requestdetail.objects.filter(requestid__in=list(requestid_onassign)).filter(requestid__in=list(requestid_onstatus)).values_list('requestid',flat=True).distinct()
     form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'startdatetime':starttime,'stopdatetime':stoptime})
     form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
-    form.fields['reports'].queryset = Reports.objects.all()
+    form.fields['reports'].queryset = Activity.objects.all()
     model = info.modelTracker
     if request.method == 'POST':
         form = TimetrackersForm(request.POST)
         form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
-        form.fields['reports'].queryset = Reports.objects.all()
-
+        form.fields['reports'].queryset = Activity.objects.all()
         if form.is_valid():
             inst = form.save(commit=False)
             inst.mimember
@@ -989,7 +1076,7 @@ def TimeTracker(request):
                 inst.save()
             form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
             form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
-            form.fields['reports'].queryset = Reports.objects.all()
+            form.fields['reports'].queryset = Activity.objects.all()
             model = info.modelTracker
             dv = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',core_noncore=None,OT=2)
             dvOT = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',core_noncore=None,OT=1)
@@ -1001,7 +1088,8 @@ def TimeTracker(request):
             pagename = "report"
             errormsg1 = "Something went Wrong"
             return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
-    return render(request, 'CentralMI/Tracker.html', {'form':form, 'model':model,'username':username,'authority':authority,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/Tracker.html', {'form':form, 'model':model,'username':username,'authority':authority,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'dv_months':dv_months,'dvOT_months':dvOT_months,'dvutilisation_months':dvutilisation_months,
+    'dvcore_months':dvcore_months})
 #    except:
 #        pagename = "report"
 #        errormsg1 = "Something went Wrong"
@@ -1009,27 +1097,18 @@ def TimeTracker(request):
 
 @login_required
 def EditTracker(request,requestid):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+    authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+    e = Timetrackers.objects.get(pk=requestid)
+    model = Timetrackers.objects.filter(pk=requestid)
+    form = TimetrackersForm(instance=e)
+    if request.method == 'POST':
         e = Timetrackers.objects.get(pk=requestid)
-        model = Timetrackers.objects.filter(pk=requestid)
-        form = TimetrackersForm(instance=e)
-        if request.method == 'POST':
-            e = Timetrackers.objects.get(pk=requestid)
-            form = TimetrackersForm(request.POST, instance=e)
-            if form.is_valid():
-                inst = form.save(commit=True)
-                inst.save()
-                return HttpResponseRedirect(reverse('timetracker'))
-            else:
-                pagename = "report"
-                errormsg1 = "Something went Wrong"
-                return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
-        return render(request, 'CentralMI/TrackerEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
-    except:
-        pagename = "report"
-        errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        form = TimetrackersForm(request.POST, instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('timetracker'))
+    return render(request, 'CentralMI/TrackerEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
 
 
 @login_required
@@ -1069,13 +1148,28 @@ def load_subcategories(request):
         category_id = request.GET.get('categories')
         print(category_id)
         subcategories = Requestsubcategory.objects.filter(requestcategorys_id=category_id)
-        subcategories = Reports.objects.filter(requestcategorys_id=category_id)
-        print(subcategories)
-        return render(request, 'CentralMI/rebuilding_subcategories.html', {'subcategories': subcategories,'activetab':activetab})
+        activities = Activity.objects.filter(requestcategorys=category_id)
+        print(activities)
+        return render(request, 'CentralMI/rebuilding_subcategories.html', {'subcategories': subcategories,'activities':activities,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
         return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+
+@login_required
+def load_activity(request):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+        category_id = request.GET.get('categories')
+        print(category_id)
+        activities = Activity.objects.filter(requestcategorys=category_id)
+        print(activities)
+        return render(request, 'CentralMI/rebuilding_activity.html', {'activities':activities,'activetab':activetab})
+    except:
+        pagename = "report"
+        errormsg1 = "Something went Wrong"
+        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+
 
 
 @login_required
