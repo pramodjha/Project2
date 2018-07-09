@@ -42,15 +42,21 @@ h1 {
 
 .box {
   background-color: #333333;
+  padding-top: 15px;
 }
 
 .box1 {
   background-color: #4c4c4c;
+  padding-top: 15px;
 }
 .box2 {
   background-color: #404040;
+  padding-top: 15px;
 }
-
+.box3 {
+  background-color: #404040;
+  padding-top: 10px;
+}
 
 .tablebodyformat {
   color:  #999999;
@@ -60,7 +66,6 @@ h1 {
   background-color: #005266;
 }
 
-@media (min-width: 768px) {
   /*------------------------font_Color------------------------------------------------*/
 
 .fontstyle1{color: #999999;}
@@ -83,6 +88,9 @@ h1 {
 .fonthoverstyle9 {color:#e0e0d1;}
 .fontstyle10 {color: #333333;}
 .fonthoverstyle10 {color:#333333;}
+.fontstyle11 {color: #005266;}
+
+
 
 /*-----------------------------font_Family-------------------------------------------*/
 .fontfamilycambria{font-family: Cambria;}
@@ -166,7 +174,6 @@ h1 {
 .widthsize15per {width: 15%}
 .widthsize20per {width: 20%}
 
-}
 
 .datetime-input {
   background-color: #005266;

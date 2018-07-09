@@ -176,6 +176,10 @@ class SearchForm(forms.Form):
 class FilteredForm(forms.Form):
     teamfilter = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
     memberfilter = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
+    def __init__(self, *args, **kwargs):
+        super(FilteredForm, self).__init__(*args, **kwargs)
+        self.fields['teamfilter'].widget.attrs['class']  = 'form-control mb-2'
+        self.fields['memberfilter'].widget.attrs['class']  = 'form-control'
 
 #class Reports1From(forms.Form):
 #    class Meta():

@@ -23,48 +23,58 @@
 
 <form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
 {% csrf_token %}
-  <div class="col-sm-12 col-md-12 col-lg-12">
-  <table id="table1" class="table table-striped" >
-  <tbody>
-    {% if authority == "Group2" %}
-    <thead class="tableheaderformat">
-    <tr>
-     <th>DataModel</th>
-     <th>Start Date</th>
-     <th>End Date</th>
-     <th>Team</th>
-     <th>Member</th>
-     <th  class='submit'>Save</th>
+{% if authority == "Group2" %}
 
-    </tr>
-    </thead>
-    <tbody class="tablebodyformat">
-     <tr class="">
-       <td>{{form.datachoice }}</td>
-       <td>{{form.startdate }}</td>
-       <td>{{form.enddate  }}</td>
-       <td>{{form.team }}</td>
-       <td>{{form.member }}</td>
-       <td><button id="submitbutton" class='submit' type="submit">Submit</button></td>
+  <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">Data Choice</label>
+      <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">Start Date</label>
+      <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">End Date </label>
+      <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+      <label class="">Team</label>
+      <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">Member</label>
+      <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-1 col-md-1 col-lg-1">
+      <label class="fontstyle10"> save </label>
+      <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+      </div>
+    </div>
 
-     </tr>
        {% else %}
-       <thead class="tableheaderformat">
-       <tr>
-        <th>DataModel</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th  class='submit'>Save</th>
-       </tr>
-       </thead>
-       <tbody class="">
-        <tr class="">
-          <td>{{form.datachoice }}</td>
-          <td>{{form.startdate }}</td>
-          <td>{{form.enddate  }}</td>
-          <td><button id="submitbutton" class='submit' type="submit">Submit</button></td>
-        </tr>
+
+       <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+           <label class="">Data Choice</label>
+           <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
+         </div>
+         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+           <label class="">Start Date</label>
+           <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
+         </div>
+         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+           <label class="">End Date </label>
+           <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
+         </div>
+         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+           <label class="fontstyle10"> save </label>
+           <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+           </div>
+         </div>
          {% endif %}
+       </form>
+
        </tbody>
 </table>
 </div>
