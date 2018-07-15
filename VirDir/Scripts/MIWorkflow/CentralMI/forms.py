@@ -11,7 +11,7 @@ class UserRegistrationForm(forms.Form):
     username = forms.CharField(required = True, label = 'Username', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter Username'}) )
     email = forms.EmailField(required = True, label = 'Email', max_length = 32, widget=forms.EmailInput(attrs={'placeholder': 'Enter Email ID'}))
     password = forms.CharField(required = True, label = 'Password', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Enter Password'}))
-    password1 = forms.CharField(required = True, label = 'Password1', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Enter Password (Again)'}))
+    passwordagain = forms.CharField(required = True, label = 'Password1', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Enter Password (Again)'}))
     firstname = forms.CharField(required = True, label = 'firstname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter First Name'}))
     lastname = forms.CharField(required = True, label = 'lastname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter Last Name'}))
 
@@ -151,6 +151,7 @@ class OtDetailForm(forms.ModelForm):
         model = OtDetail
         fields = '__all__'
 
+
 REPORT_CHOICES = (
     (1, ("None")),
     (2, ("Workflow")),
@@ -158,8 +159,20 @@ REPORT_CHOICES = (
     (4, ("ErrorLog")),
     (5, ("OT"))
     )
+
+INTERVAL_CHOICES = (
+    (1, ("Daily")),
+    (2, ("Weekly")),
+    (3, ("Monthly")),
+    (4, ("Quaterly")),
+    (5, ("Yearly"))
+    )
+
+
+
 class SearchForm(forms.Form):
     datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="", initial=1, widget=forms.Select(), required=True)
+    interval = forms.ChoiceField(choices = INTERVAL_CHOICES, label="", initial=1, widget=forms.Select(), required=True)
     startdate = forms.DateField(initial=datetime.now(), required=False)
     enddate = forms.DateField(initial=datetime.now(), required=False)
     team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
@@ -168,6 +181,7 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['datachoice'].widget.attrs['class']  = 'form-control'
+        self.fields['interval'].widget.attrs['class']  = 'form-control'
         self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
         self.fields['enddate'].widget.attrs['class']  = 'datetime-input form-control'
         self.fields['team'].widget.attrs['class']  = 'form-control'

@@ -297,10 +297,9 @@ class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     feedback_date = models.DateTimeField()
     feedback_question = models.ForeignKey('FeedbackQuestion', models.DO_NOTHING, db_column='feedback_question')
-    feedback_integer = models.IntegerField(blank=True, null=True)
     feedback_text = models.CharField(max_length=255, blank=True, null=True)
-    feedback_datetime = models.DateTimeField(blank=True, null=True)
-    reports = models.ForeignKey('Reports', models.DO_NOTHING, db_column='reports', blank=True, null=True)
+    reports = models.IntegerField(blank=True, null=True)
+    activity = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activity', blank=True, null=True)
 
     class Meta:
         managed = False

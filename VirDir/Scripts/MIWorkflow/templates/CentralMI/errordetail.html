@@ -27,6 +27,7 @@
         <td >Reported To</td>
         <td >Error Type</td>
         <td >Error Description</td>
+        <td >Edit</td>
         </tr>
       </thead>
       <tbody class="tbody">
@@ -40,6 +41,8 @@
         <td>{{data.error_reportedto }}</td>
         <td>{{data.error_type }}</td>
         <td>{{data.error_description }}</td>
+        <td> <a href="{% url 'editerrorlog' data.error_id %}" class="glyphicon glyphicon-pencil"></a> </td>
+
         {% endfor %}
       </tr></br>
     </tbody>
@@ -53,7 +56,7 @@ $(document).ready(function() {
     $('#example').DataTable(
     {
       fixedHeader: true,
-      
+
     });
 
 } );

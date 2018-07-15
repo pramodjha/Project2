@@ -1,4 +1,7 @@
 {% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
@@ -12,82 +15,112 @@
 {% endblock %}
 
 {% block navblockfilterform %}
-{% include "filter_panel.html" %}
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Workingdays</label>
-    {{form}}
+{{model}}
+<form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
+{% csrf_token %}
+{% if authority == "Group2" %}
+
+  <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">Data Choice</label>
+      <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
     </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days OT</label>
-    {% for key, value in dvOT.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}<span></li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Core</label>
-    {% for key, value in dvcore.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Utilisation</label>
-    {% for key, value in dvutilisation.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Utilisation</label>
-    {% for key, value in dvutilisation.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks </label>
-    {% for key, value in wv.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Workingdays</label>
-    {% for key, value in dv.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks OT </label>
-    {% for key, value in wvOT.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks Core</label>
-    {% for key, value in wvcore.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks Utilisaion </label>
-    {% for key, value in wvutilisation.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months </label>
-    {% for key, value in mv.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
-  <div class="col-sm-6 col-md-4 col-lg-2">
-    <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months OT </label>
-    {% for key, value in mvOT.items %}
-    <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
-    {% endfor %}
-  </div>
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">Interval</label>
+      <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
+    </div>
+
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">Start Date</label>
+      <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">End Date </label>
+      <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <label class="">Team</label>
+      <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-1 col-md-1 col-lg-1">
+      <label class="">Member</label>
+      <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-1 col-md-1 col-lg-1">
+      <label class="fontstyle10"> save </label>
+      <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+      </div>
+    </div>
+
+       {% else %}
+
+       <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+           <label class="">Data Choice</label>
+           <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
+         </div>
+         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+           <label class="">Interval</label>
+           <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
+         </div>
+
+         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+           <label class="">Start Date</label>
+           <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
+         </div>
+         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+           <label class="">End Date </label>
+           <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
+         </div>
+         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+           <label class="fontstyle10"> save </label>
+           <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+           </div>
+         </div>
+         {% endif %}
+       </form>
+
+       </tbody>
+</table>
 </div>
+     </form>
+     <script>
+
+     $("#id_team").change(function () {
+         var member_id = $(this).val();  // get the selected country ID from the HTML input
+        console.log(member_id)
+        $.ajax({
+          url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+          data: {
+            'mimemberid': member_id     // add the country id to the GET parameters
+          },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+            $("#id_member").html(data);  // replace the contents of the city input with the data that came from the server
+          }
+        });
+      });
+
+
+      $(document).ready(function() {
+        $("#id_startdate").datepicker({
+          dateFormat: 'yy-mm-dd',
+           altField: '#thealtdate',
+           altFormat: 'yy-mm-dd'});
+      });
+
+      $(document).ready(function() {
+        $("#id_enddate").datepicker({
+          dateFormat: 'yy-mm-dd',
+           altField: '#thealtdate',
+           altFormat: 'yy-mm-dd'});
+      });
+
+
+       </script>
+
 {% endblock %}
 
 {% block footer %}

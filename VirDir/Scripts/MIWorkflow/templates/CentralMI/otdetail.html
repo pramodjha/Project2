@@ -25,18 +25,19 @@
         <td >End Date-Time</td>
         <td >OT in Hrs.</td>
         <td >OT Status</td>
+        <td> Edit </td>
         </tr>
       </thead>
       <tbody class="tbody">
     {%for data in model %}
       <tr class="tablebodyformat">
-        <td>{{data.reportid}}</td>
-        <td>{{data.ot_id }}</td>
+        <td >{{data.ot_id }} </a> </td>
         <td>{{data.timetrackers }}</td>
         <td>{{data.ot_startdatetime }}</td>
         <td>{{data.ot_enddatetime }}</td>
         <td>{{data.ot_hrs }}</td>
         <td>{{data.ot_status }}</td>
+        <td> <a href="{% url 'editot' data.ot_id %}" class="glyphicon glyphicon-pencil"></a> </td>
         {% endfor %}
       </tr></br>
     </tbody>

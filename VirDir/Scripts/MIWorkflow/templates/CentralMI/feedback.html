@@ -16,19 +16,37 @@
 
 
 {% block content %}
+<form class="form" method="POST" action="" class='form-inline '>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
 <div class="col-sm-12 col-md-12 col-lg-12">
-  <form class="form" method="POST" action="" >
-  {% csrf_token %}
-  <div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> User Feedback </label></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Report Name </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.reports}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Feedback Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.feedback_date}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Select Question </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.feedback_question}} </span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Answer </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.feedback_integer}}</div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Answer </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.feedback_text}}</span></div>
-  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Answer </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.feedback_datetime}}</span></div>
-  <div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
-</form>
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Feedback Form</h3>
 </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Activity'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.activity  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'feedbckdate'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.feedback_date  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Select Qustion'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.feedback_question  show_label=False  placeholder='' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Feedback'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.feedback_text  show_label=False  placeholder='Feedback' %}</span>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}
+</div>
+
+</form>
 
 {% endblock %}
 

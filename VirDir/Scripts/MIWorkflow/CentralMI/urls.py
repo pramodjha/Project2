@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
 
 	url(r'^$',views.index, name = 'home'),
+	url(r'^landingpage',views.landingpage, name = 'lp'),
 	url(r'^allrequest',views.All_request, name = 'allrequest'),
 	url(r'^allreports/',views.Report_Detail, name = 'allreports'),
 	url(r'^errordetail/',views.Error_detail, name = 'errordetail'),
@@ -11,7 +12,7 @@ urlpatterns = [
 	url(r'^summary_tracker/',views.summary_tracker, name = 'summary'),
 	url(r'^edf',views.filterdata, name = 'extractdatafilter'),
 	url(r'^edf1',views.filterdata, name = 'extractdatafilter1'),
-	url(r'^feedback/(?P<reportid>\d+)$',views.feedback, name = 'feedback'),
+	url(r'^feedback/(?P<reportid>\d+)/(?P<id>\d+)$',views.feedback, name = 'feedback'),
 	url(r'^about_team',views.about_team, name = 'aboutteam'),
 	url(r'^what_we_do',views.whatwedo, name = 'whatwedo'),
 	url(r'^governance_process',views.governanceprocess, name = 'governanceprocess'),
@@ -48,9 +49,11 @@ urlpatterns = [
 	url(r'^sd', views.setdate, name='sdate'),
 	url(r'^viewTracker/(?P<requestid>\d+)$', views.ViewTracker, name='viewtracker'),
 	url(r'^editTracker/(?P<requestid>\d+)$', views.EditTracker, name='edittracker'),
+	url(r'^editOT/(?P<requestid>\d+)$', views.EditOT, name='editot'),
+	url(r'^editReport/(?P<requestid>\d+)$', views.EditReport, name='editreport'),
+	url(r'^editErrorLog/(?P<requestid>\d+)$', views.EditError_Log, name='editerrorlog'),
 	url(r'^ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
 	url(r'^ajax/load-activity/', views.load_activity, name='ajax_load_activity'),
-
 	url(r'^ajax/mimember_load_ajax/', views.load_mimember, name='ajax_load_mimember'),
 	url(r'^ajax/load-datevalues/', views.load_datevalues, name='ajax_load_datavalues'),
 	url(r'^ajax/load-tables/', views.load_tables, name='ajax_load_tables'),

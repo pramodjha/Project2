@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/ -->
+<html lang="en-GB"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link rel="pingback" href="http://bookofstranger.com/xmlrpc.php">	
+<title>Optimizing Django ORM Queries for Best Performance – The book of Stranger</title>
+<link rel="dns-prefetch" href="http://s0.wp.com/">
+<link rel="dns-prefetch" href="http://s.gravatar.com/">
+<link rel="dns-prefetch" href="http://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="http://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="The book of Stranger » Feed" href="http://bookofstranger.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="The book of Stranger » Comments Feed" href="http://bookofstranger.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="The book of Stranger » Optimizing Django ORM Queries for Best Performance Comments Feed" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/feed/">
+		<script async="" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/analytics.js.download"></script><script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/bookofstranger.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.7"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/wp-emoji-release.min.js(1).download" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="es-widget-css-css" href="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/es-widget.css" type="text/css" media="all">
+<link rel="stylesheet" id="attitude_style-css" href="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/style(1).css" type="text/css" media="all">
+<link rel="stylesheet" id="google_fonts-css" href="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/css" type="text/css" media="all">
+<!-- Inline jetpack_facebook_likebox -->
+<style id="jetpack_facebook_likebox-inline-css" type="text/css">
+.widget_facebook_likebox {
+	overflow: hidden;
+}
+
+</style>
+<link rel="stylesheet" id="social-logos-css" href="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/social-logos.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="jetpack_css-css" href="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/jetpack.css" type="text/css" media="all">
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/jquery.js.download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/jquery-migrate.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var related_posts_js_options = {"post_heading":"h4"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/related-posts.min.js.download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/tinynav.js.download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/backtotop.js.download"></script>
+<script type="text/javascript" async="" defer="" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/platform.js.download" gapi_processed="true"></script>
+<link rel="https://api.w.org/" href="http://bookofstranger.com/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://bookofstranger.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://bookofstranger.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Architecting Scalable and Fast Asset Delivery System | web server vs cdn" href="http://bookofstranger.com/architecting-scalable-and-fast-asset-delivery-system/">
+<link rel="next" title="Desktop And Mobile Site With Django | custom render function, no middleware required" href="http://bookofstranger.com/mobile-and-desktop-site-with-django/">
+<link rel="canonical" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/">
+<link rel="shortlink" href="https://wp.me/p7wgOE-1O">
+<link rel="alternate" type="application/json+oembed" href="http://bookofstranger.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fbookofstranger.com%2Foptimizing-django-orm-queries-for-best-performance%2F">
+<link rel="alternate" type="text/xml+oembed" href="http://bookofstranger.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fbookofstranger.com%2Foptimizing-django-orm-queries-for-best-performance%2F&amp;format=xml">
+<!------------ Created by Seo Wizard Wordpress Plugin - www.seowizard.org ----------->
+<meta name="keywords" content="Django,django orm,optimization,performance,query optimization,querysets">
+<meta name="title" content="Django ORM Queries Performance Optimization | django orm optimization, database performance improvement">
+<meta name="description" content="Making queries in django is very simple and straight forward via ORM, but it can cause performance issues if the queries are not written properly. Using the techniques listed below, I cut down nearly 92% database queries and around 80% query execution time. I will show and discuss the statistics in detail below but first lets go through the optimization techniques. django orm optimization, database performance improvement">
+<meta name="robots" content="index,follow">
+<!------------------------------------------------------------------------------>
+<link rel="dns-prefetch" href="http://v0.wordpress.com/">
+<link rel="dns-prefetch" href="http://i0.wp.com/">
+<link rel="dns-prefetch" href="http://i1.wp.com/">
+<link rel="dns-prefetch" href="http://i2.wp.com/">
+<link rel="dns-prefetch" href="http://jetpack.wordpress.com/">
+<link rel="dns-prefetch" href="http://s0.wp.com/">
+<link rel="dns-prefetch" href="http://s1.wp.com/">
+<link rel="dns-prefetch" href="http://s2.wp.com/">
+<link rel="dns-prefetch" href="http://public-api.wordpress.com/">
+<link rel="dns-prefetch" href="http://0.gravatar.com/">
+<link rel="dns-prefetch" href="http://1.gravatar.com/">
+<link rel="dns-prefetch" href="http://2.gravatar.com/">
+<style type="text/css">img#wpstats{display:none}</style><!-- The book of Stranger Custom CSS Styles -->
+<style type="text/css" media="screen">
+body { background-image: none; }
+</style>
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f7f7f7; }
+</style>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Optimizing Django ORM Queries for Best Performance">
+<meta property="og:url" content="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/">
+<meta property="og:description" content="Django framework already comes with lot of ORM (Object Relational Mapping) functionalities. Once the models are created, you can create, update, retrieve and delete objects using its database abstr…">
+<meta property="article:published_time" content="2016-05-29T11:57:56+00:00">
+<meta property="article:modified_time" content="2016-06-19T21:59:55+00:00">
+<meta property="og:site_name" content="The book of Stranger">
+<meta property="og:image" content="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/orm.png?fit=1200%2C495">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="495">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:text:title" content="Optimizing Django ORM Queries for Best Performance">
+<meta name="twitter:image" content="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/orm.png?fit=1200%2C495&amp;w=640">
+<meta name="twitter:card" content="summary_large_image">
+<!-- BEGIN GADWP v5.1.2.5 Universal Analytics - https://deconf.com/google-analytics-dashboard-wordpress/ -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-77434088-1', 'auto', {'siteSpeedSampleRate': '20'});
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+</script>
+<!-- END GADWP Universal Analytics -->
+
+<style type="text/css"></style><link rel="stylesheet" type="text/css" id="gravatar-card-css" href="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/hovercard(1).css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/services(1).css"><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:-webkit-sticky;top:0}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}
+.fb_customer_chat_bounce_in_v1{animation-duration:250ms;animation-name:fb_bounce_in_v1}.fb_customer_chat_bounce_out_v1{animation-duration:250ms;animation-name:fb_bounce_out_v1}.fb_customer_chat_bounce_in_v2{animation-duration:300ms;animation-name:fb_bounce_in_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2{animation-duration:300ms;animation-name:fb_bounce_out_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_in_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_in_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_out_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bubble_pop_in{animation-duration:250ms;animation-name:fb_customer_chat_bubble_bounce_in_animation}.fb_customer_chat_bubble_animated_no_badge{box-shadow:0 3px 12px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_no_badge:hover{box-shadow:0 5px 24px rgba(0, 0, 0, .3)}.fb_customer_chat_bubble_animated_with_badge{box-shadow:-5px 4px 14px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_with_badge:hover{box-shadow:-5px 8px 24px rgba(0, 0, 0, .2)}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_bounce_in_v1{0%{opacity:0;transform:scale(.8, .8);transform-origin:bottom right}80%{opacity:.8;transform:scale(1.03, 1.03)}100%{opacity:1;transform:scale(1, 1)}}@keyframes fb_bounce_in_v2{0%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}50%{transform:scale(1.03, 1.03);transform-origin:bottom right}100%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}}@keyframes fb_bounce_in_v2_mobile_chat_started{0%{opacity:0;top:20px}100%{opacity:1;top:0}}@keyframes fb_bounce_out_v1{from{opacity:1}to{opacity:0}}@keyframes fb_bounce_out_v2{0%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}100%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}}@keyframes fb_bounce_out_v2_mobile_chat_started{0%{opacity:1;top:0}100%{opacity:0;top:20px}}@keyframes fb_customer_chat_bubble_bounce_in_animation{0%{bottom:6pt;opacity:0;transform:scale(0, 0);transform-origin:center}70%{bottom:18pt;opacity:1;transform:scale(1.2, 1.2)}100%{transform:scale(1, 1)}}</style></head>
+
+<body class="post-template-default single single-post postid-112 single-format-standard custom-background  jp-sharing-input-touch">
+
+	
+	<div class="wrapper">
+				<header id="branding">
+				
+	<div class="container clearfix">
+		<div class="hgroup-wrap clearfix">
+								<section class="hgroup-right">
+						
+			<div class="social-profiles clearfix">
+				<ul><li class="facebook"><a href="https://www.facebook.com/bookofstranger/" title="The book of Stranger on Facebook" target="_blank">The book of Stranger Facebook</a></li><li class="linked"><a href="https://in.linkedin.com/in/anuragjain1991" title="The book of Stranger on LinkedIn" target="_blank">The book of Stranger LinkedIn</a></li>
+			</ul>
+			</div><!-- .social-profiles -->											</section><!-- .hgroup-right -->	
+							<hgroup id="site-logo" class="clearfix">
+																		<h2 id="site-title"> 
+								<a href="http://bookofstranger.com/" title="The book of Stranger" rel="home">
+									The book of Stranger								</a>
+							</h2>
+														<h2 id="site-description">You are never too old to learn</h2>
+																
+				</hgroup><!-- #site-logo -->
+			
+		</div><!-- .hgroup-wrap -->
+	</div><!-- .container -->	
+		
+	<nav id="access" class="clearfix">
+					<div class="container clearfix"><ul class="root l_tinynav1"><li id="menu-item-15" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-15"><a href="http://bookofstranger.com/">Home</a></li>
+<li id="menu-item-111" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-111"><a href="http://bookofstranger.com/about/">About Me</a></li>
+<li id="menu-item-12" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12"><a href="http://bookofstranger.com/contact/">Contact Me</a></li>
+<li class="default-menu"><a href="http://bookofstranger.com/" title="Navigation">Navigation</a></li></ul><select class="tinynav tinynav1"><option value="http://bookofstranger.com">Home</option><option value="http://bookofstranger.com/about/">About Me</option><option value="http://bookofstranger.com/contact/">Contact Me</option><option value="http://bookofstranger.com" selected="selected">Navigation</option></select></div><!-- .container -->
+					</nav><!-- #access --> 		
+				</header>
+		
+				<div id="main" class="container clearfix">
+
+<div id="container">
+	
+
+<div id="primary" class="no-margin-left">
+   <div id="content">	<section id="post-112" class="post-112 post type-post status-publish format-standard has-post-thumbnail hentry category-django tag-django tag-django-orm tag-optimization tag-performance tag-query-optimization tag-querysets">
+		<article>
+
+			
+			<header class="entry-header">
+    			<h1 class="entry-title">
+    				Optimizing Django ORM Queries for Best Performance    			</h1><!-- .entry-title -->
+  			</header>
+
+  			
+  			
+  			<div class="entry-content clearfix">
+    			<p style="text-align: justify;">Django framework already comes with lot of <strong>ORM</strong> (Object Relational Mapping)&nbsp;functionalities. Once the models are created,&nbsp;you can create, update, retrieve and delete objects using its database abstraction api. Any changes in the models can also be handled using migrations which is pretty awesome. Making queries in django is very simple and straight forward, but it can cause performance issues if the queries are not written properly. Using the techniques listed below, I cut down nearly 92% &nbsp;database queries and around&nbsp;80% query execution time. I will show and discuss the statistics in detail below but first lets go through the database access optimization techniques.</p>
+<h2><span style="color: #003366;">Understand how Querysets work</span></h2>
+<p style="text-align: justify;">One of the important things you need to understand is that <a rel="nofollow" href="https://docs.djangoproject.com/en/dev/ref/models/querysets/">django querysets</a> are lazy i.e. they won’t be evaluated unless you ask for&nbsp;the data. Also, if you try to read the query-set again, the&nbsp;results will come from the fetched values and there won’t be any database hits.</p>
+<p>For example</p>
+<pre><code># No database interaction will be done here
+blogs = Blog.objects.filter(category='django') &nbsp; &nbsp; 
+
+# The below statement will fire the database query
+if blogs:
+    print 'yes'
+
+# No database hit
+randomBlog = blogs[0]</code></pre>
+<p style="text-align: justify;">Given that you have good understanding of querysets and making queries, following are some ways to drastically improve django orm performance.</p>
+<h2><span style="color: #003366;">Use select_related or prefetch_related</span></h2>
+<p style="text-align: justify;">Retrieve everything at once if you know you will need it.&nbsp;Most of the model definitions contain foreign key relationships. If the queries are not written properly,&nbsp;data will be fetched in multiple hits on the database which should be avoided.&nbsp;This is particularly important if you have a query that is executed in a loop, and could therefore end up doing many database queries, when only one was needed.</p>
+<p style="text-align: justify;">Lets take a use case when you have to&nbsp;query the table with foreign keys and also need the data referenced via foreign key. Assuming the following models definitions</p>
+<pre><code>Class Blog(models.Model):
+    title = models.CharField(max_length=32)
+    description = models.CharField(max_length=255)
+    author = models.ForeignKey(Author)
+
+Class Author(models.Model):
+    name = models.CharField(max_length=32)
+    email = models.EmailField(unique=True)
+    city = models.CharField(max_length=32)
+
+# Hits the database
+blog = Blog.objects.get(id=124)
+
+# hits the database again
+author = blog.author
+</code></pre>
+<p style="text-align: justify;">To optimize the database hits, we can use <a rel="nofollow" href="https://docs.djangoproject.com/en/1.9/ref/models/querysets/#django.db.models.query.QuerySet.select_related"><strong>select_related</strong></a>&nbsp;modifier which follows the foreign key relationships and fetches the result in a single complex query. You can refer any Foreign Key or a list of foreign keys and pass it to&nbsp;<strong>select_related</strong>().&nbsp;Below is the example illustrating the effect.</p>
+<pre><code># Hits the database
+blog = Blog.objects.select_related('author').get(id=124)
+
+# doesn't hit the database as value is already fetched in the previous query
+author = blog.author
+</code></pre>
+<p style="text-align: justify;">Apart from select_related, there is a similar method&nbsp;<a rel="nofollow" href="https://docs.djangoproject.com/en/1.9/ref/models/querysets/#django.db.models.query.QuerySet.prefetch_related"><strong>prefetch_related</strong></a>(). Both these methods have similar purpose but the strategy to retrieve data is different.</p>
+<p style="text-align: justify;"><strong>select_related</strong>&nbsp;performs a sql join while&nbsp;<strong>prefetch_related</strong>&nbsp;does a separate lookup which&nbsp;allows it to prefetch many-to-many and many-to-one objects, which cannot be done using select_related. prefetch_related can also be used with generic relations and generic foreign keys. You can read more about them&nbsp;<a href="https://docs.djangoproject.com/en/1.8/ref/models/querysets/#django.db.models.query.QuerySet.select_related" rel="nofollow">here</a></p>
+<h2><span style="color: #003366;">When to use count vs len vs exists</span></h2>
+<p style="text-align: justify;">There can be cases where you want to know if particular records exists in the database,&nbsp;number&nbsp;such records or full data. There are various methods to get the correct result, however we should always be aware as to which method works best for which situation. Lets take&nbsp;these use cases with example</p>
+<p style="text-align: justify;">If you want to only know if there a blog exists with category ‘django’, then use exists instead of <strong>len</strong> or <strong>count</strong></p>
+<pre><code># Bad query
+blogs = Blog.objects.filter(category='django') &nbsp;
+exists = len(blogs)&gt;0
+
+# Bad Query
+exists = Blog.objects.filter(category='django').count() &gt; 0
+
+# Good query
+exists = Blog.objects.filter(category='django').exists()</code></pre>
+<p style="text-align: justify;">Now if you want to only know the count of blogs with category as ‘django’ and you are not bothered about the content, then</p>
+<pre><code># Bad query
+blogs = Blog.objects.filter(category='django') &nbsp;
+count = len(blogs)
+
+# Good Query
+count = Blog.objects.filter(category='django').count()</code></pre>
+<p>However if you need the data of blogs as well, then its better to get full data and use len(blogs) whenever you require the number.</p>
+<h2><span style="color: #003366;">Use&nbsp;foreign key values directly</span></h2>
+<p style="text-align: justify;">If you only want to know the id of the foreign key, then its better to use fk__id instead of fk.id. This will save additional database lookup for contents of child table. For example, if you want to know the id of author of a&nbsp;particular blog</p>
+<pre><code># Bad query, additional db lookup in author table
+blog = Blog.objects.get(id=2)
+author_id = blog.author.id &nbsp;
+
+# A better version of above query but still a bad query
+blog = Blog.objects.select_related('author').get(id=2)
+author_id = blog.author.id &nbsp;
+
+# Good Query
+blog = Blog.objects.get(id=2)
+author_id = blog.author_id</code></pre>
+<h2><span style="color: #003366;">Don’t fetch data you don’t need</span></h2>
+<p style="text-align: justify;">If you know what data you require, then there is no need to retrieve all columns of the table, some of the ways to achieve this are listed below</p>
+<h4 style="text-align: justify;"><span style="color: #003366;">Use values or values_list</span></h4>
+<p style="text-align: justify;">Using queryset.values() or values_list() can be very useful if you have tables with lot of columns and you just want the dict or list of values of specific columns.</p>
+<p style="text-align: justify;">Consider a use case when&nbsp;you want to retrieve blog title and author name of all blogs with category django. Using values or values_list can significantly cut down the data transfer required from the database and can make queries run faster.</p>
+<pre><code># Bad query
+blogs = Blog.objects.filter(category='django').select_related('author')
+my_list = []
+for blog in blogs:
+   mylist.append({'title':blog.title, 'author_name':blog.author.name}) 
+
+# Good Query
+mylist = Blog.objects.filter(category='django').values('title', 'author__name')</code></pre>
+<h4><span style="color: #003366;">Use Queryset.only&nbsp;and&nbsp;defer&nbsp;</span></h4>
+<p style="text-align: justify;">Using queryset.only() or defer() in your queries can also improve the query performance. If you want only specific columns from the database, you can use <strong>only</strong> parameter. Or if you don’t want some columns, you can remove them using <strong>defer</strong> parameter. More details <a rel="nofollow" href="https://docs.djangoproject.com/en/1.9/topics/db/optimization/#use-queryset-defer-and-only">here</a>. Following example illustrates the same</p>
+<pre><code># If you want only author and blog title 
+
+# Bad query, this will retrieve all details
+blogs = Blog.objects.filter(category='django').select_related('author')
+
+# Good Query
+blogs = Blog.objects.filter(category='django').only('author','title').select_related('author')
+
+# If you want everything apart from description
+
+# Bad query, this will retrieve all details
+blogs = Blog.objects.filter(category='django').select_related('author')
+
+# Good Query
+blogs = Blog.objects.filter(category='django').defer('description').select_related('author')</code></pre>
+<h2><span style="color: #003366;">Analyze and index your tables</span></h2>
+<p style="text-align: justify;">Apart from the various techniques to improve the ORM performance, one of the most important thing you need to do is understand your data. You should have a solid&nbsp;understanding of your table structures and type of queries used on that table. Once you know that, do the proper indexing of appropriate columns. Keep in mind that Indexing slows down the write operations, so you need to factor in those things as well and then come to conclusion.</p>
+<h2><span style="color: #003366;">Install django-debug-toolbar/analyze ajax calls</span></h2>
+<p style="text-align: justify;">A very powerful tool to debug your sql queries is <a rel="nofollow" href="https://github.com/django-debug-toolbar/django-debug-toolbar">django-debug-toolbar</a> which shows &nbsp;the sql queries executed by the database api along with the time each query&nbsp;took to execute. This is a very helpful tool to analyze which calls are taking too much time/ executing lot of&nbsp;queries. &nbsp;It&nbsp;can also be used with ajax calls by installing an additional app <a rel="nofollow" href="https://github.com/recamshak/django-debug-panel">django-debug-panel</a> and a <a rel="nofollow" href="https://chrome.google.com/webstore/detail/django-debug-panel/nbiajhhibgfgkjegbnflpdccejocmbbn?hl=en">chrome extension</a>. To install both of them, follow the steps mentioned below</p>
+<pre><code>pip install django-debug-toolbar
+pip install django-debug-panel
+
+# Add these to installed apps 
+INSTALLED_APPS = (
+    .....
+    'debug_toolbar',
+    'debug_panel',
+    .....
+)
+
+# Add a middleware class
+MIDDLEWARE_CLASSES += ('debug_panel.middleware.DebugPanelMiddleware',)
+
+# Install this chrome extension
+<a rel="nofollow" href="https://chrome.google.com/webstore/detail/django-debug-panel/nbiajhhibgfgkjegbnflpdccejocmbbn?hl=en">chrome extension</a>
+</code></pre>
+<p style="text-align: justify;">In one of my calls, there were about 305 queries happening which was taking 23.2 seconds of execution time.</p>
+<h4><span style="color: #003366;">Performance before django orm query optimization</span></h4>
+<p><img data-attachment-id="115" data-permalink="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/screen-shot-2016-05-24-at-4-43-19-pm/" data-orig-file="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?fit=1918%2C721" data-orig-size="1918,721" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="Performance before orm query optimization" data-image-description="" data-medium-file="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?fit=300%2C113" data-large-file="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?fit=700%2C263" class="wp-image-115 size-full" title="Performance before orm query optimization" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/Screen-Shot-2016-05-24-at-4.43.19-PM.png" alt="Performance before orm query optimization" width="642" height="241" srcset="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?w=1918 1918w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?resize=300%2C113 300w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?resize=768%2C289 768w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?resize=1024%2C385 1024w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?resize=900%2C338 900w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?resize=1280%2C481 1280w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-24-at-4.43.19-PM.png?w=1400 1400w" sizes="(max-width: 700px) 100vw, 700px"></p>
+<h4><span style="color: #003366;">Performance after&nbsp;django orm query optimization</span></h4>
+<h3 class="mceTemp"><img data-attachment-id="116" data-permalink="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/screen-shot-2016-05-25-at-4-52-40-pm/" data-orig-file="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?fit=1920%2C507" data-orig-size="1920,507" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="Performance after optimizing django orm queries" data-image-description="&lt;p&gt;Performance after optimizing django orm queries&lt;/p&gt;
+" data-medium-file="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?fit=300%2C79" data-large-file="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?fit=700%2C185" class="wp-image-116 size-full" title="Performance after optimizing django orm queries" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/Screen-Shot-2016-05-25-at-4.52.40-PM.png" alt="Performance after optimizing django orm queries" width="642" height="169" srcset="https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?w=1920 1920w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?resize=300%2C79 300w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?resize=768%2C203 768w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?resize=1024%2C270 1024w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?resize=900%2C238 900w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?resize=1280%2C338 1280w, https://i0.wp.com/bookofstranger.com/wp-content/uploads/2016/05/Screen-Shot-2016-05-25-at-4.52.40-PM.png?w=1400 1400w" sizes="(max-width: 700px) 100vw, 700px"></h3>
+<p class="mceTemp" style="text-align: justify;">This is huge<strong> gain in performance</strong> as the execution time went down from 26.2 seconds to 3.8 seconds (85.4% reduction). The main culprit was foreign key access within a loop&nbsp;which was firing lot of queries.&nbsp;This statistic is for a&nbsp;small development database. In production, the number went down from 3.6 seconds to 0.65 seconds (82% reduction).</p>
+<p class="mceTemp" style="text-align: justify;">Keep in mind that sometimes it might actually be faster to do some extra queries vs using joins or doing complex queries, but its worth checking the query time and improving on it.</p>
+<p class="mceTemp" style="text-align: justify;">I hope you find this article helpful.&nbsp;Let me know if you have any suggestions/ feedback in the comments section below.</p>
+<p style="text-align: justify;"><strong>Fun Fact</strong>:&nbsp;<strong>Game of thrones</strong>&nbsp;season 6 is back, and its&nbsp;episode 4 is also titled as the book of stranger <img draggable="false" class="emoji" alt="🙂" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/1f642.svg" scale="0"></p>
+<style>
+#wsw-rating-box {
+border:1px solid #B8B2B2;
+border-radius: 15px;
+margin:10px;
+padding:10px;
+}
+</style>
+<div id="wsw-rating-box">
+    Structured Data, Review<br>
+    <span class="item">Title: <span class="fn entry-title">Optimizing Django ORM Queries for Best Performance</span></span><br>
+    Reviewed by <span class="reviewer">Anurag</span><br>
+    Rating: <span class="rating">5.0</span><br>
+    Summary: <span class="summary">Django ORM Queries Performance Optimization</span><br>
+    Description: <span class="description">Making queries in django is very simple and straight forward via ORM, but it can cause performance issues if the queries are not written properly. Using the techniques listed below, I cut down nearly 92% database queries and around 80% query execution time. I will show and discuss the statistics in detail below but first lets go through the optimization techniques.</span>
+</div>
+<div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow" data-shared="sharing-twitter-112" class="share-twitter sd-button share-icon" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?share=twitter&amp;nb=1" target="_blank" title="Click to share on Twitter"><span>Twitter</span></a></li><li class="share-facebook"><a rel="nofollow" data-shared="sharing-facebook-112" class="share-facebook sd-button share-icon" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?share=facebook&amp;nb=1" target="_blank" title="Click to share on Facebook"><span>Facebook<span class="share-count">80</span></span></a></li><li class="share-google-plus-1"><a rel="nofollow" data-shared="sharing-google-112" class="share-google-plus-1 sd-button share-icon" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?share=google-plus-1&amp;nb=1" target="_blank" title="Click to share on Google+"><span>Google</span></a></li><li class="share-linkedin"><a rel="nofollow" data-shared="sharing-linkedin-112" class="share-linkedin sd-button share-icon" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?share=linkedin&amp;nb=1" target="_blank" title="Click to share on LinkedIn"><span>LinkedIn</span></a></li><li class="share-pinterest"><a rel="nofollow" data-shared="sharing-pinterest-112" class="share-pinterest sd-button share-icon" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?share=pinterest&amp;nb=1" target="_blank" title="Click to share on Pinterest"><span>Pinterest</span></a></li><li class="share-end"></li></ul></div></div></div>
+<div id="jp-relatedposts" class="jp-relatedposts" style="display: block;">
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+<div class="jp-relatedposts-items jp-relatedposts-items-minimal jp-relatedposts-grid "><p class="jp-relatedposts-post jp-relatedposts-post0" data-post-id="24" data-post-format="false"><span class="jp-relatedposts-post-title"><a class="jp-relatedposts-post-a" href="http://bookofstranger.com/django-advanced-tips-you-must-know/" title="Django Advanced Tips You Must Know
+
+Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design. It is blazing fast and a very matured framework with all the functionalities you will ever need to create a full fledged website. It&#39;s out of the box admin interface is just amazing. Some of the well-known…" rel="nofollow" data-origin="112" data-position="0">Django Advanced Tips You Must Know</a></span><span class="jp-relatedposts-post-date">May 10, 2016</span><span class="jp-relatedposts-post-context">In "Django"</span></p><p class="jp-relatedposts-post jp-relatedposts-post1" data-post-id="20" data-post-format="false"><span class="jp-relatedposts-post-title"><a class="jp-relatedposts-post-a" href="http://bookofstranger.com/elastic-search-wih-django-haystack-for-search-functionality/" title="Django + Elastic Search + haystack = Powering your website with search functionality - part 1
+
+Search is one of the most important and powerful functionality in web applications these days. It helps users to easily find content, products etc on your website. Without search option, users will have to find their way out to reach the desired content which no one likes to do. Just imagine Amazon…" rel="nofollow" data-origin="112" data-position="1">Django + Elastic Search + haystack = Powering your website with search functionality - part 1</a></span><span class="jp-relatedposts-post-date">July 18, 2016</span><span class="jp-relatedposts-post-context">In "Django"</span></p><p class="jp-relatedposts-post jp-relatedposts-post2" data-post-id="17" data-post-format="false"><span class="jp-relatedposts-post-title"><a class="jp-relatedposts-post-a" href="http://bookofstranger.com/django-compressor-with-s3-and-cloudfront/" title="Speed Up Your Website - Django Compressor with S3 and cloudfront
+
+In today&#39;s world where the response time of your website determines how many people are going to stay on your website, you cannot ignore the steps needed to improve your website load time. After all, you want your users to get the content as fast as possible, right? And static components…" rel="nofollow" data-origin="112" data-position="2">Speed Up Your Website - Django Compressor with S3 and cloudfront</a></span><span class="jp-relatedposts-post-date">May 9, 2016</span><span class="jp-relatedposts-post-context">In "Django"</span></p></div></div>							<div class="tags">
+								Tagged on: <a href="http://bookofstranger.com/tag/django/" rel="tag">Django</a>, <a href="http://bookofstranger.com/tag/django-orm/" rel="tag">django orm</a>, <a href="http://bookofstranger.com/tag/optimization/" rel="tag">optimization</a>, <a href="http://bookofstranger.com/tag/performance/" rel="tag">performance</a>, <a href="http://bookofstranger.com/tag/query-optimization/" rel="tag">query optimization</a>, <a href="http://bookofstranger.com/tag/querysets/" rel="tag">querysets</a>							</div>
+							  			</div>
+  			<div class="entry-meta-bar clearfix">	        			
+    			<div class="entry-meta">
+    				<span class="by-author">By <a href="http://bookofstranger.com/author/anurag/">Anurag</a></span> |
+    				<span class="date"><a href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/" title="5:27 pm">May 29, 2016</a></span> |
+    				             		<span class="category"><a href="http://bookofstranger.com/category/django/" rel="category tag">Django</a></span> |
+             	 
+    				             		<span class="comments"><a href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/#comments">4 Comments</a></span> |
+             	 		          				
+    			</div><!-- .entry-meta -->
+    		</div>
+
+  						<ul class="default-wp-page clearfix">
+				<li class="previous"><a href="http://bookofstranger.com/architecting-scalable-and-fast-asset-delivery-system/" rel="prev"><span class="meta-nav">←</span> Architecting Scalable and Fast Asset Delivery System | web server vs cdn</a></li>
+				<li class="next"><a href="http://bookofstranger.com/mobile-and-desktop-site-with-django/" rel="next">Desktop And Mobile Site With Django | custom render function, no middleware required <span class="meta-nav">→</span></a></li>
+			</ul>
+		
+<div id="comments" class="comments-area">
+
+	
+			<h3 class="comments-title">
+			4 thoughts on “<span>Optimizing Django ORM Queries for Best Performance</span>”		</h3>
+
+		<ol class="commentlist">
+				<li class="comment even thread-even depth-1" id="li-comment-3">
+		<article id="comment-3" class="comment">
+			<header class="comment-meta comment-author vcard">
+				<img alt="" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/d6d0871ef80553b4e6c8281655bc1bf6.png" srcset="http://1.gravatar.com/avatar/d6d0871ef80553b4e6c8281655bc1bf6?s=88&amp;d=mm&amp;r=g 2x" class="avatar avatar-44 photo grav-hashed grav-hijack" height="44" width="44" originals="44" src-orig="http://1.gravatar.com/avatar/d6d0871ef80553b4e6c8281655bc1bf6?s=44&amp;d=mm&amp;r=g" scale="2" id="grav-d6d0871ef80553b4e6c8281655bc1bf6-0"><cite class="fn"><a href="http://gravatar.com/amoghaggarwal" rel="external nofollow" class="url">amogh</a> </cite><a href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/#comment-3"><time pubdate="" datetime="2016-05-30T11:51:23+00:00">May 30, 2016 at 11:51 am</time></a>			</header><!-- .comment-meta -->
+
+			
+			<section class="comment-content comment">
+				<p>Kudos. Awesome blog post. Keep it up.<br>
+Some suggestions from my side:</p>
+<p>1) It would be very cool if you could give the corresponding SQL queries that are executed in the background. That gives a very good idea about how to optimize queries.<br>
+2) You can talk about caching too. In my experience, caching really helped to give the system a performance boost. Sometimes you really don’t need to fire so many queries.<br>
+3) The wrong use of Mysql ‘IN’ statement, ‘LIKE’ statements etc which make the queries very slow. </p>
+<p>Thanks</p>
+							</section><!-- .comment-content -->
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?replytocom=3#respond" onclick="return addComment.moveForm( &quot;comment-3&quot;, &quot;3&quot;, &quot;respond&quot;, &quot;112&quot; )" aria-label="Reply to amogh">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+	<ol class="children">
+	<li class="comment byuser comment-author-anurag bypostauthor odd alt depth-2" id="li-comment-4">
+		<article id="comment-4" class="comment">
+			<header class="comment-meta comment-author vcard">
+				<img alt="" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/c61ea242f92f961a486fbafa9b886dd9.jpeg" srcset="http://0.gravatar.com/avatar/c61ea242f92f961a486fbafa9b886dd9?s=88&amp;d=mm&amp;r=g 2x" class="avatar avatar-44 photo grav-hashed grav-hijack" height="44" width="44" originals="44" src-orig="http://0.gravatar.com/avatar/c61ea242f92f961a486fbafa9b886dd9?s=44&amp;d=mm&amp;r=g" scale="2" id="grav-c61ea242f92f961a486fbafa9b886dd9-0"><cite class="fn"><a href="https://in.linkedin.com/in/anuragjain1991" rel="external nofollow" class="url">Anurag</a> <span> Post author</span></cite><a href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/#comment-4"><time pubdate="" datetime="2016-05-30T22:56:28+00:00">May 30, 2016 at 10:56 pm</time></a>			</header><!-- .comment-meta -->
+
+			
+			<section class="comment-content comment">
+				<p>Thanks Amogh,<br>
+Caching in itself is a wide topic which I will be covering in a separate post.<br>
+Sorry I cannot provide the exact queries for security purposes, but the main culprit was foreign keys referenced in loops. After using select_related and prefetch_related, my query count became 20%. Rest is achieved by modifying logic and other methods mentioned above.</p>
+<p>Thanks<br>
+Anurag</p>
+							</section><!-- .comment-content -->
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?replytocom=4#respond" onclick="return addComment.moveForm( &quot;comment-4&quot;, &quot;4&quot;, &quot;respond&quot;, &quot;112&quot; )" aria-label="Reply to Anurag">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+	</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-5">
+		<article id="comment-5" class="comment">
+			<header class="comment-meta comment-author vcard">
+				<img alt="" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/fab562e2a271ccd55243d5858c86ce54.png" srcset="http://0.gravatar.com/avatar/fab562e2a271ccd55243d5858c86ce54?s=88&amp;d=mm&amp;r=g 2x" class="avatar avatar-44 photo grav-hashed grav-hijack" height="44" width="44" originals="44" src-orig="http://0.gravatar.com/avatar/fab562e2a271ccd55243d5858c86ce54?s=44&amp;d=mm&amp;r=g" scale="2" id="grav-fab562e2a271ccd55243d5858c86ce54-0"><cite class="fn">calabrone </cite><a href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/#comment-5"><time pubdate="" datetime="2016-05-30T22:57:59+00:00">May 30, 2016 at 10:57 pm</time></a>			</header><!-- .comment-meta -->
+
+			
+			<section class="comment-content comment">
+				<p>I have heard of the debug-toolbar before, but I like your post. It’s time to recap all the different options and to improve the code. Nothing sucks more than a slow website ….</p>
+							</section><!-- .comment-content -->
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?replytocom=5#respond" onclick="return addComment.moveForm( &quot;comment-5&quot;, &quot;5&quot;, &quot;respond&quot;, &quot;112&quot; )" aria-label="Reply to calabrone">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+	<ol class="children">
+	<li class="comment byuser comment-author-anurag bypostauthor odd alt depth-2" id="li-comment-6">
+		<article id="comment-6" class="comment">
+			<header class="comment-meta comment-author vcard">
+				<img alt="" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/c61ea242f92f961a486fbafa9b886dd9.jpeg" srcset="http://0.gravatar.com/avatar/c61ea242f92f961a486fbafa9b886dd9?s=88&amp;d=mm&amp;r=g 2x" class="avatar avatar-44 photo grav-hashed grav-hijack" height="44" width="44" originals="44" src-orig="http://0.gravatar.com/avatar/c61ea242f92f961a486fbafa9b886dd9?s=44&amp;d=mm&amp;r=g" scale="2" id="grav-c61ea242f92f961a486fbafa9b886dd9-1"><cite class="fn"><a href="https://in.linkedin.com/in/anuragjain1991" rel="external nofollow" class="url">Anurag</a> <span> Post author</span></cite><a href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/#comment-6"><time pubdate="" datetime="2016-05-30T23:01:28+00:00">May 30, 2016 at 11:01 pm</time></a>			</header><!-- .comment-meta -->
+
+			
+			<section class="comment-content comment">
+				<p>Glad you like it,<br>
+Make sure to subscribe and like us on Facebook to stay updated, I will be writing some more interesting posts.</p>
+							</section><!-- .comment-content -->
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/?replytocom=6#respond" onclick="return addComment.moveForm( &quot;comment-6&quot;, &quot;6&quot;, &quot;respond&quot;, &quot;112&quot; )" aria-label="Reply to Anurag">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+	</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		</ol><!-- .commentlist -->
+
+		
+	
+	
+		<div id="respond" class="comment-respond">
+							<h3 id="reply-title" class="comment-reply-title">Come on, I know you want to say it					<small><a rel="nofollow" id="cancel-comment-reply-link" href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/#respond" style="display:none;">Cancel reply</a></small>
+				</h3>
+						<form id="commentform" class="comment-form">
+				<iframe src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/saved_resource(3).html" style="width: 100%; height: 58px; border: 0px;" name="jetpack_remote_comment" class="jetpack_remote_comment" id="jetpack_remote_comment" scrolling="no"></iframe>
+				<!--[if !IE]><!-->
+				<script>
+					document.addEventListener('DOMContentLoaded', function () {
+						var commentForms = document.getElementsByClassName('jetpack_remote_comment');
+						for (var i = 0; i < commentForms.length; i++) {
+							commentForms[i].allowTransparency = false;
+							commentForms[i].scrolling = 'no';
+						}
+					});
+				</script>
+				<!--<![endif]-->
+			</form>
+		</div>
+
+		
+		<input type="hidden" name="comment_parent" id="comment_parent" value="">
+
+		
+</div><!-- #comments .comments-area -->
+		</article>
+	</section>
+</div><!-- #content --></div><!-- #primary -->
+
+
+<div id="secondary">
+	
+
+
+</div><!-- #secondary --></div><!-- #container -->
+
+
+	   </div><!-- #main -->
+
+	   
+	   	
+	   
+	   <footer id="colophon" class="clearfix">
+			
+
+
+<div id="site-generator" class="clearfix">
+				<div class="container">
+			<div class="social-profiles clearfix">
+				<ul><li class="facebook"><a href="https://www.facebook.com/bookofstranger/" title="The book of Stranger on Facebook" target="_blank">The book of Stranger Facebook</a></li><li class="linked"><a href="https://in.linkedin.com/in/anuragjain1991" title="The book of Stranger on LinkedIn" target="_blank">The book of Stranger LinkedIn</a></li>
+			</ul>
+			</div><!-- .social-profiles --><div class="copyright">Copyright © 2018 <a href="http://bookofstranger.com/" title="The book of Stranger"><span>The book of Stranger</span></a> |  Theme by: <a href="http://themehorse.com/" target="_blank" title="Theme Horse"><span>Theme Horse</span></a> |  Powered by: <a href="http://wordpress.org/" target="_blank" title="WordPress"><span>WordPress</span></a></div><!-- .copyright --></div><!-- .container -->
+			</div><!-- #site-generator --><div class="back-to-top" style="display: block;"><a href="http://bookofstranger.com/optimizing-django-orm-queries-for-best-performance/#branding">Back to Top</a></div>		</footer>
+	   
+			
+
+	</div><!-- .wrapper -->
+
+	 
+
+	<div style="display:none">
+	<div class="grofile-hash-map-d6d0871ef80553b4e6c8281655bc1bf6">
+	</div>
+	<div class="grofile-hash-map-c61ea242f92f961a486fbafa9b886dd9">
+	</div>
+	<div class="grofile-hash-map-fab562e2a271ccd55243d5858c86ce54">
+	</div>
+	</div>
+<div id="seo-footer-links" style="text-align: center;"></div>
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"http:\/\/bookofstranger.com\/optimizing-django-orm-queries-for-best-performance\/":112};
+	</script>
+		<!--[if lte IE 8]>
+<link rel='stylesheet' id='jetpack-carousel-ie8fix-css'  href='http://bookofstranger.com/wp-content/plugins/jetpack/modules/carousel/jetpack-carousel-ie8fix.css?ver=20121024' type='text/css' media='all' />
+<![endif]-->
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/photon.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var es_widget_notices = {"es_email_notice":"Please enter email address","es_incorrect_email":"Please provide a valid email address","es_load_more":"loading...","es_ajax_error":"Cannot create XMLHTTP instance","es_success_message":"Successfully Subscribed.","es_success_notice":"Your subscription was successful! Within a few minutes, kindly check the mail in your mailbox and confirm your subscription. If you can't see the mail in your mailbox, please check your spam folder.","es_email_exists":"Email Address already exists!","es_error":"Oops.. Unexpected error occurred.","es_invalid_email":"Invalid email address","es_try_later":"Please try after some time","es_problem_request":"There was a problem with the request"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/es-widget.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var es_widget_page_notices = {"es_email_notice":"Please enter email address","es_incorrect_email":"Please provide a valid email address","es_load_more":"loading...","es_ajax_error":"Cannot create XMLHTTP instance","es_success_message":"Successfully Subscribed.","es_success_notice":"Your subscription was successful! Within a few minutes, kindly check the mail in your mailbox and confirm your subscription. If you can't see the mail in your mailbox, please check your spam folder.","es_email_exists":"Email Address already exists!","es_error":"Oops.. Unexpected error occurred.","es_invalid_email":"Invalid email address","es_try_later":"Please try after some time","es_problem_request":"There was a problem with the request"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/es-widget-page.js.download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/devicepx-jetpack.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var riveted_options = {"reportInterval":"30","idleTimeout":"120"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/riveted-wp.js.download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/gprofiles.js(1).download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/wpgroho.js(1).download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/comment-reply.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var jpfbembed = {"appid":"249643311490","locale":"en_GB"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/facebook-embed.min.js.download"></script><div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_http" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_http" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/1e2RywyANNe.html" style="border: none;"></iframe><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/1e2RywyANNe(1).html" style="border: none;"></iframe></div></div></div>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/wp-embed.min.js.download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/spin.min.js.download"></script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/jquery.spin.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"http:\/\/bookofstranger.com\/wp-admin\/admin-ajax.php","nonce":"5d31657598","display_exif":"1","display_geo":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","download_original":"View full size <span class=\"photo-size\">{0}<span class=\"photo-size-times\">\u00d7<\/span>{1}<\/span>","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","copyright":"Copyright","comment_registration":"0","require_name_email":"1","login_url":"http:\/\/bookofstranger.com\/wp-login.php?redirect_to=http%3A%2F%2Fbookofstranger.com%2Foptimizing-django-orm-queries-for-best-performance%2F","blog_id":"1","meta_data":["camera","aperture","shutter_speed","focal_length","copyright"],"local_comments_commenting_as":"<fieldset><label for=\"email\">Email (Required)<\/label> <input type=\"text\" name=\"email\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-email-field\" \/><\/fieldset><fieldset><label for=\"author\">Name (Required)<\/label> <input type=\"text\" name=\"author\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-author-field\" \/><\/fieldset><fieldset><label for=\"url\">Website<\/label> <input type=\"text\" name=\"url\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-url-field\" \/><\/fieldset>"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/jetpack-carousel.min.js.download"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/sharing.min.js.download"></script>
+<script type="text/javascript">
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-twitter', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-facebook', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-google-plus-1', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomgoogle-plus-1', 'menubar=1,resizable=1,width=480,height=550' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-linkedin', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomlinkedin', 'menubar=1,resizable=1,width=580,height=450' );
+				return false;
+			});
+</script>
+
+		<!--[if IE]>
+		<script type="text/javascript">
+			if ( 0 === window.location.hash.indexOf( '#comment-' ) ) {
+				// window.location.reload() doesn't respect the Hash in IE
+				window.location.hash = window.location.hash;
+			}
+		</script>
+		<![endif]-->
+		<script type="text/javascript">
+			(function () {
+				var comm_par_el = document.getElementById( 'comment_parent' ),
+					comm_par = ( comm_par_el && comm_par_el.value ) ? comm_par_el.value : '',
+					frame = document.getElementById( 'jetpack_remote_comment' ),
+					tellFrameNewParent;
+
+				tellFrameNewParent = function () {
+					if ( comm_par ) {
+						frame.src = "http://jetpack.wordpress.com/jetpack-comment/?blogid=111125492&postid=112&comment_registration=0&require_name_email=1&stc_enabled=1&stb_enabled=1&show_avatars=1&avatar_default=mystery&greeting=Come+on%2C+I+know+you+want+to+say+it&greeting_reply=Leave+a+Reply+to+%25s&color_scheme=light&lang=en_GB&jetpack_version=5.7&sig=5f7b8456a50f529296a08c826e6cdd63ecc9bb46#parent=http%3A%2F%2Fbookofstranger.com%2Foptimizing-django-orm-queries-for-best-performance%2F" + '&replytocom=' + parseInt( comm_par, 10 ).toString();
+					} else {
+						frame.src = "http://jetpack.wordpress.com/jetpack-comment/?blogid=111125492&postid=112&comment_registration=0&require_name_email=1&stc_enabled=1&stb_enabled=1&show_avatars=1&avatar_default=mystery&greeting=Come+on%2C+I+know+you+want+to+say+it&greeting_reply=Leave+a+Reply+to+%25s&color_scheme=light&lang=en_GB&jetpack_version=5.7&sig=5f7b8456a50f529296a08c826e6cdd63ecc9bb46#parent=http%3A%2F%2Fbookofstranger.com%2Foptimizing-django-orm-queries-for-best-performance%2F";
+					}
+				};
+
+				
+				if ( 'undefined' !== typeof addComment ) {
+					addComment._Jetpack_moveForm = addComment.moveForm;
+
+					addComment.moveForm = function ( commId, parentId, respondId, postId ) {
+						var returnValue = addComment._Jetpack_moveForm( commId, parentId, respondId, postId ),
+							cancelClick, cancel;
+
+						if ( false === returnValue ) {
+							cancel = document.getElementById( 'cancel-comment-reply-link' );
+							cancelClick = cancel.onclick;
+							cancel.onclick = function () {
+								var cancelReturn = cancelClick.call( this );
+								if ( false !== cancelReturn ) {
+									return cancelReturn;
+								}
+
+								if ( ! comm_par ) {
+									return cancelReturn;
+								}
+
+								comm_par = 0;
+
+								tellFrameNewParent();
+
+								return cancelReturn;
+							};
+						}
+
+						if ( comm_par == parentId ) {
+							return returnValue;
+						}
+
+						comm_par = parentId;
+
+						tellFrameNewParent();
+
+						return returnValue;
+					};
+				}
+
+				
+				// Do the post message bit after the dom has loaded.
+				document.addEventListener( 'DOMContentLoaded', function () {
+					var iframe_url = "http:\/\/jetpack.wordpress.com";
+					if ( window.postMessage ) {
+						if ( document.addEventListener ) {
+							window.addEventListener( 'message', function ( event ) {
+								var origin = event.origin.replace( /^http:\/\//i, 'https://' );
+								if ( iframe_url.replace( /^http:\/\//i, 'https://' ) !== origin ) {
+									return;
+								}
+								jQuery( frame ).height( event.data );
+							});
+						} else if ( document.attachEvent ) {
+							window.attachEvent( 'message', function ( event ) {
+								var origin = event.origin.replace( /^http:\/\//i, 'https://' );
+								if ( iframe_url.replace( /^http:\/\//i, 'https://' ) !== origin ) {
+									return;
+								}
+								jQuery( frame ).height( event.data );
+							});
+						}
+					}
+				})
+
+			})();
+		</script>
+
+		<script type="text/javascript" src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/e-201828.js.download" async="" defer=""></script>
+<script type="text/javascript">
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:5.7',blog:'111125492',post:'112',tz:'5.5',srv:'bookofstranger.com'} ]);
+	_stq.push([ 'clickTrackerInit', '111125492', '112' ]);
+</script>
+
+
+<img src="./Optimizing Django ORM Queries for Best Performance – The book of Stranger_files/g.gif" alt=":)" width="6" height="5" id="wpstats" scale="0"></body></html>

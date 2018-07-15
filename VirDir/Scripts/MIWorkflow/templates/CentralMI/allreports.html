@@ -29,6 +29,8 @@
         <td >Primary Owner</td>
         <td >Secondary Owner</td>
         <td >Description</td>
+        <td >Activity Status</td>
+        <td >Edit </td>
 
         </tr>
       </thead>
@@ -37,7 +39,7 @@
       <tr class="tablebodyformat">
       <td ><a class="tablebodyformat" href="{% url 'errorlog' data.reportid %}">{{data.reportid}} </a> </td>
         <td>{{data.requestcategorys }}</td>
-        <td ><a class="tablebodyformat" href="{% url 'feedback' data.reportid %}">{{data.name }}</a> </td>
+        <td ><a class="tablebodyformat" href="{% url 'feedback' data.reportid 1 %}">{{data.name }}</a> </td>
         <td>{{data.frequency }}</td>
         <td>{{data.date_types }}</td>
         <td>{{data.delivery_days }}</td>
@@ -45,6 +47,8 @@
         <td>{{data.primaryowner }}</td>
         <td>{{data.secondaryowner }}</td>
         <td>{{data.description }}</td>
+        <td>{{data.activitystatus }}</td>
+        <td> <a href="{% url 'editreport' data.reportid %}" class="glyphicon glyphicon-pencil"></a> </td>
 
         {% endfor %}
       </tr></br>
@@ -59,7 +63,7 @@ $(document).ready(function() {
     $('#example').DataTable(
     {
       fixedHeader: true,
-      
+
     });
 
 } );

@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'widget_tweaks',
     'bootstrap3_datetime',
+    'debug_toolbar',
+    'debug_panel',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_panel.middleware.DebugPanelMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'MIWorkflow.urls'

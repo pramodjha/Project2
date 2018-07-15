@@ -42,6 +42,9 @@ class Assigneddetail(models.Model):
         managed = False
         db_table = 'assigneddetail'
 
+    def __str__(self):
+        return str(self.assignedid)
+
 
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=80)
@@ -502,21 +505,6 @@ class Errorlog(models.Model):
     def __str__(self):
         return str(self.error_id)
 
-class Feedback(models.Model):
-    feedback_id = models.AutoField(primary_key=True)
-    feedback_date = models.DateTimeField(default= datetime.datetime.now())
-    feedback_question = models.ForeignKey('FeedbackQuestion', models.DO_NOTHING, db_column='feedback_question')
-    feedback_integer = models.IntegerField(blank=True, null=True)
-    feedback_text = models.CharField(max_length=255, blank=True, null=True)
-    feedback_datetime = models.DateTimeField(blank=True, null=True)
-    reports = models.ForeignKey('Reports', models.DO_NOTHING, db_column='reports', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'feedback'
-
-    def __str__(self):
-        return str(self.feedback_question)
 
 
 class FeedbackQuestion(models.Model):
@@ -583,6 +571,20 @@ class Activity(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+class Feedback(models.Model):
+    feedback_id = models.AutoField(primary_key=True)
+    feedback_date = models.DateTimeField(default= datetime.datetime.now())
+    feedback_question = models.ForeignKey('FeedbackQuestion', models.DO_NOTHING, db_column='feedback_question')
+    feedback_text = models.CharField(max_length=255, blank=True, null=True)
+    activity = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activity', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'feedback'
+
+    def __str__(self):
+        return str(self.feedback_question)
 
 class Timetrackers(models.Model):
     timetrackerid = models.AutoField(primary_key=True)
