@@ -16,7 +16,7 @@ import getpass
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
@@ -143,11 +143,9 @@ def sign_up(request):
 def sign_in(request):
     try:
         authority, activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
-        request.session['tabname'] = 'home'
     except:
-        activetab = 'signin'
         authority = ''
-        request.session['tabname'] = 'lp'
+        activetab = 'signin'
 
     tab = request.session.get('tabname')
     if request.method == 'POST':
@@ -162,7 +160,7 @@ def sign_in(request):
                 user = authenticate(username = username, password = password)
                 if user is not None:
                     login(request, user)
-                    return HttpResponseRedirect(reverse(tab))
+                    return HttpResponseRedirect(reverse('home'))
                 else:
                     form =  UsersigninForm()
                 return render(request,'CentralMI/ErrorPage.html')
@@ -177,7 +175,9 @@ def sign_in(request):
         return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab,'authority':authority})
 
 def sign_out(request):
+    #if request.method == 'POST':
     request.session.delete()
+    logout(request)
     return HttpResponseRedirect(reverse('signin'))
 
 @login_required
@@ -464,7 +464,11 @@ def EditReport(request,requestid):
 
 @login_required
 def check_status(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='loginrequest',footer='checkstatus')
+
     userid = User.objects.get(username=username).pk
     model = Requestdetail.objects.filter(username__in=[userid])
     return render(request, 'CentralMI/check_status.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
@@ -477,11 +481,15 @@ def Report_Detail(request):
 
 @login_required
 def RequestFormTemplate(request):
-    activetab = 'loginrequest'
-    activetab1 = 'addrequest'
-    username = request.user.username
-    authority = ''
-    #authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='addrequest')
+    #activetab = 'loginrequest'
+    #activetab1 = 'addrequest'
+    #username = request.user.username
+    #authority = ''
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='addrequest')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='loginrequest',footer='addrequest')
+
     userid = User.objects.get(username=username).pk
     form = RequestdetailForm(initial={'username':userid})
     form1 = StatusdetailForm(initial={'statusdetail':1,'username':userid,'requestdetail':None})
@@ -742,7 +750,11 @@ def CompletedFormTemplate(request,requestid):
 
 @login_required
 def typage(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='loginrequest',footer='')
+
     try:
         model1 = Requestdetail.objects.all().get(requestid=requestid)
         try:
@@ -836,27 +848,33 @@ def landingpage(request):
 
 @login_required
 def index(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
-    teamid , memberid, form = filterform(request,username=username,authority=authority)
-    mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    dv = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    mvOT = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-    wvOT = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-    dvOT= info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-    mvcore = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    wvcore = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    dvcore = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    mvutilisation = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-    wvutilisation = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-    dvutilisation = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-    dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-    wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-    mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
+        teamid , memberid, form = filterform(request,username=username,authority=authority)
+        mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        dv = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        mvOT = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+        wvOT = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+        dvOT= info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+        mvcore = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        wvcore = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        dvcore = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        mvutilisation = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+        wvutilisation = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+        dvutilisation = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+        dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+        wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+        mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
 
-    return render(request, 'CentralMI/index.html',{'form':form,'username':username,'authority':authority,'activetab':activetab,'authority':authority,
-    'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
-    'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error})
+        return render(request, 'CentralMI/index.html',{'form':form,'username':username,'authority':authority,'activetab':activetab,'authority':authority,
+        'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
+        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error})
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='home',footer='')
+        return render(request, 'CentralMI/landingpage.html',{'username':username,'authority':authority,'activetab':activetab,'authority':authority})
+
+
 
 def dataforemail(username=None,requestid=None,sub_user=None,L1_user=None,sub_auth=None,L1_auth=None,sub_miteam=None,L1_miteam=None,sub_manager=None,L1_manager=None,request_status=None):
     userid = User.objects.get(username=username).pk

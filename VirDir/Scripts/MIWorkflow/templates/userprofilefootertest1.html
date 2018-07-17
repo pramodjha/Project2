@@ -5,7 +5,6 @@
 <li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
 <li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
 <li {% if activetab1 == 'comm_sugg' %} class="active" {%else%} {% endif %}><a href="{% url 'comm_sugg' %}">Comments & Suggestion </a></li>
-
 {% elif activetab == "workflow" %}
 <li {% if activetab1 == 'allrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">All </a></li>
 <li {% if activetab1 == 'unapproved' %} class="active" {%else%} {% endif %}><a href="{% url 'unapproved' %}">Unapproved </a></li>
