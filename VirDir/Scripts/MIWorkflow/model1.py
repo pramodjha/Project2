@@ -44,6 +44,7 @@ class Activity(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     requestcategorys = models.ForeignKey('Requestcategorys', models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
     activitystatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+    activitydocument = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -266,6 +267,7 @@ class Errorlog(models.Model):
     error_reportedto = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedto')
     error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
     error_description = models.TextField()
+    errordocument = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -381,6 +383,7 @@ class OtDetail(models.Model):
     ot_enddatetime = models.DateTimeField(blank=True, null=True)
     ot_hrs = models.IntegerField(blank=True, null=True)
     ot_status = models.ForeignKey('OtStatus', models.DO_NOTHING, db_column='ot_status')
+    otdocument = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False

@@ -241,7 +241,7 @@ class Overviewdetail(models.Model):
     mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
     sopcreatedoptionsid = models.ForeignKey(Options, models.DO_NOTHING, db_column='sopcreatedoptionsid', blank=True, null=True)
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-    document = models.FileField(upload_to='sopdocument/')
+    document = models.FileField(upload_to='sopdocument/',blank=True, null=True)
 
     class Meta:
         managed = False
@@ -497,6 +497,7 @@ class Errorlog(models.Model):
     error_reportedto = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedto')
     error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
     error_description = models.TextField()
+    errordocument = models.FileField(upload_to='errordocument/',blank=True, null=True)
 
     class Meta:
         managed = False
@@ -528,6 +529,7 @@ class OtDetail(models.Model):
     ot_enddatetime = models.DateTimeField(default= datetime.date.today)
     ot_hrs = models.IntegerField(blank=True, null=True)
     ot_status = models.ForeignKey('OtStatus', models.DO_NOTHING, db_column='ot_status')
+    otdocument = models.FileField(upload_to='otdocument/',blank=True, null=True)
 
     class Meta:
         managed = False
@@ -564,6 +566,7 @@ class Activity(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     requestcategorys = models.ForeignKey('Requestcategorys', models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
     activitystatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+    activitydocument = models.FileField(upload_to='activitydocument/',blank=True, null=True)
 
     class Meta:
         managed = False

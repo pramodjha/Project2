@@ -16,7 +16,7 @@
 
 
 {% block content %}
-<form class="form" method="POST" action="" class='form-inline '>
+<form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_form_errors form type='non_fields' %}
 
@@ -45,6 +45,10 @@
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'OT Status'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.ot_status show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Upload File'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.otdocument  show_label=False  placeholder='Error Reported Team' %}</span>
 </div>
 
 

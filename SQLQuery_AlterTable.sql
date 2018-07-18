@@ -1,8 +1,23 @@
 use CentralMI
 GO
 
+Alter table errorlog
+add errordocument varchar(255);
+
+Alter table ot_detail
+add otdocument varchar(255);
+
+
+Alter table activity
+add activitydocument varchar(255);
+
+
 Alter table activity
 add activitystatus int;
+
+Alter table activity
+add activitystatus varchar(255);
+
 
 
 use CentralMI

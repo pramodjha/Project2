@@ -306,7 +306,7 @@ def summary_tracker(request):
             team = form.cleaned_data['team']
             member = form.cleaned_data['member']
             #print(interval)
-            model = info.define_day_week_month1(report_choice='2',start_date=startdate,end_date=enddate,range_type='Weekly',values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
+#            model = info.define_day_week_month1(report_choice='2',start_date=startdate,end_date=enddate,range_type='Weekly',values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
 
 #            model = info.define_day_week_month1(days_range=5,report_choice=reportno,start_date=startdate,end_date=enddate,range_type='Weekly',aggregatefield='requestid',teamdetail=team,member=member,output_type='extract_summary',values='requestid')
             return render(request, 'CentralMI/summary.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
@@ -354,9 +354,11 @@ def filterdata(request):
                 else:
                     model = ''
             elif team != None and member != None:
+#                print(member)
+                memberid = User.objects.get(username__in=[member]).id
                 trackerid = Timetrackers.objects.filter(mimember__in=[member]).values_list('timetrackerid',flat=True).distinct()
                 if reportno == str(2):
-                    model = Requestdetail.objects.filter(username__in=[member]).filter(requestraiseddate__range=[startdate, enddate])
+                    model = Requestdetail.objects.filter(username__in=[memberid]).filter(requestraiseddate__range=[startdate, enddate])
                 elif reportno == str(3):
                     model = Timetrackers.objects.filter(mimember__in=[member]).filter(trackingdatetime__range=[startdate, enddate])
                 elif reportno == str(4):

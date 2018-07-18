@@ -30,6 +30,7 @@
         <td >Secondary Owner</td>
         <td >Description</td>
         <td >Activity Status</td>
+        <td >attached</td>
         <td >Edit </td>
 
         </tr>
@@ -48,6 +49,8 @@
         <td>{{data.secondaryowner }}</td>
         <td>{{data.description }}</td>
         <td>{{data.activitystatus }}</td>
+        <td>{{data.activitydocument }}</td>
+
         <td> <a href="{% url 'editreport' data.reportid %}" class="glyphicon glyphicon-pencil"></a> </td>
 
         {% endfor %}
