@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-<form class="form" method="POST" action="" class='form-inline '>
+<form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_form_errors form type='non_fields' %}
 
@@ -45,6 +45,11 @@
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Request Description'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestdescription  show_label=False   %}</span>
 </div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'BRD'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestdocument  show_label=False   %}</span>
+</div>
+
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status Date'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.requeststatusdate  show_label=False   %}</span>

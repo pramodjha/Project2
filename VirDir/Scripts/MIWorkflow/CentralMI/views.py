@@ -244,7 +244,7 @@ def Error_Log(request,reportid):
     authority, activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
     form = ErrorlogForm(initial={'error_report':reportid})
     if request.method == 'POST':
-        form = ErrorlogForm(request.POST)
+        form = ErrorlogForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
@@ -265,7 +265,7 @@ def EditError_Log(request,requestid):
     form = ErrorlogForm(instance=e)
     if request.method == 'POST':
         e = Errorlog.objects.get(pk=requestid)
-        form = ErrorlogForm(request.POST, instance=e)
+        form = ErrorlogForm(request.POST, request.FILES, instance=e)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
@@ -279,7 +279,7 @@ def ot_form(request,trackerid):
     authority, activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='')
     form = OtDetailForm(initial={'timetrackers':trackerid,'ot_status':1})
     if request.method == 'POST':
-        form =  OtDetailForm(request.POST)
+        form =  OtDetailForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
@@ -430,7 +430,7 @@ def ReportForm(request):
     authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='addreport')
     form = ActivityForm()
     if request.method == 'POST':
-        form = ActivityForm(request.POST)
+        form = ActivityForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
@@ -452,16 +452,12 @@ def EditReport(request,requestid):
     form = ActivityForm(instance=e)
     if request.method == 'POST':
         e = Activity.objects.get(pk=requestid)
-        form = ActivityForm(request.POST, instance=e)
+        form = ActivityForm(request.POST,request.FILES, instance=e)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse('allreports'))
     return render(request, 'CentralMI/ReportsEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
-
-
-
-
 
 
 @login_required
@@ -483,10 +479,6 @@ def Report_Detail(request):
 
 @login_required
 def RequestFormTemplate(request):
-    #activetab = 'loginrequest'
-    #activetab1 = 'addrequest'
-    #username = request.user.username
-    #authority = ''
     try:
         authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='addrequest')
     except:
@@ -496,7 +488,7 @@ def RequestFormTemplate(request):
     form = RequestdetailForm(initial={'username':userid})
     form1 = StatusdetailForm(initial={'statusdetail':1,'username':userid,'requestdetail':None})
     if request.method == 'POST':
-        form = RequestdetailForm(request.POST)
+        form = RequestdetailForm(request.POST,request.FILES)
         form1 = StatusdetailForm (request.POST)
         if all([form.is_valid() , form1.is_valid()]):
             inst = form.save(commit=True)
@@ -505,17 +497,17 @@ def RequestFormTemplate(request):
             inst1 = form1.save(commit=False)
             inst1.requestdetail = inst
             inst1.save()
-            dataforemail(username=inst.username,
-                        requestid = inst.requestid,
-                        sub_user='Request registered successfully',
-                        L1_user='Your request is sent for approval to Authoriser, any update on your request will be sent through email ',
-                        sub_auth='Please Authorise the request',
-                        L1_auth='A request has been raised, pending for your approval',
-                        sub_miteam='Request raised, pending for approval ',
-                        L1_miteam='New request has been raised, however peding for Approval',
-                        sub_manager='Request raised, pending for approval ',
-                        L1_manager='New request has been raised, however peding for Approval',
-                        request_status='Pending for Approval')
+#            dataforemail(username=inst.username,
+#                        requestid = inst.requestid,
+#                        sub_user='Request registered successfully',
+#                        L1_user='Your request is sent for approval to Authoriser, any update on your request will be sent through email ',
+#                        sub_auth='Please Authorise the request',
+#                        L1_auth='A request has been raised, pending for your approval',
+#                        sub_miteam='Request raised, pending for approval ',
+#                        L1_miteam='New request has been raised, however peding for Approval',
+#                        sub_manager='Request raised, pending for approval ',
+#                        L1_manager='New request has been raised, however peding for Approval',
+#                        request_status='Pending for Approval')
             return HttpResponseRedirect(reverse('ty',args = (newid,)))
         else:
             return render(request, 'CentralMI/ErrorPage.html')

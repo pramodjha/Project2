@@ -25,6 +25,7 @@
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Type : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requesttypedetail }} </span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Owner : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.username }}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Description : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requestdescription }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> BRD : </label><span> <a href="{{ MEDIA_URL }}/media/{{ detail1.requestdocument}}"><span class="glyphicon glyphicon-cloud-download"></span></a></div>
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Authorise Details (2)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Authorised Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{detail2.authoriseddate }}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Authorised By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail2.authoriserdetail }}</span></div>
@@ -33,7 +34,6 @@
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Assigned By :  </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail4.assignedby}}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Assigned To :  </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail4.assignedto}}</span></div>
 </div>
-
 <div class="col-sm-12 col-md-6 col-lg-4">
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Overview Details (4)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Overview Date: </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.overviewdate}}</span></div>

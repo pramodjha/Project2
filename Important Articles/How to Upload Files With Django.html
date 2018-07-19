@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<!-- saved from url=(0094)https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript">
+
+(function() {
+	window.trackingUtils=function(k,b,d,n,o,g,c,p,r,m){var f={},i=new RegExp("/(ref=[\\w]+)/?","i"),h=function(s){return s&&encodeURIComponent(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");},l=(function(){var s=document.createElement("a");s.href=(window.location!==window.parent.location)?document.referrer:document.location;return s.protocol+"//"+s.hostname+((s.port===""||s.port==="80"||s.port==="443")?"":(":"+s.port))+(s.pathname.indexOf("/")!==0?("/"+s.pathname):s.pathname);}()),q=(function(){return h(l);}()),j=function(s,u,v,t){if(typeof v==="string"&&v!==""){if(s.search===""){s.search="?"+u+"="+v;}else{if(!s.search.match(new RegExp("[?&]"+u+"="))){s.search=s.search.replace(/\?/,"?"+u+"="+v+"&");}else{if(t){s.search=s.search.replace(new RegExp(u+"=([^&]*)"),u+"="+v);}}}}return s;},e=function(u,s,t){if(typeof t==="string"&&t!==""){if(!u.match(/\?/)){u=u+"?"+s+"="+t;}else{if(!u.match(s)){u=u.replace(/\?/,"?"+s+"="+t+"&");}}}return u;},a=function(t){var s=(typeof c!=="undefined")?c:0;if(typeof t!=="undefined"){s=t;}return s;};f.addRefUrls=function(x,y,t,s){var z=new RegExp("^http://.*(amazon|endless|myhabit|amazonwireless|javari|smallparts)\\.(com|ca|co\\.jp|de|fr|co\\.uk|cn|it|es)/.*","i"),u,w,v;for(v=0;v<x.length;v++){x[v].rel="nofollow";u=String(x[v].href);if(w=u.match(z)){x[v].href=f.addTrackingParameters(x[v],y,t,s);}}};f.addRefRefUrl=function(s){return j(s,"ref-refURL",q);};f.getRefRefUrl=function(){return q;};f.getRawRefUrl=function(){return l;};f.addSignature=function(t,s,u){return j(j(t,"sig",s),"sigts",u);};f.addLinkCode=function(t,s){return j(t,"linkCode",s);};f.addTrackingId=function(t,s){return j(t,"tag",s);};f.addLinkId=function(s,t){return j(s,"linkId",t);};f.addSubtag=function(s,t){return j(s,"ascsubtag",t);};f.addCreativeAsin=function(s,t){return j(j(s,"creativeASIN",t),"adId",t);};f.addAdType=function(t,s){return j(t,"adType",s);};f.addAdMode=function(s,t){return j(s,"adMode",t);};f.addAdFormat=function(t,s){return j(t,"adFormat",s);};f.addImpressionTimestamp=function(s,t){if(typeof t==="number"){t=t.toString();}return j(s,"impressionTimestamp",t);};f.convertToRedirectedUrl=function(s,v,t){var u=document.createElement("a");u.setAttribute("href",v);if(typeof t!=="undefined"){j(u,t,h(s.getAttribute("href")),true);}else{u.setAttribute("href",v+"/"+u.getAttribute("href"));}s.setAttribute("href",u.getAttribute("href"));return s;};f.getImpressionToken=function(){return g;};f.getClickUrl=function(){return o;};f.addImpressionToken=function(t,u){var s=a(u);if(typeof g==="string"&&g!==""){j(t,"imprToken",g);if(typeof s!=="undefined"){j(t,"slotNum",s);}}return t;};f.addImpressionTokenStr=function(u,t){var s=a(t);if(typeof g==="string"&&g!==""){u=e(u,"imprToken",g);if(typeof s!=="undefined"){u=e(u,"slotNum",s);}}return u;};f.addTrackingParameters=function(y,z,x,C,v,s,w,u,t,D,B,A){return f.addSignature(f.addCreativeAsin(f.addLinkId(f.addTrackingId(f.addSubtag(f.addLinkCode(f.addRefRefUrl(f.addImpressionToken(f.addRefMarker(f.addAdType(f.addAdMode(f.addAdFormat(f.addImpressionTimestamp(y,A),B),D),t),v))),x),p),C),z),s),w,u);};f.addRefMarker=function(t,v){var u,s=false;if(typeof v==="undefined"){return t;}if(u=t.pathname.match(i)){t.pathname=t.pathname.replace(u[1],"ref="+v);}else{s=(t.pathname.charAt(t.pathname.length-1)==="/");t.pathname=t.pathname+(s?"":"/")+"ref="+v;}return t;};f.getRefMarker=function(s){var t;if(t=s.pathname.match(i)){return t[1].substr(4);}else{return undefined;}};f.makeForesterCall=function(u){var s=undefined,t;u.refUrl=(window.location!==window.parent.location)?document.referrer:document.location.href;if(typeof JSON!=="undefined"){t=JSON.stringify(u);}else{if(typeof amzn_assoc_utils!=="undefined"&&typeof amzn_assoc_utils.stringify==="function"){t=amzn_assoc_utils.stringify(u);}else{return;}}if(typeof n==="string"){s=n+"?assoc_payload="+encodeURIComponent(t);}if(typeof s!=="undefined"){(new Image()).src=s;}};f.recordImpression=function(t,s,v,u,w){v.linkCode=t;v.trackingId=s;if(m||!r){f.makeForesterCall(v);}else{f.addABPFlag(v,f.makeForesterCall);}if(typeof u==="undefined"||!u){(new Image()).src=d+"?l="+t+"&t="+s+"&o="+k+"&cb="+(new Date()).getTime()+((typeof w!=="undefined")?w:"");}};f.addAAXClickUrls=function(t){var v,u,s;if(typeof t==="undefined"||typeof o==="undefined"){return;}for(u=0;u<t.length;u++){s=String(t[u].href);if(s.indexOf(o)<0){v=o+s;t[u].href=v;}}};f.addAAXClickUrl=function(s){if(typeof s==="undefined"||s.indexOf(o)===0){return s;}return o+s;};f.updateLinks=function(t,v){var u,s;if(typeof v!=="function"){return;}for(u=0;u<t.length;u++){s=String(t[u].href);t[u].href=v(s);}};f.elementInViewPort=function(s){var t=s.getBoundingClientRect(),u=(t.top>=0&&t.left>=0&&t.bottom<=(window.innerHeight||document.documentElement.clientHeight)&&t.right<=(window.innerWidth||document.documentElement.clientWidth));return{posX:t.left+window.pageXOffset,posY:t.top+window.pageYOffset,inViewPort:u};};f.initialViewabilityCall=function(y,t,v,x){var s=undefined,u,w={adViewability:[{above_the_fold:y,topPos:t,leftPos:v,slotNum:x}]};if(typeof JSON!=="undefined"){u=JSON.stringify(w);}else{if(typeof amzn_assoc_utils!=="undefined"&&typeof amzn_assoc_utils.stringify==="function"){u=amzn_assoc_utils.stringify(w);}else{u="";}}if(typeof n==="string"){s=n+u;}if(typeof s!=="undefined"){(new Image()).src=s+"&cb="+(new Date()).getTime();}};f.makeViewabilityCall=function(v){var s=undefined,t,u={adViewability:[{viewable:true,slotNum:v}]};if(typeof JSON!=="undefined"){t=JSON.stringify(u);}else{if(typeof amzn_assoc_utils!=="undefined"&&typeof amzn_assoc_utils.stringify==="function"){t=amzn_assoc_utils.stringify(u);}else{t="";}}if(typeof n==="string"){s=n+t;}if(typeof s!=="undefined"){(new Image()).src=s+"&cb="+(new Date()).getTime();}};f.addABPFlag=function(v,D){var x=false,w=2,u=document.body?document.body.appendChild(new Image()):new Image(),t=document.body?document.body.appendChild(new Image()):new Image(),A=false,y=false,s=Math.random()*11,C=r+"?ch=*&rn=*",B=function(F,E){if(w===0||E>1000){v.supplySideMetadata={ABPInstalled:w===0&&x};F(v);}else{setTimeout(function(){B(F,E*2);},E*2);}},z=function(){if(--w){return;}x=!A&&y;};u.style.display="none";t.style.display="none";u.onload=z;u.onerror=function(){A=true;z();};u.src=C.replace(/\*/,1).replace(/\*/,s);t.onload=z;t.onerror=function(){y=true;z();};t.src=C.replace(/\*/,2).replace(/\*/,s);B(D,250);};return f;};window.elemTracker=function(b){var a={};a.trackElements=function(d,c){var f,e;if(typeof d!=="undefined"&&d.length>0&&typeof c==="function"){window.addEventListener("scroll",function(){for(f=0;f<d.length;f++){e=b.elementInViewPort(d[f]);if(e.inViewPort){c();}}},false);}};return a;};
+	var amznAutoTaggerMaker=function(h,v,B){var D={CA:"ca",CN:"cn",IN:"in",DE:"de",FR:"fr",GB:"co.uk",JP:"co.jp",US:"com"},j={CA:[],CN:[],IN:[],DE:["javari"],FR:["javari"],GB:["javari"],JP:["javari"],US:["smallparts","amazonwireless","endless","myhabit"]},F=(function(){var O=-1,N={};N.getNextSlotNum=function(){return ++O;};return N;}()),q,o,e=Math.max(document.body.scrollHeight,document.body.offsetHeight,document.documentElement.clientHeight,document.documentElement.scrollHeight,document.documentElement.offsetHeight),m=Math.max(document.body.scrollWidth,document.body.offsetWidth,document.documentElement.clientWidth,document.documentElement.scrollWidth,document.documentElement.offsetWidth),y={totalDocWidth:m,totalDocHeight:e,logType:"onetag_pageload",pageTitle:document.title},a="w50",I="w61",H="g12",C={},b=new RegExp("%3F"),w=new Object(),x=false,l="",s="",u=0,K=0,d=0,G=new RegExp("amzn.to"),r=new RegExp(h.redirectorEndPoint),E=["kdp.amazon.com"],M=[],c=function(O){var P,N=false;for(P=0;P<E.length;P++){if(O.match(E[P])){N=true;break;}}return N;},p=function(N){return N.nextSibling&&N.nextSibling.tagName==="IMG"&&N.nextSibling.hasAttribute("src")&&(N.nextSibling.getAttribute("src").search(/ir-[a-z]{2}\.amazon-adsystem\.com/)>-1||N.nextSibling.getAttribute("src").search(/www\.assoc-amazon\.*/)>-1);},n=function(N){if(!N.href.match(r)){N.href=h.redirectorEndPoint+N.href;}},k=function(X,ad){var Y=new RegExp("/(ref=[\\w]+)/?","i"),T,ac=false,O,R,S=false,W=X.search.match(/\?tag=([^&]+)|&tag=([^&]+)|\?tag-value=([^&]+)|&tag-value=([^&]+)|\?tag_value=([^&]+)|&tag_value=([^&]+)|\?t=([^&]+)|&t=([^&]+)/),Q=X.search.match(/\?tag=|&tag=|\?tag-value=|&tag-value=|\?tag_value=|&tag_value=|\?t=|&t=/),N=X.search.match(/(linkCode|link_code|lc)=([^&]+)/i),V=v.elementInViewPort(X),ab={autoTagged:false,overwritten:false,geoRedirected:false,atf:V.inViewPort},P=F.getNextSlotNum(),U={destinationURL:X.href,slotNum:P,atfInFirstLoad:V.inViewPort,posX:V.posX,posY:V.posY,logType:"onetag_textlink"},aa=p(X),Z;ab.slotNum=P;if(X.pathname.charAt(X.pathname.length-1)!=="/"){X.pathname=X.pathname+"/";}if(X.search===""){X.search="?imprToken="+v.getImpressionToken()+"&slotNum="+P;}else{X.search=X.search.replace(/\?/,"?imprToken="+v.getImpressionToken()+"&slotNum="+P+"&");}if(h.enableAutoTagging){ab.autoTagged=true;if(W){if(h.overwrite){for(R=1;R<9;R++){if(W[R]!=undefined){X.search=X.search.replace(W[R],ad);break;}}ab.overwritten=true;ac=true;}}else{if(Q){X.search=X.search.replace(/tag=/,"tag="+ad);ac=true;}else{X.search=X.search.replace(/\?/,"?tag="+ad+"&");ac=true;}}}if(N&&typeof h.overridableLinkCodes[N[2]]!=="undefined"){S=true;}if(N&&!S){O=N[2];}else{O=ac?a:I;}if(N){U.oldLinkCode=N[2];X.search=X.search.replace(N[2],O);}else{X.search=X.search.replace(/\?/,"?linkCode="+O+"&");}if(T=X.pathname.match(Y)){X.pathname=X.pathname.replace(T[1],"ref=as_at");}else{X.pathname=X.pathname+"ref=as_at";}if(ac){Z=ad;}else{if(typeof W!=="undefined"&&W instanceof Array&&W.length>=R+1&&typeof W[R]==="string"){Z=W[R];}else{Z="";}}if(C.shouldBeGeoRedirected()){ab.geoRedirected=true;n(X);}if(X.hasAttribute("data-amzn-asin")&&!X.search.match("creativeASIN")){X.search=X.search.replace(/\?/,"?creativeASIN="+X.getAttribute("data-amzn-asin")+"&");}M.push({pos:V,slotNum:P,linkCode:O,linkInfo:U,skipIRCall:aa,imprTag:Z});X.href=v.addAAXClickUrl(X.href);return ab;},A=function(N){if(N.href.match(b)){o=N.href.split(b);N.href=o[0]+"?"+decodeURIComponent(o[1]);}},t=function(O,N,R){var Q,P;for(Q=0;Q<O.length;Q++){for(P=0;P<N.length;P++){if(window.addEventListener){O[Q].addEventListener(N[P],R,false);}else{O[Q].attachEvent("on"+N[P],R);}}}},J=function(N,O){var P=false;t([N],["touchstart"],function(){P=false;});t([N],["touchmove"],function(){P=true;});t([N],["click","touchend"],function(Q){if(P){return;}N.setAttribute("href",O);});t([N],["auxclick","contextmenu"],function(Q){N.setAttribute("href",O);});t([N],["mouseup"],function(Q){if(Q.button===1||Q.ctrlKey){N.setAttribute("href",O);}});},L=function(){var N="";for(i=0;i<h.itemRefs.length;i++){if(typeof h.itemRefs[i].type!=="undefined"&&h.itemRefs[i].type==="ASIN"&&typeof h.itemRefs[i].sourceLink!=="undefined"&&String(h.itemRefs[i].sourceLink).match(G)!==null&&typeof h.itemRefs[i].destinationLink!=="undefined"){w[h.itemRefs[i].sourceLink]=h.itemRefs[i].destinationLink;if(l!==""){N=",";}l=l+N+h.itemRefs[i].sourceLink;u++;}}},f=function(O,N){B.trackElements([O],function(){if(typeof N!==undefined&&N.slotNum!==undefined&&(N.viewed===undefined||!N.viewed)){v.makeViewabilityCall(N.slotNum);N.viewed=true;}});},g=function(N,O){J(N,N.getAttribute("href"));N.setAttribute("href",O);},z=function(){var P,O,N;for(P=0;P<M.length;P++){O=M[P];N=O.pos;v.recordImpression(O.linkCode,O.imprTag,O.linkInfo,O.skipIRCall,O.slotNum);v.initialViewabilityCall(N.inViewPort,N.posX,N.posY,O.slotNum);}M=[];};if(h.locale!=undefined){q=h.locale;}else{q="US";}C.shouldBeGeoRedirected=function(){return h.enableGeoRedirection&&(h.region!==""&&h.region!==h.viewerCountry);};C.publisherCallBack=function(){window["amzn_assoc_client_cb_"+h.adUnitSlotNum]({type:"onload",data:{},widget:C});};C.decorateLinkElement=function(N){A(N);linkProperties=k(N,h.trackingId);f(N,linkProperties);return linkProperties;};C.tagLinks=function(ae){var ag,af,O,Z,ai,ab=[],ak=0,W,Y,ah,ad,aj,N,X,U=0,Q=0,aa=0,P=0,T=0,R=0,S,V,ac="";O=D[q];Z=j[q];ai=new RegExp("^(http|https)://(www|[\\w\\-\\.]+)?amazon\\.("+O+")/","i");if(Z){for(ak=0;ak<Z.length;ak++){W=O;if(O=="co.jp"){W="co.jp|jp";}ab[ak]=new RegExp("^(http|https)://(www\\.)?("+Z[ak]+")\\.("+W+")/","i");}}Y=ae.getElementsByTagName("a");if(!x){L();x=true;}for(ag=0;ag<Y.length;ag++){X=undefined;ah=String(Y[ag].href);if(ad=ah.match(ai)&&!c(ah)){X=C.decorateLinkElement(Y[ag]);g(Y[ag],ah);}else{if(h.isShortLinksSupported&&(aj=ah.match(G))!==null){K++;if(s!==""){ac=",";}s=s+ac+Y[ag].href;S=w[Y[ag].href];if(typeof S!=="undefined"){d++;Y[ag].setAttribute("href",S);X=C.decorateLinkElement(Y[ag]);g(Y[ag],ah);}else{if(C.shouldBeGeoRedirected()){X=C.decorateLinkElement(Y[ag]);g(Y[ag],ah);}}}else{for(N=0;N<ab.length;N++){if(ad=ah.match(ab[N])){C.decorateLinkElement(Y[ag]);g(Y[ag],ah);}}}}if(typeof X!=="undefined"){if(X.autoTagged){Q++;}if(X.overwritten){R++;}if(X.geoRedirected){aa++;}if(X.atf){P++;}else{T++;}U++;}}y.numLinks=U;y.numAutoTaggedLinks=Q;y.autoTaggingEnabled=h.enableAutoTagging;y.geoRedirectEnabled=h.enableGeoRedirection;y.numLinksATF=P;y.numLinksBTF=T;y.shortLinksInLivePool=l;y.shortLinksInPage=s;y.shortLinksInLivePoolCount=u;y.shortLinksInPageCount=K;y.shortLinksMatchCount=d;v.recordImpression(h.linkCode,h.trackingId,y);t([window],["load"],z);};return C;};
+    var spec = {
+        trackingId : "vitorfs0b-20",
+        region : "US",
+        overwrite : false,
+        enableAutoTagging : false,
+        linkCode : "w49",
+        overridableLinkCodes :  {   "am1": ""   , "am2": ""   , "am3": ""   , "as1": ""   , "as2": ""   , "as3": ""   , "as4": ""   , "li1": ""   , "li2": ""   , "li3": ""   , "ll1": ""   , "ll2": ""   },
+        enableGeoRedirection : true,
+        redirectorEndPoint : "https://assoc-redirect.amazon.com/g/r/",
+        adUnitSlotNum : "0",
+        itemRefs : [],
+        isShortLinksSupported : true,
+        viewerCountry : "IN"
+    }, trackingUtils = window.trackingUtils(
+        "1",
+        "//fls-na.amazon-adsystem.com/1/associates-ads/1/OP/r/json",
+        "//ir-na.amazon-adsystem.com/e/ir",
+        "https://aax-us-east.amazon-adsystem.com/x/px/Qj4Wu5CiCqM2YxSBT7Ei-IQAAAFks4AGQwEAAAFKAaz-uCI/", "https://aax-us-east.amazon-adsystem.com/x/c/Qj4Wu5CiCqM2YxSBT7Ei-IQAAAFks4AGQwEAAAFKAaz-uCI/", "pAQoBzL2AbKtu0n92j9Q.A", undefined, undefined, undefined, true
+    );
+
+    window.amznAutoTagger = amznAutoTaggerMaker(spec, trackingUtils, window.elemTracker(trackingUtils));
+    window.amznAutoTagger.tagLinks(document);
+    window.amznAutoTagger.publisherCallBack();
+}());
+
+ //# sourceURL=dynscript-0.js</script>
+  
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Upload Files With Django</title>
+<meta name="description" content="In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find...">
+<link href="./How to Upload Files With Django_files/css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./How to Upload Files With Django_files/main.css">
+<link rel="stylesheet" href="./How to Upload Files With Django_files/font-awesome.min.css">
+<link rel="canonical" href="https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="https://simpleisbetterthancomplex.com/feed.xml">
+<link rel="icon" type="image/png" href="https://simpleisbetterthancomplex.com/favicon.png">
+<link rel="mask-icon" href="https://simpleisbetterthancomplex.com/safari-pinned-tab.svg" color="#5bbad5">
+<script src="./How to Upload Files With Django_files/1689711451348257" async=""></script><script id="facebook-jssdk" src="./How to Upload Files With Django_files/sdk.js.download"></script><script async="" src="./How to Upload Files With Django_files/fbevents.js.download"></script><script async="" src="./How to Upload Files With Django_files/analytics.js.download"></script><script src="./How to Upload Files With Django_files/jquery.min.js.download"></script>
+<script src="./How to Upload Files With Django_files/site.js.download"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = '/tutorial/2016/08/01/how-to-upload-files-with-django.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&ev=PageView&noscript=1"
+  /></noscript>
+
+
+  <meta property="og:title" content="How to Upload Files With Django">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016-08-01-how-to-upload-files-with-django/featured.jpg">
+<meta property="og:description" content="In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-08-01T12:05:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Upload Files With Django">
+<meta name="twitter:description" content="In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find the source code of the examples I used ...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016-08-01-how-to-upload-files-with-django/featured.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="forms">
+  
+    <meta property="article:tag" content="media">
+  
+    <meta property="article:tag" content="upload">
+  
+  <style type="text/css">
+    body {
+      padding-top:70px!important;
+    }
+  </style>
+<script src="./How to Upload Files With Django_files/embed.js.download" data-timestamp="1532019867446"></script><script id="_carbonads_projs" type="text/javascript" src="./How to Upload Files With Django_files/CKYIEKQM.json"></script><script src="./How to Upload Files With Django_files/count-data.js.download"></script><link rel="preload" as="style" href="https://c.disquscdn.com/next/embed/styles/lounge.3999ac261b914f8b8b5e85df0ff3eaea.css"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/common.bundle.5f8e47303ecf1055cd7c6905466d140a.js"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/lounge.bundle.33067ddbd4792de0b384ceb588602715.js"><link rel="preload" as="script" href="https://disqus.com/next/config.js"><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:-webkit-sticky;top:0}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}
+.fb_customer_chat_bounce_in_v1{animation-duration:250ms;animation-name:fb_bounce_in_v1}.fb_customer_chat_bounce_out_v1{animation-duration:250ms;animation-name:fb_bounce_out_v1}.fb_customer_chat_bounce_in_v2{animation-duration:300ms;animation-name:fb_bounce_in_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2{animation-duration:300ms;animation-name:fb_bounce_out_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_in_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_in_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_out_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bubble_pop_in{animation-duration:250ms;animation-name:fb_customer_chat_bubble_bounce_in_animation}.fb_customer_chat_bubble_animated_no_badge{box-shadow:0 3px 12px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_no_badge:hover{box-shadow:0 5px 24px rgba(0, 0, 0, .3)}.fb_customer_chat_bubble_animated_with_badge{box-shadow:-5px 4px 14px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_with_badge:hover{box-shadow:-5px 8px 24px rgba(0, 0, 0, .2)}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_bounce_in_v1{0%{opacity:0;transform:scale(.8, .8);transform-origin:bottom right}80%{opacity:.8;transform:scale(1.03, 1.03)}100%{opacity:1;transform:scale(1, 1)}}@keyframes fb_bounce_in_v2{0%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}50%{transform:scale(1.03, 1.03);transform-origin:bottom right}100%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}}@keyframes fb_bounce_in_v2_mobile_chat_started{0%{opacity:0;top:20px}100%{opacity:1;top:0}}@keyframes fb_bounce_out_v1{from{opacity:1}to{opacity:0}}@keyframes fb_bounce_out_v2{0%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}100%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}}@keyframes fb_bounce_out_v2_mobile_chat_started{0%{opacity:1;top:0}100%{opacity:0;top:20px}}@keyframes fb_customer_chat_bubble_bounce_in_animation{0%{bottom:6pt;opacity:0;transform:scale(0, 0);transform-origin:center}70%{bottom:18pt;opacity:1;transform:scale(1.2, 1.2)}100%{transform:scale(1, 1)}}</style></head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header class="nav-up">
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="https://simpleisbetterthancomplex.com/search/">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="https://simpleisbetterthancomplex.com/" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="https://simpleisbetterthancomplex.com/">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <!--li class="menu-item">
+        <a href="/ask/">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Ask a Question
+        </a>
+      </li-->
+      <li class="menu-item">
+        <a href="https://simpleisbetterthancomplex.com/contact/">
+          <span class="fa fa-envelope" style="margin-right: 3px"></span>
+          Contact
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://simpleisbetterthancomplex.com/snippets/">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://simpleisbetterthancomplex.com/series/">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://simpleisbetterthancomplex.com/archive/">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Archive
+        </a>
+      </li>
+      <!--li class="menu-item">
+        <a href="/jobs/">
+          <span class="fa fa-briefcase" style="margin-right: 3px"></span>
+          Jobs
+        </a>
+      </li-->
+      <li class="menu-item">
+        <a href="https://simpleisbetterthancomplex.com/feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="http://eepurl.com/b0gR51" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="https://simpleisbetterthancomplex.com/search/">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+  <p style="text-align:center;font-size:1.4rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="https://angel.co/anansi-insurance/jobs/395698-devops-security-consultant" target="_blank" rel="noopener nofollow">
+      DevOps/Security Consultant at Anansi Insurance · Zurich, Switzerland, Remote · Contract
+    </a>
+  </p>
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="./How to Upload Files With Django_files/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <p class="bio">
+      I'm a passionate software developer and researcher from Brazil, currently living in Finland. I write about
+      Python, Django and Web Development on a weekly basis. <a href="https://simpleisbetterthancomplex.com/about/" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="https://google.com/+VitorFreitas" rel="me noopener" target="_blank" title="Google+"><i class="fa fa-google-plus-official"></i></a>
+      <a href="https://simpleisbetterthancomplex.com/contact/" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+    <div id="ad">
+      <script async="" type="text/javascript" src="./How to Upload Files With Django_files/carbon.js.download" id="_carbonads_js"></script><div id="carbonads"><span><span class="carbon-wrap"><a href="http://sibt.co/2xhZa6M" class="carbon-img" target="_blank" rel="noopener"><img src="./How to Upload Files With Django_files/ad323a286af50bace0129cd2f5269aaf.png" alt="" border="0" height="100" width="130" style="max-width: 130px;"></a><a href="http://sibt.co/2xhZa6M" class="carbon-text" target="_blank" rel="noopener">Get $10 Free Credit on DigitalOcean to Get Started.</a></span><a href="http://carbonads.net/?utm_source=simpleisbetterthancomplexcom&amp;utm_medium=ad_via_link&amp;utm_campaign=in_unit&amp;utm_term=carbon" class="carbon-poweredby" target="_blank" rel="noopener">ads via Carbon</a></span></div>
+    </div>
+  
+</div>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Upload Files With Django</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Aug 1, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    6 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html#disqus_thread" data-disqus-identifier="/tutorial/2016/08/01/how-to-upload-files-with-django">75 comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="/tutorial/2016/08/01/how-to-upload-files-with-django.html">169,178</span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="./How to Upload Files With Django_files/featured.jpg" alt="How to Upload Files With Django" class="featured-image">
+    
+  </div>
+
+            <article>
+              <div class="info">
+    <strong><i class="fa fa-info-circle"></i> Updated at Aug 1, 2016:</strong>
+    As suggested by <a href="https://twitter.com/fapolloner/status/760075954874150912" target="_blank">@fapolloner</a>, I've removed the manual
+    file handling. Updated the example using FileSystemStorage instead. Thanks!
+</div>
+
+<p>In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms.
+In the end of this post you will find the source code of the examples I used so you can try and explore.</p>
+
+<hr>
+
+<h4 id="the-basics-of-file-upload-with-django">The Basics of File Upload With Django</h4>
+
+<p>When files are submitted to the server, the file data ends up placed in <code class="highlighter-rouge">request.FILES</code>.</p>
+
+<p>It is mandatory for the HTML form to have the attribute <code class="highlighter-rouge">enctype="multipart/form-data"</code> set correctly. Otherwise the
+<code class="highlighter-rouge">request.FILES</code> will be empty.</p>
+
+<p>The form must be submitted using the <strong>POST</strong> method.</p>
+
+<p>Django have proper model fields to handle uploaded files: <code class="highlighter-rouge">FileField</code> and <code class="highlighter-rouge">ImageField</code>.</p>
+
+<p>The files uploaded to <code class="highlighter-rouge">FileField</code> or <code class="highlighter-rouge">ImageField</code> are not stored in the database but in the filesystem.</p>
+
+<p><code class="highlighter-rouge">FileField</code> and <code class="highlighter-rouge">ImageField</code> are created as a string field in the database (usually VARCHAR), containing the reference
+to the actual file.</p>
+
+<p>If you delete a model instance containing <code class="highlighter-rouge">FileField</code> or <code class="highlighter-rouge">ImageField</code>, Django will <strong>not</strong> delete the physical file,
+but only the reference to the file.</p>
+
+<p>The <code class="highlighter-rouge">request.FILES</code> is a dictionary-like object. Each key in <code class="highlighter-rouge">request.FILES</code> is the name from the <code class="highlighter-rouge">&lt;input type="file" name="" /&gt;</code>.</p>
+
+<p>Each value in <code class="highlighter-rouge">request.FILES</code> is an <code class="highlighter-rouge">UploadedFile</code> instance.</p>
+
+<p>You will need to set <code class="highlighter-rouge">MEDIA_URL</code> and <code class="highlighter-rouge">MEDIA_ROOT</code> in your project’s <strong>settings.py</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">'/media/'</span>
+<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'media'</span><span class="p">)</span></code></pre></figure>
+
+<p>In the development server you may serve the user uploaded files (media) using <strong>django.contrib.staticfiles.views.serve()</strong>
+view.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.conf.urls.static</span> <span class="kn">import</span> <span class="n">static</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c"># Project url patterns...</span>
+<span class="p">]</span>
+
+<span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+    <span class="n">urlpatterns</span> <span class="o">+=</span> <span class="n">static</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_URL</span><span class="p">,</span> <span class="n">document_root</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_ROOT</span><span class="p">)</span></code></pre></figure>
+
+<p>To access the <code class="highlighter-rouge">MEDIA_URL</code> in template you must add <code class="highlighter-rouge">django.template.context_processors.media</code> to your
+<code class="highlighter-rouge">context_processeors</code> inside the <code class="highlighter-rouge">TEMPLATES</code> config.</p>
+
+<hr>
+
+<h4 id="simple-file-upload">Simple File Upload</h4>
+
+<p>Following is a minimal file upload example using <code class="highlighter-rouge">FileSystemStorage</code>. Use it just to learn about the flow of the
+process.</p>
+
+<p><strong>simple_upload.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+    {% csrf_token %}
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"file"</span> <span class="na">name=</span><span class="s">"myfile"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Upload<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+
+  {% if uploaded_file_url %}
+    <span class="nt">&lt;p&gt;</span>File uploaded at: <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ uploaded_file_url }}"</span><span class="nt">&gt;</span>{{ uploaded_file_url }}<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+  {% endif %}
+
+  <span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'home' %}"</span><span class="nt">&gt;</span>Return to home<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+{% endblock %}</code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.core.files.storage</span> <span class="kn">import</span> <span class="n">FileSystemStorage</span>
+
+<span class="k">def</span> <span class="nf">simple_upload</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s">'myfile'</span><span class="p">]:</span>
+        <span class="n">myfile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s">'myfile'</span><span class="p">]</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="n">FileSystemStorage</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">myfile</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">myfile</span><span class="p">)</span>
+        <span class="n">uploaded_file_url</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">url</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/simple_upload.html'</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s">'uploaded_file_url'</span><span class="p">:</span> <span class="n">uploaded_file_url</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/simple_upload.html'</span><span class="p">)</span></code></pre></figure>
+
+<hr>
+
+<h4 id="file-upload-with-model-forms">File Upload With Model Forms</h4>
+
+<p>Now, this is a way more convenient way. Model forms perform validation, automatically builds the absolute path for the
+upload, treats filename conflicts and other common tasks.</p>
+
+<p><strong>models.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Document</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">document</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">'documents/'</span><span class="p">)</span>
+    <span class="n">uploaded_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></figure>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">uploads.core.models</span> <span class="kn">import</span> <span class="n">Document</span>
+
+<span class="k">class</span> <span class="nc">DocumentForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Document</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">'description'</span><span class="p">,</span> <span class="s">'document'</span><span class="p">,</span> <span class="p">)</span></code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">model_form_upload</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">DocumentForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'home'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">DocumentForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/model_form_upload.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span>
+    <span class="p">})</span></code></pre></figure>
+
+<p><strong>model_form_upload.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">{% extends 'base.html' %}
+
+{% block content %}
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Upload<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+
+  <span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'home' %}"</span><span class="nt">&gt;</span>Return to home<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+{% endblock %}</code></pre></figure>
+
+<hr>
+
+<h4 id="about-the-filefield-uploadto-parameter">About the FileField upload_to Parameter</h4>
+
+<p>See the example below:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">document</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">'documents/'</span><span class="p">)</span></code></pre></figure>
+
+<p>Note the <code class="highlighter-rouge">upload_to</code> parameter. The files will be automatically uploaded to <code class="highlighter-rouge">MEDIA_ROOT/documents/</code>.</p>
+
+<p>It is also possible to do something like:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">document</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">'documents/</span><span class="si">%</span><span class="s">Y/</span><span class="si">%</span><span class="s">m/</span><span class="si">%</span><span class="s">d/'</span><span class="p">)</span></code></pre></figure>
+
+<p>A file uploaded today would be uploaded to <code class="highlighter-rouge">MEDIA_ROOT/documents/2016/08/01/</code>.</p>
+
+<p>The <code class="highlighter-rouge">upload_to</code> can also be a callable that returns a string. This callable accepts two parameters, <strong>instance</strong> and
+<strong>filename</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">user_directory_path</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="c"># file will be uploaded to MEDIA_ROOT/user_&lt;id&gt;/&lt;filename&gt;</span>
+    <span class="k">return</span> <span class="s">'user_{0}/{1}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">upload</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="n">user_directory_path</span><span class="p">)</span></code></pre></figure>
+
+<hr>
+
+<h4 id="download-the-examples">Download the Examples</h4>
+
+<p>The code used in this post is available on <a href="https://github.com/sibtc/simple-file-upload">Github</a>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone https://github.com/sibtc/simple-file-upload.git</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install django</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py runserver</code></pre></figure>
+
+
+            </article>
+            <hr>
+            <div class="popular-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="https://simpleisbetterthancomplex.com/series/2017/09/18/a-complete-beginners-guide-to-django-part-3.html">
+<img src="./How to Upload Files With Django_files/featured(1).jpg" alt="A Complete Beginner&#39;s Guide to Django - Part 3" title="A Complete Beginner&#39;s Guide to Django - Part 3">
+A Complete Beginner's Guide to Django - Part 3
+</a>
+</div>
+<div class="four columns">
+<a href="https://simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html">
+<img src="./How to Upload Files With Django_files/featured-form-rendering.jpg" alt="How to Render Django Form Manually" title="How to Render Django Form Manually">
+How to Render Django Form Manually
+</a>
+</div>
+<div class="four columns">
+<a href="https://simpleisbetterthancomplex.com/tutorial/2017/08/01/how-to-setup-amazon-s3-in-a-django-project.html">
+<img src="./How to Upload Files With Django_files/featured-s3.jpg" alt="How to Setup Amazon S3 in a Django Project" title="How to Setup Amazon S3 in a Django Project">
+How to Setup Amazon S3 in a Django Project
+</a>
+</div>
+    </div>
+</div>
+
+            <div class="row">
+  <div class="twelve columns post-tags" style="padding-top: 0; margin-top: 3rem;">
+    
+      <a href="https://simpleisbetterthancomplex.com/tag/django/"><span class="tag">django</span></a>
+    
+      <a href="https://simpleisbetterthancomplex.com/tag/forms/"><span class="tag">forms</span></a>
+    
+      <a href="https://simpleisbetterthancomplex.com/tag/media/"><span class="tag">media</span></a>
+    
+      <a href="https://simpleisbetterthancomplex.com/tag/upload/"><span class="tag">upload</span></a>
+    
+  </div>
+</div>
+<hr class="dashed">
+<div class="row">
+  <div class="four columns post-tags" style="padding-top: 4px">
+    
+      <div class="fb-like fb_iframe_widget" data-href="https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=1645747765697865&amp;container_width=270&amp;href=https%3A%2F%2Fsimpleisbetterthancomplex.com%2Ftutorial%2F2016%2F08%2F01%2Fhow-to-upload-files-with-django.html&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;share=false&amp;show_faces=false&amp;size=small"><span style="vertical-align: bottom; width: 67px; height: 20px;"><iframe name="f134394c1c14698" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./How to Upload Files With Django_files/like.html" style="border: none; visibility: visible; width: 67px; height: 20px;" class=""></iframe></span></div>
+      <div id="vk_like" style="display: inline-block; vertical-align: bottom; width: 115px; height: 20px; background: none; position: relative; clear: both;"><iframe name="fXD51553" frameborder="0" src="./How to Upload Files With Django_files/widget_like.html" width="100%" height="20" scrolling="no" id="vkwidget1" style="overflow: hidden; height: 20px; width: 115px; z-index: 150;"></iframe></div>
+    
+  </div>
+  <div class="eight columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mLtcu6" rel="nofollow" target="_blank" title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Upload%20Files%20With%20Django&amp;url=http://sibt.co/2nGoW3S&amp;via=vitorfs&amp;related=vitorfs" rel="nofollow" target="_blank" title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nwvS3h" rel="nofollow" target="_blank" title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nizUvs&amp;title=How%20to%20Upload%20Files%20With%20Django&amp;summary=In%20this%20tutorial%20you%20will%20learn%20the%20concepts%20behind%20Django%20file%20upload%20and%20how%20to%20handle%20file%20upload%20using%20model%20forms.%20In%20the%20end%20of%20this%20post%20you%20will%20find%20the%20source%20code%20of%20the%20examples%20I%20used%20...&amp;source=https://simpleisbetterthancomplex.com" rel="nofollow" target="_blank" title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+  <a href="https://plus.google.com/share?url=http://sibt.co/2o0qDoX" rel="nofollow" target="_blank" title="Share on Google+">
+    <i class="fa fa-google-plus"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <div style="text-align:center;margin-bottom:20px">
+            <a href="https://namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="./How to Upload Files With Django_files/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important">
+            </a>
+            <img height="0" width="0" src="./How to Upload Files With Django_files/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0">
+          </div>
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"><iframe id="dsq-app839" name="dsq-app839" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./How to Upload Files With Django_files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 7876px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html';
+        this.page.identifier = '/tutorial/2016/08/01/how-to-upload-files-with-django';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = '//simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="./How to Upload Files With Django_files/count.js.download" async=""></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://simpleisbetterthancomplex.us12.list-manage.com/subscribe/post?u=98efdfc6a91e10018aaa182b0&amp;id=a31c2b72f8&amp;SIGNUP=Article" method="post">
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive exclusive Django tips every week!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="EMAIL">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="./How to Upload Files With Django_files/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="https://simpleisbetterthancomplex.com/tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="./How to Upload Files With Django_files/featured-post-image(1).jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="https://simpleisbetterthancomplex.com/tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="./How to Upload Files With Django_files/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2018 simple is better than complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="https://simpleisbetterthancomplex.com/about/" rel="author">about</a></li>
+      <li><a href="https://simpleisbetterthancomplex.com/cookies/">cookies</a></li>
+      <li><a href="https://simpleisbetterthancomplex.com/privacy/">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./How to Upload Files With Django_files/bSTT5dUx9MY.html" style="border: none;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1645747765697865";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  <div id="vk_api_transport"><script type="text/javascript" src="./How to Upload Files With Django_files/openapi.js.download" async=""></script></div>
+  <script type="text/javascript">
+    window.vkAsyncInit = function() {
+      VK.init({
+        apiId: 5651718,
+        onlyWidgets: true
+      });
+      VK.Widgets.Like("vk_like", {type: "mini", height: 20});
+    };
+
+    setTimeout(function() {
+      var el = document.createElement("script");
+      el.type = "text/javascript";
+      el.src = "//vk.com/js/api/openapi.js";
+      el.async = true;
+      document.getElementById("vk_api_transport").appendChild(el);
+    }, 0);
+  </script>
+
+  <script id="ga-page-views" src="./How to Upload Files With Django_files/page-views.js.download" async=""></script>
+
+  <script src="./How to Upload Files With Django_files/onejs"></script><div id="amzn_assoc_ad_div_adunit_0"></div>
+
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html",
+  "headline": "How to Upload Files With Django",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016-08-01-how-to-upload-files-with-django/featured.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-08-01T12:05:00+03:00",
+  "dateModified": "2016-08-01T15:42:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find the source code of the examples I used ..."
+}
+</script>
+
+
+<iframe style="display: none;" src="./How to Upload Files With Django_files/saved_resource(1).html"></iframe></body></html>

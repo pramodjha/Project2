@@ -484,6 +484,7 @@ class Requestdetail(models.Model):
     prioritydetail = models.ForeignKey(Prioritydetail, models.DO_NOTHING, db_column='prioritydetail')
     username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
     requestdescription = models.TextField()
+    requestdocument = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False

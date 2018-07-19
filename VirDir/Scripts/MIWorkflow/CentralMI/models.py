@@ -284,6 +284,8 @@ class Requestdetail(models.Model):
     prioritydetail = models.ForeignKey(Prioritydetail, models.DO_NOTHING, db_column='prioritydetail')
     username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
     requestdescription = models.TextField()
+    requestdocument = models.FileField(upload_to='requestdocument/',blank=True, null=True)
+
 
     class Meta:
         managed = False
@@ -525,8 +527,8 @@ class FeedbackQuestion(models.Model):
 class OtDetail(models.Model):
     ot_id = models.AutoField(primary_key=True)
     timetrackers = models.ForeignKey('Timetrackers', models.DO_NOTHING, db_column='timetrackers')
-    ot_startdatetime = models.DateTimeField(default= datetime.date.today)
-    ot_enddatetime = models.DateTimeField(default= datetime.date.today)
+    ot_startdatetime = models.DateTimeField(blank=True, null=True)
+    ot_enddatetime = models.DateTimeField(blank=True, null=True)
     ot_hrs = models.IntegerField(blank=True, null=True)
     ot_status = models.ForeignKey('OtStatus', models.DO_NOTHING, db_column='ot_status')
     otdocument = models.FileField(upload_to='otdocument/',blank=True, null=True)
