@@ -195,6 +195,16 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+class Designationmaster(models.Model):
+    designationid = models.AutoField(primary_key=True)
+    designation = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'designationmaster'
+
+    def __str__(self):
+        return self.designation
 
 class Estimationdetail(models.Model):
     estimationid = models.AutoField(primary_key=True)
@@ -215,6 +225,12 @@ class Mimember(models.Model):
     mimemberid = models.AutoField(primary_key=True)
     username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
     teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail')
+    designationmaster = models.ForeignKey(Designationmaster, models.DO_NOTHING, db_column='designationmaster', blank=True, null=True)
+    employeeid = models.IntegerField(blank=True, null=True)
+    dateofjoining = models.DateField(db_column='DateofJoining', blank=True, null=True)  # Field name made lowercase.
+    dateofbirth = models.DateField(db_column='DateofBirth', blank=True, null=True)  # Field name made lowercase.
+    address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
+    phonenumber = models.IntegerField(db_column='PhoneNumber', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -638,3 +654,46 @@ class Activitystatus(models.Model):
 
     def __str__(self):
         return str(self.activitystatus)
+
+
+
+
+class Internaltask(models.Model):
+    internaltaskid = models.AutoField(primary_key=True)
+    internaltaskdatetime = models.DateTimeField(default= datetime.datetime.now())
+    internaltaskquestion = models.CharField(db_column='internaltaskQuestion', max_length=255)  # Field name made lowercase.
+    status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='status', blank=True, null=True)
+    owner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='Owner', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'internaltask'
+
+    def __str__(self):
+        return str(self.internaltaskquestion)
+
+
+class Internaltaskchoice(models.Model):
+    internaltaskchoiceid = models.AutoField(primary_key=True)
+    internaltaskchoicedatetime = models.DateTimeField(default= datetime.datetime.now())
+    internaltaskchoice = models.CharField(max_length=255)
+    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask')
+
+    class Meta:
+        managed = False
+        db_table = 'internaltaskchoice'
+
+
+    def __str__(self):
+        return str(self.internaltaskchoice)
+
+class Internaltaskstatus(models.Model):
+    internaltaskstatusid = models.AutoField(primary_key=True)
+    internaltaskstatusdatetime = models.DateTimeField(default= datetime.datetime.now())
+    mimember = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='mimember', blank=True, null=True)
+    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask', blank=True, null=True)
+    internaltaskchoice = models.ForeignKey(Internaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoice', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'internaltaskstatus'

@@ -21,6 +21,18 @@ $("#setdate").click(function () {
           });
 
 
+  $(document).ready(function() {
+      $('#example').DataTable(
+      {
+        fixedHeader: true,
+        scrollY: '90vh',
+        scrollCollapse: true
+
+      });
+
+  } );
+
+
 // $("#id_trackingdatetime").change(function () {
   //  var url = $("#datatable").attr("ajax_load_datevalues");  // get the url of the `load_cities` view
   //  var datevalue = $(this).val();  // get the selected country ID from the HTML input

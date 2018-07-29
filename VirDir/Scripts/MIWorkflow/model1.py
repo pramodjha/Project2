@@ -196,6 +196,15 @@ class Deliverydays(models.Model):
         db_table = 'deliverydays'
 
 
+class Designationmaster(models.Model):
+    designationid = models.AutoField(primary_key=True)
+    designation = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'designationmaster'
+
+
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
@@ -357,10 +366,61 @@ class Frequency(models.Model):
         db_table = 'frequency'
 
 
+class Internaltask(models.Model):
+    internaltaskid = models.AutoField(primary_key=True)
+    internaltaskdatetime = models.DateTimeField()
+    internaltaskquestion = models.CharField(db_column='internaltaskQuestion', max_length=255)  # Field name made lowercase.
+    status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='status', blank=True, null=True)
+    owner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='Owner', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'internaltask'
+
+
+class Internaltaskchoice(models.Model):
+    internaltaskchoiceid = models.AutoField(primary_key=True)
+    internaltaskchoicedatetime = models.DateTimeField()
+    internaltaskchoice = models.CharField(max_length=255)
+    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask')
+
+    class Meta:
+        managed = False
+        db_table = 'internaltaskchoice'
+
+
+class Internaltaskstatus(models.Model):
+    internaltaskstatusid = models.AutoField(primary_key=True)
+    internaltaskstatusdatetime = models.DateTimeField()
+    mimember = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='mimember', blank=True, null=True)
+    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask', blank=True, null=True)
+    internaltaskchoice = models.ForeignKey(Internaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoice', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'internaltaskstatus'
+
+
+class Managermaster(models.Model):
+    managerid = models.AutoField(primary_key=True)
+    managername = models.CharField(max_length=100, blank=True, null=True)
+    employeeid = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'managermaster'
+
+
 class Mimember(models.Model):
     mimemberid = models.AutoField(primary_key=True)
     username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
-    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail')
+    teamdetail = models.IntegerField()
+    designationmaster = models.ForeignKey(Designationmaster, models.DO_NOTHING, db_column='designationmaster', blank=True, null=True)
+    employeeid = models.IntegerField(blank=True, null=True)
+    dateofjoining = models.DateField(db_column='DateofJoining', blank=True, null=True)  # Field name made lowercase.
+    dateofbirth = models.DateField(db_column='DateofBirth', blank=True, null=True)  # Field name made lowercase.
+    address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
+    phonenumber = models.IntegerField(db_column='PhoneNumber', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -420,6 +480,82 @@ class Prioritydetail(models.Model):
     class Meta:
         managed = False
         db_table = 'prioritydetail'
+
+
+class ReportBuilderDisplayfield(models.Model):
+    path = models.CharField(max_length=2000)
+    path_verbose = models.CharField(max_length=2000)
+    field = models.CharField(max_length=2000)
+    field_verbose = models.CharField(max_length=2000)
+    name = models.CharField(max_length=2000)
+    sort = models.IntegerField(blank=True, null=True)
+    sort_reverse = models.BooleanField()
+    width = models.IntegerField()
+    aggregate = models.CharField(max_length=5)
+    position = models.SmallIntegerField(blank=True, null=True)
+    total = models.BooleanField()
+    group = models.BooleanField()
+    display_format = models.ForeignKey('ReportBuilderFormat', models.DO_NOTHING, blank=True, null=True)
+    report = models.ForeignKey('ReportBuilderReport', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'report_builder_displayfield'
+
+
+class ReportBuilderFilterfield(models.Model):
+    path = models.CharField(max_length=2000)
+    path_verbose = models.CharField(max_length=2000)
+    field = models.CharField(max_length=2000)
+    field_verbose = models.CharField(max_length=2000)
+    filter_type = models.CharField(max_length=20)
+    filter_value = models.CharField(max_length=2000)
+    filter_value2 = models.CharField(max_length=2000)
+    exclude = models.BooleanField()
+    position = models.SmallIntegerField(blank=True, null=True)
+    report = models.ForeignKey('ReportBuilderReport', models.DO_NOTHING)
+    filter_delta = models.BigIntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'report_builder_filterfield'
+
+
+class ReportBuilderFormat(models.Model):
+    name = models.CharField(max_length=50)
+    string = models.CharField(max_length=300)
+
+    class Meta:
+        managed = False
+        db_table = 'report_builder_format'
+
+
+class ReportBuilderReport(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=50)
+    description = models.TextField()
+    created = models.DateField()
+    modified = models.DateField()
+    distinct = models.BooleanField()
+    report_file = models.CharField(max_length=100)
+    report_file_creation = models.DateTimeField(blank=True, null=True)
+    root_model = models.ForeignKey(DjangoContentType, models.DO_NOTHING)
+    user_created = models.ForeignKey(AuthUser, models.DO_NOTHING, blank=True, null=True)
+    user_modified = models.ForeignKey(AuthUser, models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'report_builder_report'
+
+
+class ReportBuilderReportStarred(models.Model):
+    report = models.ForeignKey(ReportBuilderReport, models.DO_NOTHING)
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'report_builder_report_starred'
+        unique_together = (('report', 'user'),)
 
 
 class ReportType(models.Model):
@@ -573,3 +709,13 @@ class Timetrackers(models.Model):
     class Meta:
         managed = False
         db_table = 'timetrackers'
+
+
+class TlMaster(models.Model):
+    tl_id = models.AutoField(primary_key=True)
+    tl_name = models.CharField(max_length=100, blank=True, null=True)
+    employeeid = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tl_master'

@@ -1,18 +1,10 @@
-{% extends "basetemplate.html" %}
+{% extends "base_model_template.html" %}
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
 {% endblock %}
-{% block navblockleft %}
-<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
-{% endblock %}
-
-{% block navblockright %}
-{% include "userprofiletest1.html" %}
-{% endblock %}
-
 
 {% block content %}
 <form class="form" method="POST" action="" class='form-inline '>
@@ -24,7 +16,7 @@
 <h3 class="col-sm-12 col-md-12 col-lg-12 head">Request Approval</h3>
 </div>
 </div>
-<div class="col-sm-12 col-md-12 col-lg-6">
+<div class="col-sm-12 col-md-12 col-lg-12">
 <div >
 <label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Authorised Date'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.authoriseddate  show_label=False layout='inline'  %}</span>
@@ -49,13 +41,11 @@
 <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Request Status'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form1.statusdetail  show_label=False  placeholder='Error Reported To' %}</span>
 </div>
-<div class="col-sm-12 col-md-12 col-lg-12">
-<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}
+<div class="col-sm-12 col-md-12 col-lg-7">
+  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'unapproved' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
 </div>
 </div>
 </form>
 
-{% endblock %}
-{% block footer %}
-{% include "userprofilefootertest1.html" %}
 {% endblock %}

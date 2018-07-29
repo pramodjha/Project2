@@ -1,0 +1,85 @@
+{% extends "base_model_template.html" %}
+{% load staticfiles %}
+{% block style %}
+<style>
+/* Ensure that the demo table scrolls */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+
+    div.container {
+
+        width: 100%;
+
+    }
+
+</style>
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <table  class="table " id="example" style="width:100%">
+    <thead class="thead tableheaderformat">
+    <tr class="" >
+      <td >ID <a href="{% url 'addinternaltaskoption' taskid  %}" class="glyphicon glyphicon-plus"></td>
+      <td> Internal Task </td>
+      <td >Choice</td>
+      <td >Edit </td>
+      </tr>
+    </thead>
+    <tbody class="tbody">
+  {%for data in model %}
+    <tr class="tablebodyformat">
+      <td >{{data.internaltaskchoiceid }} </td>
+      <td >{{data.internaltask }}</td>
+      <td >{{data.internaltaskchoice }}</td>
+      <td> <a href="{% url 'editinternaltaskoption' data.internaltaskchoiceid %}" class="glyphicon glyphicon-pencil"></a></td>
+      {% endfor %}
+      </tr></br>
+
+  </tbody>
+  </table>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-7">
+  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="submit" name="submit" class="btn btn-default">Done</a></div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $('#example').DataTable(
+    {
+      fixedHeader: true,
+      scrollY: '90vh',
+      scrollCollapse: true,
+      scrollX: true,
+      columnDefs: [
+            { width: 400, targets: 0 }
+        ],
+
+    });
+
+} );
+</script>
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}
+{% block footer_right %}
+{% endblock %}

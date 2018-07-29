@@ -1,0 +1,39 @@
+{% extends "base_model_template.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block content %}
+<form class="form" method="POST" action="" class='form-inline '>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Choice</h3>
+</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Date Time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskchoicedatetime  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Choice'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.internaltaskchoice  show_label=False  placeholder='' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'internal task'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltask  show_label=False  placeholder='Feedback' %}</span>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-7">
+<div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'viewinternaltaskoption' taskid %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+</div>
+</div>
+</form>
+
+{% endblock %}

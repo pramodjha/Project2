@@ -1,4 +1,4 @@
-{% extends "basetemplate.html" %}
+{% extends "base_model_template.html" %}
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -6,17 +6,7 @@
 {% block style %}
 {% endblock %}
 
-{% block navblockleft %}
-<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
-{% endblock %}
-
-{% block navblockright %}
-{% include "userprofiletest1.html" %}
-{% endblock %}
-
-
 {% block content %}
-
 <form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
 {% csrf_token %}
 {% bootstrap_form_errors form type='non_fields' %}
@@ -26,7 +16,7 @@
 <h3 class="col-sm-12 col-md-12 col-lg-12 head">Edit Report</h3>
 </div>
 </div>
-<div class="col-sm-12 col-md-12 col-lg-6">
+<div class="col-sm-12 col-md-12 col-lg-12">
 <div >
 <label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Registered Date'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.registereddate  show_label=False layout='inline'  %}</span>
@@ -83,15 +73,12 @@
 
 </div>
 
-<div class="col-sm-12 col-md-12 col-lg-12">
-<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+<div class="col-sm-12 col-md-12 col-lg-7">
+<div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'allreports' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
 </div>
 </form>
 
 
 
-{% endblock %}
-
-{% block footer %}
-{% include "userprofilefootertest1.html" %}
 {% endblock %}

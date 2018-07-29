@@ -31,12 +31,14 @@
 <li {% if activetab1 == 'tracker' %} class="active" {%else%} {% endif %}><a href="{% url 'tracker' %}">Tracker</a></li>
 <li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
 {% elif activetab == "report" %}
-<li {% if activetab1 == 'addreport' %} class="active" {%else%} {% endif %}><a href="{% url 'addreport' %}">Add Reports</a></li>
 <li {% if activetab1 == 'allreports' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Reports Detail</a></li>
 <li {% if activetab1 == 'errordetail' %} class="active" {%else%} {% endif %}><a href="{% url 'errordetail' %}">Error Detail</a></li>
+<li {% if activetab1 == 'feedbackdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'feedbackdetail' %}">Feedback Detail</a></li>
 {% elif activetab == "allreports" %}
-<li {% if activetab1 == 'addreport' %} class="active" {%else%} {% endif %}><a href="{% url 'addreport' %}">Add Reports</a></li>
 <li {% if activetab1 == 'allreports' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Reports Detail</a></li>
+{% elif activetab == "Details" %}
+<li {% if activetab1 == 'viewdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">View Details</a></li>
+<li {% if activetab1 == 'internaltaskdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'internaltaskdetail' %}">Internal Task Detail</a></li>
 
 {% else  %}
 <li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>

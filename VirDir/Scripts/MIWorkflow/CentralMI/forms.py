@@ -1,6 +1,6 @@
 from django import forms
 from bootstrap3_datetime.widgets import DateTimePicker
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus
 #Reports1
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -150,6 +150,10 @@ class OtDetailForm(forms.ModelForm):
     class Meta():
         model = OtDetail
         fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(OtDetailForm, self).__init__(*args, **kwargs)
+        self.fields['ot_startdatetime'].widget.attrs['class']  = 'form_datetime'
+        self.fields['ot_enddatetime'].widget.attrs['class']  = 'form_datetime'
 
 
 REPORT_CHOICES = (
@@ -204,4 +208,30 @@ class FilteredForm(forms.Form):
 class ActivityForm(forms.ModelForm):
     class Meta():
         model = Activity
+        fields = '__all__'
+
+class MimemberForm(forms.ModelForm):
+    class Meta():
+        model = Mimember
+        fields = '__all__'
+
+class UserForm(forms.ModelForm):
+    class Meta():
+        model = AuthUser
+        fields = '__all__'
+
+class InternaltaskForm(forms.ModelForm):
+    class Meta():
+        model = Internaltask
+        fields = '__all__'
+
+
+class InternaltaskchoiceForm(forms.ModelForm):
+    class Meta():
+        model = Internaltaskchoice
+        fields = '__all__'
+
+class InternaltaskstatusForm(forms.ModelForm):
+    class Meta():
+        model = Internaltaskstatus
         fields = '__all__'

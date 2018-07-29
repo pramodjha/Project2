@@ -11,6 +11,8 @@ requestpriorityid int not null primary key Identity(1,1),
 requestpriority varchar(50) not null unique
 );
 
+
+
 use CentralMI
 create table requestdetail(
 requestid int not null primary key Identity(1,1),
@@ -23,9 +25,32 @@ requestdescription varchar(max) not null,
 );
 
 
+use CentralMI
+create table internaltask(
+internaltaskid int not null primary key Identity(1,1),
+internaltaskdatetime datetime default getdate() not null,
+internaltaskQuestion varchar(255) not null,
+status int foreign key references internaltask(internaltaskid) not null,
 
+);
 
+use CentralMI
+create table internaltaskchoice(
+internaltaskchoiceid int not null primary key Identity(1,1),
+internaltaskchoicedatetime datetime default getdate() not null,
+internaltaskchoice varchar(255) not null,
+internaltask int foreign key references internaltask(internaltaskid) not null,
+);
 
+use CentralMI
+
+create table internaltaskstatus(
+internaltaskstatusid int not null primary key Identity(1,1),
+internaltaskstatusdatetime datetime default getdate() not null,
+mimember int foreign key references mimember(mimemberId),
+internaltask int foreign key references internaltask(internaltaskid),
+internaltaskchoice int foreign key references internaltaskchoice(internaltaskchoiceid),
+)
 
 use CentralMI
 create table statusdetail(
@@ -64,6 +89,31 @@ mimemberid int not null primary key Identity(1,1),
 username int foreign key references auth_user(id) not null, 
 teamdetail int foreign key references teamdetail(teamid) not null, 
 );
+
+use CentralMI
+create table designationmaster(
+designationid int not null primary key Identity(1,1),
+designation varchar(100) null
+)
+
+use CentralMI
+create table managermaster(
+managerid int not null primary key Identity(1,1),
+managername varchar(100) null
+)
+
+use CentralMI
+create table managermaster(
+managerid int not null primary key Identity(1,1),
+managername varchar(100) null
+)
+
+use CentralMI
+create table tl_master(
+tl_id int not null primary key Identity(1,1),
+tl_name varchar(100) null
+)
+
 
 use CentralMI
 create table options(

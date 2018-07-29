@@ -24,6 +24,7 @@ urlpatterns = [
     #url(r'^logout/$', auth_views.logout, {'next_page': 'login'},name='logout'),
     url(r'^admin/', admin.site.urls),
     url(r'^CMI/', include('CentralMI.urls')),
+    url(r'^CMI/report_builder/', include('report_builder.urls')),
     #url(r'^$', views.HomeView.as_view(), name='home'),
 ]
 

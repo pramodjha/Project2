@@ -1,4 +1,4 @@
-{% extends "basetemplate.html" %}
+{% extends "base_model_template.html" %}
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -25,7 +25,7 @@
 <h3 class="col-sm-12 col-md-12 col-lg-12 head">Estimation Acceptance Form</h3>
 </div>
 </div>
-<div class="col-sm-12 col-md-12 col-lg-6">
+<div class="col-sm-12 col-md-12 col-lg-12">
 <div >
 <label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Estimation Date'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.estacceptrejectdate  show_label=False layout='inline'  %}</span>
@@ -56,11 +56,12 @@
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status ID'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.requestdetail  show_label=False  placeholder='Error Reported To' %}</span>
 </div>
-
-
-<div class="col-sm-12 col-md-12 col-lg-12">
-<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}
 </div>
+
+
+<div class="col-sm-12 col-md-12 col-lg-7">
+  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'estimate' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
 </div>
 </form>
 

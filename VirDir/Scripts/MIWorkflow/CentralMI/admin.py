@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType,DateTypes, Activitystatus
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType,DateTypes, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice
 
 
 admin.site.register(Mimember)
@@ -51,3 +51,7 @@ admin.site.register(OtStatus)
 admin.site.register(ReportType)
 admin.site.register(DateTypes)
 admin.site.register(Activitystatus)
+admin.site.register(Designationmaster)
+admin.site.register(Internaltask)
+admin.site.register(Internaltaskchoice)
+admin.site.register(Internaltaskstatus)

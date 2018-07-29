@@ -1,0 +1,21 @@
+@media (min-width: 768px) {
+  .navbar-nav.navbar-left {
+  position: absolute;
+  left: 5%;
+  min-height: 1%;
+  transform: translatex(10%);
+  }
+
+  .navbar-nav.navbar-center {
+  position: absolute;
+  left: 50%;
+  min-height: 1%;
+  transform: translatex(-50%);
+  }
+
+.navbar-nav.navbar-right {
+position: absolute;
+right: 8%;
+min-height: 1%;
+transform: translatex(10%);
+  }

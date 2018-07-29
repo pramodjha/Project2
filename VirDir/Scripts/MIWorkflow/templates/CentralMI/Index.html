@@ -33,7 +33,7 @@
     </div>
     <div class="col-auto col-sm-4 col-md-4 col-lg-4">
       <label class="fontstyle11"> save </label>
-      <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+      <div class="">{% buttons submit='Submit'  %}{% endbuttons layout='inline' %}</div>
       </div>
     </div>
 </form>
@@ -145,6 +145,7 @@ $("#id_teamfilter").change(function () {
     var member_id = $(this).val();  // get the selected country ID from the HTML input
    console.log(member_id)
    $.ajax({
+
      url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
      data: {
        'mimemberid': member_id     // add the country id to the GET parameters
@@ -154,6 +155,27 @@ $("#id_teamfilter").change(function () {
      }
    });
  });
+
+
+
+ $(".btn-default").click(function () {
+      var member_id = document.getElementById("id_teamfilter").value;
+      console.log(member_id)
+      alert(member_id)
+      $.ajax({
+
+        url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'mimemberid': member_id,
+        },
+          done: function (data) {
+          $("#id_memberfilter").html(data);
+            // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
 
 </script>
 

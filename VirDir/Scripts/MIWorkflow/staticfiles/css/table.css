@@ -1,0 +1,64 @@
+
+  /*------------------------table------------------------------------------------*/
+
+  #table1 {
+      font-family: "Cambria";
+      width: 100%;
+      font-size: 11px;
+  }
+  #table1 tr:nth-child(odd){background-color: #EAEDED;font-size: 11px;}
+  #table1 tr:nth-child(even){background-color: #E5E8E8; font-size: 11px;}
+  #table1 th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #cc9966;
+      color: white;
+      font-size: 11px;
+
+  }
+  #hiddenid{
+  display: none;
+  }
+
+
+  #table2 {
+      font-family: "Cambria";
+      width: 100%;
+      font-size: 11px;
+  }
+  #table2 tr:nth-child(odd){background-color: #EAEDED;font-size: 11px;}
+  #table2 tr:nth-child(even){background-color: #E5E8E8; font-size: 11px;}
+  #table2 th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #cc9966;
+      color: white;
+      font-size: 11px;
+  }
+
+
+
+.tbody {
+    height: 27em;
+    overflow: auto;
+    width:100%;
+}
+td {
+    width:1%;
+    }
+
+.thead > tr, .tbody{
+    display:block;}
+
+
+  .tbody1 {
+      height: 19em;
+      overflow: auto;
+      width:100%;
+  }
+
+
+  .thead1 > tr, .tbody1{
+      display:block;}

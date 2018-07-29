@@ -5,8 +5,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm, INTERVAL_CHOICES
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice
 from django.core import serializers
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse, reverse_lazy, resolve
@@ -33,10 +33,22 @@ from django.conf import settings
 from django.template import Context
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import pandas as pd
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
+@login_required
+def Report_create(request):
+    form = ActivityForm()
+    context = {'form': form}
+    html_form = render_to_string('books/includes/partial_book_create.html',
+        context,
+        request=request,
+    )
+    return JsonResponse({'html_form': html_form})
 
 @login_required
 def create_session(request,header=None,footer=None,loginpage=None):
@@ -269,21 +281,34 @@ def EditError_Log(request,requestid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('allreports'))
-    return render(request, 'CentralMI/ErrorLog.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
+            return HttpResponseRedirect(reverse('errordetail'))
+    return render(request, 'CentralMI/ErrorLogEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
 
-
+def modelview(request):
+    form = FilteredForm()
+    return render(request, 'CentralMI/modeltest.html',{'form':form})
 
 @login_required
 def ot_form(request,trackerid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='otdetail')
     form = OtDetailForm(initial={'timetrackers':trackerid,'ot_status':1})
     if request.method == 'POST':
         form =  OtDetailForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
+            startdate = form.cleaned_data['ot_startdatetime']
+            enddate = form.cleaned_data['ot_enddatetime']
+            try:
+                time = str(enddate-startdate).split(':')
+                timehours = time[0]
+                timemin = time[1]
+                timesec = time[2]
+                Totalmin = (int(timehours) * 60) + int(timemin) + (int(timesec)/60)
+                inst.ot_hrs = Totalmin
+            except:
+                inst.ot_hrs = 0
             inst.save()
-            return render(request, 'CentralMI/otform.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+            return HttpResponseRedirect(reverse('otdetail'))
     return render(request, 'CentralMI/otform.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
 
 def OT_detail(request):
@@ -305,10 +330,8 @@ def summary_tracker(request):
             enddate = form.cleaned_data['enddate']
             team = form.cleaned_data['team']
             member = form.cleaned_data['member']
-            #print(interval)
-#            model = info.define_day_week_month1(report_choice='2',start_date=startdate,end_date=enddate,range_type='Weekly',values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
-
-#            model = info.define_day_week_month1(days_range=5,report_choice=reportno,start_date=startdate,end_date=enddate,range_type='Weekly',aggregatefield='requestid',teamdetail=team,member=member,output_type='extract_summary',values='requestid')
+            print(interval)
+            model = info.define_day_week_month2(report_choice='2',start_date=startdate,end_date=enddate,range_type=interval,values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
             return render(request, 'CentralMI/summary.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
     return render(request, 'CentralMI/summary.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
 
@@ -376,28 +399,6 @@ def filterdata(request):
     return render(request, 'CentralMI/extract_data.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
 
 
-@login_required
-def feedback(request,reportid,id=1):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
-    request.session['reportid'] = reportid
-    questionlen = FeedbackQuestion.objects.count()
-    #print(questionlen)
-    activeid = request.session.get('reportid')
-    form = FeedbackForm(initial={'activity':reportid,'feedback_question':id})
-    if request.method == 'POST':
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            #form = FeedbackForm()
-            id = int(int(id) + 1)
-            reportid = activeid
-            if id > questionlen:
-                return HttpResponseRedirect(reverse('allreports'))
-            else:
-                return HttpResponseRedirect(reverse('feedback', args={reportid,id}))
-    return render(request, 'CentralMI/feedback.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
 
 
 @login_required
@@ -427,16 +428,14 @@ def comm_sugg(request):
 
 @login_required
 def ReportForm(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='addreport')
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
     form = ActivityForm()
     if request.method == 'POST':
         form = ActivityForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            form = ActivityForm()
-            successmsg = 'Report has been successfully added'
-            return render(request, 'CentralMI/Reports.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1,'successmsg':successmsg})
+            return HttpResponseRedirect(reverse('allreports'))
         else:
             return render(request, 'CentralMI/ErrorPage.html')
     else:
@@ -478,6 +477,61 @@ def Report_Detail(request):
     return render(request, 'CentralMI/allreports.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
 
 @login_required
+def feedback(request,reportid,id=1):
+    id_cumulative = 0
+    authority, activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
+    #exist = Feedback.objects.filter(activity__in=[reportid]).count()
+#    if exist > 0:
+#        return HttpResponseRedirect(reverse('allreports'))
+#    else:
+    #request.session['reportid'] = reportid
+    questionlen = FeedbackQuestion.objects.count()
+    #activeid = request.session.get('reportid')
+    form = FeedbackForm(initial={'activity':reportid,'feedback_question':id})
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            id_cumulative = int(int(id_cumulative) + 1)
+            id = id_cumulative
+            if id > questionlen:
+                return HttpResponseRedirect(reverse('allreports'))
+            else:
+                print(reportid)
+                print(id)
+                return HttpResponseRedirect(reverse('feedback', args={reportid,id}))
+    return render(request, 'CentralMI/feedback.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+@login_required
+def Feedback_Detail(request):
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
+    model = Feedback.objects.all()
+    return render(request, 'CentralMI/feedbackdetail.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+
+@login_required
+def Feedback_Detail_id(request,reportid):
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
+    model = Feedback.objects.filter(activity__in=[reportid])
+    return render(request, 'CentralMI/feedbackdetail.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+
+
+@login_required
+def EditFeedback(request,feedbackid):
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
+    e = Feedback.objects.get(pk=feedbackid)
+    model = Feedback.objects.filter(pk=feedbackid)
+    form = FeedbackForm(instance=e)
+    if request.method == 'POST':
+        e = Feedback.objects.get(pk=feedbackid)
+        form = FeedbackForm(request.POST,request.FILES, instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('feedbackdetail'))
+    return render(request, 'CentralMI/editfeedbackform.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+
+@login_required
 def RequestFormTemplate(request):
     try:
         authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='addrequest')
@@ -514,6 +568,187 @@ def RequestFormTemplate(request):
     else:
         return render(request, 'CentralMI/RequestForm.html',{'form':form,'form1':form1,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
     return render(request, 'CentralMI/RequestForm.html',{'form':form,'form1':form1,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+@login_required
+def view_staff_detail(request):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='viewdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='viewdetail')
+    print(authority)
+    if authority == "Group2":
+        model1 = User.objects.all()
+        model = Mimember.objects.all()
+        data = zip(model1,model)
+    elif authority == "Group4":
+        userid = User.objects.get(username=username).pk
+        model1 = User.objects.filter(username__in=[username])
+        model = Mimember.objects.filter(username__in=[userid])
+        data = zip(model1,model)
+    return render(request, 'CentralMI/Employee_Detail.html',{'model':model,'model1':model1,'data':data,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+@login_required
+def edit_staff_detail(request):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='')
+    userid = User.objects.get(username=username).pk
+    e1 = User.objects.get(pk=userid)
+    print(e1)
+    e = Mimember.objects.get(username=userid)
+    model1 = User.objects.filter(username__in=username)
+    model = Mimember.objects.filter(username__in=[userid])
+    form1 = UserForm(instance=e1)
+    print(username)
+    form = MimemberForm(instance=e)
+    if request.method == 'POST':
+        form = MimemberForm(request.POST,instance=e)
+        form1 = UserForm (request.POST,instance=e1)
+        if all([form.is_valid() , form1.is_valid()]):
+            inst = form.save(commit=True)
+            inst.save()
+            inst1 = form1.save(commit=False)
+            inst1.username = username
+            inst1.save()
+            return HttpResponseRedirect(reverse('viewDetail'))
+        else:
+            return render(request, 'CentralMI/ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/EditStaffDetail.html',{'form':form,'form1':form1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/EditStaffDetail.html',{'form':form,'form1':form1,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+
+@login_required
+def internal_task_detail(request):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    model = Internaltask.objects.all()
+    return render(request, 'CentralMI/InternalTaskDetail.html',{'model':model, 'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+@login_required
+def view_internal_task(request,taskid):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    model = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
+    return render(request, 'CentralMI/InternalTaskChoiceView.html',{'model':model, 'taskid':taskid,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+@login_required
+def add_internal_task_detail(request):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    userid = User.objects.get(username=username).id
+    mimemberid = Mimember.objects.get(username=userid).mimemberid
+    form = InternaltaskForm(initial={'owner':mimemberid})
+    if request.method == 'POST':
+        form = InternaltaskForm(request.POST)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('internaltaskdetail'))
+    return render(request, 'CentralMI/addinternaltask.html',{'form':form, 'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+@login_required
+def edit_internal_task_detail(request,taskid):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    e = Internaltask.objects.get(internaltaskid=taskid)
+    form = InternaltaskForm(instance=e)
+    if request.method == 'POST':
+        form = InternaltaskForm(request.POST,instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('internaltaskdetail'))
+    return render(request, 'CentralMI/addinternaltask.html',{'form':form, 'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+
+@login_required
+def edit_internal_choice(request,choiceid):
+    print(choiceid)
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    e = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid)
+    question = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid).internaltask
+    print(question)
+    taskid = Internaltask.objects.get(internaltaskquestion=question).internaltaskid
+    print(taskid)
+#    print(id)
+    form =  InternaltaskchoiceForm(instance=e)
+    if request.method == 'POST':
+        form =  InternaltaskchoiceForm(request.POST,instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (taskid,)))
+        else:
+            return render(request, 'CentralMI/ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+@login_required
+def add_internal_choice(request,taskid):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    id = taskid
+    print(id)
+    form =  InternaltaskchoiceForm(initial={'internaltask':taskid})
+    if request.method == 'POST':
+        form =  InternaltaskchoiceForm(request.POST)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (id,)))
+        else:
+            return render(request, 'CentralMI/ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'id':id,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'id':id,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+@login_required
+def internal_task_with_choice(request,taskid):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
+    model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
+    userid = User.objects.get(username=username).id
+    memberid = Mimember.objects.get(username=userid).mimemberid
+    form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
+    if request.method == 'POST':
+        choice = request.POST['choice']
+        e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
+        print(choice)
+        form =  InternaltaskstatusForm(request.POST)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.internaltaskchoice = e
+            inst.save()
+            return HttpResponseRedirect(reverse('internaltaskdetail'))
+    else:
+        return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
 
 
 @login_required
@@ -765,7 +1000,6 @@ def typage(request,requestid):
             model4 = "nothing"
         try:
             model5 = Overviewdetail.objects.all().get(requestdetail=requestid)
-
         except:
             model5 = "nothing"
         try:
@@ -819,10 +1053,12 @@ def filterform(request,username,authority):
                 elif teamfilter == None and memberfilter == None:
                     teamid = None
                     memberid = None
+                #form.fields['memberfilter'] =  Mimember.objects.all()
             else:
                 teamid = None
                 memberid = None
                 form = FilteredForm()
+                print("error")
         else:
             teamid = None
             memberid = None
@@ -860,7 +1096,9 @@ def index(request):
         dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
         wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
         mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-
+        form = FilteredForm()
+        #form.cleaned_data['memberfilter'] = Mimember.objects.all()
+        #load_mimember()
         return render(request, 'CentralMI/index.html',{'form':form,'username':username,'authority':authority,'activetab':activetab,'authority':authority,
         'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
         'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error})
@@ -1003,20 +1241,38 @@ class vistorinfo_output(object):
         return self.length
 
     def define_day_week_month1(self,start_date=None,end_date=None,days_range=None,range_type=None,year_range=0,report_choice=None,aggregatefield=None,values=None,core_noncore=None,OT=None,utilisation='No',teamdetail=None,member=None,output_type=None):
+        #data1 = Assigneddetail.objects.all()
+        #requestdetail = Assigneddetail.objects.get(assignedto=2)
+        #print(requestdetail)
+        #print(data1)
+
         # start_date, starting range of data
         # end_date, ending range of data
         self.key = []
         self.value = []
         self.cumulativedays = 0
-        #if start_date != None and end_date != None:
-        #    start = datetime.strftime(start_date, '%y/%m/%d')
-        #    start = datetime.strptime(start, '%y/%m/%d')
-        #    end = datetime.strftime(end_date, '%y/%m/%d')
-        #    end = datetime.strptime(end, '%y/%m/%d')
-        #    days_range = (end - start).days
-        #else:
-        #    days_range = days_range
+        if start_date != None and end_date != None:
+            start = datetime.strftime(start_date, '%y/%m/%d')
+            start = datetime.strptime(start, '%y/%m/%d')
+            end = datetime.strftime(end_date, '%y/%m/%d')
+            end = datetime.strptime(end, '%y/%m/%d')
+            if range_type == 'Daily':
+                days_range = (end - start).days
+                print(start)
+                print(end)
+            elif range_type == 'Weekly':
+                days_range = ((end - start).days) / 7
+                days_range = int(str(days_range).split('.')[0])
+                print(start)
+                print(end)
 
+            elif range_type == 'Monthly':
+                days_range = ((end - start).days) / 30
+                days_range = int(str(days_range).split('.')[0])
+        else:
+            days_range = days_range
+
+        print(days_range)
         for i in range(days_range):
             self.values = values
             self.aggregatefield = aggregatefield
@@ -1027,8 +1283,6 @@ class vistorinfo_output(object):
             self.cd = datetime.strftime(self.currentdate, '%y/%m/%d')
             self.cd  = datetime.strptime(self.cd, '%y/%m/%d')
             self.memberinteam = Mimember.objects.filter(teamdetail__in=[teamdetail]).values_list('mimemberid', flat=True).distinct()
-
-
             if range_type == None:
                 self.No_of_days = i
             elif range_type == 'setdate':
@@ -1074,13 +1328,6 @@ class vistorinfo_output(object):
                 self.StartDate = self.cd - timedelta(days=(self.days + (self.cumulativedays)))
                 self.EndDate  = self.StartDate + timedelta(days=(self.No_of_days -2))
                 self.date = self.month
-                print(self.days)
-                print(self.StartDate)
-                print(self.EndDate)
-                #print(self.cd)
-                print(self.days + self.cumulativedays)
-                #print(self.StartDate)
-                #print(self.EndDate)
 
             if output_type == 'error':
                 if teamdetail == None and member == None:
@@ -1206,58 +1453,138 @@ class vistorinfo_output(object):
                 self.key.append(str(self.date))
                 self.value.append(str(self.hoursmin))
                 self.result = OrderedDict(zip(self.key, self.value))
-
-            elif output_type == 'extract_summary':
-                if report_choice == '2':
-                    if teamdetail == None and member == None:
-                        self.data = Requestdetail.objects.filter(requestraiseddate__range=(self.StartDate,self.EndDate))
-                        #self.data = self.data[aggregatefield+'__count']
-
-                        self.key.append(str(1))
-                        self.value.append(str(1))
-                    elif teamdetail != None and member == None:
-                        memberid = Mimember.objects.filter(teamdetail__in=[teamdetail]).values_list('mimemberid',flat=True)
-                        requestid = Assigneddetail.objects.filter(assignedto__in=list(memberid)).values_list('requestdetail',flat=True)
-                        self.data = Requestdetail.objects.filter(requestraiseddate__range=(self.StartDate,self.EndDate)).filter(requestid__in=list(requestid)).aggregate(Count(self.aggregatefield))
-                        self.data = self.data[aggregatefield+'__count']
-
-                    elif teamdetail != None and member != None:
-                        requestid = Assigneddetail.objects.filter(assignedto__in=[member]).values_list('requestdetail',flat=True)
-                        self.data = Requestdetail.objects.filter(requestraiseddate__range=(self.StartDate,self.EndDate)).filter(requestid__in=list(requestid)).aggregate(Count(self.aggregatefield))
-                        self.data = self.data[aggregatefield+'__count']
-
-                elif report_choice == '3':
-                    if teamdetail == None and member == None:
-                        self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).all()
-                    elif teamdetail != None and member == None:
-                        self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).filter(teamdetail__in=[teamdetail]).aggregate(Count(self.aggregatefield))
-                    elif teamdetail != None and member != None:
-                        self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).filter(mimember__in=[member]).aggregate(Count(self.aggregatefield))
-                elif report_choice == '4':
-                    if teamdetail == None and member == None:
-                        self.data = Errorlog.objects.filter(errorlog_date__range=(self.StartDate,self.EndDate)).all()
-                    elif teamdetail != None and member == None:
-                        memberid = Mimember.objects.filter(teamdetail__in=[teamdetail]).values_list('mimemberid',flat=True)
-                        self.data = Errorlog.objects.filter(errorlog_date__range=(self.StartDate,self.EndDate)).filter(error_reportedto__in=list(memberid)).aggregate(Count(self.aggregatefield))
-                    elif teamdetail != None and member != None:
-                        self.data = Errorlog.objects.filter(errorlog_date__range=(self.StartDate,self.EndDate)).filter(error_reportedto__in=[member]).all()
-                elif report_choice == '5':
-                    if teamdetail == None and member == None:
-                        self.data = OtDetail.objects.filter(ot_startdatetime__range=(self.StartDate,self.EndDate)).all()
-                    elif teamdetail != None and member == None:
-                        timetrackerid = Timetrackers.objects.filter(teamdetail__in=[teamdetail]).values_list('timetrackerid',flat=True)
-                        self.data = OtDetail.objects.filter(ot_startdatetime__range=(self.StartDate,self.EndDate)).filter(timetrackers__in=list(timetrackerid)).all()
-                    elif teamdetail != None and member != None:
-                        timetrackerid = Timetrackers.objects.filter(mimember__in=[member]).values_list('timetrackerid',flat=True)
-                        self.data = OtDetail.objects.filter(ot_startdatetime__range=(self.StartDate,self.EndDate)).filter(timetrackers__in=list(timetrackerid)).all()
-                else:
-                    self.key.append(str(1))
-                    self.value.append(str(1))
-
-                self.key.append(str(1))
-                self.value.append(str(1))
-                self.result = OrderedDict(zip(self.key, self.value))
         return self.result
+
+
+    def define_day_week_month2(self,start_date=None,end_date=None,days_range=None,range_type=None,year_range=0,report_choice=None,aggregatefield=None,values=None,core_noncore=None,OT=None,utilisation='No',teamdetail=None,member=None,output_type=None):
+        self.key = []
+        self.value = []
+        self.cumulativedays = 0
+        if start_date != None and end_date != None:
+            start = datetime.strftime(start_date, '%y/%m/%d')
+            start = datetime.strptime(start, '%y/%m/%d')
+            end = datetime.strftime(end_date, '%y/%m/%d')
+            end = datetime.strptime(end, '%y/%m/%d')
+            if range_type == 'Daily':
+                days_range = (end - start).days
+            elif range_type == 'Weekly':
+                days_range = ((end - start).days) / 7
+                days_range = int(str(days_range).split('.')[0])
+            elif range_type == 'Monthly':
+                days_range = ((end - start).days) / 30
+                days_range = int(str(days_range).split('.')[0])
+        else:
+            days_range = days_range
+        print(days_range)
+
+        for i in range(days_range ):
+            self.values = values
+            self.aggregatefield = aggregatefield
+            self.currentdate = start_date
+            self.cd = datetime.strftime(self.currentdate, '%y/%m/%d')
+            self.cd  = datetime.strptime(self.cd, '%y/%m/%d')
+            self.memberinteam = Mimember.objects.filter(teamdetail__in=[teamdetail]).values_list('mimemberid', flat=True).distinct()
+            if range_type == None:
+                self.No_of_days = i
+            elif range_type == 'setdate':
+                self.daystoloop = 1
+                if self.sd != None:
+                    self.StartDate = self.sd
+                    self.EndDate  =  self.sd
+                else:
+                    self.StartDate = self.currentdate
+                    self.EndDate  = self.currentdate
+                self.date = ''
+            elif range_type == 'Daily':
+                self.daystoloop = 1
+                self.No_of_days = i
+                self.StartDate = self.cd + timedelta(days=self.No_of_days)
+                self.EndDate  = self.StartDate
+                self.currentyear = datetime.strftime(self.StartDate, '%Y')
+                self.currentmonth = datetime.strftime(self.StartDate, '%m')
+                self.currentdays = datetime.strftime(self.StartDate, '%d')
+                self.date = date(int(self.currentyear),int(self.currentmonth),int(self.currentdays))
+            elif range_type == 'Weekly':
+                self.daystoloop = 7
+                self.days = 7
+                self.No_of_days = (7 * i)
+                self.Start = self.cd + timedelta(days=self.cd.weekday())
+                self.StartDate = self.Start + timedelta(days=self.No_of_days)
+                self.EndDate  = self.StartDate  + timedelta(days=(self.days))
+                self.currentyear = datetime.strftime(self.StartDate, '%Y')
+                self.currentmonth = datetime.strftime(self.StartDate, '%m')
+                self.currentdays = datetime.strftime(self.StartDate, '%d')
+                self.date = date(int(self.currentyear),int(self.currentmonth),int(self.currentdays))
+            elif range_type == 'Monthly':
+
+                totaldays = ((end - start).days)
+                print(totaldays)
+
+                if days_range == 1:
+                    self.currentmonth = datetime.strftime(self.currentdate, '%m')
+                    self.currentyear = datetime.strftime(self.currentdate, '%Y')
+                    self.currentdays = datetime.strftime(self.currentdate, '%d')
+                    self.month  = int(self.currentmonth)
+                    self.year  = int(self.currentyear)
+                    self.daystoloop = calendar.monthrange(self.year,self.month)[1]
+                    self.daystoloop = self.daystoloop - int(self.currentdays)
+                    self.cumulativedays = self.cumulativedays +  self.daystoloop
+                    self.StartDate = self.currentdate
+                    self.EndDate = self.StartDate + timedelta(days=(self.cumulativedays))
+                else:
+                    self.StartDate = self.cd + timedelta(days=(self.cumulativedays))
+                    self.month = int(datetime.strftime(self.StartDate, '%m'))
+                    self.year = int(datetime.strftime(self.StartDate, '%Y'))
+                    self.daystoloop = calendar.monthrange(self.year,self.month)[1]
+                    self.EndDate = self.StartDate + timedelta(days=(self.cumulativedays))
+                    self.cumulativedays = self.cumulativedays +  self.daystoloop
+
+        if report_choice == '2':
+            if teamdetail == None and member == None:
+                self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).all()
+            elif teamdetail != None and member == None:
+                memberid = Mimember.objects.filter(teamdetail__in=[teamdetail]).values_list('mimemberid',flat=True)
+                requestid = Assigneddetail.objects.filter(assignedto__in=list(memberid)).values_list('requestdetail',flat=True)
+                self.data = Requestdetail.objects.filter(requestraiseddate__range=(self.StartDate,self.EndDate)).filter(requestid__in=list(requestid)).aggregate(Count(self.aggregatefield))
+                self.data = self.data[aggregatefield+'__count']
+            elif teamdetail != None and member != None:
+                requestid = Assigneddetail.objects.filter(assignedto__in=[member]).values_list('requestdetail',flat=True)
+                self.data = Requestdetail.objects.filter(requestraiseddate__range=(self.StartDate,self.EndDate)).filter(requestid__in=list(requestid)).aggregate(Count(self.aggregatefield))
+                self.data = self.data[aggregatefield+'__count']
+
+        elif report_choice == '3':
+            if teamdetail == None and member == None:
+                self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).all()
+            elif teamdetail != None and member == None:
+                self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).filter(teamdetail__in=[teamdetail]).aggregate(Count(self.aggregatefield))
+            elif teamdetail != None and member != None:
+                self.data = Timetrackers.objects.filter(trackingdatetime__range=(self.StartDate,self.EndDate)).filter(mimember__in=[member]).aggregate(Count(self.aggregatefield))
+
+        elif report_choice == '4':
+            if teamdetail == None and member == None:
+                self.data = Errorlog.objects.filter(errorlog_date__range=(self.StartDate,self.EndDate)).all()
+            elif teamdetail != None and member == None:
+                memberid = Mimember.objects.filter(teamdetail__in=[teamdetail]).values_list('mimemberid',flat=True)
+                self.data = Errorlog.objects.filter(errorlog_date__range=(self.StartDate,self.EndDate)).filter(error_reportedto__in=list(memberid)).aggregate(Count(self.aggregatefield))
+            elif teamdetail != None and member != None:
+                self.data = Errorlog.objects.filter(errorlog_date__range=(self.StartDate,self.EndDate)).filter(error_reportedto__in=[member]).all()
+        elif report_choice == '5':
+            if teamdetail == None and member == None:
+                self.data = OtDetail.objects.filter(ot_startdatetime__range=(self.StartDate,self.EndDate)).all()
+            elif teamdetail != None and member == None:
+                timetrackerid = Timetrackers.objects.filter(teamdetail__in=[teamdetail]).values_list('timetrackerid',flat=True)
+                self.data = OtDetail.objects.filter(ot_startdatetime__range=(self.StartDate,self.EndDate)).filter(timetrackers__in=list(timetrackerid)).all()
+            elif teamdetail != None and member != None:
+                timetrackerid = Timetrackers.objects.filter(mimember__in=[member]).values_list('timetrackerid',flat=True)
+                self.data = OtDetail.objects.filter(ot_startdatetime__range=(self.StartDate,self.EndDate)).filter(timetrackers__in=list(timetrackerid)).all()
+        else:
+            self.key.append(str(1))
+            self.value.append(str(1))
+#        self.key.append(str(1))
+#        self.value.append(str(1))
+#    self.result = OrderedDict(zip(self.key, self.value))
+
+
 
 #def looping_into_interval(output=output,data=data,interval=interval):
 #    self.key = []
@@ -1266,6 +1593,7 @@ class vistorinfo_output(object):
 #        if interval == '1':
 
 
+        return days_range
 
 
 
@@ -1417,14 +1745,12 @@ def load_activity(request):
         errormsg1 = "Something went Wrong"
         return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
 
-
-
 @login_required
 def load_mimember(request):
     mimember_id = request.GET.get('mimemberid')
-    #print(mimember_id)
     mimembers = Mimember.objects.filter(teamdetail__in=[mimember_id])
-    #print(mimembers)
+    print('load_member')
+    print(mimembers)
     return render(request, 'CentralMI/rebuilding_mimember.html', {'mimembers': mimembers})
 
 @login_required

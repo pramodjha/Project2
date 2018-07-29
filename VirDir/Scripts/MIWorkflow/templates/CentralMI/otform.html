@@ -32,7 +32,7 @@
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Start Date-time'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.ot_startdatetime  show_label=False   %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.ot_startdatetime  show_label=False    %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'End Date-time'  %}</label>
@@ -57,32 +57,22 @@
 </div>
 </div>
 </form>
-
-
 <script type="text/javascript">
-$(document).ready(function() {
-  $("#id_ot_startdatetime").datepicker({
-    dateFormat: 'yy-mm-dd',
-     altField: '#thealtdate',
-     altFormat: 'yy-mm-dd'});
-});
-
-$(document).ready(function() {
-  $("#id_ot_enddatetime").datepicker({
-    dateFormat: 'yy-mm-dd',
-     altField: '#thealtdate',
-     altFormat: 'yy-mm-dd'});
-});
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+    weekStart: 1,
+    todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+    showMeridian: 1
+    });
 </script>
 
-
-
-
-
-
-
-
 {% endblock %}
+
+
 
 {% block footer %}
 {% include "userprofilefootertest1.html" %}

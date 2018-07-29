@@ -15,7 +15,8 @@
 <li {% if activetab == 'workflow' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">Workflow </a></li>
 <li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
 <li {% if activetab == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Time Tracker </a></li>
-<li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'report' %}">Report </a></li>
+<li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Report </a></li>
+<li {% if activetab == 'Details' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">Details </a></li>
 <li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
 <li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signout' %}">Sign Out </a></li>
 {% elif authority == "Group3" %}
@@ -27,7 +28,8 @@
 <li {% if activetab == 'workflow' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">Workflow </a></li>
 <li {% if activetab == 'loginrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'loginrequest' %}">Login Request </a></li>
 <li {% if activetab == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Time Tracker </a></li>
-<li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'report' %}">Report </a></li>
+<li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Report </a></li>
+<li {% if activetab == 'Details' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">Details </a></li>
 <li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
 <li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signout' %}">Sign Out </a></li>
 {% else %}

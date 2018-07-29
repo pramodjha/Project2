@@ -1,6 +1,19 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
+<style>
+/* Ensure that the demo table scrolls */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+
+    div.container {
+
+        width: 100%;
+
+    }
+</style>
 {% endblock %}
 
 {% block navblockleft %}
@@ -42,7 +55,6 @@
         <td>{{data.error_type }}</td>
         <td>{{data.error_description }}</td>
         <td> <a href="{% url 'editerrorlog' data.error_id %}" class="glyphicon glyphicon-pencil"></a> </td>
-
         {% endfor %}
       </tr></br>
     </tbody>
@@ -56,9 +68,10 @@ $(document).ready(function() {
     $('#example').DataTable(
     {
       fixedHeader: true,
+      scrollY: '90vh',
+      scrollCollapse: true
 
     });
-
 } );
 </script>
 
