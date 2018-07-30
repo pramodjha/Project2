@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
 from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus
 from django.core import serializers
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse, reverse_lazy, resolve
@@ -735,20 +735,45 @@ def internal_task_with_choice(request,taskid):
     model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
     userid = User.objects.get(username=username).id
     memberid = Mimember.objects.get(username=userid).mimemberid
-    form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
-    if request.method == 'POST':
-        choice = request.POST['choice']
-        e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
-        print(choice)
-        form =  InternaltaskstatusForm(request.POST)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.internaltaskchoice = e
-            inst.save()
-            return HttpResponseRedirect(reverse('internaltaskdetail'))
+    checkmember = Internaltaskstatus.objects.filter(mimember__in=[memberid]).count()
+    model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid])
+    print(model2)
+    print(checkmember)
+    if checkmember > 0:
+        e = Internaltaskstatus.objects.get(mimember__in=[memberid])
+        form = InternaltaskstatusForm(instance=e)
+        #print(form)
+        if request.method == 'POST':
+            choice = request.POST['choice']
+            e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
+            form =  InternaltaskstatusForm(request.POST,instance=e)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.internaltaskchoice = e
+                inst.save()
+                return HttpResponseRedirect(reverse('internaltaskdetail'))
+            else:
+                return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
     else:
-        return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+        form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
+        if request.method == 'POST':
+            choice = request.POST['choice']
+            e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
+            print(choice)
+            form =  InternaltaskstatusForm(request.POST)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.internaltaskchoice = e
+                inst.save()
+                return HttpResponseRedirect(reverse('internaltaskdetail'))
+            else:
+                return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
     return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+
+
+
+
 
 
 @login_required
