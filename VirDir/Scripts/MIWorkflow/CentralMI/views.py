@@ -731,16 +731,18 @@ def internal_task_with_choice(request,taskid):
         authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
     except:
         authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
-    model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
+    print(taskid)
     userid = User.objects.get(username=username).id
     memberid = Mimember.objects.get(username=userid).mimemberid
-    checkmember = Internaltaskstatus.objects.filter(mimember__in=[memberid]).count()
-    model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid])
-    print(model2)
-    print(checkmember)
+    model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
+    model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
+
+    checkmember = Internaltaskstatus.objects.filter(internaltask__in=[taskid]).filter(mimember__in=[memberid]).count()
+    model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
     if checkmember > 0:
-        e = Internaltaskstatus.objects.get(mimember__in=[memberid])
+        taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
+        print(taskstatusid)
+        e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
         form = InternaltaskstatusForm(instance=e)
         #print(form)
         if request.method == 'POST':
@@ -754,12 +756,13 @@ def internal_task_with_choice(request,taskid):
                 return HttpResponseRedirect(reverse('internaltaskdetail'))
             else:
                 return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
     else:
         form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
         if request.method == 'POST':
             choice = request.POST['choice']
-            e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
+
+            taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
+            e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
             print(choice)
             form =  InternaltaskstatusForm(request.POST)
             if form.is_valid():
@@ -769,7 +772,7 @@ def internal_task_with_choice(request,taskid):
                 return HttpResponseRedirect(reverse('internaltaskdetail'))
             else:
                 return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
 
 
 
