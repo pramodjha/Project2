@@ -66,7 +66,7 @@
         <td>{{data.description }}</td>
         <td>{{data.activitystatus }}</td>
         <td>{{data.activitydocument }}</td>
-        <td> <a href="{% url 'errorlog' data.reportid %}" class="glyphicon glyphicon-plus"></a> | <a  href="{% url 'feedback' data.reportid 1 %}" class="glyphicon glyphicon-plus"></a></td>
+        <td> <a href="{% url 'errorlog' data.reportid %}" class="glyphicon glyphicon-plus"></a> | <a  href="{% url 'feedback' data.reportid  %}" class="glyphicon glyphicon-plus"></a></td>
         <td> <a href="{% url 'editreport' data.reportid %}" class="glyphicon glyphicon-pencil"></a></td>
         {% endfor %}
       </tr></br>

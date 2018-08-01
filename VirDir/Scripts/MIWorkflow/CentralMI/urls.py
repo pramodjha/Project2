@@ -22,10 +22,14 @@ urlpatterns = [
 	url(r'^edit_internal_task_option/(?P<choiceid>\d+)$',views.edit_internal_choice, name = 'editinternaltaskoption'),
 	url(r'^add_internal_task_option/(?P<taskid>\d+)$',views.add_internal_choice, name = 'addinternaltaskoption'),
 	url(r'^internal_task_with_choice/(?P<taskid>\d+)$',views.internal_task_with_choice, name = 'internaltaskwithchoice'),
+	url(r'^internal_task_with_choice_edit/(?P<taskstatusid>\d+)$',views.internal_task_with_choice_edit, name = 'internaltaskwithchoiceedit'),
 
-	url(r'^feedback/(?P<reportid>\d+)/(?P<id>\d+)$',views.feedback, name = 'feedback'),
-	url(r'^feedback_detail_id/(?P<reportid>\d+)$',views.Feedback_Detail_id, name = 'feedbackdetailid'),
+
+	url(r'^feedback/(?P<reportid>\d+)$',views.feedback, name = 'feedback'),
 	url(r'^feedback_detail',views.Feedback_Detail, name = 'feedbackdetail'),
+	url(r'^add_feedback',views.AddFeedback, name = 'addfeedback'),
+	url(r'^editFeedback/(?P<feedbackid>\d+)$', views.EditFeedback, name='editfeedback'),
+
 	url(r'^about_team',views.about_team, name = 'aboutteam'),
 	url(r'^what_we_do',views.whatwedo, name = 'whatwedo'),
 	url(r'^governance_process',views.governanceprocess, name = 'governanceprocess'),
@@ -65,7 +69,6 @@ urlpatterns = [
 	url(r'^editOT/(?P<requestid>\d+)$', views.EditOT, name='editot'),
 	url(r'^editReport/(?P<requestid>\d+)$', views.EditReport, name='editreport'),
 	url(r'^editErrorLog/(?P<requestid>\d+)$', views.EditError_Log, name='editerrorlog'),
-	url(r'^editFeedback/(?P<feedbackid>\d+)$', views.EditFeedback, name='editfeedback'),
 	url(r'^ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
 	url(r'^ajax/load-activity/', views.load_activity, name='ajax_load_activity'),
 	url(r'^ajax/mimember_load_ajax/', views.load_mimember, name='ajax_load_mimember'),

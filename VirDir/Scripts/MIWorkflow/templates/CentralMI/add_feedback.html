@@ -1,0 +1,76 @@
+{% extends "base_model_template.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+<style>
+/* Ensure that the demo table scrolls */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+
+    div.container {
+
+        width: 100%;
+
+    }
+</style>
+
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="col-sm-6 col-md-4 col-lg-12">
+    <table  class="table" id="example" style="width:100%">
+      <thead class="thead">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+        <td >Activity</td>
+        <td >Feedback Date</td>
+        <td >Question</td>
+        <td >Feedback </td>
+        <td >Add Feedback</td>
+        </tr>
+      </thead>
+      <tbody class="tbody">
+    {%for data in model %}
+      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+        <td>{{data.activity }}</td>
+        <td>{{data.feedback_date }}</td>
+        <td>{{data.feedback_question }}</td>
+        <td>{{data.feedback_text }}</td>
+        <td> <a href="{% url 'editfeedback' data.feedback_id %}" class="glyphicon glyphicon-pencil"></a> </td>
+        {% endfor %}
+      </tr></br>
+    </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $('#example').DataTable(
+    {
+      fixedHeader: true,
+
+    });
+
+} );
+</script>
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

@@ -477,44 +477,38 @@ def Report_Detail(request):
     return render(request, 'CentralMI/allreports.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
 
 @login_required
-def feedback(request,reportid,id=1):
-    id_cumulative = 0
+def feedback(request,reportid):
+    #id_cumulative = 0
     authority, activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
     #exist = Feedback.objects.filter(activity__in=[reportid]).count()
 #    if exist > 0:
 #        return HttpResponseRedirect(reverse('allreports'))
 #    else:
     #request.session['reportid'] = reportid
-    questionlen = FeedbackQuestion.objects.count()
+    #questionlen = FeedbackQuestion.objects.count()
     #activeid = request.session.get('reportid')
-    form = FeedbackForm(initial={'activity':reportid,'feedback_question':id})
-    if request.method == 'POST':
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            id_cumulative = int(int(id_cumulative) + 1)
-            id = id_cumulative
-            if id > questionlen:
-                return HttpResponseRedirect(reverse('allreports'))
-            else:
-                print(reportid)
-                print(id)
-                return HttpResponseRedirect(reverse('feedback', args={reportid,id}))
-    return render(request, 'CentralMI/feedback.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+    #form = FeedbackForm(initial={'activity':reportid,'feedback_question':id})
+    model =  Feedback.objects.filter(activity__in=[reportid])
+    #if request.method == 'POST':
+    #    form = FeedbackForm(request.POST)
+    #    if form.is_valid():
+    #        inst = form.save(commit=True)
+    #        inst.save()
+            #id_cumulative = int(int(id_cumulative) + 1)
+            #id = id_cumulative
+            #if id > questionlen:
+            #    return HttpResponseRedirect(reverse('allreports'))
+            #else:
+            #    print(reportid)
+            #    print(id)
+    #        return HttpResponseRedirect(reverse('feedback', args={reportid,id}))
+    return render(request, 'CentralMI/add_feedback.html',{'model':model,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
 
 @login_required
 def Feedback_Detail(request):
     authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
     model = Feedback.objects.all()
     return render(request, 'CentralMI/feedbackdetail.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
-
-@login_required
-def Feedback_Detail_id(request,reportid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
-    model = Feedback.objects.filter(activity__in=[reportid])
-    return render(request, 'CentralMI/feedbackdetail.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
-
 
 @login_required
 def EditFeedback(request,feedbackid):
@@ -530,6 +524,18 @@ def EditFeedback(request,feedbackid):
             inst.save()
             return HttpResponseRedirect(reverse('feedbackdetail'))
     return render(request, 'CentralMI/editfeedbackform.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+
+@login_required
+def AddFeedback(request):
+    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
+    form = FeedbackForm()
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST,request.FILES)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('feedbackdetail'))
+    return render(request, 'CentralMI/add_feedback.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
 
 @login_required
 def RequestFormTemplate(request):
@@ -736,7 +742,6 @@ def internal_task_with_choice(request,taskid):
     memberid = Mimember.objects.get(username=userid).mimemberid
     model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
     model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
-
     checkmember = Internaltaskstatus.objects.filter(internaltask__in=[taskid]).filter(mimember__in=[memberid]).count()
     model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
     if checkmember > 0:
@@ -760,7 +765,6 @@ def internal_task_with_choice(request,taskid):
         form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
         if request.method == 'POST':
             choice = request.POST['choice']
-
             taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
             e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
             print(choice)
@@ -775,6 +779,23 @@ def internal_task_with_choice(request,taskid):
     return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
 
 
+@login_required
+def internal_task_with_choice_edit(request,taskstatusid):
+    try:
+        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    except:
+        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
+    e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
+    form = InternaltaskstatusForm(instance=e)
+    if request.method == 'POST':
+        form =  InternaltaskstatusForm(request.POST,instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('internaltaskdetail'))
+        else:
+            return render(request, 'CentralMI/ErrorPage.html')
+    return render(request, 'CentralMI/internaltaskwithchoicestatusedit.html',{'form':form,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
 
 
 
