@@ -1,0 +1,189 @@
+{% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+
+{% if group_name == "manager" or group_name == "team_leadear" or group_name == "technical_leadear" %}
+<form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
+{% csrf_token %}
+  <div class="col-auto col-sm-12 col-md-12 col-lg-12">
+    <div class="col-auto col-sm-4 col-md-4 col-lg-4">
+      <label class="">Team</label>
+      <span  class="">{% bootstrap_field form.teamfilter  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-4 col-md-4 col-lg-4">
+      <label class="">Team Member</label>
+      <span  class="">{% bootstrap_field form.memberfilter  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="col-auto col-sm-4 col-md-4 col-lg-4">
+      <label class="fontstyle11"> save </label>
+      <div class="">{% buttons submit='Submit'  %}{% endbuttons layout='inline' %}</div>
+      </div>
+    </div>
+</form>
+
+
+<div class="col-sm-6 col-md-6 col-lg-9 box">
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Days WH</label>
+    {% for key, value in dv.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Days OT</label>
+    {% for key, value in dvOT.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}<span></li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Days Core</label>
+    {% for key, value in dvcore.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Days Util.</label>
+    {% for key, value in dvutilisation.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Weeks WH</label>
+    {% for key, value in wv.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Weeks OT </label>
+    {% for key, value in wvOT.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Weeks Core</label>
+    {% for key, value in wvcore.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 5 Weeks Util. </label>
+    {% for key, value in wvutilisation.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 3 Months WH</label>
+    {% for key, value in mv.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 3 Months OT </label>
+    {% for key, value in mvOT.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 3 Months Core </label>
+    {% for key, value in mv.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+
+  <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
+    <label class="">Last 3 Months Util.</label>
+    {% for key, value in mvcore.items %}
+    <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+    {% endfor %}
+  </div>
+</div>
+<div class="col-sm-3 col-md-3 col-lg-3 box1">
+  <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+  <label class="">Error Last 5 Days</label>
+  {% for key, value in dv_error.items %}
+  <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+  {% endfor %}
+</div>
+<div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+  <label class="">Error Last 5 Weeks</label>
+  {% for key, value in wv_error.items %}
+  <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+  {% endfor %}
+</div>
+<div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+  <label class="">Error Last 3 Months</label>
+  {% for key, value in mv_error.items %}
+  <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
+  {% endfor %}
+</div>
+</div>
+</div>
+{% else %}
+{% endif %}
+
+
+
+<script>
+$("#id_teamfilter").change(function () {
+    var member_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(member_id)
+   $.ajax({
+
+     url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'mimemberid': member_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_memberfilter").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+
+
+ $(".btn-default").click(function () {
+      var member_id = document.getElementById("id_teamfilter").value;
+      console.log(member_id)
+      alert(member_id)
+      $.ajax({
+
+        url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'mimemberid': member_id,
+        },
+          done: function (data) {
+          $("#id_memberfilter").html(data);
+            // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+
+</script>
+
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

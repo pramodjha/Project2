@@ -1,0 +1,77 @@
+{% extends "base_model_template.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+<style>
+/* Ensure that the demo table scrolls */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+
+    div.container {
+
+        width: 100%;
+
+    }
+</style>
+
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+
+{% block content %}
+<form class="form" method="POST" action="" class='form-inline '>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Feedback Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.feedback_date  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Feedback Question'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.feedback_question  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Enter Feedback'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.feedback_text  show_label=False  placeholder='' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Report'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.activity  show_label=False  placeholder='Feedback' %}</span>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-7">
+<button type="submit" class="col-sm-12 col-md-12 col-lg-3 btn btn-default" >Submit</button>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'viewfeedbackquestion'  activityid %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+</div>
+</form>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $('#example').DataTable(
+    {
+      fixedHeader: true,
+    });
+} );
+</script>
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

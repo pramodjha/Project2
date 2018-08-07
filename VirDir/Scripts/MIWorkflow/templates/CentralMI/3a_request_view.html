@@ -1,0 +1,152 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-6 col-md-4 col-lg-12">
+  <table  class="table" id="example" style="width:100%">
+    <thead class="">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+
+    {% if activetab1 == "allrequest" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "unapproved" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "approved" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "assigned" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "overview" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "estimate" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "wip" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "completed" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% elif activetab1 == "rejected" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Status</td>
+      {% endif %}
+    </tr>
+
+    </thead>
+    <tbody class="">
+  {%for data in model %}
+  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+
+  {% if activetab1 == "allrequest" %}
+
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "unapproved" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'authform' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "approved" %}
+      <td><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'assignedform' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "assigned" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'overviewform' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "overview" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'estimationform' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "estimate" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'estimationformar' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "wip" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'completedform' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "completed" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+      {% elif activetab1 == "rejected" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
+      <td>{{data.requestraiseddate }}</td>
+      <td>{{data.requesttype }}</td>
+      <td>{{data.requestpriority }}</td>
+      <td>{{data.requestdescription }}</td>
+
+      {% endif %}
+
+      {% endfor %}
+    </tr></br>
+  </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

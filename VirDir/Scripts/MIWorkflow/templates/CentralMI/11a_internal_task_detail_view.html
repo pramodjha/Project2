@@ -1,0 +1,73 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <table  class="table " id="example" style="width:100%">
+    <thead class="">
+    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+      {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
+      <td >ID <a href="{% url 'addinternaltaskdetail' %}" id="addinternaltask" name="addinternaltask" class="glyphicon glyphicon-plus"></td>
+      {% elif group_name == "mi_team" %}
+      <td >ID </td>
+      {% endif %}
+
+      <td >Internal Task Datetime</td>
+      <td >Question</td>
+      <td> Status </td>
+      <td> Owner </td>
+  {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
+  <td> View | Edit | Add </td>
+  <td> View Status </td>
+  {% elif group_name == "mi_team" %}
+      <td> Update </td>
+  {% endif %}
+    </tr>
+    </thead>
+    <tbody class="">
+  {%for data in model %}
+    <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+      <td ><a href="{% url 'editinternaltaskdetail' data.internaltaskid %}">{{data.internaltaskid }} </a></td>
+      <td>{{data.internaltaskdatetime }}</td>
+      <td >{{data.internaltaskquestion }}</td>
+      <td >{{data.status }}</td>
+      <td >{{data.owner }}</td>
+      {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
+      <td> <a href="{% url 'viewinternaltaskoption' data.internaltaskid %}" class="glyphicon glyphicon-pencil"></a></td>
+      <td> <a href="{% url 'internaltaskcompetionview' data.internaltaskid %}" class="glyphicon glyphicon-pencil"></a></td>
+      {% elif group_name == "mi_team" %}
+      <td> <a href="{% url 'internaltaskwithchoice' data.internaltaskid %}" class="glyphicon glyphicon-pencil"></a></td>
+      {% endif %}
+
+      {% endfor %}
+      </tr></br>
+
+  </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}
+{% block footer_right %}
+{% endblock %}

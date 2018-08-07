@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
 from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion
 from django.core import serializers
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse, reverse_lazy, resolve
@@ -14,7 +14,7 @@ from django.db import connection
 import datetime
 import getpass
 from django.core.files.storage import FileSystemStorage
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -36,7 +36,9 @@ from django.utils.html import strip_tags
 import pandas as pd
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
+from  .decorators import user_permission
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
@@ -51,32 +53,33 @@ def Report_create(request):
     return JsonResponse({'html_form': html_form})
 
 @login_required
-def create_session(request,header=None,footer=None,loginpage=None):
-    username = request.user.username
-    sd = request.session.get('setdate')
-    info = vistorinfo_output(username,sd)
-    info.getinfo()
-    info.is_member()
+def is_group(request,username):
     try:
-        authority = info.permission
+        userid = User.objects.get(username=username).id
+        group = Group.objects.prefetch_related('user_set')
+        group = group.filter(user__in=[userid]).values_list('name',flat=True)
+        group = list(group)
     except:
-        authority = ''
-    request.session['activeheader'] = header
-    request.session['activefooter'] = footer
-    activetab = request.session.get('activeheader')
-    activetab1 = request.session.get('activefooter')
-    return authority, activetab, activetab1, username, info, sd
+        group = ['None']
+    return ', '.join(group)
+
 
 @login_required
-def create_session_onerror(request,header=None,footer=None,loginpage=None):
+def create_session(request,header=None,footer=None):
     username = request.user.username
-    authority = ''
     request.session['activeheader'] = header
     request.session['activefooter'] = footer
     activetab = request.session.get('activeheader')
     activetab1 = request.session.get('activefooter')
-    return authority, activetab, activetab1, username
-
+    try:
+        sd = request.session.get('setdate')
+        info = vistorinfo_output(username,sd)
+        info.get_member_info()
+        return activetab, activetab1, username, info, sd
+    except:
+        sd = None
+        info = None
+        return activetab, activetab1, username, info, sd
 
 @login_required
 def data_extraction(request,parameter1=None,parameter2=None):
@@ -104,10 +107,10 @@ def setdate(request):
         request.session['setdate'] = selecteddate
         return HttpResponseRedirect(reverse('timetracker'))
     except:
-        return render(request, 'CentralMI/ErrorPage.html')
+        return render(request, 'CentralMI/15a_ErrorPage.html')
 
-def sign_up(request):
-    #authority, activetab, activetab1, username, info, sd = create_session(request, header='signup',footer='')
+def Sign_Up_View(request):
+    #activetab, activetab1, username, info, sd = create_session(request, header='signup',footer='')
     activetab = 'signup'
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -121,9 +124,12 @@ def sign_up(request):
             lastname =  userObj['lastname']
             print(password)
             print(passwordagain)
+            print(password == passwordagain)
             if password == passwordagain:
-                if not (User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()):
+                print(User.objects.filter(username=username).exists() )
+                if not (User.objects.filter(username=username).exists() ):
                     new_user = User.objects.create_user(username, email, password)
+                    print(new_user)
                     new_user.is_active = True
                     new_user.first_name = firstname
                     new_user.last_name = lastname
@@ -133,32 +139,30 @@ def sign_up(request):
                     try:
                         user = authenticate(username = username, password = password)
                         login(request, user)
-                        return HttpResponseRedirect(reverse('lp'))
+                        return HttpResponseRedirect(reverse('home'))
                     except:
                         form =  UserRegistrationForm()
-                        return render(request,'CentralMI/ErrorPage.html')
+                        return render(request,'CentralMI/15a_ErrorPage.html')
                 else:
                     form = UserRegistrationForm()
-                    return render(request,'CentralMI/ErrorPage.html')
+                    return render(request,'CentralMI/15a_ErrorPage.html')
             else:
                 form = UserRegistrationForm()
-                return render(request,'CentralMI/ErrorPage.html')
+                return render(request,'CentralMI/15a_ErrorPage.html')
 
         else:
             form = UserRegistrationForm()
-            return render(request, 'CentralMI/signup.html', {'form' : form,'activetab':activetab})
+            return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab})
     else:
         form = UserRegistrationForm()
-        return render(request, 'CentralMI/signup.html', {'form' : form,'activetab':activetab})
+        return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab})
 
 
-def sign_in(request):
+def Sign_In_View(request):
     try:
-        authority, activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
+        activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
     except:
-        authority = ''
         activetab = 'signin'
-
     tab = request.session.get('tabname')
     if request.method == 'POST':
         form =  UsersigninForm(request.POST)
@@ -166,7 +170,6 @@ def sign_in(request):
             userObj = form.cleaned_data
             username =  userObj['username']
             password =  userObj['password']
-
             #print(password)
             if (User.objects.filter(username=username).exists()):
                 user = authenticate(username = username, password = password)
@@ -175,85 +178,107 @@ def sign_in(request):
                     return HttpResponseRedirect(reverse('home'))
                 else:
                     form =  UsersigninForm()
-                return render(request,'CentralMI/ErrorPage.html')
+                    error = 'NoError'
+                    return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
             else:
                 form =  UsersigninForm()
-                return render(request,'CentralMI/ErrorPage.html')
+                error = 'Error'
+                return render(request,'CentralMI/15a_ErrorPage.html')
         else:
             form =  UsersigninForm()
-            return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab,'authority':authority})
+            error = 'NoError'
+            return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
     else:
         form =  UsersigninForm()
-        return render(request, 'CentralMI/signin.html', {'form' : form,'activetab':activetab,'authority':authority})
+        error = 'NoError'
+        return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
 
-def sign_out(request):
-    #if request.method == 'POST':
+def Sign_Out(request):
     request.session.delete()
     logout(request)
     return HttpResponseRedirect(reverse('signin'))
 
 @login_required
-def All_request(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='allrequest')
+def All_Request_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='allrequest')
+    group_name = is_group(request,username=username)
     data = data_extraction(request,parameter1="'All'",parameter2="'All'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
-def unapproved(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='unapproved')
+def Unapproved_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='unapproved')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Approval pending'",parameter2="'RequestStage'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
-def approved(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='approved')
+def Approved_View(request):
+    activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='approved')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Approved'",parameter2="'AuthorisedStage'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
 @login_required
-def assigned(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='assigned')
+def Assigned_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='assigned')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Assigned'",parameter2="'AssignedStage'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
 @login_required
-def overview(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='overview')
+def Overview_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='overview')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Overviewed'",parameter2="'OverviewStage'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
-def estimate(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='estimate')
+def Estimate_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='estimate')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Estimated'",parameter2="'EstimateStage'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
 @login_required
-def wip(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='wip')
+def Wip_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='wip')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Estimation Accepted'",parameter2="'WIPStage'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
 @login_required
-def completed(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='completed')
+def Completed_View(request):
+    activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='completed')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Completed'",parameter2="'CompletedStage'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
-def rejected(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='rejected')
+def Rejected_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='rejected')
+    group_name = is_group(request,username=username)
+
     data = data_extraction(request,parameter1="'Rejected'",parameter2="'All'")
-    return render(request, 'CentralMI/DetailView.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
 @login_required
-def Error_Log(request,reportid):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
+def Errorlog_Add_Form(request,reportid):
+    activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
+    group_name = is_group(request,username=username)
+
     form = ErrorlogForm(initial={'error_report':reportid})
     if request.method == 'POST':
         form = ErrorlogForm(request.POST,request.FILES)
@@ -261,17 +286,22 @@ def Error_Log(request,reportid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse('errordetail'))
-    return render(request, 'CentralMI/ErrorLog.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+    return render(request, 'CentralMI/7b_errorlog_add_form.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+
 
 @login_required
-def Error_detail(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='report',footer='errordetail')
+def Errorlog_Detail_View(request):
+    activetab, activetab1, username, info, sd= create_session(request, header='report',footer='errordetail')
+    group_name = is_group(request,username=username)
+
     data = Errorlog.objects.all()
-    return render(request, 'CentralMI/errordetail.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
+    return render(request, 'CentralMI/7a_error_detail_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
-def EditError_Log(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+def Errorlog_Edit_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
+    group_name = is_group(request,username=username)
+
     e = Errorlog.objects.get(pk=requestid)
     model = Errorlog.objects.filter(pk=requestid)
     form = ErrorlogForm(instance=e)
@@ -282,15 +312,20 @@ def EditError_Log(request,requestid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse('errordetail'))
-    return render(request, 'CentralMI/ErrorLogEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
+    return render(request, 'CentralMI/7c_errorlog_edit_form.html', {'form':form,'model':model, 'username':username,'activetab':activetab})
 
-def modelview(request):
-    form = FilteredForm()
-    return render(request, 'CentralMI/modeltest.html',{'form':form})
+def Ot_Detail_View(request):
+    activetab, activetab1, username, info, sd= create_session(request, header='timetracker',footer='otdetail')
+    group_name = is_group(request,username=username)
+
+    data = OtDetail.objects.all()
+    return render(request, 'CentralMI/9a_ot_detail_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
-def ot_form(request,trackerid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='otdetail')
+def Ot_Add_Form(request,trackerid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='otdetail')
+    group_name = is_group(request,username=username)
+
     form = OtDetailForm(initial={'timetrackers':trackerid,'ot_status':1})
     if request.method == 'POST':
         form =  OtDetailForm(request.POST,request.FILES)
@@ -309,17 +344,13 @@ def ot_form(request,trackerid):
                 inst.ot_hrs = 0
             inst.save()
             return HttpResponseRedirect(reverse('otdetail'))
-    return render(request, 'CentralMI/otform.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
-
-def OT_detail(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='timetracker',footer='otdetail')
-    data = OtDetail.objects.all()
-    return render(request, 'CentralMI/otdetail.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'authority':authority,'username':username})
-
+    return render(request, 'CentralMI/9b_ot_add_form.html',{'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def summary_tracker(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='extractdatafilter',footer='summary')
+def Summary_Tracker(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='extractdatafilter',footer='summary')
+    group_name = is_group(request,username=username)
+
     form = SearchForm()
     if request.method == 'POST':
         form =  SearchForm(request.POST)
@@ -332,12 +363,14 @@ def summary_tracker(request):
             member = form.cleaned_data['member']
             print(interval)
             model = info.define_day_week_month2(report_choice='2',start_date=startdate,end_date=enddate,range_type=interval,values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
-            return render(request, 'CentralMI/summary.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
-    return render(request, 'CentralMI/summary.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+            return render(request, 'CentralMI/12b_summary_tracker.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
 
 
-def filterdata(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='extractdatafilter',footer='extractdatafilter1')
+def Filter_Data(request):
+    activetab, activetab1, username, info, sd= create_session(request, header='extractdatafilter',footer='extractdatafilter1')
+    group_name = is_group(request,username=username)
+
     form = SearchForm()
     if request.method == 'POST':
         form =  SearchForm(request.POST)
@@ -394,41 +427,71 @@ def filterdata(request):
                     model = ''
 
             #print(enddate)
-            return render(request, 'CentralMI/extract_data.html',{'model':model,'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno})
-        return render(request, 'CentralMI/extract_data.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
-    return render(request, 'CentralMI/extract_data.html',{'form':form,'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+            return render(request, 'CentralMI/12a_extract_data.html',{'model':model,'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportno':reportno})
+        return render(request, 'CentralMI/12a_extract_data.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+    return render(request, 'CentralMI/12a_extract_data.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+
+@login_required
+def About_Team_View(request):
+    activetab, activetab1, username, info, sd= create_session(request, header='home',footer='aboutteam')
+    group_name = is_group(request,username=username)
+
+    return render(request, 'CentralMI/2a_about_team_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+
+@login_required
+def What_We_Do_View(request):
+    activetab, activetab1, username, info, sd= create_session(request, header='home',footer='whatwedo')
+    group_name = is_group(request,username=username)
+
+    return render(request, 'CentralMI/2b_what_we_do_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+
+@login_required
+def Governance_Process_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='governanceprocess')
+    group_name = is_group(request,username=username)
+
+    return render(request, 'CentralMI/2c_governance_process_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+
+@login_required
+def Success_Stories_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='successstories')
+    group_name = is_group(request,username=username)
+
+    return render(request, 'CentralMI/2d_success_stories_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+
+@login_required
+def Comm_Sugg_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,header='home',footer='commsugg')
+    group_name = is_group(request,username=username)
+
+    return render(request, 'CentralMI/2e_comm_sugg_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+
+@login_required
+def Check_Status_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
+    group_name = is_group(request,username=username)
+
+    userid = User.objects.get(username=username).pk
+    model = Requestdetail.objects.filter(username__in=[userid])
+    return render(request, 'CentralMI/3b_check_status_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 
+################## Reports
 
 
 @login_required
-def about_team(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='home',footer='aboutteam')
-    return render(request, 'CentralMI/about_team.html',{'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+def Report_Detail_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='allreports')
+    group_name = is_group(request,username=username)
+
+    model = Activity.objects.all()
+    return render(request, 'CentralMI/5a_reports_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def whatwedo(request):
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='home',footer='whatwedo')
-    return render(request, 'CentralMI/about_team.html',{'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
+def Report_Add_Form(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
+    group_name = is_group(request,username=username)
 
-@login_required
-def governanceprocess(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='governanceprocess')
-    return render(request, 'CentralMI/about_team.html',{'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
-
-@login_required
-def successstories(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='successstories')
-    return render(request, 'CentralMI/about_team.html',{'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
-
-@login_required
-def comm_sugg(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,header='home',footer='comm_sugg')
-    return render(request, 'CentralMI/about_team.html',{'authority':authority,'activetab':activetab,'activetab1':activetab1,'username':username})
-
-@login_required
-def ReportForm(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
     form = ActivityForm()
     if request.method == 'POST':
         form = ActivityForm(request.POST,request.FILES)
@@ -437,15 +500,16 @@ def ReportForm(request):
             inst.save()
             return HttpResponseRedirect(reverse('allreports'))
         else:
-            return render(request, 'CentralMI/ErrorPage.html')
+            return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        return render(request, 'CentralMI/Reports.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    return render(request, 'CentralMI/Reports.html',{'form':form,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
+        return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def EditReport(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+def Report_Edit_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='')
+    group_name = is_group(request,username=username)
+
     e = Activity.objects.get(pk=requestid)
     model = Activity.objects.filter(pk=requestid)
     form = ActivityForm(instance=e)
@@ -456,63 +520,33 @@ def EditReport(request,requestid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse('allreports'))
-    return render(request, 'CentralMI/ReportsEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
+    return render(request, 'CentralMI/5c_report_edit_form.html', {'form':form,'model':model, 'username':username,'activetab':activetab})
 
 
-@login_required
-def check_status(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='loginrequest',footer='checkstatus')
-
-    userid = User.objects.get(username=username).pk
-    model = Requestdetail.objects.filter(username__in=[userid])
-    return render(request, 'CentralMI/check_status.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+######################## Feedback
 
 @login_required
-def Report_Detail(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='allreports')
-    model = Activity.objects.all()
-    return render(request, 'CentralMI/allreports.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+def Feedback_Question_View(request,activityid):
+    activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
+    group_name = is_group(request,username=username)
+
+    model =  FeedbackQuestion.objects.all()
+    request.session['aid'] = activityid
+    return render(request, 'CentralMI/6b_feedback_question_view.html',{'model':model,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def feedback(request,reportid):
-    #id_cumulative = 0
-    authority, activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
-    #exist = Feedback.objects.filter(activity__in=[reportid]).count()
-#    if exist > 0:
-#        return HttpResponseRedirect(reverse('allreports'))
-#    else:
-    #request.session['reportid'] = reportid
-    #questionlen = FeedbackQuestion.objects.count()
-    #activeid = request.session.get('reportid')
-    #form = FeedbackForm(initial={'activity':reportid,'feedback_question':id})
-    model =  Feedback.objects.filter(activity__in=[reportid])
-    #if request.method == 'POST':
-    #    form = FeedbackForm(request.POST)
-    #    if form.is_valid():
-    #        inst = form.save(commit=True)
-    #        inst.save()
-            #id_cumulative = int(int(id_cumulative) + 1)
-            #id = id_cumulative
-            #if id > questionlen:
-            #    return HttpResponseRedirect(reverse('allreports'))
-            #else:
-            #    print(reportid)
-            #    print(id)
-    #        return HttpResponseRedirect(reverse('feedback', args={reportid,id}))
-    return render(request, 'CentralMI/add_feedback.html',{'model':model,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+def Feedback_Detail_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
+    group_name = is_group(request,username=username)
 
-@login_required
-def Feedback_Detail(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
     model = Feedback.objects.all()
-    return render(request, 'CentralMI/feedbackdetail.html',{'model':model,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/6a_feedback_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def EditFeedback(request,feedbackid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
+def Feedback_Edit_Form(request,feedbackid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
+    group_name = is_group(request,username=username)
+
     e = Feedback.objects.get(pk=feedbackid)
     model = Feedback.objects.filter(pk=feedbackid)
     form = FeedbackForm(instance=e)
@@ -523,26 +557,288 @@ def EditFeedback(request,feedbackid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse('feedbackdetail'))
-    return render(request, 'CentralMI/editfeedbackform.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+    return render(request, 'CentralMI/6c_feedback_edit_form.html',{'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def AddFeedback(request):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
-    form = FeedbackForm()
+def Feedback_Add_Form(request,feedbackquestionid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
+    group_name = is_group(request,username=username)
+
+    activityid = request.session.get('aid')
+    checkmember = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid]).count()
+    model1 = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid])
+    if checkmember > 0:
+        feedbackid = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid])
+        print(feedbackid)
+        e = Feedback.objects.get(feedback_id=feedbackid)
+        form = FeedbackForm(instance=e)
+        if request.method == 'POST':
+            form =  FeedbackForm(request.POST,instance=e)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.save()
+                return HttpResponseRedirect(reverse('viewfeedbackquestion',args = (activityid,)))
+            else:
+                return render(request, 'CentralMI/6d_feedback_add_form.html',{'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'activityid':activityid})
+    else:
+        form = FeedbackForm(initial={'feedback_question':feedbackquestionid,'activity':activityid})
+        if request.method == 'POST':
+            form = FeedbackForm(request.POST,request.FILES)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.save()
+                return HttpResponseRedirect(reverse('viewfeedbackquestion',args = (activityid,)))
+            else:
+                return render(request, 'CentralMI/6d_feedback_add_form.html',{'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'activityid':activityid})
+    return render(request, 'CentralMI/6d_feedback_add_form.html',{'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'activityid':activityid})
+
+############## Staff
+@login_required
+def Staff_Detail_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='viewdetail')
+    group_name = is_group(request,username=username)
+    if group_name == 'mi_team':
+        userid = User.objects.get(username=username).pk
+        model1 = User.objects.filter(username__in=[username])
+        model = Mimember.objects.filter(username__in=[userid])
+        data = zip(model1,model)
+    else:
+        model1 = User.objects.all()
+        model = Mimember.objects.all()
+        data = zip(model1,model)
+    return render(request, 'CentralMI/10a_staff_detail_view.html',{'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+
+@login_required
+def Staff_Edit_Form(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='')
+    group_name = is_group(request,username=username)
+
+    userid = User.objects.get(username=username).pk
+    e1 = User.objects.get(pk=userid)
+    print(e1)
+    e = Mimember.objects.get(username=userid)
+    model1 = User.objects.filter(username__in=username)
+    model = Mimember.objects.filter(username__in=[userid])
+    form1 = UserForm(instance=e1)
+    print(username)
+    form = MimemberForm(instance=e)
     if request.method == 'POST':
-        form = FeedbackForm(request.POST,request.FILES)
+        form = MimemberForm(request.POST,instance=e)
+        form1 = UserForm (request.POST,instance=e1)
+        if all([form.is_valid() , form1.is_valid()]):
+            inst = form.save(commit=True)
+            inst.save()
+            inst1 = form1.save(commit=False)
+            inst1.username = username
+            inst1.save()
+            return HttpResponseRedirect(reverse('viewDetail'))
+        else:
+            return render(request, 'CentralMI/15a_ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/10b_staff_edit_form.html',{'form':form,'form1':form1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/10b_staff_edit_form.html',{'form':form,'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+############### Internal Task detailview
+@login_required
+def Internal_Task_Detail_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    model = Internaltask.objects.all()
+    return render(request, 'CentralMI/11a_internal_task_detail_view.html',{'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+def Internal_Task_Completion_View(request,internaltaskid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    model = Internaltaskstatus.objects.filter(internaltask_id__in=[internaltaskid])
+    return render(request, 'CentralMI/11g_internal_task_completion_view.html',{'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+@login_required
+def Internal_Task_Add_Form(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    userid = User.objects.get(username=username).id
+    mimemberid = Mimember.objects.get(username=userid).mimemberid
+    form = InternaltaskForm(initial={'owner':mimemberid})
+    if request.method == 'POST':
+        form = InternaltaskForm(request.POST)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('feedbackdetail'))
-    return render(request, 'CentralMI/add_feedback.html',{'form':form,'username':username,'authority':authority, 'activetab':activetab,'activetab1':activetab1})
+            return HttpResponseRedirect(reverse('internaltaskdetail'))
+    return render(request, 'CentralMI/11b_internal_task_add_form.html',{'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def RequestFormTemplate(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='addrequest')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='loginrequest',footer='addrequest')
+def Internal_Task_Edit_Form(request,taskid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    e = Internaltask.objects.get(internaltaskid=taskid)
+    form = InternaltaskForm(instance=e)
+    if request.method == 'POST':
+        form = InternaltaskForm(request.POST,instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('internaltaskdetail'))
+    return render(request, 'CentralMI/11b_internal_task_add_form.html',{'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+
+@login_required
+def Internal_Task_Choice_view(request,taskid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    model = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
+    return render(request, 'CentralMI/11c_internal_task_choice_view.html',{'model':model, 'taskid':taskid,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+@login_required
+def Internal_Choice_Add_Form(request,taskid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    id = taskid
+    print(id)
+    form =  InternaltaskchoiceForm(initial={'internaltask':taskid})
+    if request.method == 'POST':
+        form =  InternaltaskchoiceForm(request.POST)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (id,)))
+        else:
+            return render(request, 'CentralMI/15a_ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'id':id,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'id':id,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+@login_required
+def Internal_Choice_Edit_Form(request,choiceid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    e = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid)
+    question = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid).internaltask
+    print(question)
+    taskid = Internaltask.objects.get(internaltaskquestion=question).internaltaskid
+    print(taskid)
+#    print(id)
+    form =  InternaltaskchoiceForm(instance=e)
+    if request.method == 'POST':
+        form =  InternaltaskchoiceForm(request.POST,instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (taskid,)))
+        else:
+            return render(request, 'CentralMI/15a_ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+
+
+@login_required
+def Internal_Task_And_Choice_View(request,taskid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    print(taskid)
+    userid = User.objects.get(username=username).id
+    memberid = Mimember.objects.get(username=userid).mimemberid
+    model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
+    model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
+    checkmember = Internaltaskstatus.objects.filter(internaltask__in=[taskid]).filter(mimember__in=[memberid]).count()
+    model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
+    if checkmember > 0:
+        taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
+        print(taskstatusid)
+        e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
+        form = InternaltaskstatusForm(instance=e)
+        #print(form)
+        if request.method == 'POST':
+            choice = request.POST['choice']
+            e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
+            form =  InternaltaskstatusForm(request.POST,instance=e)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.internaltaskchoice = e
+                inst.save()
+                return HttpResponseRedirect(reverse('internaltaskdetail'))
+            else:
+                return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    else:
+        form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
+        if request.method == 'POST':
+            choice = request.POST['choice']
+            taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
+            e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
+            print(choice)
+            form =  InternaltaskstatusForm(request.POST)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.internaltaskchoice = e
+                inst.save()
+                return HttpResponseRedirect(reverse('internaltaskdetail'))
+            else:
+                return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+@login_required
+def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+
+    userid = User.objects.get(username=username).id
+    memberid = Mimember.objects.get(username=userid).mimemberid
+    #print(taskstatusid)
+    internaltaskchoice = Internaltaskstatus.objects.filter(internaltaskstatusid__in=[taskstatusid]).values_list('internaltaskchoice', flat=True)
+    #print(internaltaskchoice)
+    taskid = Internaltaskstatus.objects.filter(internaltaskstatusid__in=[taskstatusid]).values_list('internaltask', flat=True)
+    internaltaskid = Internaltask.objects.get(internaltaskid=taskid).internaltaskid
+    print(internaltaskid)
+    choice = Internaltaskchoice.objects.filter(internaltaskchoiceid__in=list(internaltaskchoice)).values_list('internaltaskchoice',flat=True)
+    choice_string = ', '.join(choice)
+    #taskid_string =  ', '.join(taskid)
+    model =  Internaltask.objects.filter(internaltaskid__in=list(taskid))
+    model1 = Internaltaskchoice.objects.filter(internaltask__in=list(taskid))
+    e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
+    form = InternaltaskstatusForm(instance=e)
+    if request.method == 'POST':
+        choice = request.POST['choice']
+        taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=list(taskid)).values_list('internaltaskchoiceid',flat=True)
+        #print(taskchoiceid)
+        #taskchoiceid = ', '.join(taskchoiceid)
+        f = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
+        #print(f)
+        form =  InternaltaskstatusForm(request.POST,instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.internaltaskchoice = f
+            inst.save()
+            return HttpResponseRedirect(reverse('internaltaskwithchoice',args = (internaltaskid,)))
+        else:
+            return render(request, 'CentralMI/15a_ErrorPage.html')
+    return render(request, 'CentralMI/11f_internal_task_and_choice_edit_form.html',{'form':form,'model':model,'model1':model1,'choice':choice_string,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+
+
+
+@login_required
+def Request_Form(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='addrequest')
+    group_name = is_group(request,username=username)
 
     userid = User.objects.get(username=username).pk
     form = RequestdetailForm(initial={'username':userid})
@@ -570,239 +866,19 @@ def RequestFormTemplate(request):
 #                        request_status='Pending for Approval')
             return HttpResponseRedirect(reverse('ty',args = (newid,)))
         else:
-            return render(request, 'CentralMI/ErrorPage.html')
+            return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        return render(request, 'CentralMI/RequestForm.html',{'form':form,'form1':form1,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    return render(request, 'CentralMI/RequestForm.html',{'form':form,'form1':form1,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-@login_required
-def view_staff_detail(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='viewdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='viewdetail')
-    print(authority)
-    if authority == "Group2":
-        model1 = User.objects.all()
-        model = Mimember.objects.all()
-        data = zip(model1,model)
-    elif authority == "Group4":
-        userid = User.objects.get(username=username).pk
-        model1 = User.objects.filter(username__in=[username])
-        model = Mimember.objects.filter(username__in=[userid])
-        data = zip(model1,model)
-    return render(request, 'CentralMI/Employee_Detail.html',{'model':model,'model1':model1,'data':data,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-@login_required
-def edit_staff_detail(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='')
-    userid = User.objects.get(username=username).pk
-    e1 = User.objects.get(pk=userid)
-    print(e1)
-    e = Mimember.objects.get(username=userid)
-    model1 = User.objects.filter(username__in=username)
-    model = Mimember.objects.filter(username__in=[userid])
-    form1 = UserForm(instance=e1)
-    print(username)
-    form = MimemberForm(instance=e)
-    if request.method == 'POST':
-        form = MimemberForm(request.POST,instance=e)
-        form1 = UserForm (request.POST,instance=e1)
-        if all([form.is_valid() , form1.is_valid()]):
-            inst = form.save(commit=True)
-            inst.save()
-            inst1 = form1.save(commit=False)
-            inst1.username = username
-            inst1.save()
-            return HttpResponseRedirect(reverse('viewDetail'))
-        else:
-            return render(request, 'CentralMI/ErrorPage.html')
-    else:
-        return render(request, 'CentralMI/EditStaffDetail.html',{'form':form,'form1':form1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    return render(request, 'CentralMI/EditStaffDetail.html',{'form':form,'form1':form1,  'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-
-@login_required
-def internal_task_detail(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    model = Internaltask.objects.all()
-    return render(request, 'CentralMI/InternalTaskDetail.html',{'model':model, 'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-@login_required
-def view_internal_task(request,taskid):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    model = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
-    return render(request, 'CentralMI/InternalTaskChoiceView.html',{'model':model, 'taskid':taskid,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-@login_required
-def add_internal_task_detail(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    userid = User.objects.get(username=username).id
-    mimemberid = Mimember.objects.get(username=userid).mimemberid
-    form = InternaltaskForm(initial={'owner':mimemberid})
-    if request.method == 'POST':
-        form = InternaltaskForm(request.POST)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            return HttpResponseRedirect(reverse('internaltaskdetail'))
-    return render(request, 'CentralMI/addinternaltask.html',{'form':form, 'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-@login_required
-def edit_internal_task_detail(request,taskid):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    e = Internaltask.objects.get(internaltaskid=taskid)
-    form = InternaltaskForm(instance=e)
-    if request.method == 'POST':
-        form = InternaltaskForm(request.POST,instance=e)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            return HttpResponseRedirect(reverse('internaltaskdetail'))
-    return render(request, 'CentralMI/addinternaltask.html',{'form':form, 'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-
-@login_required
-def edit_internal_choice(request,choiceid):
-    print(choiceid)
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    e = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid)
-    question = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid).internaltask
-    print(question)
-    taskid = Internaltask.objects.get(internaltaskquestion=question).internaltaskid
-    print(taskid)
-#    print(id)
-    form =  InternaltaskchoiceForm(instance=e)
-    if request.method == 'POST':
-        form =  InternaltaskchoiceForm(request.POST,instance=e)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (taskid,)))
-        else:
-            return render(request, 'CentralMI/ErrorPage.html')
-    else:
-        return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-@login_required
-def add_internal_choice(request,taskid):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    id = taskid
-    print(id)
-    form =  InternaltaskchoiceForm(initial={'internaltask':taskid})
-    if request.method == 'POST':
-        form =  InternaltaskchoiceForm(request.POST)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (id,)))
-        else:
-            return render(request, 'CentralMI/ErrorPage.html')
-    else:
-        return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'id':id,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    return render(request, 'CentralMI/InternalTaskChoiceEdit.html',{'form':form,'taskid':taskid,'id':id,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-@login_required
-def internal_task_with_choice(request,taskid):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    print(taskid)
-    userid = User.objects.get(username=username).id
-    memberid = Mimember.objects.get(username=userid).mimemberid
-    model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
-    model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
-    checkmember = Internaltaskstatus.objects.filter(internaltask__in=[taskid]).filter(mimember__in=[memberid]).count()
-    model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
-    if checkmember > 0:
-        taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
-        print(taskstatusid)
-        e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
-        form = InternaltaskstatusForm(instance=e)
-        #print(form)
-        if request.method == 'POST':
-            choice = request.POST['choice']
-            e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
-            form =  InternaltaskstatusForm(request.POST,instance=e)
-            if form.is_valid():
-                inst = form.save(commit=True)
-                inst.internaltaskchoice = e
-                inst.save()
-                return HttpResponseRedirect(reverse('internaltaskdetail'))
-            else:
-                return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    else:
-        form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
-        if request.method == 'POST':
-            choice = request.POST['choice']
-            taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
-            e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
-            print(choice)
-            form =  InternaltaskstatusForm(request.POST)
-            if form.is_valid():
-                inst = form.save(commit=True)
-                inst.internaltaskchoice = e
-                inst.save()
-                return HttpResponseRedirect(reverse('internaltaskdetail'))
-            else:
-                return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'model':model,'model1':model1,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-    return render(request, 'CentralMI/internaltaskwithchoice.html',{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
-
-
-@login_required
-def internal_task_with_choice_edit(request,taskstatusid):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='Details',footer='internaltaskdetail')
-    e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
-    form = InternaltaskstatusForm(instance=e)
-    if request.method == 'POST':
-        form =  InternaltaskstatusForm(request.POST,instance=e)
-        if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            return HttpResponseRedirect(reverse('internaltaskdetail'))
-        else:
-            return render(request, 'CentralMI/ErrorPage.html')
-    return render(request, 'CentralMI/internaltaskwithchoicestatusedit.html',{'form':form,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+        return render(request, 'CentralMI/4a_request_form.html',{'form':form,'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/4a_request_form.html',{'form':form,'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 
 
 
 @login_required
-def AuthorisedFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='unapproved')
+def Authorised_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='unapproved')
+    group_name = is_group(request,username=username)
+
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Authorisedetail.objects.all().get(requestdetail=requestid)
@@ -833,12 +909,14 @@ def AuthorisedFormTemplate(request,requestid):
                         request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('unapproved'))
             else:
-                return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/AuthorisedForm.html',{'form':form, 'form1':form1,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+                return render(request, 'CentralMI/15a_ErrorPage.html')
+        return render(request, 'CentralMI/4b_authorised_form.html',{'form':form, 'form1':form1,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 @login_required
-def RequestassigneddetailFormTemplate(request, requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='approved')
+def Requestassigneddetail_Form(request, requestid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='approved')
+    group_name = is_group(request,username=username)
+
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Assigneddetail.objects.all().get(requestdetail=requestid)
@@ -872,14 +950,16 @@ def RequestassigneddetailFormTemplate(request, requestid):
                 return HttpResponseRedirect(reverse('approved'))
 
             else:
-                return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/AssignedForm.html',{'form':form,'form1':form1,'authority':authority,'activetab1':activetab1,'activetab':activetab})
+                return render(request, 'CentralMI/15a_ErrorPage.html')
+        return render(request, 'CentralMI/4c_assigned_form.html',{'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab})
 
 
 
 @login_required
-def OverviewFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='assigned')
+def Overview_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='assigned')
+    group_name = is_group(request,username=username)
+
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Overviewdetail.objects.all().get(requestdetail=requestid)
@@ -910,12 +990,14 @@ def OverviewFormTemplate(request,requestid):
                         request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('assigned'))
             else:
-                return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/OverviewForm.html',{'form':form,'form1':form1,'username':username,'authority':authority,'activetab1':activetab1,'activetab':activetab})
+                return render(request, 'CentralMI/15a_ErrorPage.html')
+        return render(request, 'CentralMI/4d_overview_form.html',{'form':form,'form1':form1,'username':username,'activetab1':activetab1,'activetab':activetab})
 
 @login_required
-def EstimationFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='overview')
+def Estimation_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='overview')
+    group_name = is_group(request,username=username)
+
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Estimationdetail.objects.all().get(requestdetail=requestid)
@@ -948,12 +1030,14 @@ def EstimationFormTemplate(request,requestid):
             else:
                 pagename = "estimate"
                 errormsg1 = "Something went Wrong"
-                return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/EstimationForm.html',{'form':form, 'form1':form1, 'username': username,'authority':authority,'activetab1':activetab1,'activetab':activetab})
+                return render(request, 'CentralMI/15a_ErrorPage.html')
+        return render(request, 'CentralMI/4e_estimation_form.html',{'form':form, 'form1':form1, 'username': username,'activetab1':activetab1,'activetab':activetab})
 
 @login_required
-def EstimationAcceptanceFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
+def EstimationAcceptance_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
+    group_name = is_group(request,username=username)
+
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Acceptrejectdetail.objects.all().get(requestdetail=requestid)
@@ -984,12 +1068,14 @@ def EstimationAcceptanceFormTemplate(request,requestid):
                         request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('estimate'))
             else:
-                return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/EstAcceptRejectForm.html',{'form':form, 'form1':form1, 'username': username,'authority':authority,'activetab1':activetab1,'activetab':activetab})
+                return render(request, 'CentralMI/15a_ErrorPage.html')
+        return render(request, 'CentralMI/4f_estimation_acceptance_form.html',{'form':form, 'form1':form1, 'username': username,'activetab1':activetab1,'activetab':activetab})
 
 @login_required
-def CompletedFormTemplate(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
+def Completed_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
+    group_name = is_group(request,username=username)
+
     userid = User.objects.get(username=username).pk
     try:
         DataModel= Completeddetail.objects.all().get(requestdetail=requestid)
@@ -1021,17 +1107,15 @@ def CompletedFormTemplate(request,requestid):
                         request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('wip'))
             else:
-                return render(request, 'CentralMI/ErrorPage.html')
-        return render(request, 'CentralMI/CompletedForm.html',{'form':form, 'form1':form1, 'username': username,'activetab1':activetab1,'authority':authority,'activetab':activetab})
+                return render(request, 'CentralMI/15a_ErrorPage.html')
+        return render(request, 'CentralMI/4g_completed_form.html',{'form':form, 'form1':form1, 'username': username,'activetab1':activetab1,'activetab':activetab})
 
 
 
 @login_required
-def typage(request,requestid):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='loginrequest',footer='')
+def Thank_You_Page_View(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
+    group_name = is_group(request,username=username)
 
     try:
         model1 = Requestdetail.objects.all().get(requestid=requestid)
@@ -1063,55 +1147,40 @@ def typage(request,requestid):
             model8 = Completeddetail.objects.all().get(requestdetail=requestid)
         except:
             model8 = "nothing"
-        return render(request, 'CentralMI/ThankYou.html',{'detail1':model1,'detail2':model2,'detail3':model3,'detail4':model4,'detail5':model5,'detail6':model6,'detail7':model7,'detail8':model8,'username':username,'authority':authority,'activetab':activetab,'activetab1':activetab1})
+        return render(request, 'CentralMI/3c_thankyou_view.html',{'detail1':model1,'detail2':model2,'detail3':model3,'detail4':model4,'detail5':model5,'detail6':model6,'detail7':model7,'detail8':model8,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
     except:
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1,'activetab':activetab,'activetab1':activetab1})
+        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
-
-def RequestdetailUpdate(request,requestid):
-    instance = get_object_or_404(Requestdetail, requestid=requestid)
-    form = RequestdetailForm(request.POST or None, instance=instance)
-    if request.method == 'POST':
-        form = RequestdetailForm(request.POST)
-        if form.is_valid():
-            estimate = form.save(commit=True)
-            estimate.save()
-            return render(request, 'CentralMI/RequestForm.html', {'form':form})
-        else:
-            pagename = "report"
-            errormsg1 = "Something went Wrong"
-            return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
-    return render(request, 'CentralMI/RequestForm.html',{'form':form})
 
 @login_required
-def filterform(request,username,authority):
+def filterform(request,username):
     form = FilteredForm()
-    if authority == "Group2":
-        if request.method == 'POST':
-            form =  FilteredForm(request.POST)
-            if form.is_valid():
-                teamfilter = form.cleaned_data['teamfilter']
-                memberfilter = form.cleaned_data['memberfilter']
-                if teamfilter != None and memberfilter != None:
-                    teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
-                    userid = User.objects.get(username__in=[memberfilter]).id
-                    memberid = Mimember.objects.get(username__in=[userid]).mimemberid
-                elif teamfilter != None and memberfilter == None:
-                    teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
-                    memberid = None
-                elif teamfilter == None and memberfilter == None:
-                    teamid = None
-                    memberid = None
-                #form.fields['memberfilter'] =  Mimember.objects.all()
-            else:
+#    if authority == "Group2":
+    if request.method == 'POST':
+        form =  FilteredForm(request.POST)
+        if form.is_valid():
+            teamfilter = form.cleaned_data['teamfilter']
+            memberfilter = form.cleaned_data['memberfilter']
+            if teamfilter != None and memberfilter != None:
+                teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
+                userid = User.objects.get(username__in=[memberfilter]).id
+                memberid = Mimember.objects.get(username__in=[userid]).mimemberid
+            elif teamfilter != None and memberfilter == None:
+                teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
+                memberid = None
+            elif teamfilter == None and memberfilter == None:
                 teamid = None
                 memberid = None
-                form = FilteredForm()
-                print("error")
-        else:
-            teamid = None
-            memberid = None
-            form = FilteredForm()
+                #form.fields['memberfilter'] =  Mimember.objects.all()
+#            else:
+#                teamid = None
+#                memberid = None
+#                form = FilteredForm()
+#                print("error")
+#        else:
+#            teamid = None
+#            memberid = None
+#            form = FilteredForm()
     else:
         userid = User.objects.get(username__in=[username]).id
         memberid = Mimember.objects.get(username__in=[userid]).mimemberid
@@ -1120,40 +1189,39 @@ def filterform(request,username,authority):
 
 
 @login_required
-def landingpage(request):
-    username = request.user.username
-    return render(request, 'CentralMI/landingpage.html',{'username':username})
+def HomePage_Data(request,username,info):
+    teamid , memberid, form = filterform(request,username=username)
+    mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    dv = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    mvOT = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+    wvOT = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+    dvOT= info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+    mvcore = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    wvcore = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    dvcore = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    mvutilisation = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+    wvutilisation = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+    dvutilisation = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+    dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+    wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+    mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+    return mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form
 
 
 @login_required
-def index(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
-        teamid , memberid, form = filterform(request,username=username,authority=authority)
-        mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-        wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-        dv = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-        mvOT = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-        wvOT = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-        dvOT= info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-        mvcore = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-        wvcore = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-        dvcore = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-        mvutilisation = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-        wvutilisation = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-        dvutilisation = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-        dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-        wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-        mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-        form = FilteredForm()
-        #form.cleaned_data['memberfilter'] = Mimember.objects.all()
-        #load_mimember()
-        return render(request, 'CentralMI/index.html',{'form':form,'username':username,'authority':authority,'activetab':activetab,'authority':authority,
+def Index(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
+    group_name = is_group(request,username=username)
+    print(group_name)
+    if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
+        mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form = HomePage_Data(request,username=username,info=info)
+        return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
         'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
-        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error})
-    except:
-        authority, activetab, activetab1, username = create_session_onerror(request,header='home',footer='')
-        return render(request, 'CentralMI/landingpage.html',{'username':username,'authority':authority,'activetab':activetab,'authority':authority})
+        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name})
+
+    else:
+        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 
 
@@ -1205,89 +1273,24 @@ class sendemail(object):
             instance = Emaildetail(requestdetail=self.requestinst,emaildate=self.currentdatetime,stage=self.sent_to,emailsubject=self.subject,emailbody=self.emailbody,emailto=self.to_email,emailfrom=from_email,emailstatus='Failed',requeststatus=self.request_status)
             instance.save()
 
-from django.contrib.auth.models import Group
 class vistorinfo_output(object):
     def __init__(self, username,sd=None, core='Core',noncore='Non-Core',OT_Yes=1,OT_No=2):
         self.username = username
         self.sd = sd
         self.OT_Yes = OT_Yes
         self.OT_No = OT_No
-        user_id = User.objects.get(username=self.username).pk
-        self.mimemberid = Mimember.objects.get(username=user_id).mimemberid
         self.core = core
         self.noncore = noncore
 
-    def is_member(self):
-        for grpname in ['Group1','Group2','Group3','Group4']:
-            self.groupname = Group.objects.get(name=grpname).user_set.filter(username=self.username)
-            try:
-                self.groupname = self.groupname[0]
-                self.permission = grpname
-            except:
-                self.groupname = None
 
-
-    def getinfo(self):
-        self.mimemberid = self.mimemberid
+    def get_member_info(self):
+        self.user_id = User.objects.get(username=self.username).pk
+        self.mimemberid = Mimember.objects.get(username=self.user_id).mimemberid
         self.teamname = Mimember.objects.get(mimemberid=self.mimemberid).teamdetail
         self.teamid = Teamdetail.objects.get(teamname=self.teamname).pk
         self.coreid = Requestsubcategory.objects.filter(core_noncore__in=[self.core]).values_list('pk', flat=True).distinct()
         self.noncoreid = Requestsubcategory.objects.filter(core_noncore__in=[self.noncore]).values_list('pk', flat=True).distinct()
         self.modelTracker = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd)
-
-
-    def sumcalculationindividual(self,core_noncore=None,OT=None,aggregatefield='totaltime'):
-        """ For Core enter 'Core' in parameter and for Non-Core enter 'noncore'"""
-        """ For OT enter 'Yes' in parameter and 'No' for without OT"""
-        if core_noncore != None:
-            self.core_noncore_id = Requestsubcategory.objects.filter(core_noncore__in=[core_noncore]).values_list('pk', flat=True).distinct()
-        if core_noncore == None and OT == None:
-            self.summarising = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd ).aggregate(Sum(aggregatefield))
-        elif core_noncore == None and OT != None:
-            self.summarising = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd ).filter(options=OT).aggregate(Sum(aggregatefield))
-        elif core_noncore != None and OT == None:
-            self.summarising = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd ).filter(requestsubcategory__in=list(self.core_noncore_id)).aggregate(Sum(aggregatefield))
-        else:
-            self.summarising = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(trackingdatetime=self.sd ).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).aggregate(Sum(aggregatefield))
-
-        self.summarising1 = self.summarising[aggregatefield+'__sum']
-        if self.summarising1 == None:
-            self.summarising1 = 0
-        elif self.summarising1 > 60:
-            self.summarising1 = str(round(self.summarising1/60,0)).split('.')[0]  + ":" + str(self.summarising1 % 60)
-        else:
-            self.summarising1
-        return self.summarising, self.summarising1
-
-    def Topdata(self,grouping_column='trackingdatetime',core_noncore=None,OT=None,aggregatefield='totaltime',topn=5):
-        if core_noncore != None:
-            self.core_noncore_id = Requestsubcategory.objects.filter(core_noncore__in=[core_noncore]).values_list('pk', flat=True).distinct()
-        if core_noncore == None and OT == None:
-            self.Topdata = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).values(grouping_column).annotate(sum=Sum(self.aggregatefield)).order_by(grouping_column).reverse()
-            self.Topdata = self.Topdata[":" + topn]
-        elif core_noncore == None and OT != None:
-            self.Topdata = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(options=OT).values(grouping_column).annotate(sum=Sum(self.aggregatefield)).order_by(grouping_column).reverse()
-            self.Topdata = self.Topdata[":" + topn]
-        elif core_noncore != None and OT == None:
-            self.Topdata = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(requestsubcategory__in=list(self.core_noncore_id)).values(grouping_column).annotate(sum=Sum(self.aggregatefield)).order_by(grouping_column).reverse()
-            self.Topdata = self.Topdata[":" + topn]
-        else:
-            self.Topdata = Timetrackers.objects.filter(mimember__in=[self.mimemberid]).filter(options=OT).filter(requestsubcategory__in=list(self.core_noncore_id)).values(grouping_column).annotate(sum=Sum(self.aggregatefield)).order_by(grouping_column).reverse()
-            self.Topdata = self.Topdata[":" + topn]
-        return self.Topdata
-
-    def sqlconnection(self,storeprocedurename,parameter1,parameter2):
-        cur = connection.cursor()
-        result = cur.execute("" + storeprocedurename + "'" + parameter1 + "','" + parameter2 + "'")
-
-        def dictfetchall(cursor):
-            desc = cursor.description
-            return [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-                ]
-        self.length = len(dictfetchall(result))
-        return self.length
 
     def define_day_week_month1(self,start_date=None,end_date=None,days_range=None,range_type=None,year_range=0,report_choice=None,aggregatefield=None,values=None,core_noncore=None,OT=None,utilisation='No',teamdetail=None,member=None,output_type=None):
         #data1 = Assigneddetail.objects.all()
@@ -1648,9 +1651,11 @@ class vistorinfo_output(object):
 
 
 @login_required
-def TimeTracker(request):
+def TimeTracker_View(request):
 #    try:
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
+    group_name = is_group(request,username=username)
+
     starttime = request.POST.get('startdatetime')
     stoptime = request.POST.get('stopdatetime')
     userid = User.objects.get(username__in=[username]).id
@@ -1678,7 +1683,7 @@ def TimeTracker(request):
             if inst.requestcategorys == None or inst.requestsubcategory == None or inst.totaltime == None or (inst.requestdetail!=None and inst.reports!=None):
                 form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
                 model = info.modelTracker
-                return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'authority':authority,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1})
+                return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
             else:
                 inst.save()
             form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
@@ -1690,21 +1695,23 @@ def TimeTracker(request):
             dvAll = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=None,teamdetail=teamid,member=memberid,output_type='timetracker')
             dvcore = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
             dvutilisation = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-            return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'authority':authority,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1})
+            return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
         else:
             pagename = "report"
             errormsg1 = "Something went Wrong"
-            return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
-    return render(request, 'CentralMI/Tracker.html', {'form':form, 'model':model,'username':username,'authority':authority,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1})
+            return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
+    return render(request, 'CentralMI/8a_tracker_view.html', {'form':form, 'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 #    except:
 #        pagename = "report"
 #        errormsg1 = "Something went Wrong"
-#        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
+#        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
 
 @login_required
-def EditTracker(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+def Tracker_Edit_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
+    group_name = is_group(request,username=username)
+
     e = Timetrackers.objects.get(pk=requestid)
     model = Timetrackers.objects.filter(pk=requestid)
     form = TimetrackersForm(instance=e)
@@ -1715,12 +1722,14 @@ def EditTracker(request,requestid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse('timetracker'))
-    return render(request, 'CentralMI/TrackerEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
+    return render(request, 'CentralMI/8b_tracker_edit_form.html', {'form':form,'model':model, 'username':username,'activetab':activetab})
 
 
 @login_required
-def EditOT(request,requestid):
-    authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+def Ot_Edit_Form(request,requestid):
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
+    group_name = is_group(request,username=username)
+
     e = OtDetail.objects.get(pk=requestid)
     model = OtDetail.objects.filter(pk=requestid)
     form = OtDetailForm(instance=e)
@@ -1731,86 +1740,67 @@ def EditOT(request,requestid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse('otdetail'))
-    return render(request, 'CentralMI/otformEdit.html', {'form':form,'model':model, 'username':username,'authority':authority,'activetab':activetab})
-
-
+    return render(request, 'CentralMI/9c_ot_edit_form.html', {'form':form,'model':model, 'username':username,'activetab':activetab})
 
 @login_required
-def ViewTracker(request,requestid):
+def Load_Datevalues(request):
     try:
-        activetab = 'timetracker'
-        username = request.user.username
-        sd = request.session.get('setdate')
-        info = vistorinfo_output(username,sd)
-        info.getinfo()
-        info.is_member()
-        model = Timetrackers.objects.filter(pk=requestid)
-        if request.method == 'POST':
-            return render(request, 'CentralMI/TrackerView.html', {'model':model, 'username':username,'authority':authority,'activetab':activetab})
-        return render(request, 'CentralMI/TrackerView.html', {'model':model, 'username':username,'authority':authority,'activetab':activetab})
-    except:
-        pagename = "report"
-        errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
 
-@login_required
-def load_datevalues(request):
-    try:
-        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
         mimemberid = User.objects.get(username=username).pk
         model = Timetrackers.objects.filter(mimember__in=[mimemberid]).filter(trackingdatetime=sd)
-        return render(request, 'CentralMI/rebuilding_datevalues.html', {'model': model,'activetab':activetab})
+        return render(request, 'CentralMI/13b_rebuilding_datevalues.html', {'model': model,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
 
 @login_required
-def load_subcategories(request):
+def Load_Subcategories(request):
     try:
-        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+        activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
         category_id = request.GET.get('categories')
         #print(category_id)
         subcategories = Requestsubcategory.objects.filter(requestcategorys_id=category_id)
         activities = Activity.objects.filter(requestcategorys=category_id)
         #print(activities)
-        return render(request, 'CentralMI/rebuilding_subcategories.html', {'subcategories': subcategories,'activities':activities,'activetab':activetab})
+        return render(request, 'CentralMI/13d_rebuilding_subcategories.html', {'subcategories': subcategories,'activities':activities,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
 
 @login_required
-def load_activity(request):
+def Load_Activity(request):
     try:
-        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+        activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
         category_id = request.GET.get('categories')
         #print(category_id)
         activities = Activity.objects.filter(requestcategorys=category_id)
         #print(activities)
-        return render(request, 'CentralMI/rebuilding_activity.html', {'activities':activities,'activetab':activetab})
+        return render(request, 'CentralMI/13a_rebuilding_activity.html', {'activities':activities,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
 
 @login_required
-def load_mimember(request):
+def Load_Mimember(request):
     mimember_id = request.GET.get('mimemberid')
     mimembers = Mimember.objects.filter(teamdetail__in=[mimember_id])
     print('load_member')
     print(mimembers)
-    return render(request, 'CentralMI/rebuilding_mimember.html', {'mimembers': mimembers})
+    return render(request, 'CentralMI/13c_rebuilding_mimember.html', {'mimembers': mimembers})
 
 @login_required
-def load_tables(request):
+def Load_Tables(request):
     try:
-        authority, activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='tracker')
+        activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
         mimemberid = User.objects.get(username=username).pk
         form = TimetrackersForm(initial={'trackingdatetime':sd})
         model = Timetrackers.objects.filter(mimember__in=[mimemberid])
-        return render(request, 'CentralMI/rebuilding_datevalues.html', {'form':form,'model': model,'activetab':activetab})
+        return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model': model,'activetab':activetab})
     except:
         pagename = "report"
         errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/ErrorPage.html',{'username':username,'authority':authority,'pagename':pagename,'errormsg1':errormsg1})
+        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})

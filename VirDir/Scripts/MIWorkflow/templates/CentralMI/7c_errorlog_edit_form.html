@@ -1,0 +1,73 @@
+{% extends "base_model_template.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block content %}
+  <form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
+  {% csrf_token %}
+  {% bootstrap_form_errors form type='non_fields' %}
+
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div >
+  <h3 class="col-sm-12 col-md-12 col-lg-12 head">Edit Error Log</h3>
+  </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div >
+  <label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Error Log Date'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.errorlog_date  show_label=False layout='inline'  %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Error Occurance date'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_occurancedate  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Error Report'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 hidden" >{% bootstrap_field form.error_report  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Repoted By'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedby  show_label=False placeholder='Error Reported By'   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Reported Team'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedteam  show_label=False  placeholder='Error Reported Team' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Reported To'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedto  show_label=False  placeholder='Error Reported To' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Type'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_type  show_label=False  placeholder='Error Type' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Description'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.error_description  show_label=False placeholder='Error Description' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Upload File'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.errordocument  show_label=False  placeholder='Error Reported Team' %}</span>
+  </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-7">
+    <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+    <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'errordetail' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+  </div>
+</form>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#id_error_occurancedate").datepicker({
+    dateFormat: 'yy-mm-dd',
+     altField: '#thealtdate',
+     altFormat: 'yy-mm-dd'});
+});
+</script>
+
+{% endblock %}

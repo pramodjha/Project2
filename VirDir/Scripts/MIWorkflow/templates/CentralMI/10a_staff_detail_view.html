@@ -1,0 +1,109 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+{% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <table  class="table " id="example" style="width:100%">
+    <thead class="">
+    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+      <td >Username </td>
+      <td >Employee ID</td>
+      <td >First Name</td>
+      <td >Last Name</td>
+      <td >Email ID</td>
+      <td >Team Name</td>
+      <td >Designation</td>
+      <td >Address</td>
+      <td >Phone No.</td>
+      <td >DOJ</td>
+      <td >DOB</td>
+      <td >Registered Date</td>
+      <td >Last Login</td>
+      <td >Super User</td>
+      <td >Staff</td>
+      <td >Active</td>
+
+      </tr>
+    </thead>
+    <tbody class="">
+  {%for data, data1 in data %}
+    <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+      <td >{{data.username }} </td>
+      <td >{{data1.employeeid}}</td>
+      <td>{{data.first_name }}</td>
+      <td >{{data.last_name }}</td>
+      <td>{{data.email }}</td>
+      <td >{{data1.teamdetail }} </td>
+      <td>{{data1.designationmaster}}</td>
+      <td>{{data1.address   }}</td>
+      <td>{{data1.phonenumber }}</td>
+      <td>{{data1.dateofjoining }}</td>
+      <td>{{data1.dateofbirth }}</td>
+      <td>{{data.date_joined  }}</td>
+      <td>{{data.last_login  }}</td>
+      <td>{{data.is_superuser }}</td>
+      <td>{{data.is_staff }}</td>
+      <td>{{data.is_active }}</td>
+      {% endfor %}
+      </tr></br>
+
+  </tbody>
+  </table>
+</div>
+
+{% elif group_name == "mi_team" %}
+<div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'editstaffdetail' %}" id="EditDetails" name="Edit" class="btn btn-default">Edit Details</a></div>
+{%for data in model1 %}
+<div class="col-sm-12 col-md-6 col-lg-6">
+<h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Basic Details (1)</h>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Username : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.username }} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> First Name : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.first_name  }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Last Name : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.last_name}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Email : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.email}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Registered Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.date_joined }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Last Login : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.last_login }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Superuser : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.is_superuser }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Staff : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.is_staff}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Active : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.is_active}}</span></div>
+</div>
+{% endfor %}
+{%for data in model %}
+<div class="col-sm-12 col-md-6 col-lg-6">
+<h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Other Details (2)</h>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Team Detail : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.teamdetail  }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Designation : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Employee ID : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.employeeid}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> DOJ : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.dateofjoining }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> DOB : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.dateofbirth }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Address : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.address }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Phone No. : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.phonenumber}}</span></div>
+</div>
+{% endfor %}
+
+{% else %}
+{% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}
+{% block footer_right %}
+{% endblock %}

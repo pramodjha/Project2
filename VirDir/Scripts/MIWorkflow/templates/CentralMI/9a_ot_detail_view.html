@@ -1,0 +1,53 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+  <div class="col-sm-6 col-md-4 col-lg-12">
+    <table  class="table" id="example" style="width:100%">
+      <thead class="">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+        <td >OT ID</td>
+        <td >TimeTracker Ref</td>
+        <td >Start Date-Time</td>
+        <td >End Date-Time</td>
+        <td >OT in Mins.</td>
+        <td >OT Status</td>
+        <td> Edit </td>
+        </tr>
+      </thead>
+      <tbody class="">
+    {%for data in model %}
+      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+        <td >{{data.ot_id }} </a> </td>
+        <td>{{data.timetrackers }}</td>
+        <td>{{data.ot_startdatetime }}</td>
+        <td>{{data.ot_enddatetime }}</td>
+        <td>{{data.ot_hrs }}</td>
+        <td>{{data.ot_status }}</td>
+        <td> <a href="{% url 'editot' data.ot_id %}" class="glyphicon glyphicon-pencil"></a> </td>
+        {% endfor %}
+      </tr></br>
+    </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base_model_template.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+
+{% block content %}
+<form class="form" method="POST" action="" class='form-inline '>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'DateTime'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskstatusdatetime  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Mimember'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.mimember  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Task'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltask  show_label=False  placeholder='' %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Choice'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskchoice  show_label=False  placeholder='Feedback' %}</span>
+</div>
+
+{% for choices in model1 %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+<input type="radio" name="choice" id="choices{{ forloop.counter }}" value="{{ choices.internaltaskchoice }}" {% if choices.internaltaskchoice == choice %} checked="checked" {%else%} {% endif %} />
+<label  class="fontstyle4 fontsize15 fontfamilycambria widthsize20per " for="choices{{ forloop.counter }}">{{  choices.internaltaskchoice }}</label><br />
+</div>
+{% endfor %}
+<div class="col-sm-12 col-md-12 col-lg-7">
+<button type="submit" class="col-sm-12 col-md-12 col-lg-3 btn btn-default" >Submit</button>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'timetracker'  %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+</div>
+
+
+
+</form>
+
+{% endblock %}
+
+
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}
