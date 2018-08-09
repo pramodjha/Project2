@@ -914,17 +914,17 @@ def Authorised_Form(request,requestid):
                 inst.save()
                 inst1 = form1.save(commit=False)
                 inst1.save()
-                dataforemail(username= request_owner,
-                        requestid = requestid,
-                        sub_user= 'Request ID ' + str(requestid) +'  has been ' + str(inst1.statusdetail) ,
-                        L1_user= 'Request has been ' + str(inst1.statusdetail) + ' , now it is with MI-Team to assign ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + 'has been ' + str(inst1.statusdetail) + ' , hence no futher action required',
-                        sub_auth='Thanks for authorising Request ID ' + str(requestid) ,
-                        L1_auth='Request is with MI-Team to Assign ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + ' has been ' + str(inst1.statusdetail) + ' , hence no futher action required' ,
-                        sub_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail),
-                        L1_miteam='Authoriser has '  + str(inst1.statusdetail) + ' the request, assign to appropriate member ' if str(inst1.statusdetail)=='Approved' else ' Request ID ' + str(requestid) + ' has been '  + str(inst1.statusdetail) + ' , hence no futher action required',
-                        sub_manager='Request ID ' + str(requestid) + ' need to be assigned ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + ' has been ' + str(inst1.statusdetail) + ' , hence no futher action required',
-                        L1_manager='Request has authorised and it is with MI-Team to assign',
-                        request_status=str(inst1.statusdetail))
+        #        dataforemail(username= request_owner,
+        #                requestid = requestid,
+        #                sub_user= 'Request ID ' + str(requestid) +'  has been ' + str(inst1.statusdetail) ,
+        #                L1_user= 'Request has been ' + str(inst1.statusdetail) + ' , now it is with MI-Team to assign ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + 'has been ' + str(inst1.statusdetail) + ' , hence no futher action required',
+        #                sub_auth='Thanks for authorising Request ID ' + str(requestid) ,
+        #                L1_auth='Request is with MI-Team to Assign ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + ' has been ' + str(inst1.statusdetail) + ' , hence no futher action required' ,
+        #                sub_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail),
+        #                L1_miteam='Authoriser has '  + str(inst1.statusdetail) + ' the request, assign to appropriate member ' if str(inst1.statusdetail)=='Approved' else ' Request ID ' + str(requestid) + ' has been '  + str(inst1.statusdetail) + ' , hence no futher action required',
+        #                sub_manager='Request ID ' + str(requestid) + ' need to be assigned ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + ' has been ' + str(inst1.statusdetail) + ' , hence no futher action required',
+        #                L1_manager='Request has authorised and it is with MI-Team to assign',
+        #                request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('unapproved'))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
@@ -953,17 +953,17 @@ def Requestassigneddetail_Form(request, requestid):
                 inst.save()
                 inst1 = form1.save(commit=False)
                 inst1.save()
-                dataforemail(username= request_owner,
-                        requestid = requestid,
-                        sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) + ' to ' + str(inst.assignedto),
-                        L1_user= 'Request has been ' + str(inst1.statusdetail) + ' , now it is with MI-Team to Overview ',
-                        sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' to ' + str(inst.assignedto),
-                        L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' to ' + str(inst.assignedto) + ' ,next step is take Overview',
-                        sub_miteam='Request has been succesfully assigned to '+  str(inst.assignedto),
-                        L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail)+ 'to ' + str(inst.assignedto),
-                        sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' to ' + str(inst.assignedto) ,
-                        L1_manager='Next Step is to take overview of request',
-                        request_status=str(inst1.statusdetail))
+        #        dataforemail(username= request_owner,
+        #                requestid = requestid,
+        #                sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) + ' to ' + str(inst.assignedto),
+        #                L1_user= 'Request has been ' + str(inst1.statusdetail) + ' , now it is with MI-Team to Overview ',
+        #                sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' to ' + str(inst.assignedto),
+        #                L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' to ' + str(inst.assignedto) + ' ,next step is take Overview',
+        #                sub_miteam='Request has been succesfully assigned to '+  str(inst.assignedto),
+        #                L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail)+ 'to ' + str(inst.assignedto),
+        #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' to ' + str(inst.assignedto) ,
+        #                L1_manager='Next Step is to take overview of request',
+        #                request_status=str(inst1.statusdetail))
 
                 return HttpResponseRedirect(reverse('approved'))
 
@@ -995,17 +995,17 @@ def Overview_Form(request,requestid):
                 inst.save()
                 inst1 = form1.save(commit=False)
                 inst1.save()
-                dataforemail(username= request_owner,
-                        requestid = requestid,
-                        sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) ,
-                        L1_user= 'Request has been ' + str(inst1.statusdetail) + ' , shortly estimation in hours will be provided ',
-                        sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
-                        L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + '  , shortly estimation in hours will be provided',
-                        sub_miteam='Request ID ' + str(requestid) + ' has been overviewed',
-                        L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail)+ ', please provide the estimation of the same',
-                        sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
-                        L1_manager='Next Step is with MI-Team to provide estimation in hours',
-                        request_status=str(inst1.statusdetail))
+        #        dataforemail(username= request_owner,
+        #                requestid = requestid,
+        #                sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) ,
+        #                L1_user= 'Request has been ' + str(inst1.statusdetail) + ' , shortly estimation in hours will be provided ',
+        #                sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
+        #                L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + '  , shortly estimation in hours will be provided',
+        #                sub_miteam='Request ID ' + str(requestid) + ' has been overviewed',
+        #                L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail)+ ', please provide the estimation of the same',
+        #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
+        #                L1_manager='Next Step is with MI-Team to provide estimation in hours',
+        #                request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('assigned'))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
@@ -1033,17 +1033,17 @@ def Estimation_Form(request,requestid):
                 inst.save()
                 inst1 = form1.save(commit=False)
                 inst1.save()
-                dataforemail(username= request_owner,
-                        requestid = requestid,
-                        sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) ,
-                        L1_user= 'Request has been ' + str(inst1.statusdetail) + ' and Estimated time is ' + str(inst.estimateddays) + 'hours',
-                        sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail)  ,
-                        L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' and Estimated time is ' + str(inst.estimateddays) + 'hours',
-                        sub_miteam='Request ID ' + str(requestid) + ' has been' + str(inst1.statusdetail) ,
-                        L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail)+ ' and Estimated time is ' + str(inst.estimateddays) + 'hours',
-                        sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
-                        L1_manager='Next Step is with Requester to Accept/Reject estimation',
-                        request_status=str(inst1.statusdetail))
+        #        dataforemail(username= request_owner,
+        #                requestid = requestid,
+        #                sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) ,
+        #                L1_user= 'Request has been ' + str(inst1.statusdetail) + ' and Estimated time is ' + str(inst.estimateddays) + 'hours',
+        #                sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail)  ,
+        #                L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) + ' and Estimated time is ' + str(inst.estimateddays) + 'hours',
+        #                sub_miteam='Request ID ' + str(requestid) + ' has been' + str(inst1.statusdetail) ,
+        #                L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail)+ ' and Estimated time is ' + str(inst.estimateddays) + 'hours',
+        #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
+        #                L1_manager='Next Step is with Requester to Accept/Reject estimation',
+        #                request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('overview'))
             else:
                 pagename = "estimate"
@@ -1073,17 +1073,17 @@ def EstimationAcceptance_Form(request,requestid):
                 inst.save()
                 inst1 = form1.save(commit=False)
                 inst1.save()
-                dataforemail(username= request_owner,
-                        requestid = requestid,
-                        sub_user=  str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
-                        L1_user= 'You have accepted the Estimation of your request ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
-                        sub_auth= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
-                        L1_auth='Request ID ' + str(requestid) + ' moved to WIP ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required' ,
-                        sub_miteam= str(inst1.statusdetail) + 'for Request ID' + str(requestid),
-                        L1_miteam= str(inst1.statusdetail) + ' and it moved to WIP ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
-                        sub_manager= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
-                        L1_manager="Estimation has been Accepted, it's moved to WIP bucket"  if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
-                        request_status=str(inst1.statusdetail))
+        #        dataforemail(username= request_owner,
+        #                requestid = requestid,
+        #                sub_user=  str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
+        #                L1_user= 'You have accepted the Estimation of your request ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
+        #                sub_auth= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
+        #                L1_auth='Request ID ' + str(requestid) + ' moved to WIP ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required' ,
+        #                sub_miteam= str(inst1.statusdetail) + 'for Request ID' + str(requestid),
+        #                L1_miteam= str(inst1.statusdetail) + ' and it moved to WIP ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
+        #                sub_manager= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
+        #                L1_manager="Estimation has been Accepted, it's moved to WIP bucket"  if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
+        #                request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('estimate'))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
@@ -1112,17 +1112,17 @@ def Completed_Form(request,requestid):
                 inst.save()
                 inst1 = form1.save(commit=False)
                 inst1.save()
-                dataforemail(username= request_owner,
-                        requestid = requestid,
-                        sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) ,
-                        L1_user= 'Request has been ' + str(inst1.statusdetail) ,
-                        sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail)  ,
-                        L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) ,
-                        sub_miteam='Request ID ' + str(requestid) + ' has been' + str(inst1.statusdetail) ,
-                        L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail),
-                        sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
-                        L1_manager='Request been completed',
-                        request_status=str(inst1.statusdetail))
+        #        dataforemail(username= request_owner,
+        #                requestid = requestid,
+        #                sub_user= 'Request ID ' + str(requestid) +'  has been ' +str(inst1.statusdetail) ,
+        #                L1_user= 'Request has been ' + str(inst1.statusdetail) ,
+        #                sub_auth='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail)  ,
+        #                L1_auth= 'Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail) ,
+        #                sub_miteam='Request ID ' + str(requestid) + ' has been' + str(inst1.statusdetail) ,
+        #                L1_miteam='Request ID '  + str(requestid) +' has been ' + str(inst1.statusdetail),
+        #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
+        #                L1_manager='Request been completed',
+        #                request_status=str(inst1.statusdetail))
                 return HttpResponseRedirect(reverse('wip'))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
