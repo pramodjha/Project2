@@ -2,7 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy, resolve
+from django.urls import reverse
 
 
 
