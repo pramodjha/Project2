@@ -66,6 +66,8 @@ urlpatterns = [
 # 7) Employee Detail
 	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'viewDetail'),
 	url(r'^staff_edit_form/',views.Staff_Edit_Form, name = 'editstaffdetail'),
+	url(r'^staff_edit_manager_form/(?P<id>\d+)$',views.Staff_Edit_Manager_Form, name = 'editstaffbymanager'),
+
 # 8) Internal Task
 	url(r'^internal_task_detail_view/',views.Internal_Task_Detail_View, name = 'internaltaskdetail'),
 	url(r'^internal_task_add_form/',views.Internal_Task_Add_Form, name = 'addinternaltaskdetail'),

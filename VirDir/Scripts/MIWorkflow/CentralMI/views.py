@@ -509,9 +509,8 @@ def Report_Add_Form(request):
 def Report_Edit_Form(request,requestid):
     activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='')
     group_name = is_group(request,username=username)
-
-    e = Activity.objects.get(pk=requestid)
-    model = Activity.objects.filter(pk=requestid)
+    e = Activity.objects.get(activityid=requestid)
+    model = Activity.objects.filter(activityid=requestid)
     form = ActivityForm(instance=e)
     if request.method == 'POST':
         e = Activity.objects.get(pk=requestid)
@@ -614,10 +613,8 @@ def Staff_Detail_View(request):
 def Staff_Edit_Form(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='')
     group_name = is_group(request,username=username)
-
     userid = User.objects.get(username=username).pk
     e1 = User.objects.get(pk=userid)
-    print(e1)
     e = Mimember.objects.get(username=userid)
     model1 = User.objects.filter(username__in=username)
     model = Mimember.objects.filter(username__in=[userid])
@@ -639,6 +636,28 @@ def Staff_Edit_Form(request):
     else:
         return render(request, 'CentralMI/10b_staff_edit_form.html',{'form':form,'form1':form1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
     return render(request, 'CentralMI/10b_staff_edit_form.html',{'form':form,'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
+@login_required
+def Staff_Edit_Manager_Form(request,id):
+    detail = "managerview"
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='')
+    group_name = is_group(request,username=username)
+    userid = User.objects.get(id=id).pk
+    e1 = User.objects.get(pk=userid)
+    model1 = User.objects.filter(username__in=username)
+    form1 = UserForm(instance=e1)
+    if request.method == 'POST':
+        form1 = UserForm (request.POST,instance=e1)
+        if  form1.is_valid():
+            inst1 = form1.save(commit=True)
+            inst1.save()
+            return HttpResponseRedirect(reverse('viewDetail'))
+        else:
+            return render(request, 'CentralMI/15a_ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/10b_staff_edit_form.html',{'form1':form1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'detail':detail})
+    return render(request, 'CentralMI/10b_staff_edit_form.html',{'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'detail':detail})
 
 
 ############### Internal Task detailview

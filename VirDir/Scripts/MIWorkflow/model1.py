@@ -31,7 +31,7 @@ class Acceptrejectoption(models.Model):
 
 
 class Activity(models.Model):
-    reportid = models.AutoField(primary_key=True)
+    activityid = models.AutoField(primary_key=True)
     registereddate = models.DateTimeField()
     name = models.CharField(max_length=255, blank=True, null=True)
     frequency = models.ForeignKey('Frequency', models.DO_NOTHING, db_column='frequency', blank=True, null=True)
@@ -270,7 +270,7 @@ class Errorlog(models.Model):
     error_id = models.AutoField(primary_key=True)
     errorlog_date = models.DateTimeField()
     error_occurancedate = models.DateTimeField()
-    error_report = models.ForeignKey('Reports', models.DO_NOTHING, db_column='error_report')
+    error_report = models.ForeignKey(Activity, models.DO_NOTHING, db_column='error_report')
     error_reportedby = models.CharField(max_length=50)
     error_reportedteam = models.CharField(max_length=50)
     error_reportedto = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedto')
@@ -309,7 +309,6 @@ class Feedback(models.Model):
     feedback_date = models.DateTimeField()
     feedback_question = models.ForeignKey('FeedbackQuestion', models.DO_NOTHING, db_column='feedback_question')
     feedback_text = models.CharField(max_length=255, blank=True, null=True)
-    reports = models.IntegerField(blank=True, null=True)
     activity = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activity', blank=True, null=True)
 
     class Meta:

@@ -37,7 +37,7 @@
       <td >Super User</td>
       <td >Staff</td>
       <td >Active</td>
-
+      <td >Edit</td>
       </tr>
     </thead>
     <tbody class="">
@@ -59,6 +59,8 @@
       <td>{{data.is_superuser }}</td>
       <td>{{data.is_staff }}</td>
       <td>{{data.is_active }}</td>
+      <td><a href="{% url 'editstaffbymanager' data.id %}" class="glyphicon glyphicon-plus" >Edit</td>
+
       {% endfor %}
       </tr></br>
 

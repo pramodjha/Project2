@@ -505,25 +505,6 @@ class Errortype(models.Model):
     def __str__(self):
         return str(self.error_type)
 
-class Errorlog(models.Model):
-    error_id = models.AutoField(primary_key=True)
-    errorlog_date = models.DateTimeField(default= datetime.datetime.now())
-    error_occurancedate = models.DateField(default= datetime.date.today)
-    error_report = models.ForeignKey('Reports', models.DO_NOTHING, db_column='error_report')
-    error_reportedby = models.CharField(max_length=50)
-    error_reportedteam = models.CharField(max_length=50)
-    error_reportedto = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedto')
-    error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
-    error_description = models.TextField()
-    errordocument = models.FileField(upload_to='errordocument/',blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'errorlog'
-
-    def __str__(self):
-        return str(self.error_id)
-
 
 
 class FeedbackQuestion(models.Model):
@@ -571,7 +552,7 @@ class OtStatus(models.Model):
 
 
 class Activity(models.Model):
-    reportid = models.AutoField(primary_key=True)
+    activityid = models.AutoField(primary_key=True)
     registereddate = models.DateTimeField(default= datetime.datetime.now())
     name = models.CharField(max_length=255, blank=True, null=True)
     frequency = models.ForeignKey('Frequency', models.DO_NOTHING, db_column='frequency', blank=True, null=True)
@@ -592,6 +573,26 @@ class Activity(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+class Errorlog(models.Model):
+    error_id = models.AutoField(primary_key=True)
+    errorlog_date = models.DateTimeField(default= datetime.datetime.now())
+    error_occurancedate = models.DateField(default= datetime.date.today)
+    error_report = models.ForeignKey(Activity, models.DO_NOTHING, db_column='error_report')
+    error_reportedby = models.CharField(max_length=50)
+    error_reportedteam = models.CharField(max_length=50)
+    error_reportedto = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedto')
+    error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
+    error_description = models.TextField()
+    errordocument = models.FileField(upload_to='errordocument/',blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'errorlog'
+
+    def __str__(self):
+        return str(self.error_id)
 
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
