@@ -1702,7 +1702,7 @@ def TimeTracker_View(request):
             if inst.requestcategorys == None or inst.requestsubcategory == None or inst.totaltime == None or (inst.requestdetail!=None and inst.reports!=None):
                 form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
                 model = info.modelTracker
-                return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+                return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
             else:
                 inst.save()
             form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
@@ -1714,7 +1714,7 @@ def TimeTracker_View(request):
             dvAll = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=None,teamdetail=teamid,member=memberid,output_type='timetracker')
             dvcore = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
             dvutilisation = info.define_day_week_month1(days_range=1,range_type='setdate',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-            return render(request, 'CentralMI/rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+            return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
         else:
             pagename = "report"
             errormsg1 = "Something went Wrong"
