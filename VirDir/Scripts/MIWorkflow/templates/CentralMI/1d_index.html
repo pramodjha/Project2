@@ -143,14 +143,15 @@
 
 
 <script>
+
 $("#id_teamfilter").change(function () {
-    var member_id = $(this).val();  // get the selected country ID from the HTML input
-   console.log(member_id)
+    var team_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(team_id)
    $.ajax({
 
      url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
      data: {
-       'mimemberid': member_id     // add the country id to the GET parameters
+       'team_id': team_id     // add the country id to the GET parameters
      },
        success: function (data) {   // `data` is the return of the `load_cities` view function
        $("#id_memberfilter").html(data);  // replace the contents of the city input with the data that came from the server
@@ -161,16 +162,15 @@ $("#id_teamfilter").change(function () {
 
 
  $(".btn-default").click(function () {
-      var member_id = document.getElementById("id_teamfilter").value;
-      console.log(member_id)
-      alert(member_id)
+      var url = $("#extractdata").attr("data-mimember-url");
+      var team_id = document.getElementById("id_teamfilter").value;
+      console.log(team_id)
       $.ajax({
-
-        url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
         data: {
-          'mimemberid': member_id,
+          'team_id': team_id,
         },
-          done: function (data) {
+          success: function (data) {
           $("#id_memberfilter").html(data);
             // replace the contents of the city input with the data that came from the server
         }

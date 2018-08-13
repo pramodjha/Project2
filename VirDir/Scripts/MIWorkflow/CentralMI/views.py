@@ -38,18 +38,18 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from  .decorators import user_permission
 from django.urls import reverse
+#import django-excel as excel
+#import pyexcel.ext.xls
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
-@login_required
-def Report_create(request):
-    form = ActivityForm()
-    context = {'form': form}
-    html_form = render_to_string('books/includes/partial_book_create.html',
-        context,
-        request=request,
-    )
-    return JsonResponse({'html_form': html_form})
+
+#def export_excel(self, request):
+#    response = excel.make_response_from_a_table(Requestdetail, 'xls')
+#    response['Content-Disposition'] = 'attachment; filename="books.xls"'
+#    return response
+
 
 @login_required
 def is_group(request,username):
@@ -93,6 +93,90 @@ def data_extraction(request,parameter1=None,parameter2=None):
             ]
     data = dictfetchall(ret)
     return data
+
+
+def Timetrckers_Summary(request):
+    df1 = pd.DataFrame(list(Timetrackers.objects.all().values()))
+    df2 = pd.DataFrame(list(Mimember.objects.all().values()))
+    df3 = pd.DataFrame(list(AuthUser.objects.all().values()))
+    df4 = pd.DataFrame(list(Requestsubcategory.objects.all().values()))
+    df_merge1 = pd.merge(df1, df2,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
+    df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['username_id'], right_on = ['id'])
+    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['requestsubcategory_id'], right_on = ['requestsubcategoryid'])
+    pivot = pd.pivot_table(df_merge3,index=['trackingdatetime','core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+    data = pivot.to_html(classes="table cell-border")
+    return render(request, 'CentralMI/1d_test.html', {'data' : data})
+
+def OT_Summary(request):
+    df1 = pd.DataFrame(list(OtDetail.objects.all().values()))
+    df2 = pd.DataFrame(list(Timetrackers.objects.all().values()))
+    df3 = pd.DataFrame(list(Mimember.objects.all().values()))
+    df4 = pd.DataFrame(list(AuthUser.objects.all().values()))
+    df_merge1 = pd.merge(df1, df2,  how='left', left_on=['timetrackers_id'], right_on = ['timetrackerid'])
+    df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
+    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['username_id'], right_on = ['id'])
+    pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
+    data = pivot.to_html(classes="table cell-border")
+    return render(request, 'CentralMI/1d_test.html', {'data' : data})
+
+import datetime as dt
+def Workflow_Summary(request):
+    df01 = pd.DataFrame(list(Requestdetail.objects.all().values()))
+    df02 = pd.DataFrame(list(Authorisedetail.objects.all().values()))
+    df03 = pd.DataFrame(list(Assigneddetail.objects.all().values()))
+    df04 = pd.DataFrame(list(Overviewdetail.objects.all().values()))
+    df05 = pd.DataFrame(list(Estimationdetail.objects.all().values()))
+    df06 = pd.DataFrame(list(Acceptrejectdetail.objects.all().values()))
+    df07 = pd.DataFrame(list(Completeddetail.objects.all().values()))
+    df08 = pd.DataFrame(list(Prioritydetail.objects.all().values()))
+    df09 = pd.DataFrame(list(Requesttypedetail.objects.all().values()))
+    df10 = pd.DataFrame(list(Mimember.objects.all().values()))
+    df11 = pd.DataFrame(list(AuthUser.objects.all().values()))
+    df_merge1 = pd.merge(df01, df02,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+    df_merge2 = pd.merge(df_merge1, df03,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+    df_merge3 = pd.merge(df_merge2, df04,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+    df_merge4 = pd.merge(df_merge3, df05,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+    df_merge5 = pd.merge(df_merge4, df06,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+    df_merge6 = pd.merge(df_merge5, df07,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+    df_merge7 = pd.merge(df_merge6, df08,  how='left', left_on=['prioritydetail_id'], right_on = ['requestpriorityid'])
+    df_merge8 = pd.merge(df_merge7, df09,  how='left', left_on=['requesttypedetail_id'], right_on = ['requesttypeid'])
+    df_merge9 = pd.merge(df_merge8, df10,  how='left', left_on=['username_id'], right_on = ['username_id'])
+    df_merge10 = pd.merge(df_merge9, df11,  how='left', left_on=['username_id'], right_on = ['id'])
+
+    df_merge10['requestraiseddate'] = df_merge10['requestraiseddate'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
+    df_merge10['requestraised_monthyear'] = df_merge10['requestraiseddate'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
+    df_merge10['assigneddate'] = df_merge10['assigneddate'].apply(lambda x:
+                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
+    df_merge10['assigneddate_monthyear'] = df_merge10['assigneddate'].apply(lambda x:
+                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
+    df_merge10['completeddate'] = df_merge10['completeddate'].apply(lambda x:
+                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
+    df_merge10['completeddate_monthyear'] = df_merge10['completeddate'].apply(lambda x:
+                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
+
+    #print(df_merge2.head(5))
+    #print(df11.head(5))
+    pivot_daily_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+    pivot_monthly_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+    pivot_daily_priority = pd.pivot_table(df_merge10,index=['requestraiseddate'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+    pivot_monthly_priority = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+    pivot_daily_assigned = pd.pivot_table(df_merge10,index=['assigneddate'], columns='assignedto_id', values='assignedid',aggfunc=len)
+    pivot_monthly_assigned = pd.pivot_table(df_merge10,index=['assigneddate_monthyear'], columns='assignedto_id', values='assignedid',aggfunc=len)
+    pivot_daily_completed = pd.pivot_table(df_merge10,index=['completeddate'], columns='completedby_id', values='completedid',aggfunc=len)
+    pivot_monthly_completed = pd.pivot_table(df_merge10,index=['completeddate_monthyear'], columns='completedby_id', values='completedid',aggfunc=len)
+
+    pivot_daily_compare = pivot_daily_assigned.merge(pivot_daily_completed, left_index=True, right_index=True, how = 'outer')
+    pivot_monthly_compare = pivot_monthly_assigned.merge(pivot_monthly_completed, left_index=True, right_index=True, how = 'outer')
+
+    #pivot_requestraised_monthly
+    data = pivot_daily_compare.to_html(classes="table cell-border")
+    data1 = pivot_monthly_compare.to_html(classes="table cell-border")
+
+    return render(request, 'CentralMI/1d_test.html', {'data' : data,'data1':data1})
+
+
 
 @login_required
 def setdate(request):
@@ -177,15 +261,15 @@ def Sign_In_View(request):
                     return HttpResponseRedirect(reverse('home'))
                 else:
                     form =  UsersigninForm()
-                    error = 'NoError'
+                    error = 'Error'
                     return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
             else:
                 form =  UsersigninForm()
                 error = 'Error'
-                return render(request,'CentralMI/15a_ErrorPage.html')
+                return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
         else:
             form =  UsersigninForm()
-            error = 'NoError'
+            error = 'Error'
             return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
     else:
         form =  UsersigninForm()
@@ -1176,6 +1260,7 @@ def filterform(request,username):
 #    if authority == "Group2":
     if request.method == 'POST':
         form =  FilteredForm(request.POST)
+
         if form.is_valid():
             teamfilter = form.cleaned_data['teamfilter']
             memberfilter = form.cleaned_data['memberfilter']
@@ -1183,13 +1268,14 @@ def filterform(request,username):
                 teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
                 userid = User.objects.get(username__in=[memberfilter]).id
                 memberid = Mimember.objects.get(username__in=[userid]).mimemberid
+#                form.fields['memberfilter'] =  Mimember.objects.filter(teamdetail__in=[teamfilter])
             elif teamfilter != None and memberfilter == None:
                 teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
                 memberid = None
             elif teamfilter == None and memberfilter == None:
                 teamid = None
                 memberid = None
-                #form.fields['memberfilter'] =  Mimember.objects.all()
+
 #            else:
 #                teamid = None
 #                memberid = None
@@ -1231,7 +1317,6 @@ def HomePage_Data(request,username,info):
 def Index(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
     group_name = is_group(request,username=username)
-    print(group_name)
     if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
         mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form = HomePage_Data(request,username=username,info=info)
         return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
@@ -1802,11 +1887,62 @@ def Load_Activity(request):
         errormsg1 = "Something went Wrong"
         return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
 
+def Load_Signup(request):
+    try:
+        username = request.GET.get('username')
+        emailid = request.GET.get('emailid')
+        password = request.GET.get('password')
+        passwordagain = request.GET.get('passwordagain')
+        print(username)
+#        print(passwordagain)
+#        print(password)
+#        print(username)
+        try:
+            lengthofusername = len(username)
+            print(lengthofusername)
+            username_exist = User.objects.filter(username__in=[username]).exists()
+            print(username_exist)
+            active_field = 1
+        except:
+            username_exist = None
+            lengthofusername = None
+#        print(username_exist)
+        try:
+            lengthofemail = len(emailid)
+            email_exist = User.objects.filter(email__in=[emailid]).exists()
+            active_field = 2
+        except:
+            lengthofemail = None
+            email_exist = None
+
+        try:
+            lengthofpassword = len(passwordagain)
+            #print(lengthofpassword)
+            password_match = True if passwordagain == password else False
+            print(password_match)
+            active_field = 3
+        except:
+            lengthofpassword = None
+            password_match = None
+
+        #print(password_match)
+        #print(passwordagain)
+        #print(email_exist)
+        #print(lengthofemail)
+        #check = username_exist == True or lengthofusername > 5
+#        print(check)
+        #print(activities)
+        return render(request, 'CentralMI/1c_username_check.html', {'active_field':active_field,'username_exist':username_exist,'lengthofusername':lengthofusername,'email_exist':email_exist,'lengthofemail':lengthofemail,'password_match':password_match,'lengthofpassword':lengthofpassword})
+    except:
+        pagename = "report"
+        errormsg1 = "Something went Wrong"
+        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
+
+
 @login_required
 def Load_Mimember(request):
-    mimember_id = request.GET.get('mimemberid')
-    mimembers = Mimember.objects.filter(teamdetail__in=[mimember_id])
-    print('load_member')
+    team_id = request.GET.get('team_id')
+    mimembers = Mimember.objects.filter(teamdetail__in=[team_id])
     print(mimembers)
     return render(request, 'CentralMI/13c_rebuilding_mimember.html', {'mimembers': mimembers})
 

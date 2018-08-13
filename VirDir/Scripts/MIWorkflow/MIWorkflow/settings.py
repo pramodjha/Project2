@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'debug_panel',
     'report_builder',
-]
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,7 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
             ],
-        
+
         },
     },
 ]

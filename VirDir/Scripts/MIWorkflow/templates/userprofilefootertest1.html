@@ -89,5 +89,16 @@
 <li {% if activetab1 == 'viewdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">View Details</a></li>
 <li {% if activetab1 == 'internaltaskdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'internaltaskdetail' %}">Internal Task Detail</a></li>
 {% endif %}
+{% else %}
+{% if activetab == "home" %}
+<li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>
+<li {% if activetab1 == 'whatwedo' %} class="active" {%else%} {% endif %}><a href="{% url 'whatwedo' %}">What we do? </a></li>
+<li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
+<li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
+<li {% if activetab1 == 'comm_sugg' %} class="active" {%else%} {% endif %}><a href="{% url 'commsugg' %}">Comments & Suggestion </a></li>
+{% elif activetab == "loginrequest" %}
+<li {% if activetab1 == 'addrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'addrequest' %}">Add Request </a></li>
+<li {% if activetab1 == 'checkstatus' %} class="active" {%else%} {% endif %}><a href="{% url 'checkstatus' %}">Check Status </a></li>
+{% endif %}
 
 {% endif %}

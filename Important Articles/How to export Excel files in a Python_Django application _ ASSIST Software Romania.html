@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<!-- saved from url=(0081)https://assist-software.net/blog/how-export-excel-files-python-django-application -->
+<html lang="en" dir="ltr" xmlns:fb="http://ogp.me/ns/fb#" xmlns:og="http://ogp.me/ns#" xmlns:article="http://ogp.me/ns/article#" xmlns:book="http://ogp.me/ns/book#" xmlns:profile="http://ogp.me/ns/profile#" xmlns:video="http://ogp.me/ns/video#" xmlns:product="http://ogp.me/ns/product#" class="js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+<link rel="author" href="https://plus.google.com/u/0/117862944686543157825/">
+<meta property="fb:app_id" content="317903457175">
+<link rel="publisher" href="https://plus.google.com/109464775888304342871">
+<link rel="shortcut icon" href="https://cdnsite1.assist.ro/sites/all/themes/assist/favicon1.ico" type="image/vnd.microsoft.icon">
+<link rel="dns-prefetch" href="https://cdnsite1.assist.ro/">
+<meta http-equiv="x-dns-prefetch-control" content="on">
+<link rel="dns-prefetch" href="https://cdnsite2.assist.ro/">
+<link rel="dns-prefetch" href="https://cdnsite3.assist.ro/">
+<link rel="dns-prefetch" href="https://d2z1ksq6nul58p.cloudfront.net/">
+<meta name="description" content="This tutorial will show you how to export Excel files in Python/Django and how to create an Excel document and make it available for download in a Python/Django application.">
+<meta name="keywords" content="export Excel files in a Python/Django application, creating a working environment for django/python, create an Excel file, xlsxwriter for python, django python xlsx, xlsxwriter resize column width, xlsxwriter resize row height, xlsxwriter create charts">
+<meta name="generator" content="Drupal 7 (http://drupal.org)">
+<link rel="image_src" href="https://assist-software.net/sites/default/files/promoted_images/blog/python-django-xlsx.png">
+<link rel="canonical" href="https://assist-software.net/blog/how-export-excel-files-python-django-application">
+<link rel="shortlink" href="https://assist-software.net/node/300">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://assist-software.net/blog/how-export-excel-files-python-django-application">
+<meta property="og:title" content="How to export Excel files in a Python/Django application">
+<meta property="og:image" content="https://assist-software.net/sites/default/files/promoted_images/blog/python-django-xlsx.png">
+<meta property="article:published_time" content="2016-07-25T11:10:25+03:00">
+<meta property="article:modified_time" content="2018-06-19T15:03:03+03:00">
+<meta itemprop="name" content="How to export Excel files in a Python/Django application">
+<meta itemprop="image" content="https://assist-software.net/sites/default/files/promoted_images/blog/python-django-xlsx.png">
+  <title>How to export Excel files in a Python/Django application | ASSIST Software Romania</title>
+  <link rel="stylesheet" href="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/css_YGHHZUT2Jeyvtyih-0KNd8pwzb7NCNFXRLxS6nrkSTs.css" media="all">
+<link type="text/css" rel="stylesheet" href="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/css_ZWPWucire0gNZjcOKI_ScbXqCk_5fY1aiC_sYgYUhu4.css" media="all">
+<link type="text/css" rel="stylesheet" href="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/css_9MGnhiNBFbYhktO2-fX-y6fPX7bomEus1Z0L_ZaOOko.css" media="all">
+<style>#sliding-popup.sliding-popup-bottom,#sliding-popup.sliding-popup-bottom .eu-cookie-withdraw-banner,.eu-cookie-withdraw-tab{background:#1e3e61;}#sliding-popup.sliding-popup-bottom.eu-cookie-withdraw-wrapper{background:transparent}#sliding-popup .popup-content #popup-text h1,#sliding-popup .popup-content #popup-text h2,#sliding-popup .popup-content #popup-text h3,#sliding-popup .popup-content #popup-text p,.eu-cookie-compliance-more-button,.eu-cookie-compliance-secondary-button,.eu-cookie-withdraw-tab{color:#fff !important;}.eu-cookie-withdraw-tab{border-color:#fff;}
+</style>
+<link type="text/css" rel="stylesheet" href="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/css_0rvDbu1IHB_s1p5FKB1krvC24uNHGfwXUeARP2XrCA4.css" media="all">
+  <!-- HTML5 element support for IE6-8 -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+<script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/cb=gapi.loaded_3" async=""></script><script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/cb=gapi.loaded_2" async=""></script><script id="twitter-wjs" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/widgets.js.download"></script><script async="" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/analytics.js.download"></script><script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/cb=gapi.loaded_1" async=""></script><script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/cb=gapi(2).loaded_0" async=""></script><script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/secureAnonymousFramework"></script><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:-webkit-sticky;top:0}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}
+.fb_customer_chat_bounce_in_v1{animation-duration:250ms;animation-name:fb_bounce_in_v1}.fb_customer_chat_bounce_out_v1{animation-duration:250ms;animation-name:fb_bounce_out_v1}.fb_customer_chat_bounce_in_v2{animation-duration:300ms;animation-name:fb_bounce_in_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2{animation-duration:300ms;animation-name:fb_bounce_out_v2;transition-timing-function:ease-in}.fb_customer_chat_bounce_in_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_in_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bounce_out_v2_mobile_chat_started{animation-duration:300ms;animation-name:fb_bounce_out_v2_mobile_chat_started;transition-timing-function:ease-in}.fb_customer_chat_bubble_pop_in{animation-duration:250ms;animation-name:fb_customer_chat_bubble_bounce_in_animation}.fb_customer_chat_bubble_animated_no_badge{box-shadow:0 3px 12px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_no_badge:hover{box-shadow:0 5px 24px rgba(0, 0, 0, .3)}.fb_customer_chat_bubble_animated_with_badge{box-shadow:-5px 4px 14px rgba(0, 0, 0, .15);transition:box-shadow 150ms linear}.fb_customer_chat_bubble_animated_with_badge:hover{box-shadow:-5px 8px 24px rgba(0, 0, 0, .2)}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_bounce_in_v1{0%{opacity:0;transform:scale(.8, .8);transform-origin:bottom right}80%{opacity:.8;transform:scale(1.03, 1.03)}100%{opacity:1;transform:scale(1, 1)}}@keyframes fb_bounce_in_v2{0%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}50%{transform:scale(1.03, 1.03);transform-origin:bottom right}100%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}}@keyframes fb_bounce_in_v2_mobile_chat_started{0%{opacity:0;top:20px}100%{opacity:1;top:0}}@keyframes fb_bounce_out_v1{from{opacity:1}to{opacity:0}}@keyframes fb_bounce_out_v2{0%{opacity:1;transform:scale(1, 1);transform-origin:bottom right}100%{opacity:0;transform:scale(0, 0);transform-origin:bottom right}}@keyframes fb_bounce_out_v2_mobile_chat_started{0%{opacity:1;top:0}100%{opacity:0;top:20px}}@keyframes fb_customer_chat_bubble_bounce_in_animation{0%{bottom:6pt;opacity:0;transform:scale(0, 0);transform-origin:center}70%{bottom:18pt;opacity:1;transform:scale(1.2, 1.2)}100%{transform:scale(1, 1)}}</style><script type="text/javascript" charset="utf-8" async="" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/button.0cb9151550e202c51f74aa69f27a9a61.js.download"></script><style type="text/css">* html #li_ui_li_gen_1533964285963_0 a#li_ui_li_gen_1533964285963_0-link{height:1% !important;}#li_ui_li_gen_1533964285963_0{position:relative !important;overflow:visible !important;display:block !important;}#li_ui_li_gen_1533964285963_0 span{-webkit-box-sizing:content-box !important;-moz-box-sizing:content-box !important;box-sizing:content-box !important;}#li_ui_li_gen_1533964285963_0 a#li_ui_li_gen_1533964285963_0-link{border:0 !important;height:20px !important;text-decoration:none !important;padding:0 !important;margin:0 !important;display:inline-block !important;}#li_ui_li_gen_1533964285963_0 a#li_ui_li_gen_1533964285963_0-link:link, #li_ui_li_gen_1533964285963_0 a#li_ui_li_gen_1533964285963_0-link:visited, #li_ui_li_gen_1533964285963_0 a#li_ui_li_gen_1533964285963_0-link:hover, #li_ui_li_gen_1533964285963_0 a#li_ui_li_gen_1533964285963_0-link:active{border:0 !important;text-decoration:none !important;}#li_ui_li_gen_1533964285963_0 a#li_ui_li_gen_1533964285963_0-link:after{content:"." !important;display:block !important;clear:both !important;visibility:hidden !important;line-height:0 !important;height:0 !important;}#li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-logo{background-image:url(https://static.licdn.com/scds/common/u/images/apps/connect/sprites/sprite_connect_v14.png) !important;background-position:-56px -423px !important;background-repeat:no-repeat !important;background-color:#0077b5 !important;background-size:135px auto !important;cursor:pointer !important;border:0 !important;border-right:1px solid #066094 !important;text-indent:-9999em !important;overflow:hidden !important;padding:0 !important;margin:0 !important;position:absolute !important;left:0px !important;top:0px !important;display:block !important;width:20px !important;height:20px !important;float:right !important;border-radius:2px !important;-webkit-border-radius:2px !important;border-top-right-radius:2px !important;border-bottom-right-radius:2px !important;-webkit-border-top-right-radius:2px !important;-webkit-border-bottom-right-radius:2px !important;}#li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title{color:#fff !important;cursor:pointer !important;display:block !important;white-space:nowrap !important;float:left !important;margin-left:1px !important;vertical-align:top !important;overflow:hidden !important;text-align:center !important;height:18px !important;padding:0 4px 0 23px !important;border:1px solid #000 !important;border-top-color:#0077b5 !important;border-right-color:#0077b5 !important;border-bottom-color:#0077b5 !important;border-left-color:#0077b5 !important;text-shadow:0 -1px #005887 !important;line-height:20px !important;border-radius:2px !important;-webkit-border-radius:2px !important;border-top-right-radius:2px !important;border-bottom-right-radius:2px !important;-webkit-border-top-right-radius:2px !important;-webkit-border-bottom-right-radius:2px !important;background-color:#0077b5 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0077b5), color-stop(100%,#0077b5)) !important; background-image: -webkit-linear-gradient(top, #0077b5 0%, #0077b5 100%) !important;}#li_ui_li_gen_1533964285963_0.hovered #li_ui_li_gen_1533964285963_0-title{border:1px solid #000 !important;border-top-color:#0369a0 !important;border-right-color:#0369a0 !important;border-bottom-color:#0369a0 !important;border-left-color:#0369a0 !important;background-color:#0369a0 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0369a0), color-stop(100%,#0369a0)) !important; background-image: -webkit-linear-gradient(top, #0369a0 0%, #0369a0 100%) !important;}#li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title, #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title{color:#fff !important;border:1px solid #000 !important;border-top-color:#066094 !important;border-right-color:#066094 !important;border-bottom-color:#066094 !important;border-left-color:#066094 !important;background-color:#066094 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#066094), color-stop(100%,#066094)) !important; background-image: -webkit-linear-gradient(top, #066094 0%, #066094 100%) !important;}.IN-shadowed #li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title{}.IN-shadowed #li_ui_li_gen_1533964285963_0.hovered #li_ui_li_gen_1533964285963_0-title{}.IN-shadowed #li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title, .IN-shadowed #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title{}#li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title-text, #li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title-text *{color:#fff !important;font-size:11px !important;font-family:Arial, sans-serif !important;font-weight:bold !important;font-style:normal !important;-webkit-font-smoothing:antialiased !important;display:inline-block !important;background:transparent none !important;vertical-align:top !important;height:18px !important;line-height:20px !important;float:none !important;}#li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title-text strong{font-weight:bold !important;}#li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title-text em{font-style:italic !important;}#li_ui_li_gen_1533964285963_0.hovered #li_ui_li_gen_1533964285963_0-title-text, #li_ui_li_gen_1533964285963_0.hovered #li_ui_li_gen_1533964285963_0-title-text *{color:#fff !important;}#li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title-text, #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title-text, #li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title-text *, #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title-text *{color:#fff !important;}#li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title #li_ui_li_gen_1533964285963_0-mark{display:inline-block !important;width:0px !important;overflow:hidden !important;}.success #li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title{color:#fff !important;border-top-color:#0077b5 !important;border-right-color:#0077b5 !important;border-bottom-color:#0077b5 !important;border-left-color:#0077b5 !important;background-color:#0077b5 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0077b5), color-stop(100%,#0077b5)) !important; background-image: -webkit-linear-gradient(top, #0077b5 0%, #0077b5 100%) !important;}.success #li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title-text, .success #li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title-text *{color:#fff !important;}.IN-shadowed .success #li_ui_li_gen_1533964285963_0 #li_ui_li_gen_1533964285963_0-title{}.success #li_ui_li_gen_1533964285963_0.hovered #li_ui_li_gen_1533964285963_0-title{color:#fff !important;border-top-color:#0369a0 !important;border-right-color:#0369a0 !important;border-bottom-color:#0369a0 !important;border-left-color:#0369a0 !important;background-color:#0369a0 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#0369a0), color-stop(100%,#0369a0)) !important; background-image: -webkit-linear-gradient(top, #0369a0 0%, #0369a0 100%) !important;}.success #li_ui_li_gen_1533964285963_0.hovered #li_ui_li_gen_1533964285963_0-title-text, .success #li_ui_li_gen_1533964285963_0.hovered #li_ui_li_gen_1533964285963_0-title-text *{color:#fff !important;}.success #li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title, .success #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title{color:#fff !important;border-top-color:#066094 !important;border-right-color:#066094 !important;border-bottom-color:#066094 !important;border-left-color:#066094 !important;background-color:#066094 !important;background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#066094), color-stop(100%,#066094)) !important; background-image: -webkit-linear-gradient(top, #066094 0%, #066094 100%) !important;}.success #li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title-text, .success #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title-text, .success #li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title-text *, .success #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title-text *{color:#fff !important;}.IN-shadowed .success #li_ui_li_gen_1533964285963_0.clicked #li_ui_li_gen_1533964285963_0-title, .IN-shadowed .success #li_ui_li_gen_1533964285963_0.down #li_ui_li_gen_1533964285963_0-title{}</style><style>.gc-bubbleDefault{background-color:transparent !important;text-align:left;padding:0 !important;margin:0 !important;border:0 !important;table-layout:auto !important}.gc-reset{background-color:transparent !important;border:0 !important;padding:0 !important;margin:0 !important;text-align:left}.pls-bubbleTop{border-bottom:1px solid #ccc !important}.pls-topTail,.pls-vertShimLeft,.pls-contentLeft{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/border_3.gif) !important}.pls-topTail{background-repeat:repeat-x !important;background-position:bottom !important}.pls-vertShim{background-color:#fff !important;text-align:right}.tbl-grey .pls-vertShim{background-color:#f5f5f5 !important}.pls-vertShimLeft{background-repeat:repeat-y !important;background-position:right !important;height:4px}.pls-vertShimRight{height:4px}.pls-confirm-container .pls-vertShim{background-color:#fff3c2 !important}.pls-contentWrap{background-color:#fff !important;position:relative !important;vertical-align:top}.pls-contentLeft{background-repeat:repeat-y;background-position:right;vertical-align:top}.pls-dropRight{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleDropR_3.png) !important;background-repeat:repeat-y !important;vertical-align:top}.pls-vert,.pls-tailleft,.pls-dropTR .pls-dropBR,.pls-dropBL,.pls-vert img{vertical-align:top}.pls-dropBottom{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleDropB_3.png) !important;background-repeat:repeat-x !important;width:100%;vertical-align:top}.pls-topLeft{background:inherit !important;text-align:right;vertical-align:bottom}.pls-topRight{background:inherit !important;text-align:left;vertical-align:bottom}.pls-bottomLeft{background:inherit !important;text-align:right}.pls-bottomRight{background:inherit !important;text-align:left;vertical-align:top}.pls-tailtop,.pls-tailright,.pls-tailbottom,.pls-tailleft{display:none;position:relative}.pls-tailbottom,.pls-tailtop,.pls-tailright,.pls-tailleft,.pls-dropTR,.pls-dropBR,.pls-dropBL{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleSprite_3.png) !important;background-repeat:no-repeat}.tbl-grey .pls-tailbottom,.tbl-grey .pls-tailtop,.tbl-grey .pls-tailright,.tbl-grey .pls-tailleft,.tbl-grey .pls-dropTR,.tbl-grey .pls-dropBR,.tbl-grey .pls-dropBL{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleSprite-grey.png) !important}.pls-tailbottom{background-position:-23px 0}.pls-confirm-container .pls-tailbottom{background-position:-23px -10px}.pls-tailtop{background-position:-19px -20px}.pls-tailright{background-position:0 0}.pls-tailleft{background-position:-10px 0}.pls-tailtop{vertical-align:top}.gc-bubbleDefault td{line-height:0;font-size:0}.pls-topLeft img,.pls-topRight img,.pls-tailbottom{vertical-align:bottom}.pls-bottomLeft img,.bubbleDropTR,.pls-dropBottomL img,.pls-dropBottom img,.pls-dropBottomR img,.pls-bottomLeft{vertical-align:top}.pls-dropTR{background-position:0 -22px}.pls-dropBR{background-position:0 -27px}.pls-dropBL{background-position:0 -16px}.pls-spacertop,.pls-spacerright,.pls-spacerbottom,.pls-spacerleft{position:static !important}.pls-spinner{bottom:0;position:absolute;left:0;margin:auto;right:0;top:0} </style></head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-300 node-type-blog i18n-en navbar-is-fixed-top eu-cookie-compliance-processed" style="">
+  <div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/QX17B8fU-Vm.html" style="border: none;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></div>
+  <script id="facebook-jssdk" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/sdk.js.download"></script><script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <link rel="manifest" href="https://assist-software.net/manifest.json">
+  <script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/OneSignalSDK.js.download" async=""></script>
+  <script>
+    var OneSignal = window.OneSignal || [];
+    OneSignal.push(["init", {
+      appId: "4d7c68ba-47a3-4320-b8ef-63d3301e32db",
+      autoRegister: true,
+      notifyButton: {
+        enable: false /* Set to false to hide */
+        },
+      }
+    }]);
+  </script>
+
+    
+<a href="https://assist-software.net/contact-us" class="btn get-in-touch-btn shrink">get in touch</a>
+<a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="scrollToTop " style="display: inline;"><span class="glyphicon glyphicon-triangle-top"></span></a>
+<header id="assist">
+  <div class="container-header">
+    <div id="navbar" role="banner" class="navbar navbar-fixed-top navbar-default shrink">
+      <div class="container">
+
+        <div id="top-bar">
+		<div class="container">
+
+				<div class="search-container">
+					<form class="form-search content-search" action="https://assist-software.net/blog/how-export-excel-files-python-django-application" method="post" id="search-block-form" accept-charset="UTF-8"><div><div>
+      <h2 class="element-invisible">Search form</h2>
+    <div class="input-group"><input title="Enter the terms you wish to search for." placeholder="Search" class="form-control form-text" type="text" id="edit-search-block-form--2" name="search_block_form" value="" size="15" maxlength="128"><span class="input-group-btn"><button type="submit" class="btn btn-default"></button></span></div><div class="form-actions form-wrapper form-group" id="edit-actions"><button class="element-invisible btn btn-primary form-submit" type="submit" id="edit-submit--2" name="op" value="Search">Search</button>
+</div><input type="hidden" name="form_build_id" value="form-Ors2HTCZKlPXgCA3cgxt3s_MJYFhhaIrfOaOufI50nE">
+<input type="hidden" name="form_id" value="search_block_form">
+</div>
+</div></form>				</div>
+
+				<ul id="social-list-top">
+						<li class="fb"><a href="https://facebook.com/pages/Assist-Software/297145447125" target="_blank" class="icon icon-top-facebook"></a></li>
+						<li class="yt"><a href="https://www.youtube.com/user/assistsoftwaree" target="_blank" class="icon top-youtube"></a></li>
+						<li class="in"><a href="https://www.linkedin.com/company/assist-software-srl" target="_blank" class="icon icon-top-linkedin"></a></li>
+						<li class="gp"><a href="https://plus.google.com/109464775888304342871/posts" target="_blank" class="icon icon-top-googleplus"></a></li>
+				</ul>
+
+				<ul class="navigation top-small-nav">
+						<li><a href="tel:+40230521100">+40-230-521100</a></li>
+						<li><a href="mailto:hello@assist.ro">hello@assist.ro</a></li>
+						<!--<li class='client-area'><a href="http://red.assist.ro" target="_blank">Client Area</a></li>-->
+				</ul>
+		</div>
+</div>
+
+        <div class="navbar-header">
+                    <a class="logo navbar-btn pull-left" href="https://assist-software.net/" title="Home">
+            <img src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/logo-lightblue.svg" alt="Home">
+          </a>
+          
+          
+          <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+
+
+                  <div class="navbar-collapse collapse">
+            <nav role="navigation">
+                              <ul class="menu nav navbar-nav"><li class="first expanded dropdown"><a href="https://assist-software.net/about-us" data-target="#" class="dropdown-toggle" data-toggle="dropdown">ABOUT US <span class="caret"></span></a><ul class="dropdown-menu"><li class="first leaf"><a href="https://assist-software.net/about-us" title="">Company</a></li>
+<li class="leaf"><a href="https://assist-software.net/assist-culture" title="">Our Culture</a></li>
+<li class="leaf"><a href="https://assist-software.net/about-us/history">Our History</a></li>
+<li class="leaf"><a href="https://assist-software.net/outsourcing" title="">Outsourcing</a></li>
+<li class="leaf"><a href="https://assist-software.net/about-us/certifications" title="">Certifications</a></li>
+<li class="leaf"><a href="https://assist-software.net/about-us/partnerships" title="">Partnerships</a></li>
+<li class="leaf"><a href="https://assist-software.net/testimonials" title="">Testimonials</a></li>
+<li class="last leaf"><a href="https://assist-software.net/news" title="">News</a></li>
+</ul></li>
+<li class="expanded dropdown"><a href="https://assist-software.net/applications" title="" data-target="#" class="dropdown-toggle" data-toggle="dropdown">WHAT WE DO <span class="caret"></span></a><ul class="dropdown-menu"><li class="first leaf"><a href="https://assist-software.net/portfolio">Projects</a></li>
+<li class="leaf"><a href="https://assist-software.net/products">Products</a></li>
+<li class="leaf"><a href="https://assist-software.net/services">Services</a></li>
+<li class="leaf"><a href="https://assist-software.net/applications">Applications</a></li>
+<li class="last leaf"><a href="https://assist-software.net/expertise">Our expertise</a></li>
+</ul></li>
+<li class="leaf"><a href="https://assist-software.net/engineers">ASSIST LABS</a></li>
+<li class="leaf"><a href="https://assist-software.net/blog">BLOG</a></li>
+<li class="expanded dropdown"><a href="https://assist-software.net/assist-culture" data-target="#" class="dropdown-toggle carrers" data-toggle="dropdown">CAREERS <span class="caret"></span></a><ul class="dropdown-menu"><li class="first leaf"><a href="https://assist-software.net/jobs" title="">Open Positions</a></li>
+<li class="leaf"><a href="https://assist-software.net/internships-for-students" title="Study, work and learn | Great balance for working and learning new skills">Internships</a></li>
+<li class="last leaf"><a href="https://assist-software.net/assist-culture" title="">ASSIST Culture</a></li>
+</ul></li>
+<li class="last leaf"><a href="https://assist-software.net/contact-us">CONTACT US</a></li>
+</ul>                                                      </nav>
+          </div>
+        
+
+      </div><!--/container -->
+    </div><!--/navbar -->
+
+      </div><!--/container-header -->
+</header>
+
+<div class="main-container container">
+
+      <header role="banner" id="page-header">
+            <div class="heading-content">
+        <div>
+                      <div class="highlighted-top">  <div class="region region-highlighted-top">
+    <section id="block-custom-init-header-article-category" class="block block-custom-init clearfix">
+
+      
+  TECHNOLOGIES, PYTHON
+</section>
+  </div>
+</div>
+          
+                        <h1 class="page-header">How to export Excel files in a Python/Django application</h1>
+          
+                      <div class="highlighted">  <div class="region region-highlighted">
+    <section id="block-custom-init-header-article-date" class="block block-custom-init clearfix">
+
+      
+  <p>July 25, 2016</p>
+</section>
+  </div>
+</div>
+                  </div>
+      </div>
+    </header> <!-- /#page-header -->
+  
+  
+  <div class="custom-container">
+
+    <div class="aside-share-buttons">
+	<span class="hidden" id="page-url">https://assist-software.net/blog/how-export-excel-files-python-django-application</span>
+  <p class="aside-like">LIKE</p>
+  <div class="fb-like fb_iframe_widget" data-width="70" data-href="https://assist-software.net/blog/how-export-excel-files-python-django-application" data-layout="box_count" data-action="like" data-show-faces="false" data-share="false" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=&amp;container_width=60&amp;href=https%3A%2F%2Fassist-software.net%2Fblog%2Fhow-export-excel-files-python-django-application&amp;layout=box_count&amp;locale=en_US&amp;sdk=joey&amp;share=false&amp;show_faces=false&amp;width=70"><span style="vertical-align: bottom; width: 51px; height: 40px;"><iframe name="f25aceea96afcf4" width="70px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/like.html" style="border: none; visibility: visible; width: 51px; height: 40px;" class=""></iframe></span></div>
+  <div style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 50px; height: 24px;" id="___plusone_0"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 50px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 24px;" tabindex="0" vspace="0" width="100%" id="I0_1533964283239" name="I0_1533964283239" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/fastbutton.html" data-gapiattached="true" title="G+"></iframe></div>
+
+  <p class="aside-share">SHARE</p>
+  <div class="fb-share-button fb_iframe_widget" data-href="https://assist-software.net/blog/how-export-excel-files-python-django-application" data-layout="box_count" data-size="small" data-mobile-iframe="true" fb-xfbml-state="rendered" fb-iframe-plugin-query="app_id=&amp;container_width=60&amp;href=https%3A%2F%2Fassist-software.net%2Fblog%2Fhow-export-excel-files-python-django-application&amp;layout=box_count&amp;locale=en_US&amp;mobile_iframe=true&amp;sdk=joey&amp;size=small"><span style="vertical-align: bottom; width: 59px; height: 40px;"><iframe name="f29447a8fff2fc4" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:share_button Facebook Social Plugin" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/share_button.html" style="border: none; visibility: visible; width: 59px; height: 40px;" class=""></iframe></span></div>
+  <iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 61px; height: 20px;" title="Twitter Tweet Button" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/tweet_button.1025be460f33762a866ea882e1687ff4.en.html"></iframe>
+	<span class="IN-widget" style="line-height: 1; vertical-align: baseline; display: inline-block; text-align: center;"><span style="padding: 0px !important; margin: 0px !important; text-indent: 0px !important; display: inline-block !important; vertical-align: baseline !important; font-size: 1px !important;"><span id="li_ui_li_gen_1533964285963_0"><a id="li_ui_li_gen_1533964285963_0-link" href="javascript:void(0);"><span id="li_ui_li_gen_1533964285963_0-logo">in</span><span id="li_ui_li_gen_1533964285963_0-title"><span id="li_ui_li_gen_1533964285963_0-mark"></span><span id="li_ui_li_gen_1533964285963_0-title-text">Share</span></span></a></span></span></span><script type="IN/Share+init" data-url="https://assist-software.net/blog/how-export-excel-files-python-django-application" data-counter="top"></script>
+	<a class="whatsapp-share-button" href="https://web.whatsapp.com/send?text=https://assist-software.net/blog/how-export-excel-files-python-django-application" data-url="https://assist-software.net/blog/how-export-excel-files-python-django-application" data-action="share/whatsapp/share"></a>
+
+  <p class="aside-follow">FOLLOW</p>
+	<span class="IN-widget" style="line-height: 1; vertical-align: baseline; display: inline-block;"><span style="padding: 0px !important; margin: 0px !important; text-indent: 0px !important; display: inline-block !important; vertical-align: baseline !important; font-size: 1px !important;"><iframe name="easyXDM_IN_Lib_li_gen_1533964285977_1_provider" id="easyXDM_IN_Lib_li_gen_1533964285977_1_provider" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xdrpc.html" frameborder="0" style="width: 65px; height: 62px; display: inline-block;"></iframe></span></span><script type="IN/FollowCompany+init" data-id="369724" data-counter="top"></script>
+</div>
+    <div class="row">
+      
+      <section class="col-sm-12">
+        
+                                                                            <div class="region region-content">
+    <section id="block-system-main" class="block block-system clearfix">
+
+      
+  
+
+<div id="node-300" class="node node-blog clearfix">
+
+      
+  
+  <div class="content">
+    
+    <div class="container article-header">
+      <div class="row">
+              <div class="table-of-contents col-md-6 col-sm-6">
+          <div>
+            <div class="title">Contents</div>
+            <ul class="toc">
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#introduction" target="_blank">Introduction</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#creating-a-working-environment" target="_blank">Creating a working environment</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#how-to-serve-a-file-for-download" target="_blank">How to serve a file for download</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#how-to-create-an-excel-file" target="_blank">How to create an Excel file</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#how-to-add-title-and-headers" target="_blank">How to add title and headers</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#how-to-write-data" target="_blank">How to write data</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#how-to-resize-rows-and-columns" target="_blank">How to resize rows and columns</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#how-to-add-formulas" target="_blank">How to add formulas</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#how-to-add-charts" target="_blank">How to add charts</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#line-charts" target="_blank">Line charts</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#column-charts" target="_blank">Column charts</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#pie-charts" target="_blank">Pie charts</a></li>
+<li><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#conclusions" target="_blank">Conclusions</a></li>
+</ul>
+          </div>
+        </div>
+              
+                  <div class="team-member-container col-md-6 col-sm-6">
+            <div>
+              <a href="https://assist-software.net/team/irina-popovici" target="_blank"><img class="img-responsive" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/Popovici Irina.jpg" width="100" height="100" alt="Popovici Irina"></a>              <p class="article-author">
+                <a href="https://assist-software.net/team/irina-popovici" target="_blank">Irina  POPOVICI</a>              </p>
+              
+              
+                              <p class="article-job">Web Developer                                  at <span>ASSIST</span></p>
+                                            
+              <p>The computing scientist’s main challenge is not to get confused by the complexities of his own making. - E. W. Dijkstra</p>
+            </div>
+          </div>
+          
+        
+      </div>
+    </div>
+
+    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><h2 id="introduction">Introduction</h2>
+
+<p>When creating a web management application, many clients require pages which display statistics. Usually this feature comes along with the option to download the data in an Excel and/or PDF format. Therefore, this tutorial will show you how to create an Excel document and make it available for download in a Python/Django application.</p>
+
+<h2 id="creating-a-working-environment">Creating a working environment</h2>
+
+<p>First of all, when working with Django applications it is advised to create an environment (with <a href="https://pypi.python.org/pypi/virtualenv" target="_blank">virualenv</a>) and install all the modules in that environment. This practice is very useful when you’re working on different websites that don’t use the same versions.</p>
+
+<p>Speaking of modules, in this example we will be using:</p>
+
+<ul><li><a href="https://www.python.org/" target="_blank">Python </a>2.7</li>
+	<li><a href="https://docs.djangoproject.com/en/1.8/" target="_blank">Django</a> 1.8.2</li>
+	<li><a href="https://xlsxwriter.readthedocs.org/" target="_blank">XlsxWriter</a> 0.7.3</li>
+</ul><p>In order to expose the features brought by the XlsxWriter module, we created a simple Python/Django application, which is available for download on <a href="https://github.com/assist-software/python-django-exporting-files" target="_blank"><strong>Github</strong></a>. It consists of saving weather data for multiple towns. The user can add towns and weather information through the Django Admin interface, which is generated automatically. The front page for this website displays the current weather for the available towns. Moreover, the site contains a page that presents the weather history data:</p>
+
+<p><img alt="Django application weather history table" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/django-application-weather-history-table.png" style="width: 870px; height: 232px;"></p>
+
+<p>The user can filter the data by town, like in the above image, or select the default option which shows the history for all the towns. You can notice that there is an “Excel Report” button, hence, that is the button that will trigger the Excel file download.</p>
+
+<h2 id="how-to-serve-a-file-for-download">How to serve a file for download</h2>
+
+<p>To begin with, in the HTML file there is a form that contains the “Excel Report” button. Therefore, in the corresponding Django view we receive the request to download ‘excel’. Thus, we have to send the file to the user and we can do this through the following code. The result is that the user receives a file named “Report.xlsx”:</p>
+
+<div><div id="highlighter_315187" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java keyword">if</code> <code class="java string">'excel'</code> <code class="java plain">in request.POST:</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">response = HttpResponse(content_type=</code><code class="java string">'application/vnd.ms-excel'</code><code class="java plain">)</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">response[</code><code class="java string">'Content-Disposition'</code><code class="java plain">] = </code><code class="java string">'attachment; filename=Report.xlsx'</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">xlsx_data = WriteToExcel(weather_period, town)</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">response.write(xlsx_data)</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">return</code> <code class="java plain">response</code></div></div></td></tr></tbody></table></div></div>
+
+<p>The “WriteToExcel” function is responsible for creating the Excel file. It has two parameters:</p>
+
+<ul><li><em>weather_period</em>, that represents the data after the filtering, we will utilize it for writing information in the file;</li>
+	<li><em>town</em>, its default value is None and is used in case the user selects a town for filtering.</li>
+</ul><p>There are two options for writing the excel logic: either in the view or, like in this example, in a different file (named “<em>excel_utils.py</em>”). The second option offers a more clean and modular code.</p>
+
+<h2 id="how-to-create-an-excel-file">How to create an Excel file</h2>
+
+<p>The next step is to add code to the “WriteToExcel” function and we will be doing that by using the <a href="https://xlsxwriter.readthedocs.org/" target="_blank">XlsxWriter</a> module. The following&nbsp;code will create a blank Excel file.</p>
+
+<div><div id="highlighter_321042" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java keyword">import</code> <code class="java plain">StringIO</code></div><div class="line number2 index1 alt1"><code class="java keyword">import</code> <code class="java plain">xlsxwriter</code></div><div class="line number3 index2 alt2">&nbsp;</div><div class="line number4 index3 alt1"><code class="java plain">def WriteToExcel(weather_data, town=None):</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">output = StringIO.StringIO()</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">workbook = xlsxwriter.Workbook(output)</code></div><div class="line number7 index6 alt2">&nbsp;</div><div class="line number8 index7 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># Here we will adding the code to add data</code></div><div class="line number9 index8 alt2">&nbsp;</div><div class="line number10 index9 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">workbook.close()</code></div><div class="line number11 index10 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">xlsx_data = output.getvalue()</code></div><div class="line number12 index11 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># xlsx_data contains the Excel file</code></div><div class="line number13 index12 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">return</code> <code class="java plain">xlsx_data</code></div></div></td></tr></tbody></table></div></div>
+
+<h2 id="how-to-add-title-and-headers">How to add title and headers</h2>
+
+<p>Before adding any actual data to the file, we can create a table in the Excel, which includes a title and some headers. The code associated with this implementation consists of:</p>
+
+<ul><li>Adding a working Sheet:</li>
+</ul><div><div id="highlighter_246524" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">worksheet_s = workbook.add_worksheet(</code><code class="java string">"Summary"</code><code class="java plain">)</code></div></div></td></tr></tbody></table></div></div>
+
+<ul><li>Creating styles which can be used later when we will be adding the data. For example, we may want a bigger font size for the title, to make it to bold or &nbsp;we can add a color background for the headers:</li>
+</ul><div><div id="highlighter_444360" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">title = workbook.add_format({</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'bold'</code><code class="java plain">: True,</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'font_size'</code><code class="java plain">: </code><code class="java value">14</code><code class="java plain">,</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'align'</code><code class="java plain">: </code><code class="java string">'center'</code><code class="java plain">,</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'valign'</code><code class="java plain">: </code><code class="java string">'vcenter'</code></div><div class="line number6 index5 alt1"><code class="java plain">})</code></div><div class="line number7 index6 alt2"><code class="java plain">header = workbook.add_format({</code></div><div class="line number8 index7 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'bg_color'</code><code class="java plain">: </code><code class="java string">'#F7F7F7'</code><code class="java plain">,</code></div><div class="line number9 index8 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'color'</code><code class="java plain">: </code><code class="java string">'black'</code><code class="java plain">,</code></div><div class="line number10 index9 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'align'</code><code class="java plain">: </code><code class="java string">'center'</code><code class="java plain">,</code></div><div class="line number11 index10 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'valign'</code><code class="java plain">: </code><code class="java string">'top'</code><code class="java plain">,</code></div><div class="line number12 index11 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'border'</code><code class="java plain">: </code><code class="java value">1</code></div><div class="line number13 index12 alt2"><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<ul><li>Adding a title that is written along more columns. In order to implement this you can use the merge_range function, along with serving the columns, the text and the title style already defined:</li>
+</ul><div><div id="highlighter_65455" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">title_text = u</code><code class="java string">"{0} {1}"</code><code class="java plain">.format(ugettext(</code><code class="java string">"Weather History for"</code><code class="java plain">), town_text)</code></div><div class="line number2 index1 alt1"><code class="java plain">worksheet_s.merge_range(</code><code class="java string">'B2:H2'</code><code class="java plain">, title_text, title)</code></div></div></td></tr></tbody></table></div></div>
+
+<ul><li>Adding the headers which actually means writing text to some cells:</li>
+</ul><div><div id="highlighter_7969" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">worksheet_s.write(</code><code class="java value">4</code><code class="java plain">, </code><code class="java value">0</code><code class="java plain">, ugettext(</code><code class="java string">"No"</code><code class="java plain">), header)</code></div><div class="line number2 index1 alt1"><code class="java plain">worksheet_s.write(</code><code class="java value">4</code><code class="java plain">, </code><code class="java value">1</code><code class="java plain">, ugettext(</code><code class="java string">"Town"</code><code class="java plain">), header)</code></div><div class="line number3 index2 alt2"><code class="java plain">worksheet_s.write(</code><code class="java value">4</code><code class="java plain">, </code><code class="java value">3</code><code class="java plain">, ugettext(u</code><code class="java string">"Max T. (℃)"</code><code class="java plain">), header)</code></div><div class="line number4 index3 alt1"><code class="java plain"># the rest of the headers from the HTML file</code></div></div></td></tr></tbody></table></div></div>
+
+<p>Please note that the code in this article will use ugettext function when defining the texts. This is useful if you will add internationalization to the application. Moreover, keep in mind if you want to use unicode characters (such as “℃” or diacritical marks) you have to add u before the string and also define the encoding at the beginning of the file:</p>
+
+<div><div id="highlighter_929310" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">#!/usr/bin/python</code></div><div class="line number2 index1 alt1"><code class="java plain"># -*- coding: utf-</code><code class="java value">8</code> <code class="java plain">-*-</code></div></div></td></tr></tbody></table></div></div>
+
+<p>The result for the code added up till now is:</p>
+
+<p><img alt="XLS writer - add title headers" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-title-headers.png" style="width: 831px; height: 137px;"></p>
+
+<p>But there is a problem, some texts do not fit the columns, thus are not completely visible. The article will tackle this issue in the “How to resize rows and columns” section.</p>
+
+<h2 id="how-to-write-data">How to write data</h2>
+
+<p>After adding a new style for the cells, the data can be added through a simple loop which will write it to the corresponding columns:</p>
+
+<div><div id="highlighter_138891" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java keyword">for</code> <code class="java plain">idx, data in enumerate(weather_data):</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">row = </code><code class="java value">5</code> <code class="java plain">+ idx</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">worksheet_s.write_number(row, </code><code class="java value">0</code><code class="java plain">, idx + </code><code class="java value">1</code><code class="java plain">, cell_center)</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">worksheet_s.write_string(row, </code><code class="java value">1</code><code class="java plain">, data.town.name, cell)</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">worksheet_s.write(row, </code><code class="java value">2</code><code class="java plain">, data.date.strftime(</code><code class="java string">'%d/%m/%Y'</code><code class="java plain">), cell_center)</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># the rest of the data</code></div></div></td></tr></tbody></table></div></div>
+
+<p>In order to avoid creating an additional variable that would be incremented on each loop, we can use the python enumerate feature which automatically returns the index and the object from the list. You can observe that the idx variable is used for writing the value in the Number column. Furthermore, it is used to define a row variable, which along with a column value, determines where the data is written in the Excel file.</p>
+
+<p>Following these modifications the file looks like: &nbsp;</p>
+
+<p><img alt="xlswriter - export Excel files in a Python/Django application" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-data.png" style="width: 832px; height: 443px;"></p>
+
+<h2 id="how-to-resize-rows-and-columns">How to resize rows and columns</h2>
+
+<p>In previous sections, there was an issue with the width of the rows. This problem can have multiple solutions, depending on the desired results:</p>
+
+<p>1. The columns can have a constant width. Suitable examples for this case are Date, Temperature, Wind and Precipitation columns. Thus, the code from below displays the change for Wind column. This line can be added after or even before the loop that adds the data.</p>
+
+<div><div id="highlighter_865380" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">worksheet_s.set_column(</code><code class="java string">'G:G'</code><code class="java plain">, </code><code class="java value">10</code><code class="java plain">)</code></div></div></td></tr></tbody></table></div></div>
+
+<p>Adding this setting to all the columns that suit this solution, modifies the Excel file as follows:</p>
+
+<p><img alt="Add constant column width" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-constant-column-width.png" style="width: 720px; height: 325px;"></p>
+
+<p>2. The columns can adapt their width according to the data that they contain, in this instance: Town and Description. These values have a maximum length constraint in the database. Therefore, we can set a column width according to the biggest length of all the data:</p>
+
+<div><div id="highlighter_799985" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">description_col_width = </code><code class="java value">10</code></div><div class="line number2 index1 alt1"><code class="java plain"># ...</code></div><div class="line number3 index2 alt2"><code class="java keyword">for</code> <code class="java plain">idx, data in enumerate(weather_data):</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># ...</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">worksheet_s.write_string(row, </code><code class="java value">3</code><code class="java plain">, data.description, cell)</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">if</code> <code class="java plain">len(data.description) &gt; description_col_width:</code></div><div class="line number7 index6 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">description_col_width = len(data.description)</code></div><div class="line number8 index7 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># ...</code></div><div class="line number9 index8 alt2"><code class="java plain">worksheet_s.set_column(</code><code class="java string">'D:D'</code><code class="java plain">, description_col_width)</code></div></div></td></tr></tbody></table></div></div>
+
+<p>In this situation it is paramount to set the column options after the loop. Below is an image depicting how the Excel file changed:</p>
+
+<p><img alt="xlsxwriter add dynamic column width" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-dynamic-column-width_0.png" style="width: 870px; height: 274px;"></p>
+
+<p>3. The column can have a constant width, but the row height can vary. The last column, Observations, is where we can apply this condition. In this exercise, the width will be 25, meaning that we will consider that one row cannot have more than 25 characters:</p>
+
+<div><div id="highlighter_695137" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">observations_col_width = </code><code class="java value">25</code></div><div class="line number2 index1 alt1"><code class="java plain"># ...</code></div><div class="line number3 index2 alt2"><code class="java keyword">for</code> <code class="java plain">idx, data in enumerate(weather_data):</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># ...</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">observations = data.observations.replace(</code><code class="java string">'\r'</code><code class="java plain">, </code><code class="java string">''</code><code class="java plain">)</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">worksheet_s.write_string(row, </code><code class="java value">9</code><code class="java plain">, observations, cell)</code></div><div class="line number7 index6 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">observations_rows = compute_rows(observations, observations_col_width)</code></div><div class="line number8 index7 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">worksheet_s.set_row(row, </code><code class="java value">15</code> <code class="java plain">* observations_rows)</code></div><div class="line number9 index8 alt2"><code class="java plain"># ...</code></div><div class="line number10 index9 alt1"><code class="java plain">worksheet_s.set_column(</code><code class="java string">'J:J'</code><code class="java plain">, observations_col_width)</code></div></div></td></tr></tbody></table></div></div>
+
+<p>You can notice that the number of rows is computed using a function, named “compute_rows” (its parameters are the text and the column width):</p>
+
+<div><div id="highlighter_126296" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">def compute_rows(text, width):</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">if</code> <code class="java plain">len(text) &lt; width:</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">return</code> <code class="java value">1</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">phrases = text.replace(</code><code class="java string">'\r'</code><code class="java plain">, </code><code class="java string">''</code><code class="java plain">).split(</code><code class="java string">'\n'</code><code class="java plain">)</code></div><div class="line number5 index4 alt2">&nbsp;</div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">rows = </code><code class="java value">0</code></div><div class="line number7 index6 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">for</code> <code class="java plain">phrase in phrases:</code></div><div class="line number8 index7 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">if</code> <code class="java plain">len(phrase) &lt; width:</code></div><div class="line number9 index8 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">rows = rows + </code><code class="java value">1</code></div><div class="line number10 index9 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">else</code><code class="java plain">:</code></div><div class="line number11 index10 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">words = phrase.split(</code><code class="java string">' '</code><code class="java plain">)</code></div><div class="line number12 index11 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">temp = </code><code class="java string">''</code></div><div class="line number13 index12 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">for</code> <code class="java plain">idx, word in enumerate(words):</code></div><div class="line number14 index13 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">temp = temp + word + </code><code class="java string">' '</code></div><div class="line number15 index14 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># check </code><code class="java keyword">if</code> <code class="java plain">column width exceeded</code></div><div class="line number16 index15 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">if</code> <code class="java plain">len(temp) &gt; width:</code></div><div class="line number17 index16 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">rows = rows + </code><code class="java value">1</code></div><div class="line number18 index17 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">temp = </code><code class="java string">''</code> <code class="java plain">+ word + </code><code class="java string">' '</code></div><div class="line number19 index18 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># check </code><code class="java keyword">if</code> <code class="java plain">it is not the last word</code></div><div class="line number20 index19 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">if</code> <code class="java plain">idx == len(words) - </code><code class="java value">1</code> <code class="java plain">and len(temp) &gt; </code><code class="java value">0</code><code class="java plain">:</code></div><div class="line number21 index20 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">rows = rows + </code><code class="java value">1</code></div><div class="line number22 index21 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java keyword">return</code> <code class="java plain">rows</code></div></div></td></tr></tbody></table></div></div>
+
+<p>Now, the Excel file&nbsp;looks like:</p>
+
+<p><img alt="xlsxwriter add dynamic row height" class="image-big" height="303" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-dynamic-row-height_0.png" width="870"></p>
+
+<p>As you can observe, there are cells that have extra rows. This happens due to the fact that the letters do not have the same width; so even though the number of characters exceeds the set maximum, the text fits in less than the expected space. This solution only simulates an Auto Fit option. As a result, some extra rows may appear when the text has a large number of characters.</p>
+
+<h2 id="how-to-add-formulas">How to add formulas</h2>
+
+<p>Formulas are very useful when presenting statistical data. For instance, in this example, we could compute averages or sums for the suitable columns. The following code implements the average for Max temperatures:</p>
+
+<div><div id="highlighter_349458" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">from django.db.models </code><code class="java keyword">import</code> <code class="java plain">Avg, Sum</code></div><div class="line number2 index1 alt1">&nbsp;</div><div class="line number3 index2 alt2"><code class="java plain">def WriteToExcel(weather_data, town=None):</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain"># ...</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">max_temp_avg = Weather.objects.all().aggregate(Avg(</code><code class="java string">'max_temperature'</code><code class="java plain">))</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">worksheet_s.write_formula(</code></div><div class="line number7 index6 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">row, </code><code class="java value">4</code><code class="java plain">, </code><code class="java string">'=average({0}{1}:{0}{2})'</code><code class="java plain">.format(</code><code class="java string">'E'</code><code class="java plain">, </code><code class="java value">6</code><code class="java plain">, row),</code></div><div class="line number8 index7 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">cell_center, max_temp_avg[</code><code class="java string">'max_temperature__avg'</code><code class="java plain">])</code></div></div></td></tr></tbody></table></div></div>
+
+<p>The formula is added using the <em>write_formula</em> functions which has 5 parameters, three of them are mandatory: row, column, a string defining the formula and the other two are optional: cell style and the computed value (it is useful to add this because when opening the file with an Excel Viewer it will display 0 instead of the expected result).</p>
+
+<p>The file now has another row of data at the end of the table:&nbsp;&nbsp; &nbsp; &nbsp;</p>
+
+<p>&nbsp;<img alt="xlxswriter -Django create xls reports" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-formula.png" style="width: 870px; height: 163px;"> &nbsp;</p>
+
+<h2 id="how-to-add-charts">How to add charts</h2>
+
+<p>Prior to adding code regarding to the charts, we are going to add 2 new working sheets: one for the charts and one where we will be adding the data used for them:</p>
+
+<div><div id="highlighter_723013" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">worksheet_c = workbook.add_worksheet(</code><code class="java string">"Charts"</code><code class="java plain">)</code></div><div class="line number2 index1 alt1"><code class="java plain">worksheet_d = workbook.add_worksheet(</code><code class="java string">"Chart Data"</code><code class="java plain">)</code></div></div></td></tr></tbody></table></div></div>
+
+<p>Secondly, we require a purpose for each one of the charts.</p>
+
+<h2 id="line-charts">Line charts</h2>
+
+<p>In this case, we could use a line chart in order to show temperature data for the towns along a certain amount of time.</p>
+
+<p>First step is to add a chart object:</p>
+
+<div><div id="highlighter_61994" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">line_chart = workbook.add_chart({</code><code class="java string">'type'</code><code class="java plain">: </code><code class="java string">'line'</code><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<p>Afterwards we have to add the data on&nbsp;the “Charts Data” sheet and read it in order to add series to the chart:</p>
+
+<div><div id="highlighter_982165" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">line_chart.add_series({</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'categories'</code><code class="java plain">: </code><code class="java string">'=Chart Data!$A1:$A${0}'</code><code class="java plain">.format(len(dates)),</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'values'</code><code class="java plain">: </code><code class="java string">'=Chart Data!${0}${1}:${0}${2}'</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">.format(letter_max_t, </code><code class="java value">1</code><code class="java plain">, len(data)),</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'marker'</code><code class="java plain">: {</code><code class="java string">'type'</code><code class="java plain">: </code><code class="java string">'square'</code><code class="java plain">},</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'name'</code><code class="java plain">: u</code><code class="java string">"{0} {1}"</code><code class="java plain">.format(ugettext(</code><code class="java string">"Max T."</code><code class="java plain">), t.name)</code></div><div class="line number7 index6 alt2"><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<p>The code&nbsp;from above can be written in a loop which would add this line for all the towns. Also, you can notice the fact that the values for categories and values will be read from the “Chart Data” sheet.</p>
+
+<p>Further steps include:</p>
+
+<ul><li>setting a title</li>
+</ul><div><div id="highlighter_918242" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">line_chart.set_title({</code><code class="java string">'name'</code><code class="java plain">: ugettext(</code><code class="java string">"Maximum and Minimum Temperatures"</code><code class="java plain">)})</code></div></div></td></tr></tbody></table></div></div>
+
+<ul><li>adding options for the x axis, for instance, the labels can contain strings instead of numbers:</li>
+</ul><div><div id="highlighter_899208" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">line_chart.set_x_axis({</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'text_axis'</code><code class="java plain">: True,</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'date_axis'</code><code class="java plain">: False</code></div><div class="line number4 index3 alt1"><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<ul><li>adding options for the y axis, for example, we can add measuring units for the temperature values:</li>
+</ul><div><div id="highlighter_373769" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">line_chart.set_y_axis({</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'num_format'</code><code class="java plain">: u</code><code class="java string">'## ℃'</code></div><div class="line number3 index2 alt2"><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<ul><li>including the chart on the “Charts” Sheet, where we have the option to change the scale. This can be considered as the last step.</li>
+</ul><div><div id="highlighter_142637" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">worksheet_c.insert_chart(</code><code class="java string">'B2'</code><code class="java plain">, line_chart, {</code><code class="java string">'x_scale'</code><code class="java plain">: </code><code class="java value">2</code><code class="java plain">, </code><code class="java string">'y_scale'</code><code class="java plain">: </code><code class="java value">1</code><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<p>The visible changes in the Excel files:</p>
+
+<ul><li>a new sheet containing the chart&nbsp; &nbsp;</li>
+</ul><p><img alt="xlsxwriter add line chart" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-line-chart_0.png" style="width: 870px; height: 217px;"></p>
+
+<ul><li>a new sheet containing data</li>
+</ul><p><img alt="Add data in other sheet - xlsxwriter -Django/python" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-data-on-other-sheet.png" style="width: 477px; height: 197px;"></p>
+
+<h2 id="column-charts">Column charts</h2>
+
+<p>In order to expose the usability of the column charts we are going to display the maximum and minimum value for wind speed for each of the available towns.</p>
+
+<p>The workflow is identical to the previous chart, however, when creating the new chart object we have to change its type:</p>
+
+<div><div id="highlighter_799549" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">bar_chart = workbook.add_chart({</code><code class="java string">'type'</code><code class="java plain">: </code><code class="java string">'column'</code><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<p>Next step is to make aggregations on the data, add it onto the data sheet and then create the series. For example the series for the maximum values is:</p>
+
+<div><div id="highlighter_806635" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">bar_chart.add_series({</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'name'</code><code class="java plain">: </code><code class="java string">'Max Speed'</code><code class="java plain">,</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'values'</code><code class="java plain">: </code><code class="java string">'=Chart Data!${0}${1}:${0}${2}'</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">.format(chr(ord(</code><code class="java string">'A'</code><code class="java plain">) + cell_index + </code><code class="java value">1</code><code class="java plain">), </code><code class="java value">1</code><code class="java plain">, len(towns)),</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'categories'</code><code class="java plain">: </code><code class="java string">'=Chart Data!${0}${1}:${0}${2}'</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">.format(chr(ord(</code><code class="java string">'A'</code><code class="java plain">) + cell_index), </code><code class="java value">1</code><code class="java plain">, len(towns)),</code></div><div class="line number7 index6 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'data_labels'</code><code class="java plain">: {</code><code class="java string">'value'</code><code class="java plain">: True, </code><code class="java string">'num_format'</code><code class="java plain">: u</code><code class="java string">'#0 "km/h"'</code><code class="java plain">}</code></div><div class="line number8 index7 alt1"><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<p>You can notice that we added some formatting to the data labels as well. After adding the title and inserting it into the charts sheet, we can observe the result:</p>
+
+<p><img alt="Add column chart xlsx" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-column-chart.png" style="width: 603px; height: 277px;"></p>
+
+<h2 id="pie-charts">Pie charts</h2>
+
+<p>This time, we will create a pie chart object, which &nbsp;present the percentage of hot, warm and cold days:</p>
+
+<div><div id="highlighter_108396" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">pie_chart = workbook.add_chart({</code><code class="java string">'type'</code><code class="java plain">: </code><code class="java string">'pie'</code><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<p>Like in the previous examples, we have to aggregate the data, write it in the Excel and add the corresponding series:</p>
+
+<div><div id="highlighter_592212" class="syntaxhighlighter  java"><div class="toolbar"><span><a href="https://assist-software.net/blog/how-export-excel-files-python-django-application#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="java plain">pie_chart.add_series({</code></div><div class="line number2 index1 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'name'</code><code class="java plain">: ugettext(</code><code class="java string">'Temperature statistics'</code><code class="java plain">),</code></div><div class="line number3 index2 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'values'</code><code class="java plain">: </code><code class="java string">'=Chart Data!${0}${1}:${0}${2}'</code></div><div class="line number4 index3 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">.format(chr(ord(</code><code class="java string">'A'</code><code class="java plain">) + cell_index), </code><code class="java value">1</code><code class="java plain">, </code><code class="java value">3</code><code class="java plain">),</code></div><div class="line number5 index4 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'categories'</code><code class="java plain">: </code><code class="java string">'=Chart Data!${0}${1}:${0}${2}'</code></div><div class="line number6 index5 alt1"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java plain">.format(chr(ord(</code><code class="java string">'A'</code><code class="java plain">) + cell_index + </code><code class="java value">1</code><code class="java plain">), </code><code class="java value">1</code><code class="java plain">, </code><code class="java value">3</code><code class="java plain">),</code></div><div class="line number7 index6 alt2"><code class="java spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="java string">'data_labels'</code><code class="java plain">: {</code><code class="java string">'percentage'</code><code class="java plain">: True}</code></div><div class="line number8 index7 alt1"><code class="java plain">})</code></div></div></td></tr></tbody></table></div></div>
+
+<p>The main difference from the other charts is that the values are automatically calculated as percentages.</p>
+
+<p>After inserting the chart on the worksheet we have the following result:</p>
+
+<p><img alt="Add pie chart - python/django" class="image-big image-center" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xlsxwriter-add-pie-chart_0.png" style="width: 360px; height: 206px;"></p>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>In conclusion, when creating a Python/Django application that requires to export Excel files, <a href="https://xlsxwriter.readthedocs.org/" target="_blank">XlsxWriter</a>&nbsp;is a very useful module. You can access the official docs for this module where you will find further features and options to add.</p>
+
+<p>Moreover, you can access the whole code for this application on <a href="https://github.com/assist-software/python-django-exporting-files" target="_blank"><strong>Github</strong></a>. Hopefully&nbsp;it will help many developers learn<strong> how to export Excel files in a Python/Django</strong> properly.&nbsp;</p>
+
+<p>In this article, the main subject was creating an Excel file in a Python/Django application. In a future article the attention will be drawn to PDF, another way to export data.</p>
+
+<p><span style="font-size:10px;">* The Excel files from the screenshots were opened with LibreOffice</span></p>
+
+<p>UPDATE: In this article, the main subject was creating an Excel file in a Python/Django application. If you want to <a href="https://assist-software.net/blog/how-create-pdf-files-python-django-application-using-reportlab" target="_blank">export PDF files check this article written by our colleague Petru</a>.</p>
+</div></div></div>
+  </div>
+
+  
+  
+  
+  <div class="share-container">
+    <p>SHARE YOUR LOVE</p>
+
+    <div class="share-buttons clearfix">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fassist-software.net%2Fblog%2Fhow-export-excel-files-python-django-application" class="facebook" title="Share this page on Facebook" target="_blank">Facebook</a>
+      <a href="https://twitter.com/intent/tweet?text=How%20to%20export%20Excel%20files%20in%20a%20PythonDjango%20application&amp;url=https%3A%2F%2Fassist-software.net%2Fblog%2Fhow-export-excel-files-python-django-application" class="twitter" title="Share this page on Twitter" target="_blank">Twitter</a>
+      <a href="https://plus.google.com/share?url=https%3A%2F%2Fassist-software.net%2Fblog%2Fhow-export-excel-files-python-django-application" class="google" title="Share this page on Google+" target="_blank">Google +</a>
+      <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fassist-software.net%2Fblog%2Fhow-export-excel-files-python-django-application" class="linkedin" title="Share this page on Linkedin" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+
+  <div class="fb-comments fb_iframe_widget fb_iframe_widget_fluid" data-href="https://assist-software.net/blog/how-export-excel-files-python-django-application" data-width="100%" data-numposts="15" data-colorscheme="light" fb-xfbml-state="rendered"><span style="height: 2439px;"><iframe id="f803754c897dc8" name="f10573a25ca7a38" scrolling="no" title="Facebook Social Plugin" class="fb_ltr" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/comments.html" style="border: none; overflow: hidden; height: 2439px; width: 100%;"></iframe></span></div>
+
+</div>
+
+
+<div class="row" id="modal-target">
+  <div class="col-xs-12 col-sm-6">
+    <div id="article-nav" class="article-nav">
+      <p>Reading next</p>
+                 <a href="https://assist-software.net/blog/integrating-quality-management-system-software-development-processes" class="prev">
+          <div class="title">Integrating Quality Management System into Software Development Processes</div>
+        </a>
+                 <a href="https://assist-software.net/blog/scrum-framework-roles-activities-and-artifacts" class="prev">
+          <div class="title">SCRUM FRAMEWORK - Roles, Activities, and Artifacts</div>
+        </a>
+                 <a href="https://assist-software.net/blog/rotate-game-object-using-unity-3d-gyroscope" class="prev">
+          <div class="title">Rotate a Game Object using Unity 3D Gyroscope</div>
+        </a>
+            </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-6">
+    <div class="article-tags">
+      <p class="article-tags-title">Tags</p>
+      <div class="post-tag"><a href="https://assist-software.net/tags/xlsxwriter" class="facebook">XlsxWriter</a></div><div class="post-tag"><a href="https://assist-software.net/tags/django" class="facebook">Django</a></div><div class="post-tag"><a href="https://assist-software.net/tags/create-excel-file" class="facebook">create an excel file</a></div><div class="post-tag"><a href="https://assist-software.net/tags/working-environment" class="facebook">working environment</a></div><div class="post-tag"><a href="https://assist-software.net/tags/web-management-application" class="facebook">web management application</a></div><div class="post-tag"><a href="https://assist-software.net/tags/statistics" class="facebook">statistics</a></div><div class="post-tag"><a href="https://assist-software.net/tags/download-data" class="facebook">download data</a></div><div class="post-tag"><a href="https://assist-software.net/tags/serve-file-download" class="facebook">serve a file for download</a></div><div class="post-tag"><a href="https://assist-software.net/tags/python" class="facebook">Python</a></div>    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="header-wrapper">
+          <h2>Keep Reading</h2>
+          <h4>If you liked this article, check out our other blog articles.</h4>
+          
+        </div>
+        <div class="modal-sub-content">
+          <div class="col-sm-6 image-wrapper"><a class="link-whole-image" href="https://assist-software.net/blog/integrating-quality-management-system-software-development-processes"><div class="shadow"><img src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/quality-management-diagram.jpg" class="promoted-image-modal"></div></a><div class="shadow-title"><a href="https://assist-software.net/blog/integrating-quality-management-system-software-development-processes"><p><span class="field-title">Integrating Quality Management System into Software Development Processes</span></p></a></div></div><div class="col-sm-6 image-wrapper"><a class="link-whole-image" href="https://assist-software.net/blog/scrum-framework-roles-activities-and-artifacts"><div class="shadow"><img src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/book-image.png" class="promoted-image-modal"></div></a><div class="shadow-title"><a href="https://assist-software.net/blog/scrum-framework-roles-activities-and-artifacts"><p><span class="field-title">SCRUM FRAMEWORK - Roles, Activities, and Artifacts</span></p></a></div></div>        
+        </div>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<button type="button" class="btn btn-info btn-lg hide" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+
+</section>
+  </div>
+      </section>
+
+      
+    </div>
+  </div>
+
+        <div class="region region-wide">
+    <section id="block-block-7" class="block block-block clearfix">
+
+      
+  <div class="container">
+<div class="row text-center">
+<div class="col-md-12">
+<h2>Ready to make it happen?</h2>
+
+<p>Drop us a line. We’d love to hear from you and see how we can help in solving your digital challenges. As one of the best software outsourcing companies in Romania, Eastern Europe, Europe and the world really, we are sure we can ASSIST.</p>
+<a class="btn btn-default" href="https://assist-software.net/contact-us">GET IN TOUCH</a></div>
+</div>
+</div>
+
+</section>
+  </div>
+  
+</div>
+<footer class="footer container">
+    <div class="region region-footer">
+    <section id="block-menu-menu-footer-menu" class="block block-menu clearfix">
+
+        <h2 class="block-title">COMPANY</h2>
+    
+  <ul class="menu nav"><li class="first leaf"><a href="https://assist-software.net/about-us" title="">About Us</a></li>
+<li class="leaf"><a href="https://assist-software.net/assist-culture" title="">Our Culture</a></li>
+<li class="leaf"><a href="https://assist-software.net/about-us/certifications" title="">Certifications</a></li>
+<li class="leaf"><a href="https://assist-software.net/outsourcing" title="">Outsourcing</a></li>
+<li class="leaf"><a href="https://assist-software.net/about-us/partnerships" title="">Partnerships</a></li>
+<li class="leaf"><a href="https://assist-software.net/testimonials" title="">Testimonials</a></li>
+<li class="leaf"><a href="https://assist-software.net/expertise" title="">Expertise</a></li>
+<li class="leaf"><a href="https://assist-software.net/news" title="">News</a></li>
+<li class="leaf"><a href="https://assist-software.net/portfolio" title="">Projects</a></li>
+<li class="leaf"><a href="https://assist-software.net/engineers" title="">ASSIST Labs</a></li>
+<li class="leaf"><a href="https://assist-software.net/assist-culture" title="">Careers</a></li>
+<li class="last leaf"><a href="https://red.assist.ro/" title="" target="_blank">Client Login</a></li>
+</ul>
+</section>
+<section id="block-views-product-block" class="block block-views clearfix">
+
+        <h2 class="block-title">PRODUCTS</h2>
+    
+  <div class="view view-Product view-id-Product view-display-id-block view-dom-id-5186ebaa4d6c4f9a33e619094dad0fc2">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-1 views-row-odd views-row-first">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://assist-software.net/products/hr-assist">HR ASSIST</a></span>  </div>  </div>
+  <div class="views-row views-row-2 views-row-even">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://assist-software.net/products/hooman-invaders">Hooman Invaders</a></span>  </div>  </div>
+  <div class="views-row views-row-3 views-row-odd">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://assist-software.net/products/gps-assist">GPS ASSIST</a></span>  </div>  </div>
+  <div class="views-row views-row-4 views-row-even">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://assist-software.net/products/qualsyst-v11">Qualsyst v1.1</a></span>  </div>  </div>
+  <div class="views-row views-row-5 views-row-odd">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://assist-software.net/products/medix-v10">Medix v1.0</a></span>  </div>  </div>
+  <div class="views-row views-row-6 views-row-even">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://assist-software.net/products/caddec-v20">Caddec v2.0</a></span>  </div>  </div>
+  <div class="views-row views-row-7 views-row-odd views-row-last">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://assist-software.net/products/accountant-v56">Accountant v5.6</a></span>  </div>  </div>
+    </div>
+  
+  
+  
+  
+  
+  
+</div>
+</section>
+<section id="block-block-2" class="block block-block clearfix">
+
+      
+  <div>
+<h2>CONTACT US</h2>
+
+<p><a href="https://assist-software.net/contact-us#map" target="_blank" title="Suceava, Romania - Google Maps">Tipografiei Street 1<br>
+Suceava 720043, Romania</a></p>
+
+<p><a href="tel:+40230521100">+40-230-521100</a> | EU</p>
+
+<p><a href="tel:+13472748140">+1-347-274-8140</a> | US</p>
+
+<p><a href="mailto:hello@assist.ro">hello@assist.ro</a></p>
+</div>
+
+</section>
+<section id="block-custom-init-social-buttons-footer" class="block block-custom-init clearfix">
+
+      
+  
+<div>
+
+  
+  <div id="footer-socials">
+
+    <ul>
+      <li><a href="https://facebook.com/pages/Assist-Software/297145447125" target="_blank" title="Facebook" class="icon icon-footer-facebook"></a></li>
+      <li><a href="https://twitter.com/assistsoftware" target="_blank" title="Twitter" class="icon icon-footer-twitter"></a></li>
+      <li><a href="https://www.linkedin.com/company/assist-software-srl" target="_blank" title="LinkedIn" class="icon icon-footer-linkedin"></a></li>
+      <li><a href="https://plus.google.com/109464775888304342871/posts" target="_blank" title="Google+" class="icon icon-footer-googleplus"></a></li>
+      <li><a href="https://www.youtube.com/channel/UCe6M4rao6E30n1msI9KjJJQ/videos" target="_blank" title="YouTube" class="icon icon-footer-youtube"></a></li>
+      <li><a href="https://dribbble.com/assistsoftware" target="_blank" title="Dribbble" class="icon icon-footer-dribbble"></a></li>
+    </ul>
+  </div>
+  
+  <ul>
+    <li><a href="https://play.google.com/store/apps/developer?id=ASSIST%20Software&amp;hl=en" target="_blank">ASSIST Software on Google Play</a></li>
+    <li><a href="https://itunes.apple.com/ro/developer/assist-software/id965213563" target="_blank">ASSIST Software on Itunes</a></li>
+  </ul>
+  <p>Share this page</p>
+  
+  <div class="fb-like fb_iframe_widget" data-href="https://assist-software.net/blog/how-export-excel-files-python-django-application" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=&amp;container_width=351&amp;href=https%3A%2F%2Fassist-software.net%2Fblog%2Fhow-export-excel-files-python-django-application&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;share=false&amp;show_faces=false"><span style="vertical-align: bottom; width: 67px; height: 20px;"><iframe name="f3ccc5dfeaa66" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/like(1).html" style="border: none; visibility: visible; width: 67px; height: 20px;" class=""></iframe></span></div>
+  <iframe id="twitter-widget-1" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 61px; height: 20px;" title="Twitter Tweet Button" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/tweet_button.1025be460f33762a866ea882e1687ff4.en(1).html"></iframe>
+  <div id="___plusone_1" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 32px; height: 20px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 32px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 20px;" tabindex="0" vspace="0" width="100%" id="I1_1533964283253" name="I1_1533964283253" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/fastbutton(1).html" data-gapiattached="true" title="G+"></iframe></div>
+  <script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/in.js.download" type="text/javascript"> lang: en_US</script>
+  <span class="IN-widget" style="line-height: 1; vertical-align: baseline; display: inline-block;"><span style="padding: 0px !important; margin: 0px !important; text-indent: 0px !important; display: inline-block !important; vertical-align: baseline !important; font-size: 1px !important;"><iframe name="easyXDM_IN_Lib_li_gen_1533964285992_2_provider" id="easyXDM_IN_Lib_li_gen_1533964285992_2_provider" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/xdrpc(1).html" frameborder="0" style="width: 111px; height: 20px; display: inline-block;"></iframe></span></span><script type="IN/FollowCompany+init" data-id="369724" data-counter="right"></script>
+  <p class="youtube-subscribe">Subscribe on YouTube</p>
+  <script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/platform.js.download" gapi_processed="true"></script>
+  <div id="___ytsubscribe_0" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 111px; height: 24px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 111px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 24px;" tabindex="0" vspace="0" width="100%" id="I2_1533964284379" name="I2_1533964284379" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/subscribe_embed.html" data-gapiattached="true"></iframe></div>
+  <p>Subscribe to our newsletter</p>
+  <form class="simplenews-subscribe" action="https://assist-software.net/blog/how-export-excel-files-python-django-application" method="post" id="simplenews-block-form-56" accept-charset="UTF-8"><div><div class="form-item form-item-mail form-type-textfield form-group"> <label class="control-label" for="edit-mail">E-mail address <span class="form-required" title="This field is required.">*</span></label>
+<input placeholder="E-mail address" class="form-control form-text required" type="text" id="edit-mail" name="mail" value="" size="20" maxlength="128"></div><button type="submit" id="edit-submit" name="op" value="Subscribe" class="btn btn-default form-submit">Subscribe</button>
+<input type="hidden" name="form_build_id" value="form-3YBAA0CFmqXka0ruV_lHc-gLoiSrWaRDcGjxMTEbZ6Y">
+<input type="hidden" name="form_id" value="simplenews_block_form_56">
+<div class="form-item form-item-gdpr-compliance form-type-checkbox checkbox"> <label class="control-label" for="edit-gdpr-compliance"><input type="checkbox" id="edit-gdpr-compliance" name="gdpr_compliance" value="1" class="form-checkbox required">By submitting this form you agree with the <a href="https://assist-software.net/terms-of-use" target="_blank">Terms of use and Privacy</a> of the website <span class="form-required" title="This field is required.">*</span></label>
+</div></div></form>  
+  
+  
+  </div>
+
+</section>
+  </div>
+  <div class="footer-bottom">
+    © ASSIST SOFTWARE 1992 - 2018. ALL RIGHTS RESERVED.    <ul>
+      <li><a href="https://assist-software.net/terms-of-use">Terms of Use</a></li>
+    </ul>
+  </div>
+
+</footer>
+  <script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/js_q5IM6GDJ0EY_IK0SeQ3uNo77FzsokGLmyj2_eMSGx5c.js.download"></script>
+<script>(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");ga("create", "UA-385557-10", {"cookieDomain":"auto"});ga("send", "pageview");</script>
+<script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/js_ykDgJ3m9twdLQ3n3TaYwZBER_cZKGfrrCbXvrSgfjRA.js.download"></script>
+<script>
+      (function($){
+        Drupal.behaviors.openModal = {
+          attach: function(context, settings) {
+            jQuery(document).scroll(function() {
+              if(jQuery(this).scrollTop() + 500 >= jQuery("#modal-target").offset().top && jQuery(window).width() >= 768) {
+                jQuery(".btn-info.btn-lg").trigger("click");
+                jQuery(document).unbind("scroll");
+              }
+            });
+          }
+        }
+      })(jQuery);
+    </script>
+<script>jQuery(document).ready(function($) {
+  $('.owl-carousel').owlCarousel({
+    center: true,
+    loop: true,
+    margin: 50,
+    nav: true,
+    navText: ['', ''],
+    responsive: {
+      0:{
+        items:1,
+        center: false,
+        margin: 0,
+        nav: false
+      },
+      767:{
+        items: 1,
+        center: false,
+        margin: 0
+      },
+      990:{
+        items: 2,
+        center: true,
+        margin: 50
+      }
+    }
+  });
+});</script>
+<script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/js_Ny3R8DR4iD5PNHC4crslOvCIPSzmcrGaILHprjKIJzo.js.download"></script>
+<script>jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"assist","theme_token":"T4hXEGeUOdKj8IyZvmXO4KQgH0qyuZEIcJYb5-383WU","js":{"sites\/all\/modules\/contrib\/syntaxhighlighter\/syntaxhighlighter.min.js":1,"0":1,"1":1,"sites\/all\/modules\/contrib\/eu_cookie_compliance\/js\/eu_cookie_compliance.js":1,"sites\/all\/themes\/bootstrap\/js\/bootstrap.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/jquery\/1.10\/jquery.min.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/external\/jquery.cookie.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shCore.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushBash.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushCss.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushJScript.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushJava.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushPhp.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushPlain.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushPython.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushScala.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushXml.js":1,"sites\/all\/modules\/contrib\/google_analytics\/googleanalytics.js":1,"2":1,"sites\/all\/themes\/assist\/js\/share.js":1,"sites\/all\/themes\/assist\/js\/add_target.js":1,"3":1,"4":1,"sites\/all\/themes\/assist\/js\/owl.carousel.min.js":1,"sites\/all\/themes\/assist\/js\/lightbox.min.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/affix.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/alert.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/button.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/carousel.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/collapse.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/dropdown.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/modal.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/tooltip.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/popover.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/scrollspy.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/tab.js":1,"sites\/all\/themes\/assist\/bootstrap\/js\/transition.js":1,"sites\/all\/themes\/assist\/js\/main.js":1},"css":{"modules\/system\/system.base.css":1,"modules\/node\/node.css":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/styles\/shCore.css":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/styles\/shThemeFadeToGrey.css":1,"modules\/locale\/locale.css":1,"sites\/all\/modules\/contrib\/eu_cookie_compliance\/css\/eu_cookie_compliance.css":1,"sites\/all\/themes\/assist\/css\/owl.carousel.css":1,"sites\/all\/themes\/assist\/css\/owl.theme.css":1,"sites\/all\/themes\/assist\/css\/lightbox.css":1,"0":1,"sites\/all\/themes\/assist\/css\/style.css":1,"sites\/all\/themes\/assist\/css\/assist.css":1}},"better_exposed_filters":{"views":{"students_testimonials":{"displays":{"block_1":{"filters":[]}}},"Product":{"displays":{"block":{"filters":[]}}}}},"urlIsAjaxTrusted":{"\/blog\/how-export-excel-files-python-django-application":true},"eu_cookie_compliance":{"popup_enabled":1,"popup_agreed_enabled":0,"popup_hide_agreed":0,"popup_clicking_confirmation":false,"popup_scrolling_confirmation":false,"popup_html_info":"\u003Cdiv class=\u0022container\u0022\u003E\n    \u003Cdiv class=\u0022row\u0022\u003E\n        \u003Cdiv class =\u0022popup-content info\u0022\u003E\n            \u003Cdiv id=\u0022popup-text\u0022\u003E\n            \u003Cp\u003EWe use cookies to ensure you get the best experience on our website. By using this website you agree to our use of cookies. For more information, please read our \u003Ca _target=\u0022blank\u0022 href=\u0022https:\/\/assist-software.net\/privacy-terms-of-use\u0022\u003EPrivacy Policy\u003C\/a\u003E.\u003C\/p\u003E            \u003C\/div\u003E\n            \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n            \u003Cbutton type=\u0022button\u0022 class=\u0022agree-button\u0022\u003EAccept and Close\u003C\/button\u003E\n                        \u003C\/div\u003E\n        \u003C\/div\u003E\n    \u003C\/div\u003E\n\u003C\/div\u003E","use_mobile_message":false,"mobile_popup_html_info":"\u003Cdiv class=\u0022container\u0022\u003E\n    \u003Cdiv class=\u0022row\u0022\u003E\n        \u003Cdiv class =\u0022popup-content info\u0022\u003E\n            \u003Cdiv id=\u0022popup-text\u0022\u003E\n                        \u003C\/div\u003E\n            \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n            \u003Cbutton type=\u0022button\u0022 class=\u0022agree-button\u0022\u003EAccept and Close\u003C\/button\u003E\n                        \u003C\/div\u003E\n        \u003C\/div\u003E\n    \u003C\/div\u003E\n\u003C\/div\u003E\n","mobile_breakpoint":"768","popup_html_agreed":"\u003Cdiv\u003E\n  \u003Cdiv class =\u0022popup-content agreed\u0022\u003E\n    \u003Cdiv id=\u0022popup-text\u0022\u003E\n      \u003Ch2\u003EThank you for accepting cookies\u003C\/h2\u003E\u003Cp\u003EYou can now hide this message or find out more about cookies.\u003C\/p\u003E    \u003C\/div\u003E\n    \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n      \u003Cbutton type=\u0022button\u0022 class=\u0022hide-popup-button eu-cookie-compliance-hide-button\u0022\u003EHide\u003C\/button\u003E\n          \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E","popup_use_bare_css":false,"popup_height":"auto","popup_width":"100%","popup_delay":1000,"popup_link":"\/privacy-terms-of-use","popup_link_new_window":1,"popup_position":null,"popup_language":"en","store_consent":true,"better_support_for_screen_readers":0,"reload_page":0,"domain":"","popup_eu_only_js":0,"cookie_lifetime":"100","cookie_session":false,"disagree_do_not_show_popup":0,"method":"opt_in","whitelisted_cookies":"","withdraw_markup":"\u003Cbutton type=\u0022button\u0022 class=\u0022eu-cookie-withdraw-tab\u0022\u003E\u003C\/button\u003E\n\u003Cdiv class=\u0022eu-cookie-withdraw-banner\u0022\u003E\n  \u003Cdiv class=\u0022popup-content info\u0022\u003E\n    \u003Cdiv id=\u0022popup-text\u0022\u003E\n          \u003C\/div\u003E\n    \u003Cdiv id=\u0022popup-buttons\u0022\u003E\n      \u003Cbutton type=\u0022button\u0022 class=\u0022eu-cookie-withdraw-button\u0022\u003E\u003C\/button\u003E\n    \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E\n","withdraw_enabled":false},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc(x|m)?|dot(x|m)?|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt(x|m)?|pot(x|m)?|pps(x|m)?|ppam|sld(x|m)?|thmx|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls(x|m|b)?|xlt(x|m)|xlam|xml|z|zip"},"bootstrap":{"anchorsFix":1,"anchorsSmoothScrolling":1,"formHasError":1,"popoverEnabled":1,"popoverOptions":{"animation":1,"html":0,"placement":"right","selector":"","trigger":"click","triggerAutoclose":1,"title":"","content":"","delay":0,"container":"body"},"tooltipEnabled":1,"tooltipOptions":{"animation":1,"html":0,"placement":"auto left","selector":"","trigger":"hover focus","delay":0,"container":"body"}}});</script>
+  <script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/platform.js.download" async="" defer="" gapi_processed="true"></script>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/js_Rk5YIkK6m2gKTGH-GrMu0pM_PlMKXnI0ktQUgXw1XgA.js.download"></script>
+<script>function euCookieComplianceLoadScripts() {}</script>
+<script>var eu_cookie_compliance_cookie_name = "";</script>
+<script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/js_RhKtCZp-3-kRD5hY60PIhb5X_Ad2Mhe8LAh_8Id2cOE.js.download"></script>
+<script src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/js_L50O_PWoAuMOxVjnzZCkNSSmI0kFwhZsO1_KS8WnGKw.js.download"></script>
+
+
+<div id="sliding-popup" style="height: auto; width: 100%; bottom: 0px;" class="sliding-popup-bottom"><div class="container">
+    <div class="row">
+        <div class="popup-content info">
+            <div id="popup-text">
+            <p>We use cookies to ensure you get the best experience on our website. By using this website you agree to our use of cookies. For more information, please read our <a _target="blank" href="https://assist-software.net/privacy-terms-of-use">Privacy Policy</a>.</p>            </div>
+            <div id="popup-buttons">
+            <button type="button" class="agree-button">Accept and Close</button>
+                        </div>
+        </div>
+    </div>
+</div></div><div id="lightboxOverlay" class="lightboxOverlay" style="display: none;"></div><div id="lightbox" class="lightbox" style="display: none;"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="https://assist-software.net/blog/how-export-excel-files-python-django-application"><div class="lb-nav"><a class="lb-prev" href="https://assist-software.net/blog/how-export-excel-files-python-django-application"></a><a class="lb-next" href="https://assist-software.net/blog/how-export-excel-files-python-django-application"></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div><iframe scrolling="no" frameborder="0" allowtransparency="true" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/widget_iframe.1025be460f33762a866ea882e1687ff4.html" title="Twitter settings iframe" style="display: none;"></iframe><iframe name="oauth2relay832119009" id="oauth2relay832119009" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/postmessageRelay.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px;"></iframe><iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" title="Twitter analytics iframe" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/saved_resource(2).html"></iframe><div style="display: block; visibility: hidden; position: absolute; width: 106px; left: -1000px; top: -1000px;"><table cellpadding="0" cellspacing="0" dir="ltr" style="width:106px;" frame="void" rules="none" class=" gc-bubbleDefault pls-container"><tbody><tr class="gc-reset"><td class="pls-topLeft gc-reset"><img class="gc-reset" style="width:1px !important; height:1px !important; max-width: 1px !important; max-height: 1px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/border_3.gif"></td><td class="pls-topTail gc-reset"><img class="pls-tailbottom gc-reset" style="width:15px !important; height:9px !important; max-width: 15px !important; max-height: 9px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"><img class="pls-spacerbottom gc-reset" style="width:1px !important; height:1px !important; max-width: 1px !important; max-height: 1px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td><td class="pls-topRight gc-reset"><img class="gc-reset" style="width:1px !important; height:1px !important; max-width: 1px !important; max-height: 1px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/border_3.gif"></td></tr><tr class="gc-reset"><td class="pls-vertShimLeft gc-reset"><img class="gc-reset" style="width:1px !important; height:4px !important; max-width: 1px !important; max-height: 4px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td><td class="pls-vertShim gc-reset"><img class="gc-reset" style="width:1px !important; height:4px !important; max-width: 1px !important; max-height: 4px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td><td class="pls-vertShimRight gc-reset"><img class="pls-dropTR gc-reset" style="width:5px !important; height:4px !important; max-width: 5px !important; max-height: 4px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td></tr><tr class="gc-reset"><td class="pls-contentLeft gc-reset"><img class="pls-tailright gc-reset" style="width:9px !important; height:15px !important; max-width: 9px !important; max-height: 15px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"><img class="pls-spacerright gc-reset" style="width:1px !important; height:1px !important; max-width: 1px !important; max-height: 1px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td><td class="pls-contentWrap gc-reset"><div class="goog-bubble-content gc-reset"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="margin:0px;position:absolute;z-index:1;border-style:none;outline:none;width:100px;" tabindex="0" vspace="0" width="100%" id="I0_1533964294368" name="I0_1533964294368" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/subscribe_embed(1).html"></iframe></div></td><td class="pls-dropRight gc-reset"><img class="pls-tailleft gc-reset" style="width:12px !important; height:19px !important; max-width: 12px !important; max-height: 19px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"><img class="pls-spacerleft gc-reset" style="width:1px !important; height:1px !important; max-width: 1px !important; max-height: 1px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td></tr><tr class="gc-reset"><td class="pls-bottomLeft gc-reset"><img class="gc-reset" style="width:1px !important; height:1px !important; max-width: 1px !important; max-height: 1px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/border_3.gif"></td><td class="gc-reset"><table cellpadding="0" cellspacing="0" style="width:100%" class="gc-reset"><tbody><tr class="gc-reset"><td class="pls-vert gc-reset"><img class="pls-dropBL gc-reset" style="width:4px !important; height:5px !important; max-width: 4px !important; max-height: 5px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td><td class="pls-dropBottom gc-reset"><img class="pls-tailtop gc-reset" style="width:19px !important; height:13px !important; max-width: 19px !important; max-height: 13px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"><img class="pls-spacertop gc-reset" style="width:1px !important; height:1px !important; max-width: 1px !important; max-height: 1px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td></tr></tbody></table></td><td class="pls-vert gc-reset"><img class="pls-dropBR gc-reset" style="width:5px !important; height:5px !important; max-width: 5px !important; max-height: 5px !important;" src="./How to export Excel files in a Python_Django application _ ASSIST Software Romania_files/spacer.gif"></td></tr></tbody></table></div></body></html>

@@ -18,8 +18,6 @@
 {% endblock %}
 <!-- _________________________________________________________________________ -->
 {% block content %}
-{{error}}
-
   <form class="form" method="POST" action="" class='form-inline '>
   {% csrf_token %}
   {% bootstrap_form_errors form type='non_fields' %}
@@ -42,6 +40,9 @@
   <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
   </div>
   </form>
+  {% if error == "Error" %}
+  <span class="col-sm-12 col-md-12 col-lg-8" style="color:red">Incorrect Password or Username</span>
+  {% endif %}
 
 {% endblock %}
 

@@ -1,0 +1,35 @@
+{% if active_field == 1 %}
+{% if username_exist == True and lengthofusername > 5 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="usercheck" style="color:red; font-size:100%;"><i class="glyphicon glyphicon-remove"></i>Username Not Available</span>
+{% elif username_exist == True and lengthofusername <= 5 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="usercheck" style="color:red; font-size:100%;"><i class="glyphicon glyphicon-remove"></i>Username Not Available</span>
+{% elif username_exist == False and lengthofusername <= 5 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="usercheck" style="color:red; font-size:100%;"><i class="glyphicon glyphicon-remove"></i>Username should be more than 5 character</span>
+{% elif username_exist == False and lengthofusername > 5 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="usercheck" style="color:green; font-size:100%;"><i class="glyphicon glyphicon-ok"></i>Username Available</span>
+{% elif username_exist == None and lengthofusername == None %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="usercheck" ></span>
+{% endif %}
+
+{% elif active_field == 2 %}
+{% if email_exist == True and lengthofemail > 0 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="emailcheck" style="color:red; font-size:100%;"><i class="glyphicon glyphicon-remove"></i>Email already registered</span>
+{% elif email_exist == False and lengthofemail < 1 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="emailcheck" style="color:red; font-size:100%;"><i class="glyphicon glyphicon-remove"></i>Email id is blank</span>
+{% elif email_exist == False %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="emailcheck" style="color:green; font-size:100%;"><i class="glyphicon glyphicon-ok"></i>Email Available</span>
+{% elif email_exist == None %}
+{% endif %}
+
+{% elif active_field == 3 %}
+{% if password_match == True and lengthofpassword > 0 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="passwordcheck" style="color:green; font-size:100%;"><i class="glyphicon glyphicon-ok"></i>Password Matched</span>
+{% elif password_match == False and lengthofpassword < 1 %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="passwordcheck" style="color:red; font-size:100%;"><i class="glyphicon glyphicon-remove"></i>Enter Password Again</span>
+{% elif password_match == False %}
+<span class="col-sm-12 col-md-12 col-lg-12" id="passwordcheck" style="color:red; font-size:100%;"><i class="glyphicon glyphicon-remove"></i>Password Not-Matched</span>
+{% elif password_match == None %}
+{% endif %}
+
+
+{% endif %}

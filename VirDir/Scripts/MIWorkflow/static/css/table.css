@@ -38,6 +38,22 @@
       font-size: 11px;
   }
 
+  #table2 {
+      font-family: "Cambria";
+      width: 100%;
+      font-size: 11px;
+  }
+  #table2 tr:nth-child(odd){background-color: #EAEDED;font-size: 11px;}
+  #table2 tr:nth-child(even){background-color: #E5E8E8; font-size: 11px;}
+  #table2 th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #cc9966;
+      color: white;
+      font-size: 11px;
+  }
+
 
 
 .tbody {

@@ -92,6 +92,11 @@ urlpatterns = [
 	url(r'^ajax/mimember_load_ajax/', views.Load_Mimember, name='ajax_load_mimember'),
 	url(r'^ajax/load-datevalues/', views.Load_Datevalues, name='ajax_load_datavalues'),
 	url(r'^ajax/load-tables/', views.Load_Tables, name='ajax_load_tables'),
+	url(r'^ajax/load-signup/', views.Load_Signup, name='ajax_load_signup'),
+
+## Export to excel
+	url(r'^export_to_excel/', views.Workflow_Summary, name='exporttoexcel'),
+
 
 
 	]

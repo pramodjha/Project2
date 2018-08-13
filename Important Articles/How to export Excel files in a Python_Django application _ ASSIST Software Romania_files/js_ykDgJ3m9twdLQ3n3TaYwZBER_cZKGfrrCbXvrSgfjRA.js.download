@@ -1,0 +1,38 @@
+jQuery( document ).load(function() {
+
+    /* Share buttons */
+    jQuery('div.share-buttons > a').click(function(e) {
+      e.preventDefault();
+      var network = jQuery(this).attr('class');
+      var url = jQuery(this).attr('href');
+      var width = 600;
+      var height = 300;
+      switch (network) {
+        case 'facebook':
+              width = 465;
+              height = 500;
+              break;
+          case 'google':
+              width = 465;
+              height = 500;
+              break;
+          case 'linkedin':
+              width = 595;
+              height = 460;
+              break;
+          case 'twitter':
+              var text = escape(document.title);
+              url += '&text=' + text;
+      }
+      window.open(url, '', 'menubar=no, toolbar=no, resizeable=yes, scrollbars=yes, width=' + width + ', height=' + height);
+    });
+
+});
+;
+jQuery( document ).ready(function() {
+  
+  /* Add target attribute for all links in body of news, blog, member_articles nodes */
+  jQuery('div.content a').attr({target: "_blank"});
+
+});
+;
