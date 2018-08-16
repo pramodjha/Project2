@@ -37,11 +37,25 @@
 <li {% if activetab1 == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Tracker</a></li>
 <li {% if activetab1 == 'otdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'otdetail' %}">OT Details</a></li>
 {% elif activetab == "summary" %}
+<li {% if activetab1 == 'filterdata' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Filter Tab</a></li>
+
+{% if reportno == '2' %}
+<li {% if activetab1 == 'requesttype' %} class="active" {%else%} {% endif %}><a href="{% url 'requesttype' %}">Request Type</a></li>
+<li {% if activetab1 == 'requestpriority' %} class="active" {%else%} {% endif %}><a href="{% url 'requestpriority' %}">Request Priority</a></li>
+<li {% if activetab1 == 'requestassigned' %} class="active" {%else%} {% endif %}><a href="{% url 'requestassigned' %}">Request Assigned</a></li>
+<li {% if activetab1 == 'requestcompleted' %} class="active" {%else%} {% endif %}><a href="{% url 'requestcompleted' %}">Request Completed</a></li>
+{% elif reportno == '3' %}
+<li {% if activetab1 == 'corenoncore' %} class="active" {%else%} {% endif %}><a href="{% url 'corenoncore' %}">Core Non-Core</a></li>
+<li {% if activetab1 == 'activity' %} class="active" {%else%} {% endif %}><a href="{% url 'activitytimetracker' %}">Activity</a></li>
+{% elif reportno == '4' %}
 <li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
 <li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
+{% elif reportno == '5' %}
+<li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
+<li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
+{% endif %}
 {% elif activetab == "extractdatafilter" %}
 <li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
-<li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
 {% elif activetab == "feedback" %}
 <li {% if activetab1 == 'tracker' %} class="active" {%else%} {% endif %}><a href="{% url 'tracker' %}">Tracker</a></li>
 <li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
@@ -76,8 +90,23 @@
 {% elif activetab == "timetracker" %}
 <li {% if activetab1 == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Tracker</a></li>
 {% elif activetab == "summary" %}
+{% if reportno == '2' %}
+<li {% if activetab1 == 'requesttype' %} class="active" {%else%} {% endif %}><a href="{% url 'requesttype' %}">Request Type</a></li>
+<li {% if activetab1 == 'requestpriority' %} class="active" {%else%} {% endif %}><a href="{% url 'requestpriority' %}">Request Priority</a></li>
+<li {% if activetab1 == 'requestassigned' %} class="active" {%else%} {% endif %}><a href="{% url 'requestassigned' %}">Request Assigned</a></li>
+<li {% if activetab1 == 'requestcompleted' %} class="active" {%else%} {% endif %}><a href="{% url 'requestcompleted' %}">Request Completed</a></li>
+
+{% elif reportno == '3' %}
 <li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
 <li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
+{% elif reportno == '4' %}
+<li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
+<li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
+{% elif reportno == '5' %}
+<li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
+<li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
+{% endif %}
+
 {% elif activetab == "feedback" %}
 <li {% if activetab1 == 'tracker' %} class="active" {%else%} {% endif %}><a href="{% url 'tracker' %}">Tracker</a></li>
 <li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>

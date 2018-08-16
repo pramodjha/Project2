@@ -23,7 +23,6 @@ border-width: thin;
 }
 
 </style>
-
 <script src="{% static 'jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'jquery/myjquery.js' %}"></script>
 {% endblock %}
@@ -40,7 +39,6 @@ border-width: thin;
 {% endblock %}
 
 {% block content %}
-{% if reportpage == "mainpage" %}
 <form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
 {% csrf_token %}
 {% if authority == "Group2" %}
@@ -108,18 +106,6 @@ border-width: thin;
 </table>
 </div>
 </form>
-     {% autoescape off %}
-      {{ data | safe }}
-      {% endautoescape %}
-
-     {% else %}
-
-     {% autoescape off %}
-      {{ data | safe }}
-      {% endautoescape %}
-
-      {% endif %}
-
      <script>
 
      $("#id_team").change(function () {

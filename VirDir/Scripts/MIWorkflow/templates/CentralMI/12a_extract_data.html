@@ -3,11 +3,10 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load staticfiles %}
-<script src="{% static 'jquery/jquery-ui.js' %}"></script>
-<script src="{% static 'jquery/myjquery.js' %}"></script>
 
 {% block style %}
-
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<script src="{% static 'jquery/myjquery.js' %}"></script>
 {% endblock %}
 
 {% block navblockleft %}
@@ -124,7 +123,7 @@
       <td >RequestRaised Date</td>
       <td >Request Type</td>
       <td >Priority Detail</td>
-      <td >Request Status</td>
+      <td >Request Description</td>
       {% elif reportno == "3" %}
       <td>ID</td>
       <td>Registered Date</td>
@@ -162,7 +161,7 @@
       {% endif %}
     </tr>
     </thead>
-    <tbody class="tbody">
+    <tbody class="">
   {%for data in model %}
   <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
 
@@ -219,20 +218,6 @@
 
 <script>
 
-$(document).ready(function() {
-  $("#id_startdate").datepicker({
-    dateFormat: 'yy-mm-dd',
-     altField: '#thealtdate',
-     altFormat: 'yy-mm-dd'});
-});
-
-$(document).ready(function() {
-  $("#id_enddate").datepicker({
-    dateFormat: 'yy-mm-dd',
-     altField: '#thealtdate',
-     altFormat: 'yy-mm-dd'});
-});
-
 
 $("#id_team").change(function () {
     var member_id = $(this).val();  // get the selected country ID from the HTML input
@@ -248,6 +233,16 @@ $("#id_team").change(function () {
    });
  });
 
+ $("#id_startdate").datepicker({
+   dateFormat: 'yy-mm-dd',
+    altField: '#thealtdate',
+    altFormat: 'yy-mm-dd'});
+
+
+ $("#id_enddate").datepicker({
+   dateFormat: 'yy-mm-dd',
+    altField: '#thealtdate',
+    altFormat: 'yy-mm-dd'});
 
 
   </script>

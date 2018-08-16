@@ -13,6 +13,7 @@
 <li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Report </a></li>
 <li {% if activetab == 'Details' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">Details </a></li>
 <li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
+<li {% if activetab == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
 <li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signout' %}">Sign Out </a></li>
 {% elif group_name == "mi_team" %}
 <li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>
@@ -22,6 +23,7 @@
 <li {% if activetab == 'report' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Report </a></li>
 <li {% if activetab == 'Details' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">Details </a></li>
 <li {% if activetab == 'extractdatafilter' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter' %}">Extract Data </a></li>
+<li {% if activetab == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
 <li {% if activetab == 'signin' %} class="active" {%else%} {% endif %}><a href="{% url 'signout' %}">Sign Out </a></li>
 {% elif group_name == "authoriser" %}
 <li {% if activetab == 'home' %} class="active" {%else%} {% endif %}><a href="{% url 'home' %}"> Home </a></li>

@@ -168,11 +168,7 @@ INTERVAL_CHOICES = (
     (1, ("Daily")),
     (2, ("Weekly")),
     (3, ("Monthly")),
-    (4, ("Quaterly")),
-    (5, ("Yearly"))
     )
-
-
 
 class SearchForm(forms.Form):
     datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="", initial=1, widget=forms.Select(), required=True)

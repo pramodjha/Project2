@@ -97,6 +97,13 @@ urlpatterns = [
 ## Export to excel
 	url(r'^export_to_excel/', views.Workflow_Summary, name='exporttoexcel'),
 
-
+# 10)
+url(r'^request_type_view/', views.Requesttype_View, name='requesttype'),
+url(r'^request_priority_view/', views.Requestpriority_View, name='requestpriority'),
+url(r'^request_assign_view/', views.Requestassigned_View, name='requestassigned'),
+url(r'^request_complete_view/', views.Requestcompleted_View, name='requestcompleted'),
+# 11)
+url(r'^Core_NonCore_view/', views.CoreNonCore_View, name='corenoncore'),
+url(r'^activity_timetracker_view/', views.Activitytimetracker_View, name='activitytimetracker'),
 
 	]

@@ -40,6 +40,7 @@ from  .decorators import user_permission
 from django.urls import reverse
 #import django-excel as excel
 #import pyexcel.ext.xls
+import datetime as dt
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
@@ -95,19 +96,52 @@ def data_extraction(request,parameter1=None,parameter2=None):
     return data
 
 
-def Timetrckers_Summary(request):
+def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None):
     df1 = pd.DataFrame(list(Timetrackers.objects.all().values()))
     df2 = pd.DataFrame(list(Mimember.objects.all().values()))
     df3 = pd.DataFrame(list(AuthUser.objects.all().values()))
-    df4 = pd.DataFrame(list(Requestsubcategory.objects.all().values()))
+    df4 = pd.DataFrame(list(Requestcategorys.objects.all().values()))
+    df5 = pd.DataFrame(list(Requestsubcategory.objects.all().values()))
+
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
     df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['username_id'], right_on = ['id'])
-    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['requestsubcategory_id'], right_on = ['requestsubcategoryid'])
-    pivot = pd.pivot_table(df_merge3,index=['trackingdatetime','core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
-    data = pivot.to_html(classes="table cell-border")
-    return render(request, 'CentralMI/1d_test.html', {'data' : data})
+    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['requestcategorys_id'], right_on = ['requestcategoryid'])
+    df_merge4 = pd.merge(df_merge3, df5,  how='left', left_on=['requestsubcategory_id'], right_on = ['requestsubcategoryid'])
 
-def OT_Summary(request):
+    print(df_merge4.head(5))
+    #print(df4.head(5))
+#    pivot = pd.pivot_table(df_merge3,index=['trackingdatetime','core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+#    data = pivot.to_html(classes="table cell-border")
+    df_merge4['trackingdatetime'] = df_merge4['trackingdatetime'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
+    df_merge4['trackingdatetime_monthyear'] = df_merge4['trackingdatetime'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
+    df_merge4['trackingdatetime_week'] = df_merge4['trackingdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+
+    if interval == 'Daily':
+        if view == "core_noncore":
+            pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['trackingdatetime', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            data = pivot_daily_corenoncore.to_html(classes="table cell-border")
+        elif view == "activity":
+            pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['requestcategorys','requestsubcategory'], columns='username', values='totaltime',aggfunc=sum)
+            data = pivot_daily_corenoncore.to_html(classes="table cell-border")
+    elif  interval == 'Monthly':
+        if view == "core_noncore":
+            pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['trackingdatetime_monthyear', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
+        elif view == "activity":
+            pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+            data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
+    elif  interval == 'Weekly':
+        if view == "core_noncore":
+            pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['trackingdatetime_week', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+        elif view == "activity":
+            pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+            data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    return data
+
+def Ot_Summary(request,startdate=None,enddate=None,interval=None):
     df1 = pd.DataFrame(list(OtDetail.objects.all().values()))
     df2 = pd.DataFrame(list(Timetrackers.objects.all().values()))
     df3 = pd.DataFrame(list(Mimember.objects.all().values()))
@@ -115,13 +149,30 @@ def OT_Summary(request):
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['timetrackers_id'], right_on = ['timetrackerid'])
     df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
     df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['username_id'], right_on = ['id'])
-    pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
-    data = pivot.to_html(classes="table cell-border")
-    return render(request, 'CentralMI/1d_test.html', {'data' : data})
+#    pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
+#    data = pivot.to_html(classes="table cell-border")
+    df_merge4['ot_startdatetime'] = df_merge4['ot_startdatetime'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
+    df_merge4['ot_startdatetime_monthyear'] = df_merge4['ot_startdatetime'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
+    df_merge10['ot_startdatetime_week'] = df_merge10['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
 
-import datetime as dt
-def Workflow_Summary(request):
-    df01 = pd.DataFrame(list(Requestdetail.objects.all().values()))
+    if interval == 'Daily':
+        pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime'], columns='username', values='totaltime',aggfunc=sum)
+        data = pivot_daily_corenoncore.to_html(classes="table cell-border")
+    elif  interval == 'Monthly':
+        pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_monthyear'], columns='username', values='totaltime',aggfunc=sum)
+        data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
+    elif  interval == 'Weekly':
+        pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_week'], columns='username', values='totaltime',aggfunc=sum)
+        data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    return data
+
+def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None):
+    print(startdate)
+    print(enddate)
+    print(interval)
+    df01 = pd.DataFrame(list(Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).values()))
     df02 = pd.DataFrame(list(Authorisedetail.objects.all().values()))
     df03 = pd.DataFrame(list(Assigneddetail.objects.all().values()))
     df04 = pd.DataFrame(list(Overviewdetail.objects.all().values()))
@@ -155,28 +206,51 @@ def Workflow_Summary(request):
                                      dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
     df_merge10['completeddate_monthyear'] = df_merge10['completeddate'].apply(lambda x:
                                      dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
+    df_merge10['requestraised_week'] = df_merge10['requestraiseddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge10['assigneddate_week'] = df_merge10['assigneddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge10['completeddate_week'] = df_merge10['completeddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
 
-    #print(df_merge2.head(5))
-    #print(df11.head(5))
-    pivot_daily_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
-    pivot_monthly_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
-    pivot_daily_priority = pd.pivot_table(df_merge10,index=['requestraiseddate'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
-    pivot_monthly_priority = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
-    pivot_daily_assigned = pd.pivot_table(df_merge10,index=['assigneddate'], columns='assignedto_id', values='assignedid',aggfunc=len)
-    pivot_monthly_assigned = pd.pivot_table(df_merge10,index=['assigneddate_monthyear'], columns='assignedto_id', values='assignedid',aggfunc=len)
-    pivot_daily_completed = pd.pivot_table(df_merge10,index=['completeddate'], columns='completedby_id', values='completedid',aggfunc=len)
-    pivot_monthly_completed = pd.pivot_table(df_merge10,index=['completeddate_monthyear'], columns='completedby_id', values='completedid',aggfunc=len)
-
-    pivot_daily_compare = pivot_daily_assigned.merge(pivot_daily_completed, left_index=True, right_index=True, how = 'outer')
-    pivot_monthly_compare = pivot_monthly_assigned.merge(pivot_monthly_completed, left_index=True, right_index=True, how = 'outer')
-
-    #pivot_requestraised_monthly
-    data = pivot_daily_compare.to_html(classes="table cell-border")
-    data1 = pivot_monthly_compare.to_html(classes="table cell-border")
-
-    return render(request, 'CentralMI/1d_test.html', {'data' : data,'data1':data1})
-
-
+    #print(df_merge10['requestraised_week'])
+    if interval == 'Daily':
+        if view == "requesttype":
+            pivot_daily_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            data = pivot_daily_type.to_html(classes="table cell-border")
+        elif view == "requestpriority":
+            pivot_daily_priority = pd.pivot_table(df_merge10,index=['requestraiseddate'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            data = pivot_daily_priority.to_html(classes="table cell-border")
+        elif view == "requestassigned":
+            pivot_daily_assigned = pd.pivot_table(df_merge10,index=['assigneddate'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            data = pivot_daily_assigned.to_html(classes="table cell-border")
+        elif view == "requestcompleted":
+            pivot_daily_completed = pd.pivot_table(df_merge10,index=['completeddate'], columns='completedby_id', values='completedid',aggfunc=len)
+            data = pivot_daily_completed.to_html(classes="table cell-border")
+    elif  interval == 'Monthly':
+        if view == "requesttype":
+            pivot_monthly_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            data = pivot_monthly_type.to_html(classes="table cell-border")
+        elif view == "requestpriority":
+            pivot_monthly_priority = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            data = pivot_monthly_priority.to_html(classes="table cell-border")
+        elif view == "requestassigned":
+            pivot_monthly_assigned = pd.pivot_table(df_merge10,index=['assigneddate_monthyear'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            data = pivot_monthly_assigned .to_html(classes="table cell-border")
+        elif view == "requestcompleted":
+            pivot_monthly_Completed = pd.pivot_table(df_merge10,index=['completeddate_monthyear'], columns='completedby_id', values='completedid',aggfunc=len)
+            data = pivot_monthly_Completed.to_html(classes="table cell-border")
+    elif  interval == 'Weekly':
+        if view == "requesttype":
+            pivot_weekly_type = pd.pivot_table(df_merge10,index=['requestraised_week'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            data = pivot_weekly_type.to_html(classes="table cell-border")
+        elif view == "requestpriority":
+            pivot_weekly_priority = pd.pivot_table(df_merge10,index=['requestraised_week'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            data = pivot_weekly_priority.to_html(classes="table cell-border")
+        elif view == "requestassigned":
+            pivot_weekly_assigned = pd.pivot_table(df_merge10,index=['assigneddate_week'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            data = pivot_weekly_assigned .to_html(classes="table cell-border")
+        elif view == "requestcompleted":
+            pivot_weekly_completed = pd.pivot_table(df_merge10,index=['completeddate_week'], columns='completedby_id', values='completedid',aggfunc=len)
+            data = pivot_weekly_completed.to_html(classes="table cell-border")
+    return data
 
 @login_required
 def setdate(request):
@@ -292,7 +366,6 @@ def All_Request_View(request):
 def Unapproved_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='unapproved')
     group_name = is_group(request,username=username)
-
     data = data_extraction(request,parameter1="'Approval pending'",parameter2="'RequestStage'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
@@ -300,16 +373,13 @@ def Unapproved_View(request):
 def Approved_View(request):
     activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='approved')
     group_name = is_group(request,username=username)
-
     data = data_extraction(request,parameter1="'Approved'",parameter2="'AuthorisedStage'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
-
 
 @login_required
 def Assigned_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='assigned')
     group_name = is_group(request,username=username)
-
     data = data_extraction(request,parameter1="'Assigned'",parameter2="'AssignedStage'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
@@ -318,7 +388,6 @@ def Assigned_View(request):
 def Overview_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='overview')
     group_name = is_group(request,username=username)
-
     data = data_extraction(request,parameter1="'Overviewed'",parameter2="'OverviewStage'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
@@ -326,7 +395,6 @@ def Overview_View(request):
 def Estimate_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='estimate')
     group_name = is_group(request,username=username)
-
     data = data_extraction(request,parameter1="'Estimated'",parameter2="'EstimateStage'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
@@ -335,7 +403,6 @@ def Estimate_View(request):
 def Wip_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='wip')
     group_name = is_group(request,username=username)
-
     data = data_extraction(request,parameter1="'Estimation Accepted'",parameter2="'WIPStage'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
@@ -408,7 +475,6 @@ def Ot_Detail_View(request):
 def Ot_Add_Form(request,trackerid):
     activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='otdetail')
     group_name = is_group(request,username=username)
-
     form = OtDetailForm(initial={'timetrackers':trackerid,'ot_status':1})
     if request.method == 'POST':
         form =  OtDetailForm(request.POST,request.FILES)
@@ -429,31 +495,111 @@ def Ot_Add_Form(request,trackerid):
             return HttpResponseRedirect(reverse('otdetail'))
     return render(request, 'CentralMI/9b_ot_add_form.html',{'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
+from django.apps import apps
 @login_required
 def Summary_Tracker(request):
-    activetab, activetab1, username, info, sd = create_session(request, header='extractdatafilter',footer='summary')
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='filterdata')
+    reportpage = "mainpage"
+    allmodel = list(apps.all_models['CentralMI'])
+    print(allmodel)
     group_name = is_group(request,username=username)
-
     form = SearchForm()
     if request.method == 'POST':
         form =  SearchForm(request.POST)
         if form.is_valid():
-            reportno = form.cleaned_data['datachoice']
-            startdate = form.cleaned_data['startdate']
-            interval = dict(INTERVAL_CHOICES)[int(form.cleaned_data["interval"])]
-            enddate = form.cleaned_data['enddate']
-            team = form.cleaned_data['team']
-            member = form.cleaned_data['member']
-            print(interval)
-            model = info.define_day_week_month2(report_choice='2',start_date=startdate,end_date=enddate,range_type=interval,values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
-            return render(request, 'CentralMI/12b_summary_tracker.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
-    return render(request, 'CentralMI/12b_summary_tracker.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+            request.session['reportno'] = form.cleaned_data['datachoice']
+            reportno = request.session.get('reportno')
+            request.session['startdate'] = str(form.cleaned_data['startdate'])
+            startdate = request.session.get('startdate_report')
+            request.session['interval'] = dict(INTERVAL_CHOICES)[int(form.cleaned_data["interval"])]
+            interval = request.session.get('interval')
+            request.session['enddate_report'] = str(form.cleaned_data['enddate'])
+            enddate = request.session.get('enddate_report')
+            request.session['team'] = form.cleaned_data['team']
+            team = request.session.get('team')
+            request.session['member'] = form.cleaned_data['member']
+            member = request.session.get('member')
+            #print(enddate)
+            #rint(reportno)
+            #model =
+            #model = info.define_day_week_month2(report_choice='2',start_date=startdate,end_date=enddate,range_type=interval,values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
+            return render(request, 'CentralMI/12a_filter_tab.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportno':reportno,'reportpage':reportpage})
+    return render(request, 'CentralMI/12a_filter_tab.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage})
+
+def CoreNonCore_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='corenoncore')
+    group_name = is_group(request,username=username)
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    reportno = request.session.get('reportno')
+    interval = request.session.get('interval')
+    data = Timetrcker_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='core_noncore')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+
+def Activitytimetracker_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='activity')
+    group_name = is_group(request,username=username)
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    reportno = request.session.get('reportno')
+    interval = request.session.get('interval')
+    data = Timetrcker_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='activity')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+
+def Requesttype_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requesttype')
+    group_name = is_group(request,username=username)
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    reportno = request.session.get('reportno')
+    interval = request.session.get('interval')
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requesttype')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+
+
+def Requestpriority_View(request):
+    reportpage = "subpage"
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requestpriority')
+    group_name = is_group(request,username=username)
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    reportno = request.session.get('reportno')
+    print(startdate)
+    print(enddate)
+    interval = request.session.get('interval')
+    #print(interval)
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requestpriority')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+
+def Requestassigned_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requestassigned')
+    group_name = is_group(request,username=username)
+
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    reportno = request.session.get('reportno')
+    print(startdate)
+    print(enddate)
+    interval = request.session.get('interval')
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requestassigned')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+
+def Requestcompleted_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requestcompleted')
+    group_name = is_group(request,username=username)
+
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    interval = request.session.get('interval')
+    reportno = request.session.get('reportno')
+
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requestcompleted')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 
 def Filter_Data(request):
     activetab, activetab1, username, info, sd= create_session(request, header='extractdatafilter',footer='extractdatafilter1')
     group_name = is_group(request,username=username)
-
     form = SearchForm()
     if request.method == 'POST':
         form =  SearchForm(request.POST)
@@ -508,7 +654,6 @@ def Filter_Data(request):
                     model=  ''
                 else:
                     model = ''
-
             #print(enddate)
             return render(request, 'CentralMI/12a_extract_data.html',{'model':model,'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportno':reportno})
         return render(request, 'CentralMI/12a_extract_data.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
