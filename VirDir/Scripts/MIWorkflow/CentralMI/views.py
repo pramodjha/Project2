@@ -141,7 +141,7 @@ def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=No
             data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
     return data
 
-def Ot_Summary(request,startdate=None,enddate=None,interval=None):
+def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None):
     df1 = pd.DataFrame(list(OtDetail.objects.all().values()))
     df2 = pd.DataFrame(list(Timetrackers.objects.all().values()))
     df3 = pd.DataFrame(list(Mimember.objects.all().values()))
@@ -149,24 +149,59 @@ def Ot_Summary(request,startdate=None,enddate=None,interval=None):
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['timetrackers_id'], right_on = ['timetrackerid'])
     df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
     df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['username_id'], right_on = ['id'])
-#    pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
-#    data = pivot.to_html(classes="table cell-border")
-    df_merge4['ot_startdatetime'] = df_merge4['ot_startdatetime'].apply(lambda x:
+#   pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
+#   data = pivot.to_html(classes="table cell-border")
+    df_merge3['ot_startdatetime'] = df_merge3['ot_startdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
-    df_merge4['ot_startdatetime_monthyear'] = df_merge4['ot_startdatetime'].apply(lambda x:
+    df_merge3['ot_startdatetime_monthyear'] = df_merge3['ot_startdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
-    df_merge10['ot_startdatetime_week'] = df_merge10['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge3['ot_startdatetime_week'] = df_merge3['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
 
+    print(df_merge3.head(5))
     if interval == 'Daily':
-        pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime'], columns='username', values='totaltime',aggfunc=sum)
+        pivot_daily_corenoncore = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
         data = pivot_daily_corenoncore.to_html(classes="table cell-border")
     elif  interval == 'Monthly':
-        pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_monthyear'], columns='username', values='totaltime',aggfunc=sum)
+        pivot_monthly_corenoncore = pd.pivot_table(df_merge3,index=['ot_startdatetime_monthyear'], columns='username', values='ot_hrs',aggfunc=sum)
         data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
     elif  interval == 'Weekly':
-        pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_week'], columns='username', values='totaltime',aggfunc=sum)
+        pivot_weekly_corenoncore = pd.pivot_table(df_merge3,index=['ot_startdatetime_week'], columns='username', values='ot_hrs',aggfunc=sum)
         data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
     return data
+
+def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None):
+    df1 = pd.DataFrame(list(Errorlog.objects.all().values()))
+    df2 = pd.DataFrame(list(Activity.objects.all().values()))
+    df3 = pd.DataFrame(list(Authuser.objects.all().values()))
+
+    print(df1)
+    print(df2)
+
+    print(df3)
+    df_merge1 = pd.merge(df1, df2,  how='left', left_on=['error_report_id'], right_on = ['activityid'])
+    df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
+#   pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
+#   data = pivot.to_html(classes="table cell-border")
+    #df_merge3['ot_startdatetime'] = df_merge3['ot_startdatetime'].apply(lambda x:
+#                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
+    #df_merge3['ot_startdatetime_monthyear'] = df_merge3['ot_startdatetime'].apply(lambda x:
+#                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
+    #df_merge3['ot_startdatetime_week'] = df_merge3['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+
+    #print(df_merge3)
+    #if interval == 'Daily':
+    #    pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime'], columns='username', values='totaltime',aggfunc=sum)
+    #    data = pivot_daily_corenoncore.to_html(classes="table cell-border")
+    #elif  interval == 'Monthly':
+    #    pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_monthyear'], columns='username', values='totaltime',aggfunc=sum)
+    #    data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
+    #elif  interval == 'Weekly':
+    #    pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_week'], columns='username', values='totaltime',aggfunc=sum)
+    #    data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    return data
+
+
+
 
 def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None):
     print(startdate)
@@ -587,15 +622,42 @@ def Requestassigned_View(request):
 def Requestcompleted_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requestcompleted')
     group_name = is_group(request,username=username)
-
     startdate = request.session.get('startdate_report')
     enddate = request.session.get('enddate_report')
     interval = request.session.get('interval')
     reportno = request.session.get('reportno')
-
     data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requestcompleted')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
+def Ot_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='otuserwise')
+    group_name = is_group(request,username=username)
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    interval = request.session.get('interval')
+    reportno = request.session.get('reportno')
+    data = Ot_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view=None)
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+
+def Erroruserwise_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='otuserwise')
+    group_name = is_group(request,username=username)
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    interval = request.session.get('interval')
+    reportno = request.session.get('reportno')
+    data = Error_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='erroruserwise')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+
+def Errorreportwise_View(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='otuserwise')
+    group_name = is_group(request,username=username)
+    startdate = request.session.get('startdate_report')
+    enddate = request.session.get('enddate_report')
+    interval = request.session.get('interval')
+    reportno = request.session.get('reportno')
+    data = Error_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='errorreportwise')
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Filter_Data(request):
     activetab, activetab1, username, info, sd= create_session(request, header='extractdatafilter',footer='extractdatafilter1')

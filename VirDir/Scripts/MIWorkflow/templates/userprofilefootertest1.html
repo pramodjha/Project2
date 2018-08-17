@@ -48,11 +48,10 @@
 <li {% if activetab1 == 'corenoncore' %} class="active" {%else%} {% endif %}><a href="{% url 'corenoncore' %}">Core Non-Core</a></li>
 <li {% if activetab1 == 'activity' %} class="active" {%else%} {% endif %}><a href="{% url 'activitytimetracker' %}">Activity</a></li>
 {% elif reportno == '4' %}
-<li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
-<li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
+<li {% if activetab1 == 'otuserwise' %} class="active" {%else%} {% endif %}><a href="{% url 'otuserwise' %}">OT Userwise</a></li>
 {% elif reportno == '5' %}
-<li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>
-<li {% if activetab1 == 'summary' %} class="active" {%else%} {% endif %}><a href="{% url 'summary' %}">Summary</a></li>
+<li {% if activetab1 == 'erroruserwise' %} class="active" {%else%} {% endif %}><a href="{% url 'erroruserwise' %}">Error - Userwise</a></li>
+<li {% if activetab1 == 'errorreportwise' %} class="active" {%else%} {% endif %}><a href="{% url 'errorreportwise' %}">Error - Reportwise</a></li>
 {% endif %}
 {% elif activetab == "extractdatafilter" %}
 <li {% if activetab1 == 'extractdatafilter1' %} class="active" {%else%} {% endif %}><a href="{% url 'extractdatafilter1' %}">Report</a></li>

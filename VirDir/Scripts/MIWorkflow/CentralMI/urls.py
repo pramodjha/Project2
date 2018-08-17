@@ -102,8 +102,13 @@ url(r'^request_type_view/', views.Requesttype_View, name='requesttype'),
 url(r'^request_priority_view/', views.Requestpriority_View, name='requestpriority'),
 url(r'^request_assign_view/', views.Requestassigned_View, name='requestassigned'),
 url(r'^request_complete_view/', views.Requestcompleted_View, name='requestcompleted'),
+
 # 11)
 url(r'^Core_NonCore_view/', views.CoreNonCore_View, name='corenoncore'),
 url(r'^activity_timetracker_view/', views.Activitytimetracker_View, name='activitytimetracker'),
 
+# 12)
+url(r'^ot_view/', views.Ot_View, name='otuserwise'),
+url(r'^error_userwise_View/', views.Erroruserwise_View, name='erroruserwise'),
+url(r'^Error_reportwise_View/', views.Errorreportwise_View, name='errorreportwise'),
 	]
