@@ -111,4 +111,7 @@ url(r'^activity_timetracker_view/', views.Activitytimetracker_View, name='activi
 url(r'^ot_view/', views.Ot_View, name='otuserwise'),
 url(r'^error_userwise_View/', views.Erroruserwise_View, name='erroruserwise'),
 url(r'^Error_reportwise_View/', views.Errorreportwise_View, name='errorreportwise'),
+
+
+ url(r'^export/csv/$', views.export_users_csv, name='export_users_csv'),
 	]

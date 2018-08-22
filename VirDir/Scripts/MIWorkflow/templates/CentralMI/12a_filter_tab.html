@@ -39,20 +39,20 @@ border-width: thin;
 {% endblock %}
 
 {% block content %}
+
 <form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
 {% csrf_token %}
-{% if authority == "Group2" %}
+{% if group_name == "manager" %}
   <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
     <div class="col-auto col-sm-2 col-md-2 col-lg-2">
       <label class="">Data Choice</label>
       <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
     </div>
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-      <label class="">Interval</label>
-      <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
+    <div class="">
+      <label class="hidden">interval</label>
+      <span  class="hidden">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
     </div>
-
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
       <label class="">Start Date</label>
       <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
     </div>
@@ -60,11 +60,11 @@ border-width: thin;
       <label class="">End Date </label>
       <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
     </div>
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+    <div class="col-auto col-sm-3 col-md-3 col-lg-3">
       <label class="">Team</label>
       <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
     </div>
-    <div class="col-auto col-sm-1 col-md-1 col-lg-1">
+    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
       <label class="">Member</label>
       <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
     </div>
@@ -73,48 +73,86 @@ border-width: thin;
       <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
       </div>
     </div>
+</div>
+  {% elif group_name == "team_leader" %}
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="">Data Choice</label>
+        <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">interval</label>
+        <span  class="hidden">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
+      </div>
+        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="">Start Date</label>
+        <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="">End Date </label>
+        <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+        <label class="">Team</label>
+        <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
+      </div>
 
-       {% else %}
+      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="">Member</label>
+        <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-auto col-sm-1 col-md-1 col-lg-1">
+        <label class="fontstyle10"> save </label>
+        <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+        </div>
+      </div>
+     </div>
 
-       <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-           <label class="">Data Choice</label>
-           <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
-         </div>
-         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-           <label class="">Interval</label>
-           <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
-         </div>
+    {% else %}
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="">Data Choice</label>
+        <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">interval</label>
+        <span  class="hidden">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
+      </div>
+        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="">Start Date</label>
+        <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="">End Date </label>
+        <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+        <label class="hidden">Team</label>
+        <span  class="hidden">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
+      </div>
 
-         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-           <label class="">Start Date</label>
-           <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
-         </div>
-         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-           <label class="">End Date </label>
-           <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
-         </div>
-         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-           <label class="fontstyle10"> save </label>
-           <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-           </div>
-         </div>
-         {% endif %}
+      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+        <label class="hidden">Member</label>
+        <span  class="hidden">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-auto col-sm-1 col-md-1 col-lg-1">
+        <label class="fontstyle10"> save </label>
+        <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+        </div>
+      </div>
+     </div>
+       {% endif %}
        </form>
 
-       </tbody>
-</table>
-</div>
-</form>
      <script>
 
      $("#id_team").change(function () {
-         var member_id = $(this).val();  // get the selected country ID from the HTML input
-        console.log(member_id)
+         var team_id = $(this).val();  // get the selected country ID from the HTML input
+        console.log(team_id)
         $.ajax({
           url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
           data: {
-            'mimemberid': member_id     // add the country id to the GET parameters
+            'team_id': team_id     // add the country id to the GET parameters
           },
             success: function (data) {   // `data` is the return of the `load_cities` view function
             $("#id_member").html(data);  // replace the contents of the city input with the data that came from the server
@@ -135,24 +173,7 @@ border-width: thin;
            altFormat: 'yy-mm-dd'});
 
 
-
-            $(document).ready(function() {
-                $('.dataframe').DataTable(
-                {
-                  destroy: true,
-                  fixedHeader: true,
-                  scrollY: '100vh',
-                  scrollCollapse: true,
-                  scrollX: true,
-                  fixedColumns: true,
-                  "lengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
-
-                });
-            } );
-            </script>
-            <link rel="stylesheet" href="{% static 'datatable/dataTables.bootstrap.min.css' %}" rel="stylesheet">
-            <script type="text/javascript" src="{% static 'datatable/jquery.dataTables.min.js' %}"></script>
-            <script type="text/javascript" src="{% static 'datatable/dataTables.bootstrap.min.js' %}"  charset="UTF-8"></script>
+</script>
 {% endblock %}
 
 {% block footer %}

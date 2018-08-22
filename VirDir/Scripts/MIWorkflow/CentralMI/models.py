@@ -582,7 +582,7 @@ class Errorlog(models.Model):
     error_report = models.ForeignKey(Activity, models.DO_NOTHING, db_column='error_report')
     error_reportedby = models.CharField(max_length=50)
     error_reportedteam = models.CharField(max_length=50)
-    error_reportedto = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedto')
+    error_reportedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='error_reportedto')
     error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
     error_description = models.TextField()
     errordocument = models.FileField(upload_to='errordocument/',blank=True, null=True)

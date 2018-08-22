@@ -10,6 +10,29 @@ from __future__ import unicode_literals
 from django.db import models
 
 
+class Calendar(models.Model):
+    calendardate = models.DateTimeField(db_column='CalendarDate', primary_key=True)  # Field name made lowercase.
+    calendarca = models.IntegerField(db_column='CalendarCA', blank=True, null=True)  # Field name made lowercase.
+    calendarcd = models.IntegerField(db_column='CalendarCD', blank=True, null=True)  # Field name made lowercase.
+    weekdayid = models.IntegerField(db_column='WeekDayID', blank=True, null=True)  # Field name made lowercase.
+    weekdayname = models.CharField(db_column='WeekDayName', max_length=9, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'Calendar'
+
+
+class Calendarholidays(models.Model):
+    calendardate = models.DateTimeField(db_column='CalendarDate', primary_key=True)  # Field name made lowercase.
+    calendarfunction = models.IntegerField(db_column='CalendarFunction')  # Field name made lowercase.
+    holidaytype = models.CharField(db_column='HolidayType', max_length=100, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'CalendarHolidays'
+        unique_together = (('calendardate', 'calendarfunction'),)
+
+
 class Acceptrejectdetail(models.Model):
     estacceptrejectid = models.AutoField(primary_key=True)
     estacceptrejectdate = models.DateTimeField()
@@ -273,7 +296,7 @@ class Errorlog(models.Model):
     error_report = models.ForeignKey(Activity, models.DO_NOTHING, db_column='error_report')
     error_reportedby = models.CharField(max_length=50)
     error_reportedteam = models.CharField(max_length=50)
-    error_reportedto = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedto')
+    error_reportedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='error_reportedto')
     error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
     error_description = models.TextField()
     errordocument = models.CharField(max_length=255, blank=True, null=True)

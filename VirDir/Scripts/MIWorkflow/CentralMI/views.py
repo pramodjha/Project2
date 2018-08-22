@@ -38,18 +38,21 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from  .decorators import user_permission
 from django.urls import reverse
+from django.http import HttpResponse
 #import django-excel as excel
 #import pyexcel.ext.xls
 import datetime as dt
+import csv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
 
-#def export_excel(self, request):
-#    response = excel.make_response_from_a_table(Requestdetail, 'xls')
-#    response['Content-Disposition'] = 'attachment; filename="books.xls"'
-#    return response
+def export_users_csv(request):
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename=filename.csv'
+  exportdata.to_csv(path_or_buf=response,index = False, sep=',', encoding='utf-8')
+  return response
 
 
 @login_required
@@ -96,117 +99,140 @@ def data_extraction(request,parameter1=None,parameter2=None):
     return data
 
 
-def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None):
+def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
+    global exportdata
     df1 = pd.DataFrame(list(Timetrackers.objects.all().values()))
     df2 = pd.DataFrame(list(Mimember.objects.all().values()))
-    df3 = pd.DataFrame(list(AuthUser.objects.all().values()))
-    df4 = pd.DataFrame(list(Requestcategorys.objects.all().values()))
-    df5 = pd.DataFrame(list(Requestsubcategory.objects.all().values()))
+    df3 = pd.DataFrame(list(Teamdetail.objects.all().values()))
+    df4 = pd.DataFrame(list(AuthUser.objects.all().values()))
+    df5 = pd.DataFrame(list(Requestcategorys.objects.all().values()))
+    df6 = pd.DataFrame(list(Requestsubcategory.objects.all().values()))
 
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
-    df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['username_id'], right_on = ['id'])
-    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['requestcategorys_id'], right_on = ['requestcategoryid'])
-    df_merge4 = pd.merge(df_merge3, df5,  how='left', left_on=['requestsubcategory_id'], right_on = ['requestsubcategoryid'])
-
-    print(df_merge4.head(5))
-    #print(df4.head(5))
-#    pivot = pd.pivot_table(df_merge3,index=['trackingdatetime','core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
-#    data = pivot.to_html(classes="table cell-border")
-    df_merge4['trackingdatetime'] = df_merge4['trackingdatetime'].apply(lambda x:
+    df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['teamdetail_id_y'], right_on = ['teamid'])
+    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['username_id'], right_on = ['id'])
+    df_merge4 = pd.merge(df_merge3, df5,  how='left', left_on=['requestcategorys_id'], right_on = ['requestcategoryid'])
+    df_merge5 = pd.merge(df_merge4, df6,  how='left', left_on=['requestsubcategory_id'], right_on = ['requestsubcategoryid'])
+    df_merge5['trackingdatetime'] = df_merge5['trackingdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
-    df_merge4['trackingdatetime_monthyear'] = df_merge4['trackingdatetime'].apply(lambda x:
+    df_merge5['trackingdatetime_monthyear'] = df_merge5['trackingdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
-    df_merge4['trackingdatetime_week'] = df_merge4['trackingdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-
+    df_merge5['trackingdatetime_week'] = df_merge5['trackingdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge5 = df_merge5[df_merge5['teamname']==team] if team != 'None' else df_merge5
+    df_merge5 = df_merge5[df_merge5['username']==member] if member != 'None' else df_merge5
     if interval == 'Daily':
         if view == "core_noncore":
-            pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['trackingdatetime', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            pivot_daily_corenoncore = pd.pivot_table(df_merge5,index=['trackingdatetime', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
+            print(exportdata.head(5))
             data = pivot_daily_corenoncore.to_html(classes="table cell-border")
         elif view == "activity":
-            pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['requestcategorys','requestsubcategory'], columns='username', values='totaltime',aggfunc=sum)
+            pivot_daily_corenoncore = pd.pivot_table(df_merge5,index=['requestcategorys','requestsubcategory'], columns='username', values='totaltime',aggfunc=sum)
+            exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
             data = pivot_daily_corenoncore.to_html(classes="table cell-border")
     elif  interval == 'Monthly':
         if view == "core_noncore":
-            pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['trackingdatetime_monthyear', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            pivot_monthly_corenoncore = pd.pivot_table(df_merge5,index=['trackingdatetime_monthyear', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
             data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
         elif view == "activity":
-            pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+            pivot_monthly_corenoncore = pd.pivot_table(df_merge5,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+            exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
             data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
     elif  interval == 'Weekly':
         if view == "core_noncore":
-            pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['trackingdatetime_week', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            pivot_weekly_corenoncore = pd.pivot_table(df_merge5,index=['trackingdatetime_week', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+            exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
             data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
         elif view == "activity":
-            pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+            pivot_weekly_corenoncore = pd.pivot_table(df_merge5,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+            exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
             data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
     return data
 
-def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None):
+def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
+    global exportdata
     df1 = pd.DataFrame(list(OtDetail.objects.all().values()))
     df2 = pd.DataFrame(list(Timetrackers.objects.all().values()))
     df3 = pd.DataFrame(list(Mimember.objects.all().values()))
-    df4 = pd.DataFrame(list(AuthUser.objects.all().values()))
+    df4 = pd.DataFrame(list(Teamdetail.objects.all().values()))
+    df5 = pd.DataFrame(list(AuthUser.objects.all().values()))
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['timetrackers_id'], right_on = ['timetrackerid'])
     df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
-    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['username_id'], right_on = ['id'])
-#   pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
-#   data = pivot.to_html(classes="table cell-border")
-    df_merge3['ot_startdatetime'] = df_merge3['ot_startdatetime'].apply(lambda x:
+    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['teamdetail_id_y'], right_on = ['teamid'])
+    df_merge4 = pd.merge(df_merge3, df5,  how='left', left_on=['username_id'], right_on = ['id'])
+    df_merge4['ot_startdatetime'] = df_merge4['ot_startdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
-    df_merge3['ot_startdatetime_monthyear'] = df_merge3['ot_startdatetime'].apply(lambda x:
+    df_merge4['ot_startdatetime_monthyear'] = df_merge4['ot_startdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
-    df_merge3['ot_startdatetime_week'] = df_merge3['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-
-    print(df_merge3.head(5))
+    df_merge4['ot_startdatetime_week'] = df_merge4['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge4 = df_merge4[df_merge4['teamname']==team] if team != 'None' else df_merge4
+    df_merge4 = df_merge4[df_merge4['username']==member] if member != 'None' else df_merge4
     if interval == 'Daily':
-        pivot_daily_corenoncore = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
+        pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
+        exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
         data = pivot_daily_corenoncore.to_html(classes="table cell-border")
     elif  interval == 'Monthly':
-        pivot_monthly_corenoncore = pd.pivot_table(df_merge3,index=['ot_startdatetime_monthyear'], columns='username', values='ot_hrs',aggfunc=sum)
+        pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_monthyear'], columns='username', values='ot_hrs',aggfunc=sum)
+        exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
         data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
     elif  interval == 'Weekly':
-        pivot_weekly_corenoncore = pd.pivot_table(df_merge3,index=['ot_startdatetime_week'], columns='username', values='ot_hrs',aggfunc=sum)
+        pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_week'], columns='username', values='ot_hrs',aggfunc=sum)
+        exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
         data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
     return data
 
-def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None):
+def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
+    global exportdata
     df1 = pd.DataFrame(list(Errorlog.objects.all().values()))
     df2 = pd.DataFrame(list(Activity.objects.all().values()))
-    df3 = pd.DataFrame(list(Authuser.objects.all().values()))
+    df3 = pd.DataFrame(list(Mimember.objects.all().values()))
+    df4 = pd.DataFrame(list(Teamdetail.objects.all().values()))
+    df5 = pd.DataFrame(list(AuthUser.objects.all().values()))
 
-    print(df1)
-    print(df2)
-
-    print(df3)
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['error_report_id'], right_on = ['activityid'])
-    df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
-#   pivot = pd.pivot_table(df_merge3,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
-#   data = pivot.to_html(classes="table cell-border")
-    #df_merge3['ot_startdatetime'] = df_merge3['ot_startdatetime'].apply(lambda x:
-#                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
-    #df_merge3['ot_startdatetime_monthyear'] = df_merge3['ot_startdatetime'].apply(lambda x:
-#                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
-    #df_merge3['ot_startdatetime_week'] = df_merge3['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['error_reportedto_id'], right_on = ['mimemberid'])
+    df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['teamdetail_id'], right_on = ['teamid'])
+    df_merge4 = pd.merge(df_merge3, df5,  how='left', left_on=['username_id'], right_on = ['id'])
+    df_merge4['errorlog_date'] = df_merge4['errorlog_date'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
+    df_merge4['errorlog_date_monthyear'] = df_merge4['errorlog_date'].apply(lambda x:
+                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
+    df_merge4['errorlog_date_week'] = df_merge4['errorlog_date'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge4 = df_merge4[df_merge4['teamname']==team] if team != 'None' else df_merge4
+    df_merge4 = df_merge4[df_merge4['username']==member] if member != 'None' else df_merge4
 
-    #print(df_merge3)
-    #if interval == 'Daily':
-    #    pivot_daily_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime'], columns='username', values='totaltime',aggfunc=sum)
-    #    data = pivot_daily_corenoncore.to_html(classes="table cell-border")
-    #elif  interval == 'Monthly':
-    #    pivot_monthly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_monthyear'], columns='username', values='totaltime',aggfunc=sum)
-    #    data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
-    #elif  interval == 'Weekly':
-    #    pivot_weekly_corenoncore = pd.pivot_table(df_merge4,index=['ot_startdatetime_week'], columns='username', values='totaltime',aggfunc=sum)
-    #    data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    if interval == 'Daily':
+        if view == 'erroruserwise':
+            pivot_daily_userwise = pd.pivot_table(df_merge4,index=['errorlog_date'], columns='username', values='error_reportedto_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_daily_userwise.reset_index())
+            data = pivot_daily_userwise.to_html(classes="table cell-border")
+        elif view == 'errorreportwise':
+            pivot_daily_userwise = pd.pivot_table(df_merge4,index=['errorlog_date'], columns='name', values='error_reportedto_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_daily_userwise.reset_index())
+            data = pivot_daily_userwise.to_html(classes="table cell-border")
+    elif  interval == 'Monthly':
+        if view == 'erroruserwise':
+            pivot_monthly_userwise = pd.pivot_table(df_merge4,index=['errorlog_date_monthyear'], columns='username', values='error_reportedto_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+            data = pivot_monthly_userwise.to_html(classes="table cell-border")
+        elif view == 'errorreportwise':
+            pivot_monthly_userwise = pd.pivot_table(df_merge4,index=['errorlog_date_monthyear'], columns='name', values='error_reportedto_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+            data = pivot_monthly_userwise.to_html(classes="table cell-border")
+    elif  interval == 'Weekly':
+        if view == 'erroruserwise':
+            pivot_monthly_userwise = pd.pivot_table(df_merge4,index=['errorlog_date_week'], columns='username', values='error_reportedto_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+            data = pivot_monthly_userwise.to_html(classes="table cell-border")
+        elif view == 'errorreportwise':
+            pivot_monthly_userwise = pd.pivot_table(df_merge4,index=['errorlog_date_week'], columns='name', values='error_reportedto_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+            data = pivot_monthly_userwise.to_html(classes="table cell-border")
     return data
 
-
-
-
-def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None):
-    print(startdate)
-    print(enddate)
-    print(interval)
+def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
+    global exportdata
     df01 = pd.DataFrame(list(Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).values()))
     df02 = pd.DataFrame(list(Authorisedetail.objects.all().values()))
     df03 = pd.DataFrame(list(Assigneddetail.objects.all().values()))
@@ -218,6 +244,7 @@ def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None
     df09 = pd.DataFrame(list(Requesttypedetail.objects.all().values()))
     df10 = pd.DataFrame(list(Mimember.objects.all().values()))
     df11 = pd.DataFrame(list(AuthUser.objects.all().values()))
+    df12 = pd.DataFrame(list(Teamdetail.objects.all().values()))
     df_merge1 = pd.merge(df01, df02,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
     df_merge2 = pd.merge(df_merge1, df03,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
     df_merge3 = pd.merge(df_merge2, df04,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
@@ -228,62 +255,74 @@ def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None
     df_merge8 = pd.merge(df_merge7, df09,  how='left', left_on=['requesttypedetail_id'], right_on = ['requesttypeid'])
     df_merge9 = pd.merge(df_merge8, df10,  how='left', left_on=['username_id'], right_on = ['username_id'])
     df_merge10 = pd.merge(df_merge9, df11,  how='left', left_on=['username_id'], right_on = ['id'])
-
-    df_merge10['requestraiseddate'] = df_merge10['requestraiseddate'].apply(lambda x:
+    df_merge11 = pd.merge(df_merge10, df12,  how='left', left_on=['teamdetail_id'], right_on = ['teamid'])
+    df_merge11['requestraiseddate'] = df_merge11['requestraiseddate'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
-    df_merge10['requestraised_monthyear'] = df_merge10['requestraiseddate'].apply(lambda x:
+    df_merge11['requestraised_monthyear'] = df_merge11['requestraiseddate'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
-    df_merge10['assigneddate'] = df_merge10['assigneddate'].apply(lambda x:
+    df_merge11['assigneddate'] = df_merge11['assigneddate'].apply(lambda x:
                                      dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
-    df_merge10['assigneddate_monthyear'] = df_merge10['assigneddate'].apply(lambda x:
+    df_merge11['assigneddate_monthyear'] = df_merge11['assigneddate'].apply(lambda x:
                                      dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
-    df_merge10['completeddate'] = df_merge10['completeddate'].apply(lambda x:
+    df_merge11['completeddate'] = df_merge11['completeddate'].apply(lambda x:
                                      dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
-    df_merge10['completeddate_monthyear'] = df_merge10['completeddate'].apply(lambda x:
+    df_merge11['completeddate_monthyear'] = df_merge11['completeddate'].apply(lambda x:
                                      dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
-    df_merge10['requestraised_week'] = df_merge10['requestraiseddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-    df_merge10['assigneddate_week'] = df_merge10['assigneddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-    df_merge10['completeddate_week'] = df_merge10['completeddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-
-    #print(df_merge10['requestraised_week'])
+    df_merge11['requestraised_week'] = df_merge11['requestraiseddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge11['assigneddate_week'] = df_merge11['assigneddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge11['completeddate_week'] = df_merge11['completeddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge11 = df_merge11[df_merge11['teamname']==team] if team != 'None' else df_merge11
+    df_merge11 = df_merge11[df_merge11['username']==member] if member != 'None' else df_merge11
     if interval == 'Daily':
         if view == "requesttype":
-            pivot_daily_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            pivot_daily_type = pd.pivot_table(df_merge11,index=['requestraiseddate'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_daily_type.reset_index())
             data = pivot_daily_type.to_html(classes="table cell-border")
         elif view == "requestpriority":
-            pivot_daily_priority = pd.pivot_table(df_merge10,index=['requestraiseddate'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            pivot_daily_priority = pd.pivot_table(df_merge11,index=['requestraiseddate'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_daily_priority.reset_index())
             data = pivot_daily_priority.to_html(classes="table cell-border")
         elif view == "requestassigned":
-            pivot_daily_assigned = pd.pivot_table(df_merge10,index=['assigneddate'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            pivot_daily_assigned = pd.pivot_table(df_merge11,index=['assigneddate'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_daily_assigned.reset_index())
             data = pivot_daily_assigned.to_html(classes="table cell-border")
         elif view == "requestcompleted":
-            pivot_daily_completed = pd.pivot_table(df_merge10,index=['completeddate'], columns='completedby_id', values='completedid',aggfunc=len)
+            pivot_daily_completed = pd.pivot_table(df_merge11,index=['completeddate'], columns='completedby_id', values='completedid',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_daily_completed.reset_index())
             data = pivot_daily_completed.to_html(classes="table cell-border")
     elif  interval == 'Monthly':
         if view == "requesttype":
-            pivot_monthly_type = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            pivot_monthly_type = pd.pivot_table(df_merge11,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_type.reset_index())
             data = pivot_monthly_type.to_html(classes="table cell-border")
         elif view == "requestpriority":
-            pivot_monthly_priority = pd.pivot_table(df_merge10,index=['requestraised_monthyear'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            pivot_monthly_priority = pd.pivot_table(df_merge11,index=['requestraised_monthyear'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_priority.reset_index())
             data = pivot_monthly_priority.to_html(classes="table cell-border")
         elif view == "requestassigned":
-            pivot_monthly_assigned = pd.pivot_table(df_merge10,index=['assigneddate_monthyear'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            pivot_monthly_assigned = pd.pivot_table(df_merge11,index=['assigneddate_monthyear'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_assigned.reset_index())
             data = pivot_monthly_assigned .to_html(classes="table cell-border")
         elif view == "requestcompleted":
-            pivot_monthly_Completed = pd.pivot_table(df_merge10,index=['completeddate_monthyear'], columns='completedby_id', values='completedid',aggfunc=len)
+            pivot_monthly_Completed = pd.pivot_table(df_merge11,index=['completeddate_monthyear'], columns='completedby_id', values='completedid',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_monthly_Completed.reset_index())
             data = pivot_monthly_Completed.to_html(classes="table cell-border")
     elif  interval == 'Weekly':
         if view == "requesttype":
-            pivot_weekly_type = pd.pivot_table(df_merge10,index=['requestraised_week'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            pivot_weekly_type = pd.pivot_table(df_merge11,index=['requestraised_week'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_weekly_type.reset_index())
             data = pivot_weekly_type.to_html(classes="table cell-border")
         elif view == "requestpriority":
-            pivot_weekly_priority = pd.pivot_table(df_merge10,index=['requestraised_week'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            pivot_weekly_priority = pd.pivot_table(df_merge11,index=['requestraised_week'], columns='requestpriority', values='prioritydetail_id',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_weekly_priority.reset_index())
             data = pivot_weekly_priority.to_html(classes="table cell-border")
         elif view == "requestassigned":
-            pivot_weekly_assigned = pd.pivot_table(df_merge10,index=['assigneddate_week'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            pivot_weekly_assigned = pd.pivot_table(df_merge11,index=['assigneddate_week'], columns='assignedto_id', values='assignedid',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_weekly_assigned.reset_index())
             data = pivot_weekly_assigned .to_html(classes="table cell-border")
         elif view == "requestcompleted":
-            pivot_weekly_completed = pd.pivot_table(df_merge10,index=['completeddate_week'], columns='completedby_id', values='completedid',aggfunc=len)
+            pivot_weekly_completed = pd.pivot_table(df_merge11,index=['completeddate_week'], columns='completedby_id', values='completedid',aggfunc=len)
+            exportdata = pd.DataFrame(pivot_weekly_completed.reset_index())
             data = pivot_weekly_completed.to_html(classes="table cell-border")
     return data
 
@@ -314,14 +353,14 @@ def Sign_Up_View(request):
             passwordagain =  userObj['passwordagain']
             firstname =  userObj['firstname']
             lastname =  userObj['lastname']
-            print(password)
-            print(passwordagain)
-            print(password == passwordagain)
+            #print(password)
+            #print(passwordagain)
+            #print(password == passwordagain)
             if password == passwordagain:
-                print(User.objects.filter(username=username).exists() )
+                #print(User.objects.filter(username=username).exists() )
                 if not (User.objects.filter(username=username).exists() ):
                     new_user = User.objects.create_user(username, email, password)
-                    print(new_user)
+                #    print(new_user)
                     new_user.is_active = True
                     new_user.first_name = firstname
                     new_user.last_name = lastname
@@ -394,28 +433,35 @@ def Sign_Out(request):
 def All_Request_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='allrequest')
     group_name = is_group(request,username=username)
-    data = data_extraction(request,parameter1="'All'",parameter2="'All'")
+    data = Requestdetail.objects.all()
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
 def Unapproved_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='unapproved')
     group_name = is_group(request,username=username)
-    data = data_extraction(request,parameter1="'Approval pending'",parameter2="'RequestStage'")
+    approved = list(Authorisedetail.objects.all().values_list('requestdetail', flat=True))
+    data = Requestdetail.objects.exclude(requestid__in=approved)
+#    data1 = Requestdetail.objects.select_related('username','requesttypedetail','prioritydetail').all()
+
+#    print(data1)
+    #data = data_extraction(request,parameter1="'Approval pending'",parameter2="'RequestStage'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
 def Approved_View(request):
     activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='approved')
     group_name = is_group(request,username=username)
-    data = data_extraction(request,parameter1="'Approved'",parameter2="'AuthorisedStage'")
+    assigned = list(Assigneddetail.objects.all().values_list('requestdetail', flat=True))
+    data = Authorisedetail.objects.select_related('requestdetail').exclude(requestdetail__in=assigned)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
 def Assigned_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='assigned')
     group_name = is_group(request,username=username)
-    data = data_extraction(request,parameter1="'Assigned'",parameter2="'AssignedStage'")
+    overviewed = list(Overviewdetail.objects.all().values_list('requestdetail', flat=True))
+    data = Assigneddetail.objects.select_related('requestdetail').exclude(requestdetail__in=overviewed)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
@@ -423,14 +469,16 @@ def Assigned_View(request):
 def Overview_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='overview')
     group_name = is_group(request,username=username)
-    data = data_extraction(request,parameter1="'Overviewed'",parameter2="'OverviewStage'")
+    Estimated = list(Estimationdetail.objects.all().values_list('requestdetail', flat=True))
+    data = Overviewdetail.objects.select_related('requestdetail').exclude(requestdetail__in=Estimated)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
 def Estimate_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='estimate')
     group_name = is_group(request,username=username)
-    data = data_extraction(request,parameter1="'Estimated'",parameter2="'EstimateStage'")
+    Accepted = list(Acceptrejectdetail.objects.all().values_list('requestdetail', flat=True))
+    data = Estimationdetail.objects.select_related('requestdetail').exclude(requestdetail__in=Accepted)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
@@ -438,7 +486,8 @@ def Estimate_View(request):
 def Wip_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='wip')
     group_name = is_group(request,username=username)
-    data = data_extraction(request,parameter1="'Estimation Accepted'",parameter2="'WIPStage'")
+    Accepted = list(Completeddetail.objects.all().values_list('requestdetail', flat=True))
+    data = Acceptrejectdetail.objects.select_related('requestdetail').exclude(requestdetail__in=Accepted)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
@@ -446,16 +495,16 @@ def Wip_View(request):
 def Completed_View(request):
     activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='completed')
     group_name = is_group(request,username=username)
-
-    data = data_extraction(request,parameter1="'Completed'",parameter2="'CompletedStage'")
+    Completed = list(Completeddetail.objects.all().values_list('requestdetail', flat=True))
+    data = Completeddetail.objects.select_related('requestdetail').filter(requestdetail__in=Completed)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 @login_required
 def Rejected_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='rejected')
     group_name = is_group(request,username=username)
-
-    data = data_extraction(request,parameter1="'Rejected'",parameter2="'All'")
+    data = Requeststatusdetail.objects.select_related('statusdetail','requestdetail').filter(statusdetail__in=[3])
+#    data = data_extraction(request,parameter1="'Rejected'",parameter2="'All'")
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
@@ -535,128 +584,95 @@ from django.apps import apps
 def Summary_Tracker(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='filterdata')
     reportpage = "mainpage"
-    allmodel = list(apps.all_models['CentralMI'])
-    print(allmodel)
     group_name = is_group(request,username=username)
     form = SearchForm()
     if request.method == 'POST':
         form =  SearchForm(request.POST)
         if form.is_valid():
             request.session['reportno'] = form.cleaned_data['datachoice']
-            reportno = request.session.get('reportno')
             request.session['startdate'] = str(form.cleaned_data['startdate'])
-            startdate = request.session.get('startdate_report')
             request.session['interval'] = dict(INTERVAL_CHOICES)[int(form.cleaned_data["interval"])]
-            interval = request.session.get('interval')
-            request.session['enddate_report'] = str(form.cleaned_data['enddate'])
-            enddate = request.session.get('enddate_report')
-            request.session['team'] = form.cleaned_data['team']
-            team = request.session.get('team')
-            request.session['member'] = form.cleaned_data['member']
-            member = request.session.get('member')
-            #print(enddate)
-            #rint(reportno)
-            #model =
-            #model = info.define_day_week_month2(report_choice='2',start_date=startdate,end_date=enddate,range_type=interval,values='requestraiseddate',aggregatefield='requestid',core_noncore=None,OT=None,teamdetail=team,member=member,output_type='extract_summary')
+            request.session['enddate'] = str(form.cleaned_data['enddate'])
+            request.session['team'] = str(form.cleaned_data['team'])
+            request.session['member'] = str(form.cleaned_data['member'])
+            startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
             return render(request, 'CentralMI/12a_filter_tab.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportno':reportno,'reportpage':reportpage})
     return render(request, 'CentralMI/12a_filter_tab.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage})
+
+def Datarequiredforreport(request):
+    startdate = request.session.get('startdate')
+    enddate = request.session.get('enddate')
+    reportno = request.session.get('reportno')
+    interval = request.session.get('interval')
+    team = request.session.get('team')
+    member = request.session.get('member')
+    return startdate, enddate, reportno, interval, team, member
 
 def CoreNonCore_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='corenoncore')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    reportno = request.session.get('reportno')
-    interval = request.session.get('interval')
-    data = Timetrcker_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='core_noncore')
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Timetrcker_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='core_noncore')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Activitytimetracker_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='activity')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    reportno = request.session.get('reportno')
-    interval = request.session.get('interval')
-    data = Timetrcker_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='activity')
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Timetrcker_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='activity')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Requesttype_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requesttype')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    reportno = request.session.get('reportno')
-    interval = request.session.get('interval')
-    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requesttype')
-    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    print(team)
+    print(member)
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='requesttype')
+    length = len(data)
+    return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name,'length':length})
 
 
 def Requestpriority_View(request):
-    reportpage = "subpage"
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requestpriority')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    reportno = request.session.get('reportno')
-    print(startdate)
-    print(enddate)
-    interval = request.session.get('interval')
-    #print(interval)
-    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requestpriority')
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='requestpriority')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Requestassigned_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requestassigned')
     group_name = is_group(request,username=username)
-
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    reportno = request.session.get('reportno')
-    print(startdate)
-    print(enddate)
-    interval = request.session.get('interval')
-    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requestassigned')
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='requestassigned')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Requestcompleted_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='requestcompleted')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    interval = request.session.get('interval')
-    reportno = request.session.get('reportno')
-    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='requestcompleted')
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='requestcompleted')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Ot_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='otuserwise')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    interval = request.session.get('interval')
-    reportno = request.session.get('reportno')
-    data = Ot_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view=None)
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Ot_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view=None)
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Erroruserwise_View(request):
-    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='otuserwise')
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='erroruserwise')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    interval = request.session.get('interval')
-    reportno = request.session.get('reportno')
-    data = Error_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='erroruserwise')
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Error_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='erroruserwise')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Errorreportwise_View(request):
-    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='otuserwise')
+    activetab, activetab1, username, info, sd = create_session(request, header='summary',footer='errorreportwise')
     group_name = is_group(request,username=username)
-    startdate = request.session.get('startdate_report')
-    enddate = request.session.get('enddate_report')
-    interval = request.session.get('interval')
-    reportno = request.session.get('reportno')
-    data = Error_Summary(request,startdate=startdate,enddate=enddate,interval=interval,view='errorreportwise')
+    startdate, enddate, reportno, interval, team, member = Datarequiredforreport(request)
+    data = Error_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='errorreportwise')
     return render(request, 'CentralMI/12b_summary_tracker.html',{'data':data,'activetab':activetab,'activetab1':activetab1,'username':username,'reportno':reportno,'group_name':group_name})
 
 def Filter_Data(request):
@@ -858,7 +874,7 @@ def Feedback_Add_Form(request,feedbackquestionid):
     model1 = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid])
     if checkmember > 0:
         feedbackid = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid])
-        print(feedbackid)
+        #print(feedbackid)
         e = Feedback.objects.get(feedback_id=feedbackid)
         form = FeedbackForm(instance=e)
         if request.method == 'POST':
@@ -909,7 +925,7 @@ def Staff_Edit_Form(request):
     model1 = User.objects.filter(username__in=username)
     model = Mimember.objects.filter(username__in=[userid])
     form1 = UserForm(instance=e1)
-    print(username)
+    #print(username)
     form = MimemberForm(instance=e)
     if request.method == 'POST':
         form = MimemberForm(request.POST,instance=e)
@@ -1015,7 +1031,7 @@ def Internal_Choice_Add_Form(request,taskid):
     group_name = is_group(request,username=username)
 
     id = taskid
-    print(id)
+    #print(id)
     form =  InternaltaskchoiceForm(initial={'internaltask':taskid})
     if request.method == 'POST':
         form =  InternaltaskchoiceForm(request.POST)
@@ -1037,9 +1053,9 @@ def Internal_Choice_Edit_Form(request,choiceid):
 
     e = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid)
     question = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid).internaltask
-    print(question)
+    #print(question)
     taskid = Internaltask.objects.get(internaltaskquestion=question).internaltaskid
-    print(taskid)
+    #print(taskid)
 #    print(id)
     form =  InternaltaskchoiceForm(instance=e)
     if request.method == 'POST':
@@ -1062,7 +1078,7 @@ def Internal_Task_And_Choice_View(request,taskid):
     activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='internaltaskdetail')
     group_name = is_group(request,username=username)
 
-    print(taskid)
+    #print(taskid)
     userid = User.objects.get(username=username).id
     memberid = Mimember.objects.get(username=userid).mimemberid
     model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
@@ -1071,7 +1087,7 @@ def Internal_Task_And_Choice_View(request,taskid):
     model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
     if checkmember > 0:
         taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
-        print(taskstatusid)
+    #    print(taskstatusid)
         e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
         form = InternaltaskstatusForm(instance=e)
         #print(form)
@@ -1092,7 +1108,7 @@ def Internal_Task_And_Choice_View(request,taskid):
             choice = request.POST['choice']
             taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
             e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
-            print(choice)
+            #print(choice)
             form =  InternaltaskstatusForm(request.POST)
             if form.is_valid():
                 inst = form.save(commit=True)
@@ -1225,8 +1241,9 @@ def Authorised_Form(request,requestid):
 def Requestassigneddetail_Form(request, requestid):
     activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='approved')
     group_name = is_group(request,username=username)
-
-    userid = User.objects.get(username=username).pk
+    userid = User.objects.get(username=username).id
+    memberid = Mimember.objects.get(username=userid).mimemberid
+    print(userid)
     try:
         DataModel= Assigneddetail.objects.all().get(requestdetail=requestid)
         return HttpResponseRedirect(reverse('approved'))
@@ -1234,7 +1251,7 @@ def Requestassigneddetail_Form(request, requestid):
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
         #print(request_owner)
-        form = AssigneddetailForm(initial={'requestdetail':requestid, 'assignedby':userid})
+        form = AssigneddetailForm(initial={'requestdetail':requestid, 'assignedby':memberid})
         form1 = RequeststatusdetailForm(initial={'statusdetail':4,'username':userid,'requestdetail':requestid})
         if request.method == 'POST':
             form = AssigneddetailForm(request.POST)
@@ -1269,14 +1286,15 @@ def Overview_Form(request,requestid):
     activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='assigned')
     group_name = is_group(request,username=username)
 
-    userid = User.objects.get(username=username).pk
+    userid = User.objects.get(username=username).id
+    memberid = Mimember.objects.get(username=userid).mimemberid
     try:
         DataModel= Overviewdetail.objects.all().get(requestdetail=requestid)
         return HttpResponseRedirect(reverse('assigned'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
-        form = OverviewdetailForm(initial={'requestdetail':requestid, 'mimember':userid})
+        form = OverviewdetailForm(initial={'requestdetail':requestid, 'mimember':memberid})
         form1 = RequeststatusdetailForm(initial={'statusdetail':5,'username':userid,'requestdetail':requestid})
         if request.method == 'POST':
             form = OverviewdetailForm(request.POST,request.FILES)
@@ -1308,13 +1326,15 @@ def Estimation_Form(request,requestid):
     group_name = is_group(request,username=username)
 
     userid = User.objects.get(username=username).pk
+    memberid = Mimember.objects.get(username=userid).mimemberid
+
     try:
         DataModel= Estimationdetail.objects.all().get(requestdetail=requestid)
         return HttpResponseRedirect(reverse('overview'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
-        form = EstimationdetailForm(initial={'requestdetail':requestid, 'mimember':userid})
+        form = EstimationdetailForm(initial={'requestdetail':requestid, 'mimember':memberid})
         form1 = RequeststatusdetailForm(initial={'statusdetail':6,'username':userid,'requestdetail':requestid})
         if request.method == 'POST':
             form = EstimationdetailForm(request.POST)
@@ -1529,11 +1549,8 @@ def Index(request):
         return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
         'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
         'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name})
-
     else:
         return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
-
-
 
 def dataforemail(username=None,requestid=None,sub_user=None,L1_user=None,sub_auth=None,L1_auth=None,sub_miteam=None,L1_miteam=None,sub_manager=None,L1_manager=None,request_status=None):
     userid = User.objects.get(username=username).pk
@@ -1620,13 +1637,13 @@ class vistorinfo_output(object):
             end = datetime.strptime(end, '%y/%m/%d')
             if range_type == 'Daily':
                 days_range = (end - start).days
-                print(start)
-                print(end)
+                #print(start)
+                #print(end)
             elif range_type == 'Weekly':
                 days_range = ((end - start).days) / 7
                 days_range = int(str(days_range).split('.')[0])
-                print(start)
-                print(end)
+                #print(start)
+                #print(end)
 
             elif range_type == 'Monthly':
                 days_range = ((end - start).days) / 30
@@ -1634,7 +1651,7 @@ class vistorinfo_output(object):
         else:
             days_range = days_range
 
-        print(days_range)
+        #print(days_range)
         for i in range(days_range):
             self.values = values
             self.aggregatefield = aggregatefield
@@ -1837,7 +1854,7 @@ class vistorinfo_output(object):
                 days_range = int(str(days_range).split('.')[0])
         else:
             days_range = days_range
-        print(days_range)
+        #print(days_range)
 
         for i in range(days_range ):
             self.values = values
@@ -1880,7 +1897,7 @@ class vistorinfo_output(object):
             elif range_type == 'Monthly':
 
                 totaldays = ((end - start).days)
-                print(totaldays)
+                #print(totaldays)
 
                 if days_range == 1:
                     self.currentmonth = datetime.strftime(self.currentdate, '%m')
@@ -2100,15 +2117,15 @@ def Load_Signup(request):
         emailid = request.GET.get('emailid')
         password = request.GET.get('password')
         passwordagain = request.GET.get('passwordagain')
-        print(username)
+        #print(username)
 #        print(passwordagain)
 #        print(password)
 #        print(username)
         try:
             lengthofusername = len(username)
-            print(lengthofusername)
+            #print(lengthofusername)
             username_exist = User.objects.filter(username__in=[username]).exists()
-            print(username_exist)
+            #print(username_exist)
             active_field = 1
         except:
             username_exist = None
@@ -2126,7 +2143,7 @@ def Load_Signup(request):
             lengthofpassword = len(passwordagain)
             #print(lengthofpassword)
             password_match = True if passwordagain == password else False
-            print(password_match)
+            #print(password_match)
             active_field = 3
         except:
             lengthofpassword = None

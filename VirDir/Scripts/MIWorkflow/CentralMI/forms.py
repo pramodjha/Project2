@@ -171,12 +171,12 @@ INTERVAL_CHOICES = (
     )
 
 class SearchForm(forms.Form):
-    datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="", initial=1, widget=forms.Select(), required=True)
-    interval = forms.ChoiceField(choices = INTERVAL_CHOICES, label="", initial=1, widget=forms.Select(), required=True)
-    startdate = forms.DateField(initial=datetime.now(), required=False)
-    enddate = forms.DateField(initial=datetime.now(), required=False)
-    team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
-    member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
+    datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="Date Choice", initial=1, widget=forms.Select(), required=True)
+    interval = forms.ChoiceField(choices = INTERVAL_CHOICES, label="Interval", initial=1, widget=forms.Select(), required=True)
+    startdate = forms.DateField(initial=datetime.now(), label="StartDate",required=False)
+    enddate = forms.DateField(initial=datetime.now(), required=False,label="EndDate")
+    team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False,label="Team")
+    member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False,label="Member")
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)

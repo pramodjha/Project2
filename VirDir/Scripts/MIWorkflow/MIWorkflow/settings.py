@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'debug_panel',
     'report_builder',
+    
     ]
 
 MIDDLEWARE = [

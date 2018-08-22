@@ -11,21 +11,14 @@ thead > tr {
   font-family: Cambria;
   background-color: #333333;
 }
-
 tbody > tr {
   font-size: 12px;
   font-family: Cambria;
 }
-
 .cell-border{
 border-width: thin;
-
 }
-
 </style>
-
-<script src="{% static 'jquery/jquery-ui.js' %}"></script>
-<script src="{% static 'jquery/myjquery.js' %}"></script>
 {% endblock %}
 
 {% block navblockleft %}
@@ -40,133 +33,30 @@ border-width: thin;
 {% endblock %}
 
 {% block content %}
-{% if reportpage == "mainpage" %}
-<form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
-{% csrf_token %}
-{% if authority == "Group2" %}
-  <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-      <label class="">Data Choice</label>
-      <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-      <label class="">Interval</label>
-      <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
-    </div>
 
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-      <label class="">Start Date</label>
-      <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-      <label class="">End Date </label>
-      <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-      <label class="">Team</label>
-      <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-1 col-md-1 col-lg-1">
-      <label class="">Member</label>
-      <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-1 col-md-1 col-lg-1">
-      <label class="fontstyle10"> save </label>
-      <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-      </div>
-    </div>
+<a href="{% url 'export_users_csv' %}">Export to CSV</a>
+{% autoescape off %}
+{{ data | safe }}
+{% endautoescape %}
 
-       {% else %}
+ <script>
+  $(document).ready(function() {
+      $('.dataframe').DataTable(
+      {
+        destroy: true,
+        fixedHeader: true,
+        scrollY: '100vh',
+        scrollCollapse: true,
+        scrollX: true,
+        fixedColumns: true,
+        "lengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
 
-       <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-           <label class="">Data Choice</label>
-           <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
-         </div>
-         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-           <label class="">Interval</label>
-           <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
-         </div>
-
-         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-           <label class="">Start Date</label>
-           <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
-         </div>
-         <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-           <label class="">End Date </label>
-           <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
-         </div>
-         <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-           <label class="fontstyle10"> save </label>
-           <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-           </div>
-         </div>
-         {% endif %}
-       </form>
-
-       </tbody>
-</table>
-</div>
-</form>
-     {% autoescape off %}
-      {{ data | safe }}
-      {% endautoescape %}
-
-     {% else %}
-
-     {% autoescape off %}
-      {{ data | safe }}
-      {% endautoescape %}
-
-      {% endif %}
-
-     <script>
-
-     $("#id_team").change(function () {
-         var member_id = $(this).val();  // get the selected country ID from the HTML input
-        console.log(member_id)
-        $.ajax({
-          url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-          data: {
-            'mimemberid': member_id     // add the country id to the GET parameters
-          },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-            $("#id_member").html(data);  // replace the contents of the city input with the data that came from the server
-          }
-        });
       });
-
-
-        $("#id_startdate").datepicker({
-          dateFormat: 'yy-mm-dd',
-           altField: '#thealtdate',
-           altFormat: 'yy-mm-dd'});
-
-
-        $("#id_enddate").datepicker({
-          dateFormat: 'yy-mm-dd',
-           altField: '#thealtdate',
-           altFormat: 'yy-mm-dd'});
-
-
-
-            $(document).ready(function() {
-                $('.dataframe').DataTable(
-                {
-                  destroy: true,
-                  fixedHeader: true,
-                  scrollY: '100vh',
-                  scrollCollapse: true,
-                  scrollX: true,
-                  fixedColumns: true,
-                  "lengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
-
-                });
-            } );
-            </script>
-            <link rel="stylesheet" href="{% static 'datatable/dataTables.bootstrap.min.css' %}" rel="stylesheet">
-            <script type="text/javascript" src="{% static 'datatable/jquery.dataTables.min.js' %}"></script>
-            <script type="text/javascript" src="{% static 'datatable/dataTables.bootstrap.min.js' %}"  charset="UTF-8"></script>
+  } );
+  </script>
+  <link rel="stylesheet" href="{% static 'datatable/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <script type="text/javascript" src="{% static 'datatable/jquery.dataTables.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'datatable/dataTables.bootstrap.min.js' %}"  charset="UTF-8"></script>
 {% endblock %}
 
 {% block footer %}
