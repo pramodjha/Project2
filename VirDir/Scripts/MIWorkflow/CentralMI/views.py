@@ -781,15 +781,12 @@ def Check_Status_View(request):
     model = Requestdetail.objects.filter(username__in=[userid])
     return render(request, 'CentralMI/3b_check_status_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
-
 ################## Reports
-
 
 @login_required
 def Report_Detail_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='allreports')
     group_name = is_group(request,username=username)
-
     model = Activity.objects.all()
     return render(request, 'CentralMI/5a_reports_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
