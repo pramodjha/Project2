@@ -98,6 +98,38 @@ def data_extraction(request,parameter1=None,parameter2=None):
     data = dictfetchall(ret)
     return data
 
+@login_required
+def activity_Calendar(request,parameter1=None,parameter2=None):
+    print(parameter1)
+    print(parameter2)
+    print("[CentralMI].[dbo].[usp_activity_calendar] " + "'" + parameter1 + "'"  + ","  + "'" + parameter2 + "'")
+    cur = connection.cursor()
+    ret = cur.execute("[CentralMI].[dbo].[usp_activity_calendar] "  + "'" + parameter1 + "'"  + ","  + "'" + parameter2 + "'")
+
+    def dictfetchall(cursor):
+        desc = cursor.description
+        return [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+            ]
+    data = dictfetchall(ret)
+    return data
+
+@login_required
+def report_due(request):
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='reportdue')
+    group_name = is_group(request,username=username)
+    if sd == None:
+        sd = datetime.today().strftime('%Y-%m-%d')
+        datedetail = 'Activity Due is for  today i.e. ' + sd + '. To check for other date please set it in Timetracker'
+    else:
+        datedetail = 'Activity Due is for the date ' + sd + '. To check for other date please set it in Timetracker'
+    data_daily = activity_Calendar(request,parameter1=sd,parameter2='daily')
+    data_weekly = activity_Calendar(request,parameter1=sd,parameter2='weekly')
+    data_monthly = activity_Calendar(request,parameter1=sd,parameter2='monthly')
+    return render(request, 'CentralMI/16a_report_due.html', {'datedetail':datedetail,'model1':data_daily,'model2':data_weekly,'model3':data_monthly,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
+
+
 
 def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
     global exportdata
@@ -326,19 +358,24 @@ def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None
             data = pivot_weekly_completed.to_html(classes="table cell-border")
     return data
 
-@login_required
-def setdate(request):
+
+def setdateforall(request):
     try:
         selecteddate = request.POST.get('trackingdatetime')
-        #print(selecteddate)
         if selecteddate == None:
             currentdate = str(datetime.date.today())
             selecteddate = currentdate
-        selecteddate = selecteddate
-        request.session['setdate'] = selecteddate
-        return HttpResponseRedirect(reverse('timetracker'))
+        else:
+            selecteddate = selecteddate
     except:
-        return render(request, 'CentralMI/15a_ErrorPage.html')
+        currentdate = str(datetime.date.today())
+        selecteddate = currentdate
+    return  selecteddate
+
+@login_required
+def setdate(request):
+    request.session['setdate'] = setdateforall(request)
+    return HttpResponseRedirect(reverse('timetracker'))
 
 def Sign_Up_View(request):
     #activetab, activetab1, username, info, sd = create_session(request, header='signup',footer='')
@@ -1979,7 +2016,6 @@ def TimeTracker_View(request):
 #    try:
     activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
     group_name = is_group(request,username=username)
-
     starttime = request.POST.get('startdatetime')
     stoptime = request.POST.get('stopdatetime')
     userid = User.objects.get(username__in=[username]).id

@@ -1,0 +1,110 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block content %}
+{{datedetail}}
+<div class="col-sm-4 col-md-6 col-lg-12">
+<div class="col-sm-4 col-md-4 col-lg-4">
+  <table  class="table" id="" style="width:100%">
+    <thead class="">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <td >Daily</td>
+      </tr>
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <td >ID</td>
+      <td >Name</td>
+      <td >DueDate</td>
+
+    </tr>
+    </thead>
+    <tbody class="">
+  {%for data in model1 %}
+  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+      <td>{{data.activityid }}</td>
+      <td>{{data.name }}</td>
+      <td>{{data.date }}</td>
+
+      {% endfor %}
+    </tr></br>
+  </tbody>
+  </table>
+</div>
+
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+  <table  class="table" id="" style="width:100%">
+    <thead class="">
+    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+    <td >Weekly</td>
+    </tr>
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <td >ID</td>
+      <td >Name</td>
+      <td >DueDate</td>
+
+    </tr>
+    </thead>
+    <tbody class="">
+  {%for data in model2 %}
+  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+      <td>{{data.activityid }}</td>
+      <td>{{data.name }}</td>
+      <td>{{data.date }}</td>
+
+      {% endfor %}
+    </tr></br>
+  </tbody>
+  </table>
+</div>
+
+
+
+
+<div class="col-sm-4 col-md-4 col-lg-4">
+  <table  class="table" id="" style="width:100%">
+    <thead class="">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <td >Monthly</td>
+      </tr>
+
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <td >ID</td>
+      <td >Name</td>
+      <td >DueDate</td>
+
+    </tr>
+    </thead>
+    <tbody class="">
+  {%for data in model3 %}
+  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+      <td>{{data.activityid }}</td>
+      <td>{{data.name }}</td>
+      <td>{{data.date }}</td>
+
+      {% endfor %}
+    </tr></br>
+  </tbody>
+  </table>
+</div>
+
+</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}
