@@ -11,11 +11,18 @@ from django.db import models
 
 
 class Calendar(models.Model):
-    calendardate = models.DateTimeField(db_column='CalendarDate', primary_key=True)  # Field name made lowercase.
-    calendarca = models.IntegerField(db_column='CalendarCA', blank=True, null=True)  # Field name made lowercase.
-    calendarcd = models.IntegerField(db_column='CalendarCD', blank=True, null=True)  # Field name made lowercase.
-    weekdayid = models.IntegerField(db_column='WeekDayID', blank=True, null=True)  # Field name made lowercase.
-    weekdayname = models.CharField(db_column='WeekDayName', max_length=9, blank=True, null=True)  # Field name made lowercase.
+    date = models.DateField(blank=True, null=True)
+    calendar_days = models.IntegerField(blank=True, null=True)
+    calendar_weekday = models.IntegerField(db_column='calendar_Weekday', blank=True, null=True)  # Field name made lowercase.
+    calendar_months = models.IntegerField(blank=True, null=True)
+    calendar_days_rest = models.IntegerField(blank=True, null=True)
+    working_days = models.IntegerField(blank=True, null=True)
+    working_weekday = models.IntegerField(blank=True, null=True)
+    working_months = models.IntegerField(blank=True, null=True)
+    working_days_rest = models.IntegerField(blank=True, null=True)
+    weeknum = models.IntegerField(blank=True, null=True)
+    month = models.IntegerField(blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -74,6 +81,19 @@ class Activity(models.Model):
         db_table = 'activity'
 
 
+class ActivityCalendar(models.Model):
+    date = models.DateField(blank=True, null=True)
+    daytype = models.CharField(max_length=50, blank=True, null=True)
+    weekname = models.CharField(max_length=50, blank=True, null=True)
+    cd_wd_days = models.IntegerField(db_column='CD_WD_days', blank=True, null=True)  # Field name made lowercase.
+    activityid = models.IntegerField(blank=True, null=True)
+    frequency = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'activity_calendar'
+
+
 class Activitystatus(models.Model):
     activitystatusid = models.AutoField(primary_key=True)
     activitystatus = models.CharField(unique=True, max_length=50)
@@ -81,6 +101,19 @@ class Activitystatus(models.Model):
     class Meta:
         managed = False
         db_table = 'activitystatus'
+
+
+class ActivitystatusCalendar(models.Model):
+    activitystatusdate = models.DateTimeField()
+    activitystatus = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+    activityid = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
+    activitycalendardate = models.DateField(blank=True, null=True)
+    reallocatedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='reallocatedto', blank=True, null=True)
+    recordenteredby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='recordenteredby', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'activitystatus_calendar'
 
 
 class Assigneddetail(models.Model):
@@ -580,6 +613,22 @@ class ReportBuilderReportStarred(models.Model):
         unique_together = (('report', 'user'),)
 
 
+class ReportCalendar(models.Model):
+    datecol = models.DateTimeField()
+    calendar_days = models.IntegerField()
+    calendar_weeknum = models.IntegerField()
+    calendar_month = models.IntegerField()
+    calendar_days_rest = models.IntegerField()
+    working_days = models.IntegerField()
+    working_weeknum = models.IntegerField()
+    working_month = models.IntegerField()
+    working_days_rest = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'report_calendar'
+
+
 class ReportType(models.Model):
     report_typid = models.AutoField(primary_key=True)
     report_type = models.CharField(max_length=255)
@@ -689,6 +738,22 @@ class Statusdetail(models.Model):
     class Meta:
         managed = False
         db_table = 'statusdetail'
+
+
+class TblCalendar(models.Model):
+    date = models.DateField(blank=True, null=True)
+    days_type = models.CharField(db_column='Days Type', max_length=50, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    daily = models.IntegerField(db_column='Daily', blank=True, null=True)  # Field name made lowercase.
+    weekly = models.IntegerField(db_column='Weekly', blank=True, null=True)  # Field name made lowercase.
+    monthly = models.IntegerField(db_column='Monthly', blank=True, null=True)  # Field name made lowercase.
+    firstdayofmonth = models.DateField(db_column='FIrstDayofmonth', blank=True, null=True)  # Field name made lowercase.
+    lastdayofthemonth = models.DateField(db_column='LastDayoftheMonth', blank=True, null=True)  # Field name made lowercase.
+    weeknum = models.IntegerField(db_column='WeekNum', blank=True, null=True)  # Field name made lowercase.
+    weekname = models.CharField(db_column='WeekName', max_length=50, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_Calendar'
 
 
 class Teamdetail(models.Model):

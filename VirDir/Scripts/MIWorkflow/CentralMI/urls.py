@@ -112,6 +112,7 @@ url(r'^ot_view/', views.Ot_View, name='otuserwise'),
 url(r'^error_userwise_View/', views.Erroruserwise_View, name='erroruserwise'),
 url(r'^Error_reportwise_View/', views.Errorreportwise_View, name='errorreportwise'),
 url(r'^report_due/', views.report_due, name='reportdue'),
+url(r'^add_to_timetracker/(?P<activityid>\d+)$', views.Add_To_Timetracker, name='addtotimetracker'),
 
 
  url(r'^export/csv/$', views.export_users_csv, name='export_users_csv'),

@@ -100,8 +100,8 @@ def data_extraction(request,parameter1=None,parameter2=None):
 
 @login_required
 def activity_Calendar(request,parameter1=None,parameter2=None):
-    print(parameter1)
-    print(parameter2)
+    #print(parameter1)
+    #print(parameter2)
     print("[CentralMI].[dbo].[usp_activity_calendar] " + "'" + parameter1 + "'"  + ","  + "'" + parameter2 + "'")
     cur = connection.cursor()
     ret = cur.execute("[CentralMI].[dbo].[usp_activity_calendar] "  + "'" + parameter1 + "'"  + ","  + "'" + parameter2 + "'")
@@ -129,6 +129,31 @@ def report_due(request):
     data_monthly = activity_Calendar(request,parameter1=sd,parameter2='monthly')
     return render(request, 'CentralMI/16a_report_due.html', {'datedetail':datedetail,'model1':data_daily,'model2':data_weekly,'model3':data_monthly,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
+@login_required
+def Add_To_Timetracker(request,activityid):
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='reportdue')
+    group_name = is_group(request,username=username)
+    frequencyname = Activity.objects.get(activityid=activityid).frequency
+    if str(frequencyname) == 'Daily':
+        frequencyid = 1
+    elif str(frequencyname) == 'Weekly':
+        frequencyid = 2
+    elif str(frequencyname) == 'Monthly':
+        frequencyid = 4
+    else:
+        frequencyid = None
+    form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'requestcategorys':1,'reports':activityid,'requestsubcategory':frequencyid})
+
+    if sd == None:
+        sd = datetime.today().strftime('%Y-%m-%d')
+        datedetail = 'Activity Due is for  today i.e. ' + sd + '. To check for other date please set it in Timetracker'
+    else:
+        datedetail = 'Activity Due is for the date ' + sd + '. To check for other date please set it in Timetracker'
+    data_daily = activity_Calendar(request,parameter1=sd,parameter2='daily')
+    data_weekly = activity_Calendar(request,parameter1=sd,parameter2='weekly')
+    data_monthly = activity_Calendar(request,parameter1=sd,parameter2='monthly')
+
+    return render(request, 'CentralMI/16b_add_to_timetracker.html', {'form':form,'datedetail':datedetail,'model1':data_daily,'model2':data_weekly,'model3':data_monthly,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
 def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
@@ -156,7 +181,7 @@ def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=No
         if view == "core_noncore":
             pivot_daily_corenoncore = pd.pivot_table(df_merge5,index=['trackingdatetime', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
             exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
-            print(exportdata.head(5))
+            #print(exportdata.head(5))
             data = pivot_daily_corenoncore.to_html(classes="table cell-border")
         elif view == "activity":
             pivot_daily_corenoncore = pd.pivot_table(df_merge5,index=['requestcategorys','requestsubcategory'], columns='username', values='totaltime',aggfunc=sum)

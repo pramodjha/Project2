@@ -633,6 +633,46 @@ class Timetrackers(models.Model):
     def __str__(self):
         return str(self.timetrackerid)
 
+class ActivityCalendar(models.Model):
+    date = models.DateField(blank=True, null=True)
+    daytype = models.CharField(max_length=50, blank=True, null=True)
+    weekname = models.CharField(max_length=50, blank=True, null=True)
+    cd_wd_days = models.IntegerField(db_column='CD_WD_days', blank=True, null=True)  # Field name made lowercase.
+    activityid = models.IntegerField(blank=True, null=True)
+    frequency = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'activity_calendar'
+
+class ActivitystatusCalendar(models.Model):
+    activitystatusdate = models.DateTimeField()
+    activitystatus = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+    activityid = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
+    activitycalendardate = models.DateField(blank=True, null=True)
+    reallocatedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='reallocatedto', blank=True, null=True, related_name='reallocatedto')
+    recordenteredby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='recordenteredby', blank=True, null=True, related_name='recordenteredby')
+
+    class Meta:
+        managed = False
+        db_table = 'activitystatus_calendar'
+
+class TblCalendar(models.Model):
+    date = models.DateField(blank=True, null=True)
+    days_type = models.CharField(db_column='Days Type', max_length=50, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    daily = models.IntegerField(db_column='Daily', blank=True, null=True)  # Field name made lowercase.
+    weekly = models.IntegerField(db_column='Weekly', blank=True, null=True)  # Field name made lowercase.
+    monthly = models.IntegerField(db_column='Monthly', blank=True, null=True)  # Field name made lowercase.
+    firstdayofmonth = models.DateField(db_column='FIrstDayofmonth', blank=True, null=True)  # Field name made lowercase.
+    lastdayofthemonth = models.DateField(db_column='LastDayoftheMonth', blank=True, null=True)  # Field name made lowercase.
+    weeknum = models.IntegerField(db_column='WeekNum', blank=True, null=True)  # Field name made lowercase.
+    weekname = models.CharField(db_column='WeekName', max_length=50, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_Calendar'
+
+
 
 class DateTypes(models.Model):
     date_typesid = models.AutoField(primary_key=True)

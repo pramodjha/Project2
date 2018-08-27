@@ -30,7 +30,7 @@
     <tbody class="">
   {%for data in model1 %}
   <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
-      <td>{{data.activityid }}</td>
+      <td><a href="{% url 'addtotimetracker' data.activityid %}" >{{data.activityid}}</a></td>
       <td>{{data.name }}</td>
       <td>{{data.date }}</td>
 
@@ -57,7 +57,7 @@
     <tbody class="">
   {%for data in model2 %}
   <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
-      <td>{{data.activityid }}</td>
+      <td><a href="{% url 'addtotimetracker' data.activityid %}" >{{data.activityid}}</a></td>
       <td>{{data.name }}</td>
       <td>{{data.date }}</td>
 
@@ -87,7 +87,7 @@
     <tbody class="">
   {%for data in model3 %}
   <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
-      <td>{{data.activityid }}</td>
+      <td><a href="{% url 'addtotimetracker' data.activityid %}" >{{data.activityid}}</a></td>
       <td>{{data.name }}</td>
       <td>{{data.date }}</td>
 
