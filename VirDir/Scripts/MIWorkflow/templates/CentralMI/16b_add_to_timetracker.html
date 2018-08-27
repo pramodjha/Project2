@@ -18,72 +18,98 @@
 
 <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
  {% csrf_token %}
+ <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
 
-   <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+   <div class="">
+   <label class="hidden">Registered Date</label>
+   <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
+   </div>
+
+   <div class="">
+   <label class="hidden">Tracking Date-time</label>
+   <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
+   </div>
+
+   <div class="">
+   <label class="hidden">Member</label>
+   <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
+   </div>
      <div class="">
-       <label class="hidden">Registered Date</label>
-       <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
-     </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-       <label class="hidden">Tracking Date-time</label>
-       <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
-     </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-       <label class="hidden">Member</label>
-       <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
-     </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
        <label class="hidden">Team</label>
        <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
        <label class="hidden">Category</label>
        <span  class="hidden">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
        <label class="hidden">Sub-Category</label>
        <span  class="hidden">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
        <label class="hidden">Activity</label>
        <span  class="hidden">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="col-auto col-sm-6 col-md-6 col-lg-6 box">
        <label class="">OT</label>
        <span  class="">{% bootstrap_field form.options  show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
        <label class="hidden">Description</label>
        <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="col-auto col-sm-6 col-md-6 col-lg-6 box">
        <label class="">Time</label>
        <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
        <label class="hidden">Comments</label>
        <span  class="hidden">{% bootstrap_field form.comments   show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
        <label class="hidden">Start Date-time</label>
        <span  class="hidden">{% bootstrap_field form.startdatetime   show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
        <label class="hidden">Stop Date-time</label>
        <span  class="hidden">{% bootstrap_field form.stopdatetime   show_label=False layout='inline'  %}</span>
      </div>
-     <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+   </div>
+   <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+     <div class="">
+       <label class="hidden">ActivityStatus Date</label>
+       <span  class="hidden">{% bootstrap_field form1.activitystatusdate  show_label=False layout='inline'  %}</span>
+     </div>
+     <div class="col-auto col-sm-6 col-md-6 col-lg-6 box">
+       <label class="">Activity Status</label>
+       <span  class="">{% bootstrap_field form1.activitystatus  show_label=False layout='inline'  %}</span>
+     </div>
+     <div class="">
+       <label class="hidden">Activity ID</label>
+       <span  class="hidden">{% bootstrap_field form1.activityid  show_label=False layout='inline'  %}</span>
+     </div>
+     <div class="">
+       <label class="hidden">Activity Calendar Date</label>
+       <span  class="hidden">{% bootstrap_field form1.activitycalendardate  show_label=False layout='inline'  %}</span>
+     </div>
+     <div class="col-auto col-sm-6 col-md-6 col-lg-6 box">
+       <label class="">Reallocated To</label>
+       <span  class="">{% bootstrap_field form1.reallocatedto  show_label=False layout='inline'  %}</span>
+     </div>
+     <div class="">
+       <label class="hidden">Record Entered By</label>
+       <span  class="hidden">{% bootstrap_field form1.recordenteredby  show_label=False layout='inline'  %}</span>
+     </div>
+     <div class="col-auto col-sm-6 col-md-6 col-lg-6 box">
        <label class="fontstyle10"> save </label>
        <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
        </div>
-     </div>
+</div>
 </form>
 
 
 
 
-
-</div>
 
 
 

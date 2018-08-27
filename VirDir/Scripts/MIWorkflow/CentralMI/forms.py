@@ -1,6 +1,6 @@
 from django import forms
 from bootstrap3_datetime.widgets import DateTimePicker
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar
 #Reports1
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -46,10 +46,16 @@ class OverviewdetailForm(forms.ModelForm):
         model = Overviewdetail
         fields = '__all__'
 
+class ActivitystatusCalendar(forms.ModelForm):
+    class Meta():
+        model = ActivitystatusCalendar
+        fields = '__all__'
+
 class EstimationdetailForm(forms.ModelForm):
     class Meta():
         model = Estimationdetail
         fields = '__all__'
+
 
 
 class StatusdetailForm(forms.ModelForm):

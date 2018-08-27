@@ -646,10 +646,10 @@ class ActivityCalendar(models.Model):
         db_table = 'activity_calendar'
 
 class ActivitystatusCalendar(models.Model):
-    activitystatusdate = models.DateTimeField()
+    activitystatusdate = models.DateTimeField(default= datetime.datetime.now())
     activitystatus = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
     activityid = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
-    activitycalendardate = models.DateField(blank=True, null=True)
+    activitycalendardate = models.DateField(default= datetime.datetime.now())
     reallocatedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='reallocatedto', blank=True, null=True, related_name='reallocatedto')
     recordenteredby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='recordenteredby', blank=True, null=True, related_name='recordenteredby')
 
