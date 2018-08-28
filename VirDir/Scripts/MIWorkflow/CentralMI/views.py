@@ -4,8 +4,8 @@ from django.template import Context, loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendar
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar
 from django.core import serializers
 from django.shortcuts import redirect
 from django.db import connection
@@ -142,18 +142,34 @@ def Add_To_Timetracker(request,activityid):
         frequencyid = 4
     else:
         frequencyid = None
-    form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'requestcategorys':1,'reports':activityid,'requestsubcategory':frequencyid})
-    form1 = ActivitystatusCalendar(initial={'activityid':activityid,'recordenteredby':info.mimemberid})
-    if sd == None:
-        sd = datetime.today().strftime('%Y-%m-%d')
-        datedetail = 'Activity Due is for  today i.e. ' + sd + '. To check for other date please set it in Timetracker'
-    else:
-        datedetail = 'Activity Due is for the date ' + sd + '. To check for other date please set it in Timetracker'
-    data_daily = activity_Calendar(request,parameter1=sd,parameter2='daily')
-    data_weekly = activity_Calendar(request,parameter1=sd,parameter2='weekly')
-    data_monthly = activity_Calendar(request,parameter1=sd,parameter2='monthly')
+    checkid = ActivitystatusCalendar.objects.filter(activityid__in=[activityid]).count()
+    print(checkid)
+    if checkid > 0:
+        form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'requestcategorys':1,'reports':activityid,'requestsubcategory':frequencyid})
+#        print(activityid)
+        activity_id = ActivitystatusCalendar.objects.filter(activityid=activityid).all().values_list('activitystatuscalendarid',flat = True)
+        print(max(activity_id))
+        e = ActivitystatusCalendar.objects.get(activitystatuscalendarid=max(activity_id))
+        form1 = ActivitystatusCalendarForm(instance=e)
+        if request.method == 'POST':
+            form = TimetrackersForm(request.POST)
+            form1 = ActivitystatusCalendarForm(request.POST,instance=e)
+            if all([form.is_valid() , form1.is_valid()]):
+                form.save(commit=True)
+                form1.save(commit=True)
+                return HttpResponseRedirect(reverse('reportdue'))
 
-    return render(request, 'CentralMI/16b_add_to_timetracker.html', {'form':form,'form1':form1,'datedetail':datedetail,'model1':data_daily,'model2':data_weekly,'model3':data_monthly,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
+    else:
+        form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'requestcategorys':1,'reports':activityid,'requestsubcategory':frequencyid})
+        form1 = ActivitystatusCalendarForm(initial={'activityid':activityid,'recordenteredby':info.mimemberid})
+        if request.method == 'POST':
+            form = TimetrackersForm(request.POST)
+            form1 = ActivitystatusCalendarForm(request.POST)
+            if all([form.is_valid() , form1.is_valid()]):
+                form.save(commit=True)
+                form1.save(commit=True)
+                return HttpResponseRedirect(reverse('reportdue'))
+    return render(request, 'CentralMI/16b_add_to_timetracker.html', {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
 def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):

@@ -104,12 +104,12 @@ class Activitystatus(models.Model):
 
 
 class ActivitystatusCalendar(models.Model):
+    activitystatuscalendarid = models.AutoField(primary_key=True)
     activitystatusdate = models.DateTimeField()
     activitystatus = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
     activityid = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
     activitycalendardate = models.DateField(blank=True, null=True)
     reallocatedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='reallocatedto', blank=True, null=True)
-    recordenteredby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='recordenteredby', blank=True, null=True)
 
     class Meta:
         managed = False

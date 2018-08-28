@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 import datetime
+import django
 
 
 class Acceptrejectdetail(models.Model):
@@ -449,7 +450,6 @@ class TimeDetail(models.Model):
 
 
 
-
 class Emaildetail(models.Model):
     emailid = models.AutoField(primary_key=True)
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
@@ -646,10 +646,11 @@ class ActivityCalendar(models.Model):
         db_table = 'activity_calendar'
 
 class ActivitystatusCalendar(models.Model):
+    activitystatuscalendarid = models.AutoField(primary_key=True)
     activitystatusdate = models.DateTimeField(default= datetime.datetime.now())
     activitystatus = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
     activityid = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
-    activitycalendardate = models.DateField(default= datetime.datetime.now())
+    activitycalendardate = models.DateField(default= django.utils.timezone.now)
     reallocatedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='reallocatedto', blank=True, null=True, related_name='reallocatedto')
     recordenteredby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='recordenteredby', blank=True, null=True, related_name='recordenteredby')
 

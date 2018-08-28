@@ -46,7 +46,7 @@ class OverviewdetailForm(forms.ModelForm):
         model = Overviewdetail
         fields = '__all__'
 
-class ActivitystatusCalendar(forms.ModelForm):
+class ActivitystatusCalendarForm(forms.ModelForm):
     class Meta():
         model = ActivitystatusCalendar
         fields = '__all__'
