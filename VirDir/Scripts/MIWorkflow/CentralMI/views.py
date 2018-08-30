@@ -1617,15 +1617,25 @@ def HomePage_Data(request,username,info):
 
 @login_required
 def Index(request):
+    try:
+        view_value_radio = request.GET.get('radioValue')
+        print(view_value_radio)
+        if view_value_radio == None:
+            request.session['view_value_session'] == 'myview'
+        else:
+            request.session['view_value_session'] = view_value_radio
+        view_value = request.session.get('view_value_session')
+    except:
+        view_value = 'myview'
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
     group_name = is_group(request,username=username)
     if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
         mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form = HomePage_Data(request,username=username,info=info)
         return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
         'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
-        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name})
+        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name,'view_value':view_value})
     else:
-        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'view_value':view_value})
 
 def dataforemail(username=None,requestid=None,sub_user=None,L1_user=None,sub_auth=None,L1_auth=None,sub_miteam=None,L1_miteam=None,sub_manager=None,L1_manager=None,request_status=None):
     userid = User.objects.get(username=username).pk

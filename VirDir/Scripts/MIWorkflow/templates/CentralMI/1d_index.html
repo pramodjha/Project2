@@ -22,7 +22,7 @@
 {% if group_name == "manager" or group_name == "team_leadear" or group_name == "technical_leadear" %}
 <form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
 {% csrf_token %}
-  <div class="col-auto col-sm-12 col-md-12 col-lg-12">
+  <div class="col-auto col-sm-10 col-md-10 col-lg-10">
     <div class="col-auto col-sm-4 col-md-4 col-lg-4">
       <label class="">Team</label>
       <span  class="">{% bootstrap_field form.teamfilter  show_label=False layout='inline'  %}</span>
@@ -37,6 +37,25 @@
       </div>
     </div>
 </form>
+
+<div class="custom-control custom-radio">
+  <input type="radio" class="custom-control-input"  id="defaultGroupExample1"  value=overall name="groupOfDefaultRadios" {% if view_value == "overall" %} checked {%else%}{% endif %} >
+  <label class="custom-control-label" for="defaultGroupExample1">Overall</label>
+</div>
+
+<!-- Group of default radios - option 2 -->
+<div class="custom-control custom-radio">
+  <input type="radio" class="custom-control-input" id="defaultGroupExample2" value=teamview name="groupOfDefaultRadios" {% if view_value == "teamview" %} checked {%else%}{% endif %}>
+  <label class="custom-control-label" for="defaultGroupExample2">Team View</label>
+</div>
+
+<!-- Group of default radios - option 3 -->
+<div class="custom-control custom-radio">
+  <input type="radio" class="custom-control-input" id="defaultGroupExample3" value=myview name="groupOfDefaultRadios" {% if view_value == "myview" %} checked {%else%}{% endif %}>
+  <label class="custom-control-label" for="defaultGroupExample3">My View</label>
+</div>
+
+
 
 <div class="col-sm-6 col-md-6 col-lg-9 box">
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
@@ -177,7 +196,26 @@ $("#id_teamfilter").change(function () {
 
   });
 
+$(document).ready(function(){
+   $("input[type='radio']").click(function(){
+    var radioValue = $("input[name='groupOfDefaultRadios']:checked").val();
+    console.log(radioValue)
+      $.ajax({
+        url: "{% url 'home' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'radioValue': radioValue,
+        },
+          done: function (data) {
+          $("").html(data);
+            // replace the contents of the city input with the data that came from the server
+        }
+      });
 
+
+
+  });
+
+})
 </script>
 
 
