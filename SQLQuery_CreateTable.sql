@@ -275,3 +275,39 @@ filterid int not null primary key Identity(1,1),
 filteroption varchar(255) not null,
 );
 
+
+use CentralMI
+create table whatwedo(
+id int not null primary key Identity(1,1),
+Data varchar(255) not null,
+Description varchar(max) not null,
+Type varchar(100) not null,
+Image varchar(100) null
+);
+
+use CentralMI
+create table suggestion(
+suggestiondatetime datetime default getdate() not null,
+suggestionid int not null primary key Identity(1,1),
+name varchar(255) not null,
+suggestion varchar(max) not null,
+reply int foreign key references reply(replyid),
+);
+
+use CentralMI
+create table governance(
+governancedatetime datetime default getdate() not null,
+governanceid int not null primary key Identity(1,1),
+teamdetail int foreign key references teamdetail(teamid) not null,
+processimg varchar(100) not null,
+);
+
+
+use CentralMI
+create table reply(
+replydatetime datetime default getdate() not null,
+replyid int not null primary key Identity(1,1),
+mimember int foreign key references mimember(mimemberId),
+reply varchar(100) not null
+)
+

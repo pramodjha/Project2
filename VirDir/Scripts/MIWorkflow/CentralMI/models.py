@@ -232,6 +232,8 @@ class Mimember(models.Model):
     dateofbirth = models.DateField(db_column='DateofBirth', blank=True, null=True)  # Field name made lowercase.
     address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
     phonenumber = models.IntegerField(db_column='PhoneNumber', blank=True, null=True)  # Field name made lowercase.
+    avatar = models.FileField(upload_to='about_team/',blank=True, null=True)  # Field name made lowercase.
+    aboutme = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -739,3 +741,57 @@ class Internaltaskstatus(models.Model):
     class Meta:
         managed = False
         db_table = 'internaltaskstatus'
+
+class Whatwedo(models.Model):
+    recordid = models.AutoField(primary_key=True)
+    data = models.CharField(db_column='Data', max_length=255)  # Field name made lowercase.
+    description = models.TextField(db_column='Description')  # Field name made lowercase.
+    type = models.CharField(db_column='Type', max_length=100)  # Field name made lowercase.
+    image = models.FileField(upload_to='whatwedo/',blank=True, null=True) # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'whatwedo'
+
+class Reply(models.Model):
+    replydatetime = models.DateTimeField()
+    replyid = models.AutoField(primary_key=True)
+    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
+    reply = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'reply'
+
+class Suggestion(models.Model):
+    suggestiondatetime = models.DateTimeField()
+    suggestionid = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    suggestion = models.TextField()
+    reply = models.ForeignKey(Reply, models.DO_NOTHING, db_column='reply', blank=True, null=True)
+    subject = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'suggestion'
+
+
+class SuccessStories(models.Model):
+    storiesdatetime = models.DateTimeField()
+    storiesid = models.AutoField(primary_key=True)
+    stories = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'success_stories'
+
+class Governance(models.Model):
+    governancedatetime = models.DateTimeField()
+    governanceid = models.AutoField(primary_key=True)
+    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail')
+    processimg = models.FileField(upload_to='governanceprocess/',blank=True, null=True)
+    description = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'governance'

@@ -4,8 +4,8 @@ from django.template import Context, loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar, Whatwedo, Reply, Suggestion, Governance, SuccessStories
 from django.core import serializers
 from django.shortcuts import redirect
 from django.db import connection
@@ -116,14 +116,140 @@ def activity_Calendar(request,parameter1=None,parameter2=None):
     return data
 
 @login_required
+def session_view(request,username=None):
+    group_name = is_group(request,username=username)
+    if group_name == 'manager':
+        session_teamid = None
+        session_memberid = None
+        request.session['sessison_team'] = str(session_teamid)
+        request.session['sessison_member'] = str(session_memberid)
+        team = request.session.get('sessison_team')
+        member = request.session.get('sessison_member')
+    elif group_name == 'technical_leader' or group_name == 'team_leader':
+        session_userid = User.objects.get(username=username).id
+        session_teamid = Mimember.objects.get(username=session_userid).teamdetail
+        session_memberid = None
+        request.session['sessison_team'] = str(session_teamid)
+        request.session['sessison_member'] = str(session_memberid)
+        team = request.session.get('sessison_team')
+        member = request.session.get('sessison_member')
+    elif group_name == 'mi_team':
+        session_userid = User.objects.get(username=username).id
+        session_teamid = Mimember.objects.get(username=session_userid).teamdetail
+        session_memberid = Mimember.objects.get(username=session_userid).mimemberid
+        request.session['sessison_team'] = str(session_teamid)
+        request.session['sessison_member'] = str(session_memberid)
+        team = request.session.get('sessison_team')
+        member = request.session.get('sessison_member')
+
+    return session_teamid, session_memberid
+
+def selected_option(request):
+    try:
+        view_value_radio = request.GET.get('radioValue')
+        if view_value_radio == None:
+            request.session['view_value_session'] == 'myview'
+        else:
+            request.session['view_value_session'] = view_value_radio
+        view_value = request.session.get('view_value_session')
+    except:
+        view_value = 'myview'
+    return view_value
+
+@login_required
+def HomePage_Data(request,username,info,session_teamid,session_memberid):
+    teamid , memberid, form = filterform(request,username=username,session_teamid=session_teamid,session_memberid=session_memberid)
+    mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    dv = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    mvOT = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+    wvOT = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+    dvOT= info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+    mvcore = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    wvcore = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    dvcore = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+    mvutilisation = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+    wvutilisation = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+    dvutilisation = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+    dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+    wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+    mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+    return mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form
+
+
+@login_required
+def Index(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
+    group_name = is_group(request,username=username)
+    if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
+
+        team = request.session.get('sessison_team')
+        member = request.session.get('sessison_member')
+
+        print(team)
+        print(member)
+
+        session_teamid, session_memberid = session_view(request,username=username)
+        form = FilteredForm(initial={'teamfilter':team, 'memberfilter':session_memberid})
+        if request.method == 'POST':
+            form =  FilteredForm(request.POST)
+            if form.is_valid():
+                teamfilter = form.cleaned_data['teamfilter']
+                memberfilter = form.cleaned_data['memberfilter']
+                teamid = teamfilter
+                memberid = memberfilter
+                request.session['sessison_team'] = str(teamfilter)
+                request.session['sessison_member'] = str(memberfilter)
+            else:
+                memberid = session_memberid
+                teamid = session_teamid
+                request.session['sessison_team'] = str(session_teamid)
+                request.session['sessison_member'] = str(session_memberid)
+
+        else:
+            memberid = session_memberid
+            teamid = session_teamid
+            team = request.session.get('sessison_team')
+            member = request.session.get('sessison_member')
+
+        print('nexline')
+        team = request.session.get('sessison_team')
+        member = request.session.get('sessison_member')
+        print(team)
+        print(member)
+
+        mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        dv = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        mvOT = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+        wvOT = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+        dvOT= info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
+        mvcore = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        wvcore = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        dvcore = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
+        mvutilisation = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+        wvutilisation = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+        dvutilisation = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
+        dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+        wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+        mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+        return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
+        'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
+        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name})
+    else:
+        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+@login_required
 def report_due(request):
     activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='reportdue')
+    session_teamid, session_memberid = session_view(request,view_value=view_value,username=username)
     group_name = is_group(request,username=username)
     if sd == None:
         sd = datetime.today().strftime('%Y-%m-%d')
         datedetail = 'Activity Due is for  today i.e. ' + sd + '. To check for other date please set it in Timetracker'
     else:
         datedetail = 'Activity Due is for the date ' + sd + '. To check for other date please set it in Timetracker'
+
     data_daily = activity_Calendar(request,parameter1=sd,parameter2='daily')
     data_weekly = activity_Calendar(request,parameter1=sd,parameter2='weekly')
     data_monthly = activity_Calendar(request,parameter1=sd,parameter2='monthly')
@@ -131,6 +257,7 @@ def report_due(request):
 
 @login_required
 def Add_To_Timetracker(request,activityid):
+    view_value = request.session.get('view_value_session')
     activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='reportdue')
     group_name = is_group(request,username=username)
     frequencyname = Activity.objects.get(activityid=activityid).frequency
@@ -819,22 +946,22 @@ def Filter_Data(request):
 def About_Team_View(request):
     activetab, activetab1, username, info, sd= create_session(request, header='home',footer='aboutteam')
     group_name = is_group(request,username=username)
-
-    return render(request, 'CentralMI/2a_about_team_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+    model = Mimember.objects.all()
+    return render(request, 'CentralMI/2a_about_team_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model})
 
 @login_required
 def What_We_Do_View(request):
     activetab, activetab1, username, info, sd= create_session(request, header='home',footer='whatwedo')
     group_name = is_group(request,username=username)
-
-    return render(request, 'CentralMI/2b_what_we_do_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+    model = Whatwedo.objects.all()
+    return render(request, 'CentralMI/2b_what_we_do_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model})
 
 @login_required
 def Governance_Process_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='governanceprocess')
     group_name = is_group(request,username=username)
-
-    return render(request, 'CentralMI/2c_governance_process_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+    model = Governance.objects.all()
+    return render(request, 'CentralMI/2c_governance_process_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model})
 
 @login_required
 def Success_Stories_View(request):
@@ -977,22 +1104,25 @@ def Feedback_Add_Form(request,feedbackquestionid):
 def Staff_Detail_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='viewdetail')
     group_name = is_group(request,username=username)
-    if group_name == 'mi_team':
-        userid = User.objects.get(username=username).pk
-        model1 = User.objects.filter(username__in=[username])
-        model = Mimember.objects.filter(username__in=[userid])
-        data = zip(model1,model)
-    else:
-        model1 = User.objects.all()
-        model = Mimember.objects.all()
-        data = zip(model1,model)
+    model1 = User.objects.all()
+    model = Mimember.objects.all()
+    data = zip(model1,model)
     return render(request, 'CentralMI/10a_staff_detail_view.html',{'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
+@login_required
+def My_Detail_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='mydetail')
+    group_name = is_group(request,username=username)
+    userid = User.objects.get(username=username).pk
+    model1 = User.objects.filter(username__in=[username])
+    model = Mimember.objects.filter(username__in=[userid])
+    data = zip(model1,model)
+    return render(request, 'CentralMI/10a_my_detail_view.html',{'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 
 @login_required
 def Staff_Edit_Form(request):
-    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='')
+    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='mydetail')
     group_name = is_group(request,username=username)
     userid = User.objects.get(username=username).pk
     e1 = User.objects.get(pk=userid)
@@ -1003,7 +1133,7 @@ def Staff_Edit_Form(request):
     #print(username)
     form = MimemberForm(instance=e)
     if request.method == 'POST':
-        form = MimemberForm(request.POST,instance=e)
+        form = MimemberForm(request.POST,request.FILES,instance=e)
         form1 = UserForm (request.POST,instance=e1)
         if all([form.is_valid() , form1.is_valid()]):
             inst = form.save(commit=True)
@@ -1011,12 +1141,12 @@ def Staff_Edit_Form(request):
             inst1 = form1.save(commit=False)
             inst1.username = username
             inst1.save()
-            return HttpResponseRedirect(reverse('viewDetail'))
+            return HttpResponseRedirect(reverse('mydetail'))
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        return render(request, 'CentralMI/10b_staff_edit_form.html',{'form':form,'form1':form1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
-    return render(request, 'CentralMI/10b_staff_edit_form.html',{'form':form,'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+        return render(request, 'CentralMI/10b_my_edit_form.html',{'form':form,'form1':form1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/10b_my_edit_form.html',{'form':form,'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
 
 
 @login_required
@@ -1557,12 +1687,10 @@ def Thank_You_Page_View(request,requestid):
 
 
 @login_required
-def filterform(request,username):
-    form = FilteredForm()
-#    if authority == "Group2":
+def filterform(request,username,session_teamid,session_memberid):
+    form = FilteredForm(initial={'teamfilter':session_teamid, 'memberfilter':session_memberid})
     if request.method == 'POST':
         form =  FilteredForm(request.POST)
-
         if form.is_valid():
             teamfilter = form.cleaned_data['teamfilter']
             memberfilter = form.cleaned_data['memberfilter']
@@ -1570,23 +1698,12 @@ def filterform(request,username):
                 teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
                 userid = User.objects.get(username__in=[memberfilter]).id
                 memberid = Mimember.objects.get(username__in=[userid]).mimemberid
-#                form.fields['memberfilter'] =  Mimember.objects.filter(teamdetail__in=[teamfilter])
             elif teamfilter != None and memberfilter == None:
                 teamid = Teamdetail.objects.get(teamname__in=[teamfilter]).teamid
                 memberid = None
             elif teamfilter == None and memberfilter == None:
                 teamid = None
                 memberid = None
-
-#            else:
-#                teamid = None
-#                memberid = None
-#                form = FilteredForm()
-#                print("error")
-#        else:
-#            teamid = None
-#            memberid = None
-#            form = FilteredForm()
     else:
         userid = User.objects.get(username__in=[username]).id
         memberid = Mimember.objects.get(username__in=[userid]).mimemberid
@@ -1594,48 +1711,6 @@ def filterform(request,username):
     return teamid , memberid, form
 
 
-@login_required
-def HomePage_Data(request,username,info):
-    teamid , memberid, form = filterform(request,username=username)
-    mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    dv = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    mvOT = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-    wvOT = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-    dvOT= info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=1,teamdetail=teamid,member=memberid,output_type='timetracker')
-    mvcore = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    wvcore = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    dvcore = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
-    mvutilisation = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-    wvutilisation = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-    dvutilisation = info.define_day_week_month1(days_range=5,range_type='Daily',values='mimember',aggregatefield='totaltime',core_noncore='core',OT=2,utilisation='Yes',teamdetail=teamid,member=memberid,output_type='timetracker')
-    dv_error = info.define_day_week_month1(days_range=5,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-    wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-    mv_error = info.define_day_week_month1(days_range=3,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-    return mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form
-
-
-@login_required
-def Index(request):
-    try:
-        view_value_radio = request.GET.get('radioValue')
-        print(view_value_radio)
-        if view_value_radio == None:
-            request.session['view_value_session'] == 'myview'
-        else:
-            request.session['view_value_session'] = view_value_radio
-        view_value = request.session.get('view_value_session')
-    except:
-        view_value = 'myview'
-    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
-    group_name = is_group(request,username=username)
-    if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
-        mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form = HomePage_Data(request,username=username,info=info)
-        return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
-        'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
-        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name,'view_value':view_value})
-    else:
-        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'view_value':view_value})
 
 def dataforemail(username=None,requestid=None,sub_user=None,L1_user=None,sub_auth=None,L1_auth=None,sub_miteam=None,L1_miteam=None,sub_manager=None,L1_manager=None,request_status=None):
     userid = User.objects.get(username=username).pk
@@ -2180,6 +2255,36 @@ def Load_Subcategories(request):
         pagename = "report"
         errormsg1 = "Something went Wrong"
         return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
+
+
+def Load_view(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
+    group_name = is_group(request,username=username)
+
+    try:
+        view_value_radio = request.GET.get('radioValue')
+        print(view_value_radio)
+        if view_value_radio == None:
+            request.session['view_value_session'] == 'myview'
+        else:
+            request.session['view_value_session'] = view_value_radio
+        view_value = request.session.get('view_value_session')
+    except:
+        view_value = 'myview'
+    if view_value == 'myview':
+        session_userid = User.objects.get(username=username).id
+        session_teamid = Mimember.objects.get(username=session_userid).teamdetail
+        session_memberid = Mimember.objects.get(username=session_userid).mimemberid
+    elif view_value == 'teamview':
+        session_userid = User.objects.get(username=username).id
+        session_teamid = Mimember.objects.get(username=session_userid).teamdetail
+        session_memberid = None
+    elif view_value == 'overallview':
+        session_teamid = None
+        session_memberid = None
+        render(request, 'CentralMI/13f_rebuilding_index.html',{'session_teamid':session_teamid, 'session_memberid':session_memberid})
+
+
 
 @login_required
 def Load_Activity(request):

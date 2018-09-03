@@ -56,14 +56,10 @@ class EstimationdetailForm(forms.ModelForm):
         model = Estimationdetail
         fields = '__all__'
 
-
-
 class StatusdetailForm(forms.ModelForm):
     class Meta():
         model = Requeststatusdetail
         exclude = ['requestdetail']
-
-
 
 class RequeststatusdetailForm(forms.ModelForm):
     class Meta():
@@ -201,11 +197,14 @@ class FilteredForm(forms.Form):
         self.fields['teamfilter'].widget.attrs['class']  = 'form-control mb-2'
         self.fields['memberfilter'].widget.attrs['class']  = 'form-control'
 
-#class Reports1From(forms.Form):
-#    class Meta():
-#        model = Reports1
-#        fields = '__all__'
 
+class ViewForm(forms.Form):
+    VIEW_CHOICES = (
+        (1, ("Overall View")),
+        (2, ("Team View")),
+        (3, ("MY View")),
+        )
+    viewchoice = forms.ChoiceField(choices = VIEW_CHOICES, label="Select View", initial=3, widget=forms.Select(), required=True)
 
 class ActivityForm(forms.ModelForm):
     class Meta():

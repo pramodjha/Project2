@@ -94,3 +94,11 @@ ADD FOREIGN KEY ([Owner]) REFERENCES mimember(mimemberid);
 use CentralMI
 ALTER TABLE [mimember]
 DROP COlumn [managermaster]
+
+Alter table [CentralMI].[dbo].[mimember]
+add  Avatar varchar(255);
+Alter table [CentralMI].[dbo].[mimember]
+add  aboutme varchar(max);
+
+Alter table [CentralMI].[dbo].[mimember]
+add  aboutme varchar(max);

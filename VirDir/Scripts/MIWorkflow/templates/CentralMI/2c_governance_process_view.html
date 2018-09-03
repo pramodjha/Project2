@@ -15,6 +15,16 @@
 {% endblock %}
 
 {% block content %}
+{%for data in model %}
+
+<div class="col-sm-6 col-md-6 col-lg-6">
+  <div>{{data.teamdetail}}</div>
+  <div><img src="{{ MEDIA_URL}}/{{data.processimg}}" height='50%' width='100%' alt="Avatar" /></div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6">
+<div>{{data.description}}</div>
+</div>
+{% endfor %}
 {% endblock %}
 
 {% block footer %}

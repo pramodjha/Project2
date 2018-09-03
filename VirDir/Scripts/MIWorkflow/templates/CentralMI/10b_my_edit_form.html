@@ -1,0 +1,117 @@
+{% extends "base_model_template.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+{% block content %}
+<form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Employee Details</h3>
+</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Avatar'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.avatar  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'About Me'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.aboutme  show_label=False   %}</span>
+  </div>
+
+
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Password'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.password  show_label=False   %}</span>
+ </div>
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Last Login'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.last_login  show_label=False   %}</span>
+ </div>
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Superuser'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.is_superuser  show_label=False   %}</span>
+ </div>
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Username'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.username  show_label=False   %}</span>
+ </div>
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'First Name'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form1.first_name  show_label=False   %}</span>
+ </div>
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Last Name'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form1.last_name  show_label=False   %}</span>
+ </div>
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Email ID'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form1.email  show_label=False   %}</span>
+ </div>
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Staff'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.is_staff  show_label=False   %}</span>
+ </div>
+
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Is Active'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.is_active  show_label=False   %}</span>
+ </div>
+
+ <div>
+ <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Date Joined'  %}</label>
+ <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.date_joined  show_label=False   %}</span>
+ </div>
+
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Useranme'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.username  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'EmployeeId'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.employeeid  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Designation'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.designationmaster  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Team Name'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.teamdetail  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'DOJ'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.dateofjoining  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'DOB'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.dateofbirth  show_label=False   %}</span>
+</div>
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Address'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.address  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Phone'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.phonenumber  show_label=False   %}</span>
+</div>
+
+
+
+</div>
+<div class="col-sm-12 col-md-12 col-lg-7">
+ <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+ <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'mydetail' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+</div>
+</form>
+
+{% endblock %}

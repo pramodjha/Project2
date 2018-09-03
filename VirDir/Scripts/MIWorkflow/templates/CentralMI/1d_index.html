@@ -18,44 +18,25 @@
 {% endblock %}
 
 {% block content %}
-
+<div id=pagecontent data-view-url="{% url 'ajax_load_view' %}" >
 {% if group_name == "manager" or group_name == "team_leadear" or group_name == "technical_leadear" %}
-<form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
+<form method="post" id="extractdata"  name="form" novalidate>
 {% csrf_token %}
   <div class="col-auto col-sm-10 col-md-10 col-lg-10">
     <div class="col-auto col-sm-4 col-md-4 col-lg-4">
       <label class="">Team</label>
-      <span  class="">{% bootstrap_field form.teamfilter  show_label=False layout='inline'  %}</span>
+      <span   class="">{% bootstrap_field form.teamfilter  show_label=False layout='inline'  %}</span>
     </div>
     <div class="col-auto col-sm-4 col-md-4 col-lg-4">
       <label class="">Team Member</label>
-      <span  class="">{% bootstrap_field form.memberfilter  show_label=False layout='inline'  %}</span>
+      <span   class="">{% bootstrap_field form.memberfilter  show_label=False layout='inline'  %}</span>
     </div>
     <div class="col-auto col-sm-4 col-md-4 col-lg-4">
       <label class="fontstyle11"> save </label>
-      <div class="">{% buttons submit='Submit'  %}{% endbuttons layout='inline' %}</div>
+      <div class="" >{% buttons submit='Submit'  %}{% endbuttons layout='inline' %}</div>
       </div>
     </div>
 </form>
-
-<div class="custom-control custom-radio">
-  <input type="radio" class="custom-control-input"  id="defaultGroupExample1"  value=overall name="groupOfDefaultRadios" {% if view_value == "overall" %} checked {%else%}{% endif %} >
-  <label class="custom-control-label" for="defaultGroupExample1">Overall</label>
-</div>
-
-<!-- Group of default radios - option 2 -->
-<div class="custom-control custom-radio">
-  <input type="radio" class="custom-control-input" id="defaultGroupExample2" value=teamview name="groupOfDefaultRadios" {% if view_value == "teamview" %} checked {%else%}{% endif %}>
-  <label class="custom-control-label" for="defaultGroupExample2">Team View</label>
-</div>
-
-<!-- Group of default radios - option 3 -->
-<div class="custom-control custom-radio">
-  <input type="radio" class="custom-control-input" id="defaultGroupExample3" value=myview name="groupOfDefaultRadios" {% if view_value == "myview" %} checked {%else%}{% endif %}>
-  <label class="custom-control-label" for="defaultGroupExample3">My View</label>
-</div>
-
-
 
 <div class="col-sm-6 col-md-6 col-lg-9 box">
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
@@ -158,15 +139,13 @@
 {% else %}
 {% endif %}
 
-
-
-<script>
+</div>
+<script type="text/javascript">
 
 $("#id_teamfilter").change(function () {
     var team_id = $(this).val();  // get the selected country ID from the HTML input
    console.log(team_id)
    $.ajax({
-
      url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
      data: {
        'team_id': team_id     // add the country id to the GET parameters
@@ -196,28 +175,8 @@ $("#id_teamfilter").change(function () {
 
   });
 
-$(document).ready(function(){
-   $("input[type='radio']").click(function(){
-    var radioValue = $("input[name='groupOfDefaultRadios']:checked").val();
-    console.log(radioValue)
-      $.ajax({
-        url: "{% url 'home' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-        data: {
-          'radioValue': radioValue,
-        },
-          done: function (data) {
-          $("").html(data);
-            // replace the contents of the city input with the data that came from the server
-        }
-      });
-
-
-
-  });
-
-})
+  
 </script>
-
 
 {% endblock %}
 

@@ -110,6 +110,7 @@ class ActivitystatusCalendar(models.Model):
     activityid = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
     activitycalendardate = models.DateField(blank=True, null=True)
     reallocatedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='reallocatedto', blank=True, null=True)
+    recordenteredby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='recordenteredby', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -421,6 +422,18 @@ class Frequency(models.Model):
         db_table = 'frequency'
 
 
+class Governance(models.Model):
+    governancedatetime = models.DateTimeField()
+    governanceid = models.AutoField(primary_key=True)
+    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail')
+    processimg = models.CharField(max_length=100)
+    description = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'governance'
+
+
 class Internaltask(models.Model):
     internaltaskid = models.AutoField(primary_key=True)
     internaltaskdatetime = models.DateTimeField()
@@ -476,6 +489,8 @@ class Mimember(models.Model):
     dateofbirth = models.DateField(db_column='DateofBirth', blank=True, null=True)  # Field name made lowercase.
     address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
     phonenumber = models.IntegerField(db_column='PhoneNumber', blank=True, null=True)  # Field name made lowercase.
+    avatar = models.CharField(db_column='Avatar', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    aboutme = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -535,6 +550,17 @@ class Prioritydetail(models.Model):
     class Meta:
         managed = False
         db_table = 'prioritydetail'
+
+
+class Reply(models.Model):
+    replydatetime = models.DateTimeField()
+    replyid = models.AutoField(primary_key=True)
+    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
+    reply = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'reply'
 
 
 class ReportBuilderDisplayfield(models.Model):
@@ -740,6 +766,29 @@ class Statusdetail(models.Model):
         db_table = 'statusdetail'
 
 
+class SuccessStories(models.Model):
+    storiesdatetime = models.DateTimeField()
+    storiesid = models.AutoField(primary_key=True)
+    stories = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'success_stories'
+
+
+class Suggestion(models.Model):
+    suggestiondatetime = models.DateTimeField()
+    suggestionid = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    suggestion = models.TextField()
+    reply = models.ForeignKey(Reply, models.DO_NOTHING, db_column='reply', blank=True, null=True)
+    subject = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'suggestion'
+
+
 class TblCalendar(models.Model):
     date = models.DateField(blank=True, null=True)
     days_type = models.CharField(db_column='Days Type', max_length=50, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -806,3 +855,15 @@ class TlMaster(models.Model):
     class Meta:
         managed = False
         db_table = 'tl_master'
+
+
+class Whatwedo(models.Model):
+    recordid = models.AutoField(primary_key=True)
+    data = models.CharField(db_column='Data', max_length=255)  # Field name made lowercase.
+    description = models.TextField(db_column='Description')  # Field name made lowercase.
+    type = models.CharField(db_column='Type', max_length=100)  # Field name made lowercase.
+    image = models.CharField(db_column='Image', max_length=100, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'whatwedo'

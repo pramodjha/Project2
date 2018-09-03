@@ -67,6 +67,7 @@ urlpatterns = [
 	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'viewDetail'),
 	url(r'^staff_edit_form/',views.Staff_Edit_Form, name = 'editstaffdetail'),
 	url(r'^staff_edit_manager_form/(?P<id>\d+)$',views.Staff_Edit_Manager_Form, name = 'editstaffbymanager'),
+	url(r'^my_detail_view/',views.My_Detail_View, name = 'mydetail'),
 
 # 8) Internal Task
 	url(r'^internal_task_detail_view/',views.Internal_Task_Detail_View, name = 'internaltaskdetail'),
@@ -93,7 +94,7 @@ urlpatterns = [
 	url(r'^ajax/load-datevalues/', views.Load_Datevalues, name='ajax_load_datavalues'),
 	url(r'^ajax/load-tables/', views.Load_Tables, name='ajax_load_tables'),
 	url(r'^ajax/load-signup/', views.Load_Signup, name='ajax_load_signup'),
-	#url(r'^ajax/load-view/', views.Optionbutton_Selection, name='optionbuttonselection'),
+	url(r'^ajax/load-view/', views.Load_view, name='ajax_load_view'),
 
 ## Export to excel
 	url(r'^export_to_excel/', views.Workflow_Summary, name='exporttoexcel'),

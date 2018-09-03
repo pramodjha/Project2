@@ -1,6 +1,11 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
+<style>
+img {
+    border-radius: 50%;
+}
+</style>
 {% endblock %}
 
 {% block navblockleft %}
@@ -15,9 +20,25 @@
 {% endblock %}
 
 {% block content %}
+{%for data in model %}
+{% if data.avatar == None %}
+<div class="col-sm-2 col-md-2 col-lg-2">
+  <div><img src="{{ MEDIA_URL}}/about_team/default.gif" height='100%' width='100%'alt="Avatar" /></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.username}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.teamdetail}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
 
-<div><img src="{{ MEDIA_URL}}/teampics/Landing.jpeg" height='150' width='100'/></div>
+</div>
+{% else %}
+<div class="col-sm-2 col-md-2 col-lg-2">
+  <div><img src="{{ MEDIA_URL}}/{{data.avatar}}" height='100%' width='100%' alt="Avatar" /></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.username}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.teamdetail}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
 
+</div>
+{% endif %}
+{% endfor %}
 {% endblock %}
 
 {% block footer %}

@@ -15,6 +15,15 @@
 {% endblock %}
 
 {% block content %}
+{%for data in model %}
+<div class="col-sm-2 col-md-2 col-lg-2">
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.Image}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.data}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.description}} </span></div>
+
+</div>
+{% endfor %}
+
 {% endblock %}
 
 {% block footer %}
