@@ -121,40 +121,20 @@ def session_view(request,username=None):
     if group_name == 'manager':
         session_teamid = None
         session_memberid = None
-        request.session['sessison_team'] = str(session_teamid)
-        request.session['sessison_member'] = str(session_memberid)
-        team = request.session.get('sessison_team')
-        member = request.session.get('sessison_member')
     elif group_name == 'technical_leader' or group_name == 'team_leader':
         session_userid = User.objects.get(username=username).id
         session_teamid = Mimember.objects.get(username=session_userid).teamdetail
         session_memberid = None
-        request.session['sessison_team'] = str(session_teamid)
-        request.session['sessison_member'] = str(session_memberid)
-        team = request.session.get('sessison_team')
-        member = request.session.get('sessison_member')
     elif group_name == 'mi_team':
         session_userid = User.objects.get(username=username).id
         session_teamid = Mimember.objects.get(username=session_userid).teamdetail
         session_memberid = Mimember.objects.get(username=session_userid).mimemberid
-        request.session['sessison_team'] = str(session_teamid)
-        request.session['sessison_member'] = str(session_memberid)
-        team = request.session.get('sessison_team')
-        member = request.session.get('sessison_member')
 
-    return session_teamid, session_memberid
-
-def selected_option(request):
-    try:
-        view_value_radio = request.GET.get('radioValue')
-        if view_value_radio == None:
-            request.session['view_value_session'] == 'myview'
-        else:
-            request.session['view_value_session'] = view_value_radio
-        view_value = request.session.get('view_value_session')
-    except:
-        view_value = 'myview'
-    return view_value
+    request.session['sessison_team'] = str(session_teamid)
+    request.session['sessison_member'] = str(session_memberid)
+    teamid = request.session.get('sessison_team')
+    memberid = request.session.get('sessison_member')
+    return teamid, memberid
 
 @login_required
 def HomePage_Data(request,username,info,session_teamid,session_memberid):
@@ -182,41 +162,30 @@ def Index(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
     group_name = is_group(request,username=username)
     if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
+        try:
+            teamid = request.session.get('sessison_team')
+            memberid = request.session.get('sessison_member')
+        except:
+            teamid, memberid = session_view(request,username=username)
 
-        team = request.session.get('sessison_team')
-        member = request.session.get('sessison_member')
-
-        print(team)
-        print(member)
-
-        session_teamid, session_memberid = session_view(request,username=username)
-        form = FilteredForm(initial={'teamfilter':team, 'memberfilter':session_memberid})
+        form = FilteredForm(initial={'teamfilter':teamid, 'memberfilter':memberid})
         if request.method == 'POST':
             form =  FilteredForm(request.POST)
             if form.is_valid():
                 teamfilter = form.cleaned_data['teamfilter']
                 memberfilter = form.cleaned_data['memberfilter']
-                teamid = teamfilter
-                memberid = memberfilter
-                request.session['sessison_team'] = str(teamfilter)
-                request.session['sessison_member'] = str(memberfilter)
-            else:
-                memberid = session_memberid
-                teamid = session_teamid
-                request.session['sessison_team'] = str(session_teamid)
-                request.session['sessison_member'] = str(session_memberid)
+                teamdetail_id = Teamdetail.objects.get(teamname=teamfilter).teamid
+                user_id = User.objects.get(username=memberfilter).id
+                mimember_id = Mimember.objects.get(username=user_id).mimemberid
+                request.session['sessison_team'] = str(teamdetail_id)
+                request.session['sessison_member'] = str(mimember_id)
+                teamid = request.session.get('sessison_team')
+                memberid = request.session.get('sessison_member')
 
-        else:
-            memberid = session_memberid
-            teamid = session_teamid
-            team = request.session.get('sessison_team')
-            member = request.session.get('sessison_member')
-
-        print('nexline')
-        team = request.session.get('sessison_team')
-        member = request.session.get('sessison_member')
-        print(team)
-        print(member)
+        teamid = None if teamid == 'None' else teamid
+        memberid = None if memberid == 'None' else memberid
+        print(teamid)
+        print(memberid)
 
         mv = info.define_day_week_month1(days_range=3,range_type='Monthly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
         wv = info.define_day_week_month1(days_range=5,range_type='Weekly',values='mimember',aggregatefield='totaltime',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='timetracker')
