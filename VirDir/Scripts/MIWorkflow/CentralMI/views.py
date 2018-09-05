@@ -630,12 +630,29 @@ def Approved_View(request):
     data = Authorisedetail.objects.select_related('requestdetail').exclude(requestdetail__in=assigned)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
+
+def create_dict_for_filter(request,field_name_list = None,value_list = None):
+    filter_dict = {}
+    for list_number in range(len(value_list)):
+        if value_list[list_number]  != None:
+            filter_dict[field_name_list[list_number]] = value_list[list_number]
+    return filter_dict
+
 @login_required
 def Assigned_View(request):
     activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='assigned')
     group_name = is_group(request,username=username)
+    teamid = request.session.get('sessison_team')
+    memberid = request.session.get('sessison_member')
+    filter_dict = create_dict_for_filter(request,field_name_list = ['assignedto','assignedto__teamdetail'],value_list = [memberid,teamid])
+    print(filter_dict)
+    dict = {'assignedto':1}
     overviewed = list(Overviewdetail.objects.all().values_list('requestdetail', flat=True))
-    data = Assigneddetail.objects.select_related('requestdetail').exclude(requestdetail__in=overviewed)
+    data = Assigneddetail.objects.select_related('requestdetail').exclude(requestdetail__in=overviewed).filter(**filter_dict)
+    #data1 = Assigneddetail.objects.filter(assignedto__teamdetail=2)
+    #assigned = Assigneddetail()
+    #print(assigned.assignedto)
+    #print(data1)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name})
 
 
