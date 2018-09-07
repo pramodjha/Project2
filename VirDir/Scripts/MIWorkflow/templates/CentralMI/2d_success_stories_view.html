@@ -1,6 +1,20 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
+<style>
+.content {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  border-top: rgb(0,0,0);
+  margin-top: 50px;
+  background-color: red;
+  padding: 10px;
+  font-style: italic;
+
+}
+
+</style>
+
+
 {% endblock %}
 
 {% block navblockleft %}
@@ -15,6 +29,17 @@
 {% endblock %}
 
 {% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'successstoriesadd' %}" id="successtories" name="Add" class="btn btn-default">Add Stories</a></div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+{%for data in model %}
+<div class="col-sm-2 col-md-2 col-lg-2">
+  <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content"> {{ data.stories}} </div>
+</div>
+
+{% endfor %}
+</div>
+
+
 {% endblock %}
 
 {% block footer %}

@@ -777,7 +777,7 @@ class Suggestion(models.Model):
 
 
 class SuccessStories(models.Model):
-    storiesdatetime = models.DateTimeField()
+    storiesdatetime = models.DateTimeField(default= datetime.datetime.now())
     storiesid = models.AutoField(primary_key=True)
     stories = models.TextField(blank=True, null=True)
 

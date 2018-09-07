@@ -4,7 +4,7 @@ from django.template import Context, loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar, Whatwedo, Reply, Suggestion, Governance, SuccessStories
 from django.core import serializers
 from django.shortcuts import redirect
@@ -939,8 +939,29 @@ def About_Team_View(request):
 def What_We_Do_View(request):
     activetab, activetab1, username, info, sd= create_session(request, header='home',footer='whatwedo')
     group_name = is_group(request,username=username)
-    model = Whatwedo.objects.all()
-    return render(request, 'CentralMI/2b_what_we_do_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model})
+    model = Whatwedo.objects.filter(type__in=['Skill'])
+    model1 = Whatwedo.objects.filter(type__in=['Geograhic'])
+    return render(request, 'CentralMI/2b_what_we_do_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model,'model1':model1})
+
+
+@login_required
+def Add_What_We_Do_View(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
+    group_name = is_group(request,username=username)
+    form = WhatwedoForm()
+    if request.method == 'POST':
+        form = WhatwedoForm(request.POST,request.FILES)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('whatwedo'))
+        else:
+            return render(request, 'CentralMI/15a_ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/2c_what_we_do_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/2c_what_we_do_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
 
 @login_required
 def Governance_Process_View(request):
@@ -953,8 +974,27 @@ def Governance_Process_View(request):
 def Success_Stories_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='successstories')
     group_name = is_group(request,username=username)
+    model = SuccessStories.objects.all()
+    return render(request, 'CentralMI/2d_success_stories_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model})
 
-    return render(request, 'CentralMI/2d_success_stories_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username})
+@login_required
+def Success_Stories_Add(request):
+    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
+    group_name = is_group(request,username=username)
+    form = SuccessStoriesForm()
+    if request.method == 'POST':
+        form = SuccessStoriesForm(request.POST,request.FILES)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('successstories'))
+        else:
+            return render(request, 'CentralMI/15a_ErrorPage.html')
+    else:
+        return render(request, 'CentralMI/2d_success_stories_add.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+    return render(request, 'CentralMI/2d_success_stories_add.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+
+
 
 @login_required
 def Comm_Sugg_View(request):

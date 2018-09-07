@@ -12,8 +12,12 @@ urlpatterns = [
 # 3) About us
 	url(r'^about_team_view/',views.About_Team_View, name = 'aboutteam'),
 	url(r'^what_we_do_view/',views.What_We_Do_View, name = 'whatwedo'),
+	url(r'^what_we_do_view_add_form/',views.Add_What_We_Do_View, name = 'whatwedoadd'),
+
 	url(r'^governance_process_view/',views.Governance_Process_View, name = 'governanceprocess'),
 	url(r'^success_stories_view/',views.Success_Stories_View, name = 'successstories'),
+	url(r'^success_stories_add/',views.Success_Stories_Add, name = 'successstoriesadd'),
+
 	url(r'^comm_sugg_view/',views.Comm_Sugg_View, name = 'commsugg'),
 # 4) Workflow
 	# View

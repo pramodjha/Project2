@@ -1,6 +1,27 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
+<style>
+.content {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  background-color: red;
+  font-family: Cambria;
+  padding-left: 10%;
+  margin-top: 10px;
+  height: 50px
+}
+.header {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  background-color: #333333;
+  font-family: Cambria;
+  height: 40px;
+  font-size: 15px;
+  padding-left: 40%;
+  padding-top: 5px;
+}
+
+
+</style>
 {% endblock %}
 
 {% block navblockleft %}
@@ -15,14 +36,26 @@
 {% endblock %}
 
 {% block content %}
-{%for data in model %}
-<div class="col-sm-2 col-md-2 col-lg-2">
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.Image}} </span></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.data}} </span></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.description}} </span></div>
+<div class="col-sm-6 col-md-6 col-lg-6">
+<div class="header"><a href="{% url 'whatwedoadd' %}" class="glyphicon glyphicon-plus"></a><h> Skill we have</h></div>
 
+{%for data in model %}
+<div class="col-sm-4 col-md-4 col-lg-4">
+  <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content"> {{ data.data}} </div>
 </div>
 {% endfor %}
+
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6">
+<div class="header"><a href="{% url 'whatwedoadd' %}" class="glyphicon glyphicon-plus"></a><h> Geographic we Cover</h></div>
+
+{%for data1 in model1 %}
+<div class="col-sm-4 col-md-4 col-lg-4">
+  <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content"> {{ data1.data}} </div>
+</div>
+{% endfor %}
+
+</div>
 
 {% endblock %}
 

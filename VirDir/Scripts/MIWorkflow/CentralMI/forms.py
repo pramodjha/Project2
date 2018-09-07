@@ -1,6 +1,6 @@
 from django import forms
 from bootstrap3_datetime.widgets import DateTimePicker
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo
 #Reports1
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -235,4 +235,32 @@ class InternaltaskchoiceForm(forms.ModelForm):
 class InternaltaskstatusForm(forms.ModelForm):
     class Meta():
         model = Internaltaskstatus
+        fields = '__all__'
+
+class SuccessStoriesForm(forms.ModelForm):
+    class Meta():
+        model = SuccessStories
+        fields = '__all__'
+
+
+class GovernanceForm(forms.ModelForm):
+    class Meta():
+        model = Governance
+        fields = '__all__'
+
+
+class SuggestionForm(forms.ModelForm):
+    class Meta():
+        model = Suggestion
+        fields = '__all__'
+
+
+class ReplyForm(forms.ModelForm):
+    class Meta():
+        model = Reply
+        fields = '__all__'
+
+class WhatwedoForm(forms.ModelForm):
+    class Meta():
+        model = Whatwedo
         fields = '__all__'
