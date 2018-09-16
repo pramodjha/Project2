@@ -37,7 +37,10 @@
         <td>{{data.ot_enddatetime }}</td>
         <td>{{data.ot_hrs }}</td>
         <td>{{data.ot_status }}</td>
+        {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
         <td> <a href="{% url 'editot' data.ot_id %}" class="glyphicon glyphicon-pencil"></a> </td>
+        {% else %}
+        {% endif %}      
         {% endfor %}
       </tr></br>
     </tbody>

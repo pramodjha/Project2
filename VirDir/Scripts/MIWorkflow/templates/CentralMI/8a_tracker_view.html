@@ -8,11 +8,7 @@
 <script src="{% static 'jquery/myjquery.js' %}"></script>
 <style>
 .middle{
-  height: 10px;
   text-align: center;
-  vertical-align: middle;
-  line-height:  10px;
-
 }
 </style>
 
@@ -30,7 +26,6 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-
   <div class="col-sm-2 col-md-2 col-lg-2">
     <form method = "POST" action = "{% url 'sdate' %}">
       {% csrf_token %}
@@ -68,82 +63,82 @@
     {% for key, value in dvcore.items %}
     <span class="">{{value}}</span>
     {% endfor %}
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-2">
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
     <span class="">Utilisation(%): </span>
     <span class="">{{dvutilisation}}</span>
   </div>
 </div>
 <div class="col-sm-2 col-md-4 col-lg-10">
-
-     <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
-      {% csrf_token %}
-
-        <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-          <div class="">
-            <label class="hidden">Registered Date</label>
-            <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
+  <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
+  {% csrf_token %}
+  <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
+    <div class="">
+      <label class="hidden">Registered Date</label>
+        <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
+    </div>
+    <div class="">
+      <label class="hidden">Tracking Date-time</label>
+        <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
+    </div>
+      <div class="">
+        <label class="hidden">Member</label>
+        <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Team</label>
+        <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
+      </div>
+        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+          <label class="">Category</label>
+          <span  class="">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
+        </div>
+        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+          <label class="">Sub-Category</label>
+          <span  class="">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
+        </div>
+        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+          <label class="">Activity</label>
+          <span  class="">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
+        </div>
+        <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+          <label class="">Task</label>
+          <span  class="">{% bootstrap_field form.task  show_label=False layout='inline'  %}</span>
+        </div>
+        <div class="">
+          <label class="hidden">Description</label>
+          <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
+        </div>
+        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+          <label class="">Time</label>
+          <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
+        </div>
+        <div class="">
+          <label class="hidden">Comments</label>
+          <span  class="hidden">{% bootstrap_field form.comments   show_label=False layout='inline'  %}</span>
+        </div>
+        <div class="">
+          <label class="hidden">Start Date-time</label>
+          <span  class="hidden">{% bootstrap_field form.startdatetime   show_label=False layout='inline'  %}</span>
+        </div>
+        <div class="">
+          <label class="hidden">Stop Date-time</label>
+          <span  class="hidden">{% bootstrap_field form.stopdatetime   show_label=False layout='inline'  %}</span>
           </div>
-          <div class="">
-            <label class="hidden">Tracking Date-time</label>
-            <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
+        <div class="col-auto col-sm-1 col-md-1 col-lg-1">
+          <label class="fontstyle10"> save </label>
+          <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
           </div>
-          <div class="">
-            <label class="hidden">Member</label>
-            <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Team</label>
-            <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Category</label>
-            <span  class="">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Sub-Category</label>
-            <span  class="">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Activity</label>
-            <span  class="">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-            <label class="">Task</label>
-            <span  class="">{% bootstrap_field form.task  show_label=False layout='inline'  %}</span>
-          </div>
-
-          <div class="">
-            <label class="hidden">Description</label>
-            <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Time</label>
-            <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Comments</label>
-            <span  class="hidden">{% bootstrap_field form.comments   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Start Date-time</label>
-            <span  class="hidden">{% bootstrap_field form.startdatetime   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Stop Date-time</label>
-            <span  class="hidden">{% bootstrap_field form.stopdatetime   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-1 col-md-1 col-lg-1">
-            <label class="fontstyle10"> save </label>
-            <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-            </div>
-          </div>
-
-</form>
-<div class="box1"><span>OT Applied for ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Applied}}</span>
-<span>OT Accpeted ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Accepted}}</span>
-<span>OT Rejected ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Rejected}}</span>
-<span>OT Pending ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Pending}}</span></div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-2 col-md-4 col-lg-10 ">
+      <div class="col-sm-2 col-md-4 col-lg-12 box1 middle">
+      <span>OT Applied for ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Applied}}</span>
+      <span>OT Accpeted ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Accepted}}</span>
+      <span>OT Rejected ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Rejected}}</span>
+      <span>OT Pending ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Pending}}</span>
+      </div>
 
 </div>
 <div class="row">

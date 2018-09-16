@@ -936,6 +936,7 @@ def Data_anlayis(request):
     form =  SearchForm()
     if request.method == 'POST':
         try:
+            print("first session")
             startdate, enddate, reportno, type, interval, team, member = Datarequiredforreport(request)
             form = SearchForm(initial={'datachoice':reportno,'datatype':type,'startdate':startdate,'enddate':enddate,'interval':interval,'team':team,'member':member})
             if type == '1':
@@ -978,8 +979,10 @@ def Datarequiredforreport(request):
     type = request.session.get('type')
     team = request.session.get('team')
     member = request.session.get('member')
-    print("checkhere")
+    print(startdate)
+    print(enddate)
     print(reportno)
+    print(interval)
     print(type)
     return startdate, enddate, reportno, type, interval, team, member
 
@@ -2540,10 +2543,12 @@ def TimeTracker_View(request):
     form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
     form.fields['reports'].queryset = Activity.objects.all()
     model = info.modelTracker
-    OT_Applied = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd]).values_list('timetrackers',flat=True))
+    OT_Applied =  list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd]).values_list('timetrackers',flat=True))
     OT_Accepted = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[2]).values_list('timetrackers',flat=True))
     OT_Rejected = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[3]).values_list('timetrackers',flat=True))
     OT_Pending = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[1]).values_list('timetrackers',flat=True))
+
+
     if request.method == 'POST':
         form = TimetrackersForm(request.POST)
         form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)

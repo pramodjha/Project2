@@ -2,19 +2,21 @@
 {% load staticfiles %}
 {% block style %}
 <style>
-.content {
+.card:hover {
   box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-  border-top: rgb(0,0,0);
-  background-color: #800080;
-  height: 300px;
-  font-style: italic;
-  border-radius: 10%;
-  text-align: center;
-  vertical-align: middle;
-  line-height:  300px;
+  background-color:  #006680;
+  padding-left: 5px;
+  padding-top: 5px;
 
 }
-.mySlides {display:none;}
+.card {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0);
+  padding-left: 5px;
+  padding-top: 5px;
+
+}
+
+
 </style>
 
 
@@ -35,7 +37,31 @@
 <div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'successstoriesadd' %}" id="successtories" name="Add" class="btn btn-default">Add Stories</a></div>
 <div class="col-sm-12 col-md-12 col-lg-12">
 {%for data in model %}
-  <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content mySlides"> {{ data.stories}} </div>
+<div class="card">
+  <!-- Card image -->
+  <div class="view overlay">
+    <a>
+      <div class="mask rgba-white-slight"></div>
+    </a>
+  </div>
+  <!-- Button -->
+  <a class="btn-floating btn-action ml-auto mr-4 mdb-color lighten-3"><i class="fa fa-chevron-right pl-1"></i></a>
+  <!-- Card content -->
+  <div class="card-body">
+    <!-- Title -->
+    <h5 class="card-title">{{ data.storiesid}}) {{ data.storiesdatetime}}</h5>
+    <hr>
+    <!-- Text -->
+    <p class="card-text">{{ data.stories}}</p>
+  </div>
+  <!-- Card footer -->
+  <div class="rounded-bottom mdb-color lighten-3 text-center pt-3">
+    <ul class="list-unstyled list-inline font-small">
+      <li class="list-inline-item pr-2 white-text"><i class="fa fa-clock-o pr-1"></i></li>
+    </ul>
+  </div>
+</div>
+<!-- Card -->
 {% endfor %}
 </div>
 
