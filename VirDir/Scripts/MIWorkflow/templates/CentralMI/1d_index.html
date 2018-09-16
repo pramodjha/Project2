@@ -18,6 +18,8 @@
 {% endblock %}
 
 {% block content %}
+
+
 <div id=pagecontent data-view-url="{% url 'ajax_load_view' %}" >
 {% if group_name == "manager" or group_name == "team_leadear" or group_name == "technical_leadear" %}
 <form method="post" id="extractdata"  name="form" novalidate>
@@ -40,25 +42,29 @@
 
 <div class="col-sm-6 col-md-6 col-lg-9 box">
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 5 Days WH</label>
+    <div><label class="">------------- A -------------</label></div>
+    <div><label class="">Last 10 Days WH</label></div>
     {% for key, value in dv.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
     {% endfor %}
   </div>
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 5 Days OT</label>
+    <div><label class="">------------- B -------------</label></div>
+    <div><label class="">Last 10 Days OT</label></div>
     {% for key, value in dvOT.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}<span></li>
     {% endfor %}
   </div>
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 5 Days Core</label>
+    <div><label class="">------------- C -------------</label></div>
+    <div><label class="">Last 10 Days Core</label></div>
     {% for key, value in dvcore.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
     {% endfor %}
   </div>
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 5 Days Util.</label>
+    <div><label class="">----- D = C / (A + B) -----</label></div>
+    <div><label class="">Last 10 Days Util.</label></div>
     {% for key, value in dvutilisation.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
     {% endfor %}
@@ -89,27 +95,27 @@
     {% endfor %}
   </div>
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 3 Months WH</label>
+    <label class="">Last 6 Months WH</label>
     {% for key, value in mv.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
     {% endfor %}
   </div>
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 3 Months OT </label>
+    <label class="">Last 6 Months OT </label>
     {% for key, value in mvOT.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
     {% endfor %}
   </div>
 
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 3 Months Core </label>
+    <label class="">Last 6 Months Core </label>
     {% for key, value in mv.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
     {% endfor %}
   </div>
 
   <div class="col-xm-6 col-sm-6 col-md-6 col-lg-3">
-    <label class="">Last 3 Months Util.</label>
+    <label class="">Last 6 Months Util.</label>
     {% for key, value in mvcore.items %}
     <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
     {% endfor %}
@@ -117,19 +123,20 @@
 </div>
 <div class="col-sm-3 col-md-3 col-lg-3 box1">
   <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
-  <label class="">Error Last 5 Days</label>
+  <div><label class="">----- Error -----</label></div>
+  <div><label class="">Last 10 Days</label></div>
   {% for key, value in dv_error.items %}
   <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
   {% endfor %}
 </div>
 <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
-  <label class="">Error Last 5 Weeks</label>
+  <label class="">Last 5 Weeks</label>
   {% for key, value in wv_error.items %}
   <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
   {% endfor %}
 </div>
 <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
-  <label class="">Error Last 3 Months</label>
+  <label class="">Last 6 Months</label>
   {% for key, value in mv_error.items %}
   <li class="">{{key}} <span class="fontstyle4">{{value}}</li>
   {% endfor %}
@@ -175,7 +182,7 @@ $("#id_teamfilter").change(function () {
 
   });
 
-  
+
 </script>
 
 {% endblock %}

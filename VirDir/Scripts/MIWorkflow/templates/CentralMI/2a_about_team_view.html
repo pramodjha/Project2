@@ -32,6 +32,8 @@ r
 {% endblock %}
 
 {% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+
 {%for data in model %}
 {% if data.avatar == None %}
 <div class="col-sm-2 col-md-2 col-lg-2">
@@ -51,6 +53,7 @@ r
 </div>
 {% endif %}
 {% endfor %}
+</div>
 {% endblock %}
 
 {% block footer %}

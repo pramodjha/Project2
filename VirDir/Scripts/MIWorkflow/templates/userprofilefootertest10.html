@@ -1,0 +1,131 @@
+{% load has_group %}
+{% if group_name == "authoriser" %}
+{% if activetab == "home" %}
+<li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>
+<li {% if activetab1 == 'whatwedo' %} class="active" {%else%} {% endif %}><a href="{% url 'whatwedo' %}">What we do? </a></li>
+<li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
+<li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
+<li {% if activetab1 == 'commsugg' %} class="active" {%else%} {% endif %}><a href="{% url 'commsugg' %}">Comments & Suggestion </a></li>
+{% elif activetab == "workflow" %}
+<li {% if activetab1 == 'allrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">All </a></li>
+<li {% if activetab1 == 'unapproved' %} class="active" {%else%} {% endif %}><a href="{% url 'unapproved' %}">Unapproved </a></li>
+{% elif activetab == "loginrequest" %}
+<li {% if activetab1 == 'addrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'addrequest' %}">Add Request </a></li>
+<li {% if activetab1 == 'checkstatus' %} class="active" {%else%} {% endif %}><a href="{% url 'checkstatus' %}">Check Status </a></li>
+{% endif %}
+{% elif group_name == "manager" or group_name == "team_leader" or  group_name == "technical_leader"  %}
+{% if activetab == "home" %}
+<li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>
+<li {% if activetab1 == 'whatwedo' %} class="active" {%else%} {% endif %}><a href="{% url 'whatwedo' %}">What we do? </a></li>
+<li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
+<li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
+<li {% if activetab1 == 'commsugg' %} class="active" {%else%} {% endif %}><a href="{% url 'commsugg' %}">Comments & Suggestion </a></li>
+{% elif activetab == "workflow" %}
+<li {% if activetab1 == 'allrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">All </a></li>
+<li {% if activetab1 == 'unapproved' %} class="active" {%else%} {% endif %}><a href="{% url 'unapproved' %}">Unapproved </a></li>
+<li {% if activetab1 == 'approved' %} class="active" {%else%} {% endif %}><a href="{% url 'approved' %}">Approved </a></li>
+<li {% if activetab1 == 'assigned' %} class="active" {%else%} {% endif %}><a href="{% url 'assigned' %}">Assigned </a></li>
+<li {% if activetab1 == 'overview' %} class="active" {%else%} {% endif %}><a href="{% url 'overview' %}">Overview </a></li>
+<li {% if activetab1 == 'estimate' %} class="active" {%else%} {% endif %}><a href="{% url 'estimate' %}">Estimate </a></li>
+<li {% if activetab1 == 'wip' %} class="active" {%else%} {% endif %}><a href="{% url 'wip' %}">WIP </a></li>
+<li {% if activetab1 == 'completed' %} class="active" {%else%} {% endif %}><a href="{% url 'completed' %}">Completed </a></li>
+<li {% if activetab1 == 'rejected' %} class="active" {%else%} {% endif %}><a href="{% url 'rejected' %}">Rejected </a></li>
+{% elif activetab == "loginrequest" %}
+<li {% if activetab1 == 'addrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'addrequest' %}">Add Request </a></li>
+<li {% if activetab1 == 'checkstatus' %} class="active" {%else%} {% endif %}><a href="{% url 'checkstatus' %}">Check Status </a></li>
+{% elif activetab == "timetracker" %}
+<li {% if activetab1 == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Tracker</a></li>
+<li {% if activetab1 == 'otdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'otdetail' %}">OT Details</a></li>
+<li {% if activetab1 == 'reportdue' %} class="active" {%else%} {% endif %}><a href="{% url 'reportdue' %}">Reports Due</a></li>
+{% elif activetab == "dataanalysis" %}
+<li {% if activetab1 == 'filterdata' %} class="active" {%else%} {% endif %}><a href="{% url 'dataanalysis' %}">Filter Tab</a></li>
+{% if reportno == '2' %}
+<li {% if activetab1 == 'requesttype' %} class="active" {%else%} {% endif %}><a href="{% url 'requesttype' %}">Request Type</a></li>
+<li {% if activetab1 == 'requestpriority' %} class="active" {%else%} {% endif %}><a href="{% url 'requestpriority' %}">Request Priority</a></li>
+<li {% if activetab1 == 'requestassigned' %} class="active" {%else%} {% endif %}><a href="{% url 'requestassigned' %}">Request Assigned</a></li>
+<li {% if activetab1 == 'requestcompleted' %} class="active" {%else%} {% endif %}><a href="{% url 'requestcompleted' %}">Request Completed</a></li>
+{% elif reportno == '3' %}
+<li {% if activetab1 == 'corenoncore' %} class="active" {%else%} {% endif %}><a href="{% url 'corenoncore' %}">Core Non-Core</a></li>
+<li {% if activetab1 == 'activity' %} class="active" {%else%} {% endif %}><a href="{% url 'activitytimetracker' %}">Activity</a></li>
+{% elif reportno == '4' %}
+<li {% if activetab1 == 'erroruserwise' %} class="active" {%else%} {% endif %}><a href="{% url 'erroruserwise' %}">Error - Userwise</a></li>
+<li {% if activetab1 == 'errorreportwise' %} class="active" {%else%} {% endif %}><a href="{% url 'errorreportwise' %}">Error - Reportwise</a></li>
+{% elif reportno == '5' %}
+<li {% if activetab1 == 'otuserwise' %} class="active" {%else%} {% endif %}><a href="{% url 'otuserwise' %}">OT Userwise</a></li>
+{% endif %}
+{% elif activetab == "feedback" %}
+<li {% if activetab1 == 'tracker' %} class="active" {%else%} {% endif %}><a href="{% url 'tracker' %}">Tracker</a></li>
+<li {% if activetab1 == 'dataanalysis' %} class="active" {%else%} {% endif %}><a href="{% url 'dataanalysis' %}">Data</a></li>
+{% elif activetab == "report" %}
+<li {% if activetab1 == 'allreports' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Reports Detail</a></li>
+<li {% if activetab1 == 'errordetail' %} class="active" {%else%} {% endif %}><a href="{% url 'errordetail' %}">Error Detail</a></li>
+<li {% if activetab1 == 'feedbackdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'feedbackdetail' %}">Feedback Detail</a></li>
+{% elif activetab == "Details" %}
+<li {% if activetab1 == 'mydetail' %} class="active" {%else%} {% endif %}><a href="{% url 'mydetail' %}">My Detail</a></li>
+<li {% if activetab1 == 'viewdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">View Details</a></li>
+<li {% if activetab1 == 'internaltaskdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'internaltaskdetail' %}">Internal Task Detail</a></li>
+{% endif %}
+{% elif group_name == "mi_team" %}
+{% if activetab == "home" %}
+<li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>
+<li {% if activetab1 == 'whatwedo' %} class="active" {%else%} {% endif %}><a href="{% url 'whatwedo' %}">What we do? </a></li>
+<li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
+<li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
+<li {% if activetab1 == 'commsugg' %} class="active" {%else%} {% endif %}><a href="{% url 'commsugg' %}">Comments & Suggestion </a></li>
+{% elif activetab == "workflow" %}
+<li {% if activetab1 == 'allrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'allrequest' %}">All </a></li>
+<li {% if activetab1 == 'unapproved' %} class="active" {%else%} {% endif %}><a href="{% url 'unapproved' %}">Unapproved </a></li>
+<li {% if activetab1 == 'approved' %} class="active" {%else%} {% endif %}><a href="{% url 'approved' %}">Approved </a></li>
+<li {% if activetab1 == 'assigned' %} class="active" {%else%} {% endif %}><a href="{% url 'assigned' %}">Assigned </a></li>
+<li {% if activetab1 == 'overview' %} class="active" {%else%} {% endif %}><a href="{% url 'overview' %}">Overview </a></li>
+<li {% if activetab1 == 'estimate' %} class="active" {%else%} {% endif %}><a href="{% url 'estimate' %}">Estimate </a></li>
+<li {% if activetab1 == 'wip' %} class="active" {%else%} {% endif %}><a href="{% url 'wip' %}">WIP </a></li>
+<li {% if activetab1 == 'completed' %} class="active" {%else%} {% endif %}><a href="{% url 'completed' %}">Completed </a></li>
+<li {% if activetab1 == 'rejected' %} class="active" {%else%} {% endif %}><a href="{% url 'rejected' %}">Rejected </a></li>
+{% elif activetab == "loginrequest" %}
+<li {% if activetab1 == 'addrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'addrequest' %}">Add Request </a></li>
+<li {% if activetab1 == 'checkstatus' %} class="active" {%else%} {% endif %}><a href="{% url 'checkstatus' %}">Check Status </a></li>
+{% elif activetab == "timetracker" %}
+<li {% if activetab1 == 'timetracker' %} class="active" {%else%} {% endif %}><a href="{% url 'timetracker' %}">Tracker</a></li>
+{% elif activetab == "dataanalysis" %}
+<li {% if activetab1 == 'filterdata' %} class="active" {%else%} {% endif %}><a href="{% url 'dataanalysis' %}">Filter Tab</a></li>
+{% if reportno == '2' %}
+<li {% if activetab1 == 'requesttype' %} class="active" {%else%} {% endif %}><a href="{% url 'requesttype' %}">Request Type</a></li>
+<li {% if activetab1 == 'requestpriority' %} class="active" {%else%} {% endif %}><a href="{% url 'requestpriority' %}">Request Priority</a></li>
+<li {% if activetab1 == 'requestassigned' %} class="active" {%else%} {% endif %}><a href="{% url 'requestassigned' %}">Request Assigned</a></li>
+<li {% if activetab1 == 'requestcompleted' %} class="active" {%else%} {% endif %}><a href="{% url 'requestcompleted' %}">Request Completed</a></li>
+{% elif reportno == '3' %}
+<li {% if activetab1 == 'corenoncore' %} class="active" {%else%} {% endif %}><a href="{% url 'corenoncore' %}">Core Non-Core</a></li>
+<li {% if activetab1 == 'activity' %} class="active" {%else%} {% endif %}><a href="{% url 'activitytimetracker' %}">Activity</a></li>
+{% elif reportno == '4' %}
+<li {% if activetab1 == 'erroruserwise' %} class="active" {%else%} {% endif %}><a href="{% url 'erroruserwise' %}">Error - Userwise</a></li>
+<li {% if activetab1 == 'errorreportwise' %} class="active" {%else%} {% endif %}><a href="{% url 'errorreportwise' %}">Error - Reportwise</a></li>
+{% elif reportno == '5' %}
+<li {% if activetab1 == 'otuserwise' %} class="active" {%else%} {% endif %}><a href="{% url 'otuserwise' %}">OT Userwise</a></li>
+{% endif %}
+
+{% elif activetab == "feedback" %}
+<li {% if activetab1 == 'tracker' %} class="active" {%else%} {% endif %}><a href="{% url 'tracker' %}">Tracker</a></li>
+<li {% if activetab1 == 'dataanalysis' %} class="active" {%else%} {% endif %}><a href="{% url 'dataanalysis' %}">Data</a></li>
+{% elif activetab == "report" %}
+<li {% if activetab1 == 'allreports' %} class="active" {%else%} {% endif %}><a href="{% url 'allreports' %}">Reports Detail</a></li>
+<li {% if activetab1 == 'errordetail' %} class="active" {%else%} {% endif %}><a href="{% url 'errordetail' %}">Error Detail</a></li>
+<li {% if activetab1 == 'feedbackdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'feedbackdetail' %}">Feedback Detail</a></li>
+{% elif activetab == "Details" %}
+<li {% if activetab1 == 'mydetail' %} class="active" {%else%} {% endif %}><a href="{% url 'mydetail' %}">My Detail</a></li>
+<li {% if activetab1 == 'viewdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'viewDetail' %}">View Details</a></li>
+<li {% if activetab1 == 'internaltaskdetail' %} class="active" {%else%} {% endif %}><a href="{% url 'internaltaskdetail' %}">Internal Task Detail</a></li>
+{% endif %}
+{% else %}
+{% if activetab == "home" %}
+<li {% if activetab1 == 'aboutteam' %} class="active" {%else%} {% endif %}><a href="{% url 'aboutteam' %}">About Team </a></li>
+<li {% if activetab1 == 'whatwedo' %} class="active" {%else%} {% endif %}><a href="{% url 'whatwedo' %}">What we do? </a></li>
+<li {% if activetab1 == 'governanceprocess' %} class="active" {%else%} {% endif %}><a href="{% url 'governanceprocess' %}">Governance Process </a></li>
+<li {% if activetab1 == 'successstories' %} class="active" {%else%} {% endif %}><a href="{% url 'successstories' %}">Success Stories </a></li>
+<li {% if activetab1 == 'commsugg' %} class="active" {%else%} {% endif %}><a href="{% url 'commsugg' %}">Comments & Suggestion </a></li>
+{% elif activetab == "loginrequest" %}
+<li {% if activetab1 == 'addrequest' %} class="active" {%else%} {% endif %}><a href="{% url 'addrequest' %}">Add Request </a></li>
+<li {% if activetab1 == 'checkstatus' %} class="active" {%else%} {% endif %}><a href="{% url 'checkstatus' %}">Check Status </a></li>
+{% endif %}
+
+{% endif %}

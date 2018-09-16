@@ -13,10 +13,10 @@
 
 
 {% block content %}
-
-<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 box1">
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize30per"> Thankyou for the Request</h>
 </div>
+<div class="col-sm-12 col-md-12 col-lg-12 box">
 <div class="col-sm-12 col-md-6 col-lg-4">
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Request Details (1)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request ID : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requestid }} </span></div>
@@ -61,8 +61,27 @@
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Estimation Date    : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail6.estimationdate}} </span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Accept/Reject Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail7.estacceptrejectdate}} </span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Completed Date     : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail8.completeddate}} </span></div>
-
 </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div  class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Add Conversation <a href="{% url 'conversationform' detail1.requestid  %}" class="glyphicon glyphicon-plus"></a></div>
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 box1">Date Time</div>
+<div class="col-sm-2 col-md-2 col-lg-2 box1">Comments By</div>
+<div class="col-sm-8 col-md-8 col-lg-8 box1">Comments</div>
+
+{% for data in  model9 %}
+<div class="col-sm-12 col-md-12 col-lg-12 box">
+
+<div class="fontstyle4 fontsize12 fontfamilycambria col-sm-2 col-md-2 col-lg-2 box">{{data.date_time}} </div>
+<div class="col-sm-2 col-md-2 col-lg-2 box">{{data.userid}} </div>
+<div class="col-sm-8 col-md-8 col-lg-8 box">{{data.comments}}</div>
+</div>
+
+{% endfor %}
+
+
+
 {% endblock %}
 
 {% block footer %}

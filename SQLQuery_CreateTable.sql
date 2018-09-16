@@ -311,3 +311,32 @@ mimember int foreign key references mimember(mimemberId),
 reply varchar(100) not null
 )
 
+create table tbl_navbar_header_master(
+navbar_header_id int not null primary key Identity(1,1),
+navbar_header_name varchar(255),
+navbar_header_url varchar(255),
+)
+
+
+create table tbl_navbar_footer_master(
+navbar_footer_id int not null primary key Identity(1,1),
+navbar_footer_name varchar(255),
+navbar_header_url varchar(255),
+
+)
+
+Use CentralMI
+create table tbl_navbar_master(
+navbar_id int not null primary key Identity(1,1),
+group_name int foreign key references auth_group(id) not null,
+navbar_header_id int foreign key references tbl_navbar_header_master(navbar_header_id) not null,
+)
+
+Use CentralMI
+create table tbl_conversation(
+conversationid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+requestdetail int foreign key references requestdetail(requestid) not null,
+userid int foreign key references auth_user(id) not null,
+comments varchar(max)
+)

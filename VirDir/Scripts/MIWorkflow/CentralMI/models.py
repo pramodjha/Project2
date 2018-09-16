@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 from django.db import models
 import datetime
 import django
-
+from django.db import models
 
 class Acceptrejectdetail(models.Model):
     estacceptrejectid = models.AutoField(primary_key=True)
@@ -35,8 +35,8 @@ class Acceptrejectoption(models.Model):
 class Assigneddetail(models.Model):
     assignedid = models.AutoField(primary_key=True)
     assigneddate = models.DateTimeField(db_column='assignedDate',default= datetime.datetime.now())  # Field name made lowercase.
-    assignedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='assignedto',related_name='assignedto', blank=True, null=True)
-    assignedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='assignedby', related_name='assignedby', blank=True, null=True)
+    assignedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='assignedto',related_name='assignedto')
+    assignedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='assignedby', related_name='assignedby')
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
 
     class Meta:
@@ -54,6 +54,8 @@ class AuthGroup(models.Model):
         managed = False
         db_table = 'auth_group'
 
+    def __str__(self):
+        return str(self.name)
 
 class AuthGroupPermissions(models.Model):
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
@@ -118,7 +120,7 @@ class AuthUserUserPermissions(models.Model):
 class Authorisedetail(models.Model):
     authorisedid = models.AutoField(primary_key=True)
     authoriseddate = models.DateTimeField(default= datetime.datetime.now())
-    authoriserdetail = models.ForeignKey('Authoriserdetail', models.DO_NOTHING, db_column='authoriserdetail', blank=True, null=True)
+    authoriserdetail = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='authoriserdetail')
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
 
 
@@ -145,7 +147,7 @@ class Authoriserdetail(models.Model):
 class Completeddetail(models.Model):
     completedid = models.AutoField(primary_key=True)
     completeddate = models.DateTimeField(default= datetime.datetime.now())
-    completedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='completedby', blank=True, null=True)
+    completedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='completedby')
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
 
     class Meta:
@@ -210,8 +212,8 @@ class Designationmaster(models.Model):
 class Estimationdetail(models.Model):
     estimationid = models.AutoField(primary_key=True)
     estimationdate = models.DateTimeField(default= datetime.datetime.now())
-    estimatedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='estimatedby', blank=True, null=True)
-    estimateddays = models.IntegerField(blank=True, null=True)
+    estimatedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='estimatedby')
+    estimateddays = models.IntegerField()
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
 
     class Meta:
@@ -257,8 +259,8 @@ class Overviewdetail(models.Model):
     overviewid = models.AutoField(primary_key=True)
     overviewdate = models.DateTimeField(default= datetime.datetime.now())
     providedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='providedby')
-    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    sopcreatedoptionsid = models.ForeignKey(Options, models.DO_NOTHING, db_column='sopcreatedoptionsid', blank=True, null=True)
+    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember')
+    sopcreatedoptionsid = models.ForeignKey(Options, models.DO_NOTHING, db_column='sopcreatedoptionsid')
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
     document = models.FileField(upload_to='sopdocument/',blank=True, null=True)
 
@@ -286,7 +288,7 @@ class Prioritydetail(models.Model):
 class Requestcategorys(models.Model):
     requestcategoryid = models.AutoField(primary_key=True)
     requestcategorydatetime = models.DateTimeField()
-    requestcategorys = models.CharField(max_length=100, blank=True, null=True)
+    requestcategorys = models.CharField(max_length=100)
 
     class Meta:
         managed = False
@@ -317,7 +319,7 @@ class Requeststatusdetail(models.Model):
     requeststatusid = models.AutoField(primary_key=True)
     requeststatusdate = models.DateTimeField(default= datetime.datetime.now())
     username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
-    statusdetail = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='statusdetail', blank=True, null=True)
+    statusdetail = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='statusdetail')
     requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail')
 
     class Meta:
@@ -331,9 +333,9 @@ class Requeststatusdetail(models.Model):
 class Requestsubcategory(models.Model):
     requestsubcategoryid = models.AutoField(primary_key=True)
     requestsubcategorydatetime = models.DateTimeField(default= datetime.datetime.now())
-    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
-    requestsubcategory = models.CharField(max_length=100, blank=True, null=True)
-    core_noncore = models.CharField(max_length=50, blank=True, null=True)
+    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys')
+    requestsubcategory = models.CharField(max_length=100)
+    core_noncore = models.CharField(max_length=50)
 
 
     class Meta:
@@ -371,7 +373,7 @@ class Statusdetail(models.Model):
 class Teamdetail(models.Model):
     teamid = models.AutoField(primary_key=True)
     teamdatetime = models.DateTimeField(default= datetime.datetime.now())
-    teamname = models.CharField(max_length=100, blank=True, null=True)
+    teamname = models.CharField(max_length=100)
 
     class Meta:
         managed = False
@@ -383,7 +385,7 @@ class Teamdetail(models.Model):
 
 class Frequency(models.Model):
     frequencyid = models.AutoField(primary_key=True)
-    frequency = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.CharField(max_length=255)
 
     class Meta:
         managed = False
@@ -394,7 +396,7 @@ class Frequency(models.Model):
 
 class Deliverydays(models.Model):
     deliverydaysid = models.AutoField(primary_key=True)
-    days = models.CharField(max_length=255, blank=True, null=True)
+    days = models.CharField(max_length=255)
 
     class Meta:
         managed = False
@@ -418,15 +420,15 @@ class ReportType(models.Model):
 class Reports(models.Model):
     reportid = models.AutoField(primary_key=True)
     registereddate = models.DateTimeField(default= datetime.datetime.now())
-    name = models.CharField(max_length=255, blank=True, null=True)
-    frequency = models.ForeignKey(Frequency, models.DO_NOTHING, db_column='frequency', blank=True, null=True)
-    deliverydays = models.ForeignKey(Deliverydays, models.DO_NOTHING, db_column='deliverydays', blank=True, null=True)
+    name = models.CharField(max_length=255)
+    frequency = models.ForeignKey(Frequency, models.DO_NOTHING, db_column='frequency')
+    deliverydays = models.ForeignKey(Deliverydays, models.DO_NOTHING, db_column='deliverydays')
     deliverytime = models.DateTimeField(default= datetime.datetime.now())
-    primaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='primaryowner', blank=True, null=True,related_name='primaryowner')
-    secondaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True,related_name='secondaryowner')
+    primaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='primaryowner',related_name='primaryowner')
+    secondaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='secondaryowner',related_name='secondaryowner')
     description = models.CharField(max_length=255, blank=True, null=True)
-    delivery_time = models.ForeignKey('TimeDetail', models.DO_NOTHING, db_column='delivery_time', blank=True, null=True)
-    report_type = models.ForeignKey(ReportType, models.DO_NOTHING, db_column='report_type', blank=True, null=True)
+    delivery_time = models.ForeignKey('TimeDetail', models.DO_NOTHING, db_column='delivery_time')
+    report_type = models.ForeignKey(ReportType, models.DO_NOTHING, db_column='report_type')
 
     class Meta:
         managed = False
@@ -446,11 +448,6 @@ class TimeDetail(models.Model):
 
     def __str__(self):
         return str(self.time)
-
-
-
-
-
 
 class Emaildetail(models.Model):
     emailid = models.AutoField(primary_key=True)
@@ -526,9 +523,9 @@ class FeedbackQuestion(models.Model):
 class OtDetail(models.Model):
     ot_id = models.AutoField(primary_key=True)
     timetrackers = models.ForeignKey('Timetrackers', models.DO_NOTHING, db_column='timetrackers')
-    ot_startdatetime = models.DateTimeField(blank=True, null=True)
-    ot_enddatetime = models.DateTimeField(blank=True, null=True)
-    ot_hrs = models.IntegerField(blank=True, null=True)
+    ot_startdatetime = models.DateTimeField()
+    ot_enddatetime = models.DateTimeField()
+    ot_hrs = models.IntegerField()
     ot_status = models.ForeignKey('OtStatus', models.DO_NOTHING, db_column='ot_status')
     otdocument = models.FileField(upload_to='otdocument/',blank=True, null=True)
 
@@ -556,17 +553,17 @@ class OtStatus(models.Model):
 class Activity(models.Model):
     activityid = models.AutoField(primary_key=True)
     registereddate = models.DateTimeField(default= datetime.datetime.now())
-    name = models.CharField(max_length=255, blank=True, null=True)
-    frequency = models.ForeignKey('Frequency', models.DO_NOTHING, db_column='frequency', blank=True, null=True)
-    date_types = models.ForeignKey('DateTypes', models.DO_NOTHING, db_column='date_types', blank=True, null=True)
-    delivery_days = models.IntegerField(blank=True, null=True)
-    deliverytime = models.TimeField(blank=True, null=True)
-    teamname = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamname', blank=True, null=True)
-    primaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='primaryowner', blank=True, null=True,related_name='activityprimaryowner')
-    secondaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True,related_name='activitysecondaryowner')
-    description = models.CharField(max_length=255, blank=True, null=True)
-    requestcategorys = models.ForeignKey('Requestcategorys', models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
-    activitystatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+    name = models.CharField(max_length=255)
+    frequency = models.ForeignKey('Frequency', models.DO_NOTHING, db_column='frequency')
+    date_types = models.ForeignKey('DateTypes', models.DO_NOTHING, db_column='date_types')
+    delivery_days = models.IntegerField()
+    deliverytime = models.TimeField()
+    teamname = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamname')
+    primaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='primaryowner', related_name='activityprimaryowner')
+    secondaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='secondaryowner',related_name='activitysecondaryowner')
+    description = models.CharField(max_length=255)
+    requestcategorys = models.ForeignKey('Requestcategorys', models.DO_NOTHING, db_column='requestcategorys')
+    activitystatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='activitystatus')
     activitydocument = models.FileField(upload_to='activitydocument/',blank=True, null=True)
 
     class Meta:
@@ -601,7 +598,7 @@ class Feedback(models.Model):
     feedback_date = models.DateTimeField(default= datetime.datetime.now())
     feedback_question = models.ForeignKey('FeedbackQuestion', models.DO_NOTHING, db_column='feedback_question')
     feedback_text = models.CharField(max_length=255, blank=True, null=True)
-    activity = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activity', blank=True, null=True)
+    activity = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activity')
 
     class Meta:
         managed = False
@@ -614,15 +611,14 @@ class Timetrackers(models.Model):
     timetrackerid = models.AutoField(primary_key=True)
     registerdatetime = models.DateTimeField(default= datetime.datetime.now())
     trackingdatetime = models.DateTimeField(default= datetime.datetime.now())
-    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    teamdetail = models.ForeignKey(Teamdetail, models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
-    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
-    requestsubcategory = models.ForeignKey(Requestsubcategory, models.DO_NOTHING, db_column='requestsubcategory', blank=True, null=True)
+    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember')
+    teamdetail = models.ForeignKey(Teamdetail, models.DO_NOTHING, db_column='teamdetail')
+    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys')
+    requestsubcategory = models.ForeignKey(Requestsubcategory, models.DO_NOTHING, db_column='requestsubcategory')
     task = models.CharField(max_length=100, blank=True, null=True)
     requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
-    options = models.ForeignKey(Options, models.DO_NOTHING, db_column='options', blank=True, null=True)
     description_text = models.CharField(max_length=255, blank=True, null=True)
-    totaltime = models.IntegerField(blank=True, null=True)
+    totaltime = models.IntegerField()
     comments = models.TextField(blank=True, null=True)
     startdatetime = models.DateTimeField(blank=True, null=True)
     stopdatetime = models.DateTimeField(blank=True, null=True)
@@ -706,8 +702,8 @@ class Internaltask(models.Model):
     internaltaskid = models.AutoField(primary_key=True)
     internaltaskdatetime = models.DateTimeField(default= datetime.datetime.now())
     internaltaskquestion = models.CharField(db_column='internaltaskQuestion', max_length=255)  # Field name made lowercase.
-    status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='status', blank=True, null=True)
-    owner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='Owner', blank=True, null=True)  # Field name made lowercase.
+    status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='status')
+    owner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='Owner')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -734,9 +730,9 @@ class Internaltaskchoice(models.Model):
 class Internaltaskstatus(models.Model):
     internaltaskstatusid = models.AutoField(primary_key=True)
     internaltaskstatusdatetime = models.DateTimeField(default= datetime.datetime.now())
-    mimember = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask', blank=True, null=True)
-    internaltaskchoice = models.ForeignKey(Internaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoice', blank=True, null=True)
+    mimember = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='mimember')
+    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask')
+    internaltaskchoice = models.ForeignKey(Internaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoice')
 
     class Meta:
         managed = False
@@ -753,6 +749,11 @@ class Whatwedo(models.Model):
         managed = False
         db_table = 'whatwedo'
 
+
+    def __str__(self):
+        return str(self.data)
+
+
 class Reply(models.Model):
     replydatetime = models.DateTimeField()
     replyid = models.AutoField(primary_key=True)
@@ -763,30 +764,41 @@ class Reply(models.Model):
         managed = False
         db_table = 'reply'
 
+    def __str__(self):
+        return str(self.reply)
+
+
 class Suggestion(models.Model):
-    suggestiondatetime = models.DateTimeField()
+    suggestiondatetime = models.DateTimeField(default= datetime.datetime.now())
     suggestionid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     suggestion = models.TextField()
-    reply = models.ForeignKey(Reply, models.DO_NOTHING, db_column='reply', blank=True, null=True)
-    subject = models.CharField(max_length=100, blank=True, null=True)
+    subject = models.CharField(max_length=100)
 
     class Meta:
         managed = False
         db_table = 'suggestion'
 
+    def __str__(self):
+        return str(self.subject)
+
 
 class SuccessStories(models.Model):
     storiesdatetime = models.DateTimeField(default= datetime.datetime.now())
     storiesid = models.AutoField(primary_key=True)
-    stories = models.TextField(blank=True, null=True)
+    stories = models.TextField()
 
     class Meta:
         managed = False
         db_table = 'success_stories'
 
+
+    def __str__(self):
+        return str(self.stories)
+
+
 class Governance(models.Model):
-    governancedatetime = models.DateTimeField()
+    governancedatetime = models.DateTimeField(default= datetime.datetime.now())
     governanceid = models.AutoField(primary_key=True)
     teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail')
     processimg = models.FileField(upload_to='governanceprocess/',blank=True, null=True)
@@ -795,3 +807,56 @@ class Governance(models.Model):
     class Meta:
         managed = False
         db_table = 'governance'
+
+    def __str__(self):
+        return str(self.governanceid)
+
+
+class TblNavbarFooterMaster(models.Model):
+    navbar_footer_id = models.AutoField(primary_key=True)
+    navbar_footer_name = models.CharField(max_length=255, blank=True, null=True)
+    navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_navbar_footer_master'
+    def __str__(self):
+        return str(self.navbar_footer_name)
+
+
+class TblNavbarHeaderMaster(models.Model):
+    navbar_header_id = models.AutoField(primary_key=True)
+    navbar_header_name = models.CharField(max_length=255, blank=True, null=True)
+    navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_navbar_header_master'
+
+    def __str__(self):
+        return str(self.navbar_header_name)
+
+
+class TblNavbarMaster(models.Model):
+    navbar_id = models.AutoField(primary_key=True)
+    group_name = models.ForeignKey(AuthGroup, models.DO_NOTHING, db_column='group_name')
+    navbar_header = models.ForeignKey(TblNavbarHeaderMaster, models.DO_NOTHING)
+    navbar_footer = models.ForeignKey(TblNavbarFooterMaster, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_navbar_master'
+
+    def __str__(self):
+        return str(self.navbar_id)
+
+class TblConversation(models.Model):
+    conversationid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail')
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    comments = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_conversation'

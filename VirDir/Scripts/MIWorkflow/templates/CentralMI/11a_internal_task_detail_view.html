@@ -21,20 +21,19 @@
     <thead class="">
     <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
       {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-      <td >ID <a href="{% url 'addinternaltaskdetail' %}" id="addinternaltask" name="addinternaltask" class="glyphicon glyphicon-plus"></td>
+      <td >ID <a href="{% url 'addinternaltaskdetail' %}" id="addinternaltask" name="addinternaltask"  class="btn btn-default"></td>
       {% elif group_name == "mi_team" %}
       <td >ID </td>
       {% endif %}
-
       <td >Internal Task Datetime</td>
       <td >Question</td>
       <td> Status </td>
       <td> Owner </td>
   {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-  <td> View | Edit | Add </td>
-  <td> View Status </td>
+  <td> View | Add | Edit </td>
+  <td> View Response </td>
   {% elif group_name == "mi_team" %}
-      <td> Update </td>
+      <td>Add Response </td>
   {% endif %}
     </tr>
     </thead>
@@ -47,10 +46,10 @@
       <td >{{data.status }}</td>
       <td >{{data.owner }}</td>
       {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-      <td> <a href="{% url 'viewinternaltaskoption' data.internaltaskid %}" class="glyphicon glyphicon-pencil"></a></td>
-      <td> <a href="{% url 'internaltaskcompetionview' data.internaltaskid %}" class="glyphicon glyphicon-pencil"></a></td>
+      <td> <a href="{% url 'viewinternaltaskoption' data.internaltaskid %}"  class="btn btn-default">View | Add | Edit</a></td>
+      <td> <a href="{% url 'internaltaskcompetionview' data.internaltaskid %}" class="btn btn-default">View Response</a></td>
       {% elif group_name == "mi_team" %}
-      <td> <a href="{% url 'internaltaskwithchoice' data.internaltaskid %}" class="glyphicon glyphicon-pencil"></a></td>
+      <td> <a href="{% url 'internaltaskwithchoice' data.internaltaskid %}" class="btn btn-default">Add Response</a></td>
       {% endif %}
 
       {% endfor %}

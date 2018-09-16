@@ -39,16 +39,16 @@
       <tbody class="">
     {%for data in model %}
       <tr class="">
-      <td >{{data.activityid}} </td>
-        <td>{{data.requestcategorys }}</td>
-        <td >{{data.name }}</td>
-        <td>{{data.frequency }}</td>
-        <td>{{data.date_types }}</td>
-        <td>{{data.delivery_days }}</td>
-        <td>{{data.deliverytime }}</td>
-        <td>{{data.primaryowner }}</td>
-        <td>{{data.secondaryowner }}</td>
-        <td>{{data.description }}</td>
+      <td>{{data.activityid}} </td>
+      <td>{{data.requestcategorys }}</td>
+      <td>{{data.name }}</td>
+      <td>{{data.frequency }}</td>
+      <td>{{data.date_types }}</td>
+      <td>{{data.delivery_days }}</td>
+      <td>{{data.deliverytime }}</td>
+      <td>{{data.primaryowner }}</td>
+      <td>{{data.secondaryowner }}</td>
+      <td>{{data.description }}</td>
         <td>{{data.activitystatus }}</td>
         <td> <a href="{% url 'errorlog' data.activityid %}" class="glyphicon glyphicon-plus"></a> | <a  href="{% url 'viewfeedbackquestion' data.activityid  %}" class="glyphicon glyphicon-plus"></a></td>
         <td> <a href="{% url 'editreport' data.activityid %}" class="glyphicon glyphicon-pencil"></a></td>

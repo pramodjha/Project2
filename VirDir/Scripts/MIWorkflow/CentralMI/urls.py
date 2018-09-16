@@ -12,15 +12,18 @@ urlpatterns = [
 # 3) About us
 	url(r'^about_team_view/',views.About_Team_View, name = 'aboutteam'),
 	url(r'^what_we_do_view/',views.What_We_Do_View, name = 'whatwedo'),
-	url(r'^what_we_do_view_add_form/',views.Add_What_We_Do_View, name = 'whatwedoadd'),
+	url(r'^what_we_do_view_add_form/',views.What_We_Do_Add, name = 'whatwedoadd'),
 
 	url(r'^governance_process_view/',views.Governance_Process_View, name = 'governanceprocess'),
 	url(r'^success_stories_view/',views.Success_Stories_View, name = 'successstories'),
 	url(r'^success_stories_add/',views.Success_Stories_Add, name = 'successstoriesadd'),
 
 	url(r'^comm_sugg_view/',views.Comm_Sugg_View, name = 'commsugg'),
+	url(r'^comm_sugg_add/',views.Comm_Sugg_Add, name = 'commsuggadd'),
+
 # 4) Workflow
 	# View
+	url(r'^workflow/',views.All_Request_View, name = 'workflow'),
 	url(r'^request_view/',views.All_Request_View, name = 'allrequest'),
 	url(r'^request_unapproved_view/',views.Unapproved_View, name = 'unapproved'),
 	url(r'^request_approved_view/',views.Approved_View, name = 'approved'),
@@ -30,6 +33,7 @@ urlpatterns = [
 	url(r'^request_wip_view/',views.Wip_View, name = 'wip'),
 	url(r'^request_completed_view/',views.Completed_View, name = 'completed'),
 	url(r'^request_rejected_view/',views.Rejected_View, name = 'rejected'),
+	url(r'^conversation_form/(?P<requestid>\d+)$',views.Conversation_Form, name = 'conversationform'),
 	url(r'^check_status_view/',views.Check_Status_View, name = 'checkstatus'),
 	url(r'^thankyou_view/(?P<requestid>\d+)$',views.Thank_You_Page_View, name = 'ty'),
 
@@ -45,8 +49,9 @@ urlpatterns = [
 
 # 5) Reports/Activity
 	# Report
-	url(r'^reports_detail_view/',views.Report_Detail_View, name = 'allreports'),
-	url(r'^report_add_form/',views.Report_Add_Form, name = 'report'),
+	url(r'^reports_detail_view/',views.Report_Detail_View, name = 'report'),
+	url(r'^reports_detail_view/',views.Report_Detail_View, name = 'reportsdetail'),
+	url(r'^report_add_form/',views.Report_Add_Form, name = 'reportform'),
 	url(r'^report_add_form/',views.Report_Add_Form, name = 'addreport'),
 	url(r'^report_edit_form/(?P<requestid>\d+)$', views.Report_Edit_Form, name='editreport'),
 	# Feedback
@@ -68,7 +73,7 @@ urlpatterns = [
 	url(r'^ot_add_form/(?P<trackerid>\d+)$',views.Ot_Add_Form, name = 'otform'),
 	url(r'^ot_edit_form/(?P<requestid>\d+)$', views.Ot_Edit_Form, name='editot'),
 # 7) Employee Detail
-	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'viewDetail'),
+	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'details'),
 	url(r'^staff_edit_form/',views.Staff_Edit_Form, name = 'editstaffdetail'),
 	url(r'^staff_edit_manager_form/(?P<id>\d+)$',views.Staff_Edit_Manager_Form, name = 'editstaffbymanager'),
 	url(r'^my_detail_view/',views.My_Detail_View, name = 'mydetail'),
@@ -87,10 +92,9 @@ urlpatterns = [
 #	url(r'^rupdate/(?P<requestid>\d+)$',views.RequestdetailUpdate, name = 'rupdate'),
 
 # 9) Data Analysis
-	url(r'^summary_tracker/',views.Summary_Tracker, name = 'summary'),
-	url(r'^extract_data/',views.Filter_Data, name = 'extractdatafilter'),
-	url(r'^extract_data1/',views.Filter_Data, name = 'extractdatafilter1'),
-
+	url(r'^Data_Analysis/',views.Data_anlayis, name = 'data'),
+	url(r'^Data_Analysis/',views.Data_anlayis, name = 'filtertab'),
+	
 #### Ajax call
 	url(r'^ajax/load-subcategories/', views.Load_Subcategories, name='ajax_load_subcategories'),
 	url(r'^ajax/load-activity/', views.Load_Activity, name='ajax_load_activity'),

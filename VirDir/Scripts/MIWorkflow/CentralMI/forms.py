@@ -1,6 +1,6 @@
 from django import forms
 from bootstrap3_datetime.widgets import DateTimePicker
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation
 #Reports1
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
@@ -71,6 +71,12 @@ class AssigneddetailForm(forms.ModelForm):
         model = Assigneddetail
         fields = '__all__'
 
+
+class TblConversationForm(forms.ModelForm):
+    class Meta():
+        model = TblConversation
+        fields = '__all__'
+
 class AcceptrejectdetailForm(forms.ModelForm):
     class Meta():
         model = Acceptrejectdetail
@@ -99,7 +105,6 @@ class TimetrackersForm(forms.ModelForm):
         self.fields['requestsubcategory'].widget.attrs['class']  = 'form-control'
         self.fields['reports'].widget.attrs['class']  = 'form-control'
         self.fields['task'].widget.attrs['class']  = 'form-control'
-        self.fields['options'].widget.attrs['class']  = 'form-control'
         self.fields['totaltime'].widget.attrs['class']  = 'form-control'
 
 
@@ -157,13 +162,22 @@ class OtDetailForm(forms.ModelForm):
         self.fields['ot_startdatetime'].widget.attrs['class']  = 'form_datetime'
         self.fields['ot_enddatetime'].widget.attrs['class']  = 'form_datetime'
 
+class OtDetail1Form(forms.ModelForm):
+    class Meta():
+        model = OtDetail
+        fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(OtDetail1Form, self).__init__(*args, **kwargs)
+        self.fields['ot_startdatetime'].widget.attrs['disabled']  = True
+        self.fields['ot_enddatetime'].widget.attrs['disabled']  = True
+        self.fields['otdocument'].widget.attrs['disabled']  = True
+
 
 REPORT_CHOICES = (
-    (1, ("None")),
-    (2, ("Workflow")),
-    (3, ("TimeTracker")),
-    (4, ("ErrorLog")),
-    (5, ("OT"))
+    (1, ("Workflow")),
+    (2, ("TimeTracker")),
+    (3, ("ErrorLog")),
+    (4, ("OT"))
     )
 
 INTERVAL_CHOICES = (
@@ -172,8 +186,15 @@ INTERVAL_CHOICES = (
     (3, ("Monthly")),
     )
 
+TYPE_CHOICES = (
+    (1, ("Raw Data")),
+    (2, ("Summary")),
+    (3, ("Visualistion")),
+    )
+
 class SearchForm(forms.Form):
     datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="Date Choice", initial=1, widget=forms.Select(), required=True)
+    datatype = forms.ChoiceField(choices = TYPE_CHOICES, label="Type", initial=1, widget=forms.Select(), required=True)
     interval = forms.ChoiceField(choices = INTERVAL_CHOICES, label="Interval", initial=1, widget=forms.Select(), required=True)
     startdate = forms.DateField(initial=datetime.now(), label="StartDate",required=False)
     enddate = forms.DateField(initial=datetime.now(), required=False,label="EndDate")
@@ -183,7 +204,8 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['datachoice'].widget.attrs['class']  = 'form-control'
-        self.fields['interval'].widget.attrs['class']  = 'form-control'
+        self.fields['datatype'].widget.attrs['class']  = 'form-control'
+        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
         self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
         self.fields['enddate'].widget.attrs['class']  = 'datetime-input form-control'
         self.fields['team'].widget.attrs['class']  = 'form-control'

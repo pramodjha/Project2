@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType,DateTypes, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType,DateTypes, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster
 
 
 admin.site.register(Mimember)
@@ -16,7 +16,7 @@ admin.site.register(Acceptrejectoption)
 admin.site.register(Acceptrejectdetail)
 
 class TimetrackersAdmin(admin.ModelAdmin):
-    list_display = ('timetrackerid','registerdatetime','trackingdatetime','mimember','teamdetail','requestcategorys','requestsubcategory','task','requestdetail','options','description_text','totaltime','comments','startdatetime','stopdatetime','reports')
+    list_display = ('timetrackerid','registerdatetime','trackingdatetime','mimember','teamdetail','requestcategorys','requestsubcategory','task','requestdetail','description_text','totaltime','comments','startdatetime','stopdatetime','reports')
     search_fields = ['timetrackerid']
 
 admin.site.register(Timetrackers,TimetrackersAdmin)
@@ -30,7 +30,6 @@ class RequestdetailAdmin(admin.ModelAdmin):
     list_display = ('requestid','requestraiseddate','requesttypedetail','prioritydetail','username','requestdescription')
     search_fields = ['requestid']
 admin.site.register(Requestdetail,RequestdetailAdmin)
-
 admin.site.register(Requestcategorys)
 admin.site.register(Prioritydetail)
 admin.site.register(Overviewdetail)
@@ -60,3 +59,10 @@ admin.site.register(Reply)
 admin.site.register(Suggestion)
 admin.site.register(Governance)
 admin.site.register(SuccessStories)
+admin.site.register(TblNavbarFooterMaster)
+admin.site.register(TblNavbarHeaderMaster)
+class TblNavbarMasterAdmin(admin.ModelAdmin):
+    list_display = ('navbar_id','group_name','navbar_header_id','navbar_footer_id')
+    search_fields = ['navbar_id']
+
+admin.site.register(TblNavbarMaster,TblNavbarMasterAdmin)

@@ -16,9 +16,14 @@
 <h3 class="col-sm-12 col-md-12 col-lg-12 head">OT Form</h3>
 </div>
 </div>
+
 <div class="col-sm-12 col-md-12 col-lg-12">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <label>{{msg}}<label>
+  </div>
+
 <div >
-<label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'TimeTracker ID'  %}</label>
+<label class="col-sm-12 col-md-12 col-lg-4  hidden">{% bootstrap_label 'TimeTracker ID'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.timetrackers  show_label=False layout='inline'  %}</span>
 </div>
 <div>
@@ -41,11 +46,14 @@
 <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Upload File'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.otdocument  show_label=False  placeholder='Error Reported Team' %}</span>
 </div>
-
-
 <div class="col-sm-12 col-md-12 col-lg-7">
+{%if msg == "" %}
 <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'allreports' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'timetracker' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+{% else %}
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'timetracker' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+{% endif %}
+
 </div>
 
 </form>

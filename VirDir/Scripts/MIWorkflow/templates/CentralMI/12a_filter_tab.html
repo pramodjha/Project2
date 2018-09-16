@@ -3,28 +3,16 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load staticfiles %}
+
 {% block style %}
-<style>
-thead > tr {
-  color: #cc8800;
-  font-size: 13px;
-  font-family: Cambria;
-  background-color: #333333;
-}
-
-tbody > tr {
-  font-size: 12px;
-  font-family: Cambria;
-}
-
-.cell-border{
-border-width: thin;
-
-}
-
-</style>
 <script src="{% static 'jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'jquery/myjquery.js' %}"></script>
+<style>
+.active {
+background-color: red;
+}
+</style>
+
 {% endblock %}
 
 {% block navblockleft %}
@@ -40,31 +28,34 @@ border-width: thin;
 
 {% block content %}
 
-<form method="post" id="extractdata" data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
+<form method="post" id="extractdata"  data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
 {% csrf_token %}
-{% if group_name == "manager" %}
-  <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+  <div class="col-auto col-sm-2 col-md-2 col-lg-2 box">
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
       <label class="">Data Choice</label>
       <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
     </div>
-    <div class="">
-      <label class="hidden">interval</label>
-      <span  class="hidden">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
+      <label class="">Data Type</label>
+      <span  class="">{% bootstrap_field form.datatype  show_label=False layout='inline'  %}</span>
     </div>
-      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
+      <label class="">Interval</label>
+      <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
+    </div>
+      <div class="col-auto col-sm-12 col-md-12 col-lg-12">
       <label class="">Start Date</label>
       <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
     </div>
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
       <label class="">End Date </label>
       <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
     </div>
-    <div class="col-auto col-sm-3 col-md-3 col-lg-3">
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
       <label class="">Team</label>
       <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
     </div>
-    <div class="col-auto col-sm-2 col-md-2 col-lg-2">
+    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
       <label class="">Member</label>
       <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
     </div>
@@ -73,108 +64,74 @@ border-width: thin;
       <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
       </div>
     </div>
+  </form>
+       <div class="col-auto col-sm-10 col-md-10 col-lg-10">
+         <form action="{% url 'data' %}" method="post">
+           {% csrf_token %}
+           {% for key, values in view_dict.items %}
+           <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="active btn btn-default" {%else%} class="btn btn-default"{% endif %}>
+           {% endfor %}
+            <span><a href="{% url 'export_users_csv' %}" class="btn btn-default">Export to CSV</a></span>
+         </form>
+
+       {% autoescape off %}
+       {{ data | safe }}
+       {% endautoescape %}
 </div>
-  {% elif group_name == "team_leader" %}
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="">Data Choice</label>
-        <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="">
-        <label class="hidden">interval</label>
-        <span  class="hidden">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
-      </div>
-        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="">Start Date</label>
-        <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="">End Date </label>
-        <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-        <label class="">Team</label>
-        <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
-      </div>
 
-      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="">Member</label>
-        <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-auto col-sm-1 col-md-1 col-lg-1">
-        <label class="fontstyle10"> save </label>
-        <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-        </div>
-      </div>
-     </div>
-
-    {% else %}
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="">Data Choice</label>
-        <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="">
-        <label class="hidden">interval</label>
-        <span  class="hidden">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
-      </div>
-        <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="">Start Date</label>
-        <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="">End Date </label>
-        <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-        <label class="hidden">Team</label>
-        <span  class="hidden">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
-      </div>
-
-      <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-        <label class="hidden">Member</label>
-        <span  class="hidden">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-auto col-sm-1 col-md-1 col-lg-1">
-        <label class="fontstyle10"> save </label>
-        <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-        </div>
-      </div>
-     </div>
-       {% endif %}
-       </form>
-
-     <script>
-
-     $("#id_team").change(function () {
-         var team_id = $(this).val();  // get the selected country ID from the HTML input
-        console.log(team_id)
-        $.ajax({
-          url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-          data: {
-            'team_id': team_id     // add the country id to the GET parameters
-          },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-            $("#id_member").html(data);  // replace the contents of the city input with the data that came from the server
-          }
-        });
-      });
+<script>
 
 
-        $("#id_startdate").datepicker({
-          dateFormat: 'yy-mm-dd',
-           altField: '#thealtdate',
-           altFormat: 'yy-mm-dd'});
+$("#id_team").change(function () {
+    var team_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(team_id)
+   $.ajax({
+     url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'team_id': team_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_member").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+ $("#id_startdate").datepicker({
+   dateFormat: 'yy-mm-dd',
+    altField: '#thealtdate',
+    altFormat: 'yy-mm-dd'});
 
 
-        $("#id_enddate").datepicker({
-          dateFormat: 'yy-mm-dd',
-           altField: '#thealtdate',
-           altFormat: 'yy-mm-dd'});
+ $("#id_enddate").datepicker({
+   dateFormat: 'yy-mm-dd',
+    altField: '#thealtdate',
+    altFormat: 'yy-mm-dd'});
+
+     $(document).ready(function() {
+         $('.dataframe').DataTable(
+         {
+           destroy: true,
+           fixedHeader: true,
+           scrollY: '100vh',
+           scrollCollapse: true,
+           scrollX: true,
+           fixedColumns: true,
+           "lengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+
+         });
+     } );
+
+  </script>
+  <link rel="stylesheet" href="{% static 'datatable/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <script type="text/javascript" src="{% static 'datatable/jquery.dataTables.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'datatable/dataTables.bootstrap.min.js' %}"  charset="UTF-8"></script>
 
 
-</script>
 {% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
 
 {% block footer %}
 {% include "userprofilefootertest1.html" %}

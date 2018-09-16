@@ -1,6 +1,24 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
+<style>
+.content {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  border-top: rgb(0,0,0);
+  padding: 10px;
+  background-color: #f2f2f2;
+  vertical-align: middle;
+  margin-top: 1%;
+  border-radius: 10%;
+
+
+}
+.content1 {
+  border-top: rgb(0,0,0);
+  margin-top: 2%;
+}
+
+</style>
 {% endblock %}
 
 {% block navblockleft %}
@@ -15,6 +33,19 @@
 {% endblock %}
 
 {% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'commsuggadd' %}" id="comments_suggestion" name="Add" class="btn btn-default">Add Comments/suggestion</a></div>
+{% for data in model %}
+<div class="col-sm-6 col-md-6 col-lg-6 content">
+  <div class="fontstyle1 fontsize12 fontfamilycambria widthsize25per "> DateTime: {{ data.suggestiondatetime}} </div>
+  <div class="fontstyle1 fontsize12 fontfamilycambria widthsize25per "> Subject: {{ data.subject}} </div>
+  <div class="fontstyle1 fontsize12 fontfamilycambria widthsize25per "> Suggestion: {{ data.suggestion}} </div>
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 content1">
+</div>
+<div class="col-sm-6 col-md-6 col-lg-6 content1">
+</div>
+
+{% endfor %}
 {% endblock %}
 
 {% block footer %}

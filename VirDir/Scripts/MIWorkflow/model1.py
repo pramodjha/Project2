@@ -198,7 +198,7 @@ class AuthUserUserPermissions(models.Model):
 class Authorisedetail(models.Model):
     authorisedid = models.AutoField(primary_key=True)
     authoriseddate = models.DateTimeField()
-    authoriserdetail = models.ForeignKey('Authoriserdetail', models.DO_NOTHING, db_column='authoriserdetail', blank=True, null=True)
+    authoriserdetail = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='authoriserdetail', blank=True, null=True)
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
 
     class Meta:
@@ -781,7 +781,6 @@ class Suggestion(models.Model):
     suggestionid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     suggestion = models.TextField()
-    reply = models.ForeignKey(Reply, models.DO_NOTHING, db_column='reply', blank=True, null=True)
     subject = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
@@ -803,6 +802,49 @@ class TblCalendar(models.Model):
     class Meta:
         managed = False
         db_table = 'tbl_Calendar'
+
+
+class TblConversation(models.Model):
+    conversationid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail')
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    comments = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_conversation'
+
+
+class TblNavbarFooterMaster(models.Model):
+    navbar_footer_id = models.AutoField(primary_key=True)
+    navbar_footer_name = models.CharField(max_length=255, blank=True, null=True)
+    navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_navbar_footer_master'
+
+
+class TblNavbarHeaderMaster(models.Model):
+    navbar_header_id = models.AutoField(primary_key=True)
+    navbar_header_name = models.CharField(max_length=255, blank=True, null=True)
+    navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_navbar_header_master'
+
+
+class TblNavbarMaster(models.Model):
+    navbar_id = models.AutoField(primary_key=True)
+    group_name = models.ForeignKey(AuthGroup, models.DO_NOTHING, db_column='group_name')
+    navbar_header = models.ForeignKey(TblNavbarHeaderMaster, models.DO_NOTHING)
+    navbar_footer = models.ForeignKey(TblNavbarFooterMaster, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_navbar_master'
 
 
 class Teamdetail(models.Model):
@@ -834,7 +876,6 @@ class Timetrackers(models.Model):
     requestsubcategory = models.ForeignKey(Requestsubcategory, models.DO_NOTHING, db_column='requestsubcategory', blank=True, null=True)
     task = models.CharField(max_length=100, blank=True, null=True)
     requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
-    options = models.ForeignKey(Options, models.DO_NOTHING, db_column='options', blank=True, null=True)
     description_text = models.CharField(max_length=255, blank=True, null=True)
     totaltime = models.IntegerField(blank=True, null=True)
     comments = models.CharField(max_length=255, blank=True, null=True)
