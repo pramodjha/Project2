@@ -21,6 +21,7 @@
       <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
         <td >OT ID</td>
         <td >TimeTracker Ref</td>
+        <td >Mimember</td>
         <td >Start Date-Time</td>
         <td >End Date-Time</td>
         <td >OT in Mins.</td>
@@ -33,6 +34,7 @@
       <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
         <td >{{data.ot_id }} </a> </td>
         <td>{{data.timetrackers }}</td>
+        <td>{{data.timetrackers.mimember }}</td>
         <td>{{data.ot_startdatetime }}</td>
         <td>{{data.ot_enddatetime }}</td>
         <td>{{data.ot_hrs }}</td>
@@ -40,7 +42,7 @@
         {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
         <td> <a href="{% url 'editot' data.ot_id %}" class="glyphicon glyphicon-pencil"></a> </td>
         {% else %}
-        {% endif %}      
+        {% endif %}
         {% endfor %}
       </tr></br>
     </tbody>

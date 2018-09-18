@@ -344,3 +344,47 @@ requestdetail int foreign key references requestdetail(requestid) not null,
 userid int foreign key references auth_user(id) not null,
 comments varchar(max)
 )
+
+
+create table tbl_leave_type(
+leavetypeid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+leave_type varchar(100)
+)
+
+
+Use CentralMI
+create table tbl_leave_record(
+leaverecordid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+leave_date date not null,
+userid int foreign key references auth_user(id) not null,
+leave_type int foreign key references tbl_leave_type(leavetypeid) not null,
+)
+
+
+Use CentralMI
+create table tbl_leave_record(
+leaverecordid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+leave_date date not null,
+userid int foreign key references auth_user(id) not null,
+leave_type int foreign key references tbl_leave_type(leavetypeid) not null,
+)
+
+
+create table UAT_status(
+UAT_status_id  int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+UAT_status varchar(100)
+);
+
+drop table UAT_status
+
+use CentralMI
+create table UAT_detail(
+uatid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+UAT_status int foreign key references UAT_status(UAT_status_id),
+requestdetail int foreign key references requestdetail(requestid) not null
+);

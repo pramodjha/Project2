@@ -40,6 +40,27 @@ class Calendarholidays(models.Model):
         unique_together = (('calendardate', 'calendarfunction'),)
 
 
+class UatDetail(models.Model):
+    uatid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    uat_status = models.ForeignKey('UatStatus', models.DO_NOTHING, db_column='UAT_status', blank=True, null=True)  # Field name made lowercase.
+    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
+
+    class Meta:
+        managed = False
+        db_table = 'UAT_detail'
+
+
+class UatStatus(models.Model):
+    uat_status_id = models.AutoField(db_column='UAT_status_id', primary_key=True)  # Field name made lowercase.
+    date_time = models.DateTimeField()
+    uat_status = models.CharField(db_column='UAT_status', max_length=100, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'UAT_status'
+
+
 class Acceptrejectdetail(models.Model):
     estacceptrejectid = models.AutoField(primary_key=True)
     estacceptrejectdate = models.DateTimeField()
@@ -814,6 +835,28 @@ class TblConversation(models.Model):
     class Meta:
         managed = False
         db_table = 'tbl_conversation'
+
+
+class TblLeaveRecord(models.Model):
+    leaverecordid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    leave_date = models.DateField()
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    leave_type = models.ForeignKey('TblLeaveType', models.DO_NOTHING, db_column='leave_type')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_leave_record'
+
+
+class TblLeaveType(models.Model):
+    leavetypeid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    leave_type = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_leave_type'
 
 
 class TblNavbarFooterMaster(models.Model):

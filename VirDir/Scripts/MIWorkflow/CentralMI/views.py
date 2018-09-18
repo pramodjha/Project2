@@ -43,6 +43,7 @@ from django.http import HttpResponse
 #import pyexcel.ext.xls
 import datetime as dt
 import csv
+from django.db.models import Q
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
@@ -88,10 +89,13 @@ def create_session(request,header=None,footer=None):
     activetab1 = request.session.get('activefooter')
     try:
         sd = request.session.get('setdate')
+        sd = datetime.strptime(datetime.strftime(datetime.today(), '%y/%m/%d'),'%y/%m/%d') if sd == None else sd
         info = vistorinfo_output(username,sd)
         info.get_member_info()
         return activetab, activetab1, username, info, sd
     except:
+        #print(datetime.datetime.now())
+#        sd = datetime.today()
         sd = None
         info = None
         return activetab, activetab1, username, info, sd
@@ -276,7 +280,6 @@ def navbar(request,view_header=None,username=None):
 @login_required(login_url='signin')
 def Index(request):
     nameview = request.POST.get('home')
-    print(nameview)
     view_header = 'Home'
     view_footer = ''
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
@@ -287,6 +290,11 @@ def Index(request):
         memberid = request.session.get('sessison_member')
     except:
         teamid, memberid = session_view(request,username=username)
+
+    filterdict = create_dict_for_filter(request,field_name_list = ['username','teamdetail'], value_list = [memberid,teamid])
+    length = Mimember.objects.filter(**(filterdict)).count()
+    print("length1" + str(length))
+
     if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
 
         form = FilteredForm(initial={'teamfilter':teamid, 'memberfilter':memberid})
@@ -313,6 +321,11 @@ def Index(request):
 
         teamid = None if teamid == 'None' else teamid
         memberid = None if memberid == 'None' else memberid
+
+        filterdict = create_dict_for_filter(request,field_name_list = ['username','teamdetail'], value_list = [memberid,teamid])
+        length = Mimember.objects.filter(**(filterdict)).count()
+        print("length" + str(length))
+
         dv = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
         dvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
         dvOT = start_end_date(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
@@ -354,9 +367,11 @@ def report_due(request):
 
 @login_required
 def Add_To_Timetracker(request,activityid):
+    view_header = 'Time Tracker'
     view_value = request.session.get('view_value_session')
     activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='reportdue')
     group_name = is_group(request,username=username)
+    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     frequencyname = Activity.objects.get(activityid=activityid).frequency
     if str(frequencyname) == 'Daily':
         frequencyid = 1
@@ -853,7 +868,10 @@ def Errorlog_Detail_View(request):
     activetab, activetab1, username, info, sd= create_session(request, header='report',footer='errordetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    data = Errorlog.objects.all()
+    teamid = request.session.get('sessison_team')
+    memberid = request.session.get('sessison_member')
+    filterdict = create_dict_for_filter(request,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid])
+    data = Errorlog.objects.filter(**(filterdict))
     return render(request, 'CentralMI/7a_error_detail_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -880,7 +898,10 @@ def Ot_Detail_View(request):
     activetab, activetab1, username, info, sd= create_session(request, header='timetracker',footer='otdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    data = OtDetail.objects.all()
+    teamid = request.session.get('sessison_team')
+    memberid = request.session.get('sessison_member')
+    filterdict = create_dict_for_filter(request,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail'], value_list = [memberid,teamid])
+    data = OtDetail.objects.filter(**(filterdict))
     return render(request, 'CentralMI/9a_ot_detail_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -1250,6 +1271,10 @@ def Check_Status_View(request):
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     userid = User.objects.get(username=username).id
     model = Requestdetail.objects.filter(username__in=[userid])
+    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedby','estimatedby__teamdetail'],value_list = [memberid,teamid])
+
+
+
     return render(request, 'CentralMI/3b_check_status_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 ################## Reports
@@ -1260,7 +1285,12 @@ def Report_Detail_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='reportsdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    model = Activity.objects.all()
+    teamid = request.session.get('sessison_team')
+    memberid = request.session.get('sessison_member')
+    filterdict = create_dict_for_filter(request,field_name_list = ['teamname'], value_list = [teamid])
+    model = Activity.objects.filter(**(filterdict))
+    if memberid !=None:
+        model = Activity.objects.filter(Q(primaryowner__in=memberid)|Q(secondaryowner__in=memberid))
     return render(request, 'CentralMI/5a_reports_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -1321,7 +1351,12 @@ def Feedback_Detail_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    model = Feedback.objects.all()
+    teamid = request.session.get('sessison_team')
+    memberid = request.session.get('sessison_member')
+    filterdict = create_dict_for_filter(request,field_name_list = ['activity__teamname'], value_list = [teamid])
+    model = Feedback.objects.filter(**(filterdict))
+    if memberid !=None:
+        model = Feedback.objects.filter(Q(activity__primaryowner__in=memberid)|Q(activity__secondaryowner__in=memberid))
     return render(request, 'CentralMI/6a_feedback_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -1385,9 +1420,13 @@ def Staff_Detail_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='details')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    teamid = request.session.get('sessison_team')
+    memberid = request.session.get('sessison_member')
+    filterdict = create_dict_for_filter(request,field_name_list = ['mimemberid','teamdetail'], value_list = [memberid,teamid])
     model1 = User.objects.all()
-    model = Mimember.objects.all()
+    model = Mimember.objects.filter(**(filterdict))
     data = zip(model1,model)
+    print(model)
     return render(request, 'CentralMI/10a_staff_detail_view.html',{'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -2513,6 +2552,7 @@ def hours_min(request,time_in_min=None,date=None,dict=None):
 def TimeTracker_View(request):
     view_header = 'Time Tracker'
     activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
+    print(sd)
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     starttime = request.POST.get('startdatetime')
@@ -2523,17 +2563,12 @@ def TimeTracker_View(request):
     dv_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,None] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
     dvcore_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
     dvOT_value = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')
-
     dvAll_value = dv_value + dvOT_value
     dv = hours_min(request,time_in_min=dv_value,date=sd)
     dvOT = hours_min(request,time_in_min=dvOT_value,date=sd)
-
     dvcore = hours_min(request,time_in_min=dvcore_value,date=sd)
     dvAll = hours_min(request,time_in_min=dvAll_value,date=sd)
 
-    print(dv_value)
-    print(dvOT_value)
-    print(dvAll)
     dvutilisation = 0.00 if dvcore_value == 0 and dvAll_value == 0 else ((dvcore_value / dvAll_value) * 100)
     dvutilisation = round(dvutilisation,2)
     requestid_onassign = Assigneddetail.objects.filter(assignedto__in=[info.mimemberid]).values_list('requestdetail',flat=True).distinct()
