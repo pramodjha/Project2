@@ -102,3 +102,13 @@ add  aboutme varchar(max);
 
 Alter table [CentralMI].[dbo].[mimember]
 add  aboutme varchar(max);
+
+ALTER table mimember
+drop column suggestedby
+
+
+Alter table [CentralMI].[dbo].[suggestion]
+add  suggestedby int;
+
+ALTER TABLE [suggestion]
+ADD FOREIGN KEY (suggestedby) REFERENCES auth_user(id);

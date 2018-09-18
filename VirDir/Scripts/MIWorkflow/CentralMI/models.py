@@ -771,7 +771,7 @@ class Reply(models.Model):
 class Suggestion(models.Model):
     suggestiondatetime = models.DateTimeField(default= datetime.datetime.now())
     suggestionid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
+    suggestedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='suggestedby', blank=True, null=True)
     suggestion = models.TextField()
     subject = models.CharField(max_length=100)
 

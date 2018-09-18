@@ -94,9 +94,7 @@ def create_session(request,header=None,footer=None):
         info.get_member_info()
         return activetab, activetab1, username, info, sd
     except:
-        #print(datetime.datetime.now())
-#        sd = datetime.today()
-        sd = None
+        sd = datetime.strptime(datetime.strftime(datetime.today(), '%y/%m/%d'),'%y/%m/%d') if sd == None else sd
         info = None
         return activetab, activetab1, username, info, sd
 
@@ -1247,8 +1245,8 @@ def Comm_Sugg_Add(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
-    form = SuggestionForm()
+    userid = User.objects.get(username=username).id
+    form = SuggestionForm(initial={'suggestedby':userid})
     if request.method == 'POST':
         form = SuggestionForm(request.POST)
         if form.is_valid():

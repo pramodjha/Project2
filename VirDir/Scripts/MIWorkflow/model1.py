@@ -800,9 +800,9 @@ class SuccessStories(models.Model):
 class Suggestion(models.Model):
     suggestiondatetime = models.DateTimeField()
     suggestionid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
     suggestion = models.TextField()
     subject = models.CharField(max_length=100, blank=True, null=True)
+    suggestedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='suggestedby', blank=True, null=True)
 
     class Meta:
         managed = False
