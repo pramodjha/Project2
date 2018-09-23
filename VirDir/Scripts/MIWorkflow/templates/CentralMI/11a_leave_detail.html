@@ -1,0 +1,66 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <div class="col-sm-9 col-md-9 col-lg-9">
+    <table  class="table" id="example" style="width:100%">
+      <thead class="">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+        <td >ID<a href="{% url 'leaverecordform' %}" class="glyphicon glyphicon-plus"></a></td>
+        <td >Date Time</td>
+        <td >Leave Date</td>
+        <td >Leave Taken By</td>
+        <td >Leave Type</td>
+        </tr>
+      </thead>
+      <tbody class="">
+    {%for data in model %}
+        <td><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'leaverecordeditform' data.leaverecordid %}">{{data.leaverecordid}} </a></td>
+        <td>{{data.date_time }}</td>
+        <td>{{data.leave_date }}</td>
+        <td>{{data.userid }}</td>
+        <td>{{data.leave_type }}</td>
+      </tr></br>
+
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+  <div class="col-sm-3 col-md-3 col-lg-3 box">
+    <div class="col-sm-12 col-md-12 col-lg-12 box1">
+    <div class="col-sm-4 col-md-4 col-lg-4">Username </div>
+    <div class="col-sm-4 col-md-4 col-lg-4">Type</div>
+    <div class="col-sm-4 col-md-4 col-lg-4">Count</div>
+    </div>
+  {%for c in count %}
+  <div class="col-sm-12 col-md-12 col-lg-12 box">
+  <div class="col-sm-4 col-md-4 col-lg-4 box">{{c.userid__username__username}} </div>
+  <div class="col-sm-4 col-md-4 col-lg-4 box">{{c.leave_type__leave_type}}  </div>
+  <div class="col-sm-4 col-md-4 col-lg-4 box">{{c.dcount}}</div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

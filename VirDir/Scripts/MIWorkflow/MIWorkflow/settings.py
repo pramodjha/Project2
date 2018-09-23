@@ -35,6 +35,8 @@ EMAIL_HOST_USER = 'jha.pramod234@gmail.com'
 EMAIL_HOST_PASSWORD = 'raghav234'
 EMAIL_PORT = 587
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,7 +53,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'debug_panel',
     'report_builder',
-    
+
     ]
 
 MIDDLEWARE = [
@@ -157,9 +159,11 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join('F:/Python-Django-Project', "media")
 
 
 

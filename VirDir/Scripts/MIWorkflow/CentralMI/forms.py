@@ -1,6 +1,5 @@
 from django import forms
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation
-#Reports1
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblUsefulLinks, UatDetail
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime
@@ -65,6 +64,13 @@ class RequeststatusdetailForm(forms.ModelForm):
         model = Requeststatusdetail
         fields = '__all__'
 
+
+class RequeststatusAcceptanceForm(forms.ModelForm):
+    class Meta():
+        model = Requeststatusdetail
+        fields = '__all__'
+
+
 class AssigneddetailForm(forms.ModelForm):
     class Meta():
         model = Assigneddetail
@@ -90,7 +96,6 @@ class RequestcategorysForm(forms.ModelForm):
     class Meta():
         model = Requestcategorys
         fields = '__all__'
-
 
 class TimetrackersForm(forms.ModelForm):
     class Meta():
@@ -210,6 +215,30 @@ class SearchForm(forms.Form):
         self.fields['team'].widget.attrs['class']  = 'form-control'
         self.fields['member'].widget.attrs['class']  = 'form-control'
 
+
+class SearchForm1(forms.Form):
+    datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="Date Choice", initial=1, widget=forms.Select(), required=True)
+    datatype = forms.ChoiceField(choices = TYPE_CHOICES, label="Type", initial=1, widget=forms.Select(), required=True)
+    interval = forms.ChoiceField(choices = INTERVAL_CHOICES, label="Interval", initial=1, widget=forms.Select(), required=True)
+    startdate = forms.DateField(initial=datetime.now(), label="StartDate",required=False)
+    enddate = forms.DateField(initial=datetime.now(), required=False,label="EndDate")
+    team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False,label="Team")
+    member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False,label="Member")
+
+    def __init__(self, *args, **kwargs):
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.fields['datachoice'].widget.attrs['class']  = 'form-control'
+        self.fields['datatype'].widget.attrs['class']  = 'form-control hidden'
+        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['enddate'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['team'].widget.attrs['class']  = 'form-control'
+        self.fields['member'].widget.attrs['class']  = 'form-control'
+
+
+
+
+
 class FilteredForm(forms.Form):
     teamfilter = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False)
     memberfilter = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False)
@@ -284,4 +313,64 @@ class ReplyForm(forms.ModelForm):
 class WhatwedoForm(forms.ModelForm):
     class Meta():
         model = Whatwedo
+        fields = '__all__'
+
+class TblLeaveRecordForm(forms.ModelForm):
+    class Meta():
+        model = TblLeaveRecord
+        fields = '__all__'
+
+class TblAppreciationForm(forms.ModelForm):
+    class Meta():
+        model = TblAppreciation
+        fields = '__all__'
+
+class TblRawActivityDetailForm(forms.ModelForm):
+    class Meta():
+        model = TblRawActivityDetail
+        fields = '__all__'
+
+class TblRawScoreForm(forms.ModelForm):
+    class Meta():
+        model = TblRawScore
+        fields = '__all__'
+
+class TblRawTeamMasterForm(forms.ModelForm):
+    class Meta():
+        model = TblRawTeamMaster
+        fields = '__all__'
+
+class TblRawTeamMemberMasterForm(forms.ModelForm):
+    class Meta():
+        model = TblRawTeamMemberMaster
+        fields = '__all__'
+
+class TblTeamMetricsForm(forms.ModelForm):
+    class Meta():
+        model = TblTeamMetrics
+        fields = '__all__'
+
+
+class TeamMetricsForm(forms.ModelForm):
+    class Meta():
+        model = TeamMetrics
+        fields = '__all__'
+
+class TblRawScoreForm(forms.ModelForm):
+    class Meta():
+        model = TblRawScore
+        fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(TblRawScoreForm, self).__init__(*args, **kwargs)
+        self.fields['raw_team'].widget.attrs['readyonly']  = True
+
+
+class TblUsefulLinksForm(forms.ModelForm):
+    class Meta():
+        model = TblUsefulLinks
+        fields = '__all__'
+
+class UatDetailForm(forms.ModelForm):
+    class Meta():
+        model = UatDetail
         fields = '__all__'

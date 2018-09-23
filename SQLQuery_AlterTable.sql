@@ -112,3 +112,20 @@ add  suggestedby int;
 
 ALTER TABLE [suggestion]
 ADD FOREIGN KEY (suggestedby) REFERENCES auth_user(id);
+
+
+Alter table [CentralMI].[dbo].[team_metrics]
+add  volume int;
+
+
+Alter table [CentralMI].[dbo].[UAT_detail]
+add  testedby int;
+
+Alter table [CentralMI].[dbo].[UAT_detail]
+add  updatedby int;
+
+Alter table [CentralMI].[dbo].[UAT_detail]
+ADD FOREIGN KEY ([testedby]) REFERENCES auth_user(id);
+
+Alter table [CentralMI].[dbo].[UAT_detail]
+ADD FOREIGN KEY ([updatedby]) REFERENCES auth_user(id);

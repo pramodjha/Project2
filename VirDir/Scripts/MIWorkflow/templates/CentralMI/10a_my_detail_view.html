@@ -16,9 +16,9 @@
 
 {% block content %}
 <div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'editstaffdetail' %}" id="EditDetails" name="Edit" class="btn btn-default">Edit Details</a></div>
-
+<div class="col-sm-12 col-md-12 col-lg-12 ">
 {%for data in model %}
-<div class="col-sm-12 col-md-4 col-lg-4">
+<div class="col-sm-4 col-md-4 col-lg-4">
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Avatar</h>
 <div><img src="{{ MEDIA_URL }}/{{ data.avatar}}" height='100%' width='100%'alt="Avatar" /></div>
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> About Me</h>
@@ -29,7 +29,7 @@
 {% endfor %}
 
 {%for data in model1 %}
-<div class="col-sm-12 col-md-4 col-lg-4">
+<div class="col-sm-4 col-md-4 col-lg-4">
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Basic Details (1)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Username : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.username }} </span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> First Name : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.first_name  }}</span></div>
@@ -45,7 +45,7 @@
 {% endfor %}
 
 {%for data in model %}
-<div class="col-sm-12 col-md-4 col-lg-4">
+<div class="col-sm-4 col-md-4 col-lg-4">
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Other Details (2)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Team Detail : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.teamdetail  }}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Designation : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
@@ -59,6 +59,7 @@
 </div>
 {% endfor %}
 
+</div>
 {% endblock %}
 
 {% block javascript %}

@@ -262,7 +262,7 @@ class Overviewdetail(models.Model):
     mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember')
     sopcreatedoptionsid = models.ForeignKey(Options, models.DO_NOTHING, db_column='sopcreatedoptionsid')
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-    document = models.FileField(upload_to='sopdocument/',blank=True, null=True)
+    document = models.FileField(upload_to='sopdocument',blank=True, null=True)
 
     class Meta:
         managed = False
@@ -369,6 +369,7 @@ class Statusdetail(models.Model):
 
     def __str__(self):
         return self.statusname
+
 
 class Teamdetail(models.Model):
     teamid = models.AutoField(primary_key=True)
@@ -525,14 +526,13 @@ class OtDetail(models.Model):
     timetrackers = models.ForeignKey('Timetrackers', models.DO_NOTHING, db_column='timetrackers')
     ot_startdatetime = models.DateTimeField()
     ot_enddatetime = models.DateTimeField()
-    ot_hrs = models.IntegerField()
+    ot_hrs = models.IntegerField(blank=True, null=True)
     ot_status = models.ForeignKey('OtStatus', models.DO_NOTHING, db_column='ot_status')
     otdocument = models.FileField(upload_to='otdocument/',blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'ot_detail'
-
 
     def __str__(self):
         return str(self.timetrackers)
@@ -673,6 +673,7 @@ class TblCalendar(models.Model):
 
 
 
+
 class DateTypes(models.Model):
     date_typesid = models.AutoField(primary_key=True)
     date_types = models.CharField(max_length=255)
@@ -696,6 +697,92 @@ class Activitystatus(models.Model):
         return str(self.activitystatus)
 
 
+
+class TblRawActivityDetail(models.Model):
+    raw_activity_id = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    raw_activity = models.CharField(max_length=50, blank=True, null=True)
+    raw_activity_description = models.TextField(blank=True, null=True)
+    raw_activity_img = models.FileField(upload_to='rawactivity/',blank=True, null=True)
+    raw_activity_scheduled = models.DateField()
+    raw_activitystatus = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='raw_activitystatus', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_raw_activity_detail'
+
+    def __str__(self):
+        return str(self.raw_activity)
+
+
+class TblRawScore(models.Model):
+    raw_score_id = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    raw_team = models.ForeignKey('TblRawTeamMaster', models.DO_NOTHING, db_column='raw_team', blank=True, null=True)
+    score = models.IntegerField(blank=True, null=True)
+    winner = models.CharField(db_column='Winner', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    description = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_raw_score'
+
+    def __str__(self):
+        return str(self.raw_team)
+
+class TblRawTeamMaster(models.Model):
+    raw_team_id = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    raw_team = models.CharField(max_length=255, blank=True, null=True)
+    raw_team_icon = models.FileField(upload_to='rawteamicon/',blank=True, null=True)
+    raw_team_slogan = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_raw_team_master'
+
+
+    def __str__(self):
+        return str(self.raw_team)
+
+class TblRawTeamMemberMaster(models.Model):
+    raw_team_member_id = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    raw_team = models.ForeignKey(TblRawTeamMaster, models.DO_NOTHING, db_column='raw_team', blank=True, null=True)
+    raw_member = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='raw_member', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_raw_team_member_master'
+
+
+    def __str__(self):
+        return str(self.raw_team)
+
+class TblTeamMetrics(models.Model):
+    metrics_id = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    metrics_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_team_metrics'
+
+    def __str__(self):
+        return str(self.metrics_name)
+
+class TeamMetrics(models.Model):
+    metrics_id = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
+    metrics_name = models.ForeignKey(TblTeamMetrics, models.DO_NOTHING, db_column='metrics_name', blank=True, null=True)
+    requesttype = models.ForeignKey(Requesttypedetail, models.DO_NOTHING, db_column='requesttype', blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    volume = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'team_metrics'
 
 
 class Internaltask(models.Model):
@@ -867,13 +954,15 @@ class TblLeaveRecord(models.Model):
     leaverecordid = models.AutoField(primary_key=True)
     date_time = models.DateTimeField(default= datetime.datetime.now())
     leave_date = models.DateField()
-    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    userid = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='userid')
     leave_type = models.ForeignKey('TblLeaveType', models.DO_NOTHING, db_column='leave_type')
 
     class Meta:
         managed = False
         db_table = 'tbl_leave_record'
 
+    def __str__(self):
+        return str(self.leaverecordid)
 
 class TblLeaveType(models.Model):
     leavetypeid = models.AutoField(primary_key=True)
@@ -884,17 +973,20 @@ class TblLeaveType(models.Model):
         managed = False
         db_table = 'tbl_leave_type'
 
+    def __str__(self):
+        return str(self.leave_type)
 
 class UatDetail(models.Model):
     uatid = models.AutoField(primary_key=True)
     date_time = models.DateTimeField(default= datetime.datetime.now())
     uat_status = models.ForeignKey('UatStatus', models.DO_NOTHING, db_column='UAT_status', blank=True, null=True)  # Field name made lowercase.
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
+    testedby = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='testedby', blank=True, null=True, related_name='testedby')
+    updatedby = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='updatedby', blank=True, null=True,related_name='updatedby')
 
     class Meta:
         managed = False
         db_table = 'UAT_detail'
-
 
 class UatStatus(models.Model):
     uat_status_id = models.AutoField(db_column='UAT_status_id', primary_key=True)  # Field name made lowercase.
@@ -904,3 +996,31 @@ class UatStatus(models.Model):
     class Meta:
         managed = False
         db_table = 'UAT_status'
+
+    def __str__(self):
+        return str(self.uat_status)
+
+
+class TblAppreciation(models.Model):
+    appreciationid = models.AutoField(db_column='Appreciationid', primary_key=True)  # Field name made lowercase.
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    appreciated_to = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='Appreciated_to', blank=True, null=True)  # Field name made lowercase.
+    appreciated_by = models.CharField(db_column='Appreciated_by', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    description = models.CharField(db_column='Description', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    appreciation_status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='appreciation_status', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_Appreciation'
+
+
+class TblUsefulLinks(models.Model):
+    linkid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
+    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
+    link = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_useful_links'

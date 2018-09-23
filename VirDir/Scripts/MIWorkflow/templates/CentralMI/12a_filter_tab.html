@@ -11,6 +11,33 @@
 .active {
 background-color: red;
 }
+.card{
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  padding-left: 10px;
+  padding-top: 10px;
+  border-style: double;
+  height: 40px;
+  text-align: center;
+
+}
+.card1{
+  padding-left: 10px;
+  padding-top: 10px;
+  border-style: double;
+  text-align: center;
+}
+.middle{
+  text-align: center;
+}
+.card:hover {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  background-color:  #006680;
+  padding-left: 5px;
+  padding-top: 15px;
+  border-style: double;
+  text-align: center;
+
+}
 </style>
 
 {% endblock %}
@@ -27,60 +54,45 @@ background-color: red;
 {% endblock %}
 
 {% block content %}
-
-<form method="post" id="extractdata"  data-mimember-url="{% url 'ajax_load_mimember' %}" novalidate>
-{% csrf_token %}
-  <div class="col-auto col-sm-2 col-md-2 col-lg-2 box">
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
-      <label class="">Data Choice</label>
-      <span  class="">{% bootstrap_field form.datachoice  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
-      <label class="">Data Type</label>
-      <span  class="">{% bootstrap_field form.datatype  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
-      <label class="">Interval</label>
-      <span  class="">{% bootstrap_field form.interval  show_label=False layout='inline'  %}</span>
-    </div>
-      <div class="col-auto col-sm-12 col-md-12 col-lg-12">
-      <label class="">Start Date</label>
-      <span  class="">{% bootstrap_field form.startdate  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
-      <label class="">End Date </label>
-      <span  class="">{% bootstrap_field form.enddate  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
-      <label class="">Team</label>
-      <span  class="">{% bootstrap_field form.team  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-12 col-md-12 col-lg-12">
-      <label class="">Member</label>
-      <span  class="">{% bootstrap_field form.member  show_label=False layout='inline'  %}</span>
-    </div>
-    <div class="col-auto col-sm-1 col-md-1 col-lg-1">
-      <label class="fontstyle10"> save </label>
-      <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-      </div>
-    </div>
-  </form>
-       <div class="col-auto col-sm-10 col-md-10 col-lg-10">
-         <form action="{% url 'data' %}" method="post">
-           {% csrf_token %}
-           {% for key, values in view_dict.items %}
-           <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="active btn btn-default" {%else%} class="btn btn-default"{% endif %}>
-           {% endfor %}
-            <span><a href="{% url 'export_users_csv' %}" class="btn btn-default">Export to CSV</a></span>
-         </form>
-
-       {% autoescape off %}
-       {{ data | safe }}
-       {% endautoescape %}
+<div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
+   <div class="col-auto col-sm-12 col-md-12 col-lg-12  ">
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Start Date : {{startdate}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">End Date : {{enddate}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Data Choice : {{reportno}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Interval : {{interval}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Team : {{team}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Member : {{member}}</div>
+  </div>
+   <div class="col-auto col-sm-12 col-md-12 col-lg-12 middle ">
+     <div class="col-auto col-sm-6 col-md-6 col-lg-2  ">
+       <form action="" method="post">
+         <span><a href="{% url 'filterdata' %}" class="btn btn-default">Filter Form</a></span>
+       </form>
+     </div>
+     <div class="col-auto col-sm-6 col-md-6 col-lg-8">
+     <form action="" method="post">
+       {% csrf_token %}
+       {% for key, values in view_dict.items %}
+       <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="active btn btn-default" {%else%} class="btn btn-default"{% endif %}>
+       {% endfor %}
+    </form>
+  </div>
+  <div class="col-auto col-sm-6 col-md-6 col-lg-2  ">
+    <form action="" method="post">
+      <span><a href="{% url 'export_users_csv' %}" class="btn btn-default">Export to CSV</a></span>
+    </form>
+  </div>
+  </div>
 </div>
-
+<div class="col-auto col-sm-12 col-md-12 col-lg-12 middle">
+  ----------------------------------------------------------
+</div>
+ <div class="col-auto col-sm-12 col-md-12 col-lg-12">
+     {% autoescape off %}
+     {{ data | safe }}
+     {% endautoescape %}
+ </div>
 <script>
-
 
 $("#id_team").change(function () {
     var team_id = $(this).val();  // get the selected country ID from the HTML input

@@ -31,7 +31,9 @@ urlpatterns = [
 	url(r'^request_overview_view/',views.Overview_View, name = 'overview'),
 	url(r'^request_estimate_view/',views.Estimate_View, name = 'estimate'),
 	url(r'^request_wip_view/',views.Wip_View, name = 'wip'),
+	url(r'^request_uat_view/',views.UAT_View, name = 'uat'),
 	url(r'^request_completed_view/',views.Completed_View, name = 'completed'),
+
 	url(r'^request_rejected_view/',views.Rejected_View, name = 'rejected'),
 	url(r'^conversation_form/(?P<requestid>\d+)$',views.Conversation_Form, name = 'conversationform'),
 	url(r'^check_status_view/',views.Check_Status_View, name = 'checkstatus'),
@@ -45,6 +47,8 @@ urlpatterns = [
 	url(r'^overview_form/(?P<requestid>\d+)$',views.Overview_Form, name = 'overviewform'),
 	url(r'^estimation_form/(?P<requestid>\d+)$',views.Estimation_Form, name = 'estimationform'),
 	url(r'^estimation_acceptance_form/(?P<requestid>\d+)$',views.EstimationAcceptance_Form, name = 'estimationformar'),
+	url(r'^wip_form/(?P<requestid>\d+)$',views.WIP_Form, name = 'wipform'),
+	url(r'^uat_form/(?P<requestid>\d+)$',views.UAT_Form, name = 'uatform'),
 	url(r'^completed_form/(?P<requestid>\d+)$',views.Completed_Form, name = 'completedform'),
 
 # 5) Reports/Activity
@@ -77,6 +81,9 @@ urlpatterns = [
 	url(r'^staff_edit_form/',views.Staff_Edit_Form, name = 'editstaffdetail'),
 	url(r'^staff_edit_manager_form/(?P<id>\d+)$',views.Staff_Edit_Manager_Form, name = 'editstaffbymanager'),
 	url(r'^my_detail_view/',views.My_Detail_View, name = 'mydetail'),
+	url(r'^leave_form/',views.Leave_Record_Form, name = 'leaverecordform'),
+	url(r'^leave_detail_view/',views.Leave_Record_View, name = 'leaverecorddetail'),
+	url(r'^leave_Edit_form/(?P<leaveid>\d+)$',views.Leave_Record_Edit, name = 'leaverecordeditform'),
 
 # 8) Internal Task
 	url(r'^internal_task_detail_view/',views.Internal_Task_Detail_View, name = 'internaltaskdetail'),
@@ -94,7 +101,8 @@ urlpatterns = [
 # 9) Data Analysis
 	url(r'^Data_Analysis/',views.Data_anlayis, name = 'data'),
 	url(r'^Data_Analysis/',views.Data_anlayis, name = 'filtertab'),
-	
+	url(r'^Filter_Data/',views.Filter_Data, name = 'filterdata'),
+
 #### Ajax call
 	url(r'^ajax/load-subcategories/', views.Load_Subcategories, name='ajax_load_subcategories'),
 	url(r'^ajax/load-activity/', views.Load_Activity, name='ajax_load_activity'),
@@ -123,7 +131,22 @@ url(r'^error_userwise_View/', views.Erroruserwise_View, name='erroruserwise'),
 url(r'^Error_reportwise_View/', views.Errorreportwise_View, name='errorreportwise'),
 url(r'^report_due/', views.report_due, name='reportdue'),
 url(r'^add_to_timetracker/(?P<activityid>\d+)$', views.Add_To_Timetracker, name='addtotimetracker'),
+url(r'^export/csv/$', views.export_users_csv, name='export_users_csv'),
 
+# Raw 13)
+url(r'^raw/', views.Raw_View, name='rawdetail'),
+url(r'^appreciation_form_add/', views.Raw_Appreciation_Add_Form, name='appreciationaddform'),
+url(r'^raw_appreciation_form_add/', views.Raw_rawactivity_Add_Form, name='rawdactivityddform'),
+url(r'^appreciation_form_edit/(?P<appreciationid>\d+)$', views.Raw_Appreciation_Edit_Form, name='appreciationeditform'),
+url(r'^raw_appreciation_form_edit/(?P<activityid>\d+)$', views.Raw_rawactivity_Edit_Form, name='rawdactivityeditform'),
+url(r'^raw_score_form_edit/(?P<activityid>\d+)$', views.Raw_Score_Edit_Form, name='rawdscoreeditform'),
+url(r'^raw_team_detail/', views.Raw_Team_View, name='rawdteamdetail'),
+url(r'^raw_team_edit_form/(?P<teamid>\d+)$', views.Raw_Team_Edit_Form, name='rawdteameditform'),
+url(r'^raw_team_add_form/', views.Raw_Team_Add_Form, name='rawdteamdaddform'),
 
- url(r'^export/csv/$', views.export_users_csv, name='export_users_csv'),
+# useful link
+url(r'^useful_link/', views.Useful_link_View, name='usefullinks'),
+url(r'^useful_link_edit_form/(?P<linkid>\d+)$', views.Useful_link_Edit_form, name='usefullinkeditform'),
+url(r'^useful_link_add_form/', views.Useful_link_Add_form, name='usefullinkaddform'),
+
 	]

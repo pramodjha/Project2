@@ -3,9 +3,9 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load staticfiles %}
+
 {% block style %}
 {% endblock %}
-
 {% block content %}
 <form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
 {% csrf_token %}
@@ -21,7 +21,6 @@
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label>{{msg}}<label>
   </div>
-
 <div >
 <label class="col-sm-12 col-md-12 col-lg-4  hidden">{% bootstrap_label 'TimeTracker ID'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.timetrackers  show_label=False layout='inline'  %}</span>
@@ -55,9 +54,11 @@
 {% endif %}
 
 </div>
-
 </form>
+
 <script type="text/javascript">
+//  $('.form_datetime').datepicker()
+//
     $('.form_datetime').datetimepicker({
         //language:  'fr',
     weekStart: 1,
@@ -68,6 +69,16 @@
 		forceParse: 0,
     showMeridian: 1
     });
+-->
+        // When the document is ready
+//        $(document).ready(function () {
+
+//          $('.form_datetime').datepicker({
+    //        autoclose: true,
+  //          format: "dd-mm-yyyy"
+      //    });
+    //    });
+
 </script>
 
 {% endblock %}

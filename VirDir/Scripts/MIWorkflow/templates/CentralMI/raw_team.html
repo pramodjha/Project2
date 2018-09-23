@@ -1,0 +1,161 @@
+{% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+<style>
+.style1{
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  background-color:  #006680;
+  padding-left: 5px;
+  padding-top: 5px;
+  border-style: double;
+
+}
+.card {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  padding-left: 10px;
+  padding-top: 10px;
+  height: 100px;
+  border-style: double;
+
+}
+.card1 {
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+  padding-left: 10px;
+  padding-top: 10px;
+  height: 500px;
+  border-style: double;
+
+}
+.card2 {
+  padding-left: 10px;
+  padding-top: 10px;
+  border-style: double;
+}
+.style1{
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.5);
+  background-color:  #006680;
+  border-style: double;
+  height: 30px;
+  font-family: Comic Sans MS;
+}
+
+</style>
+
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12 box">
+  <div class="col-sm-4 col-md-4 col-lg-4 box">
+    <div class="col-xm-6 col-sm-6 col-md-6 col-lg-6"><a href="{% url 'appreciationaddform' %}" id="add_edit_score" name="add_edit" class="btn btn-default">Add Appreciation</a></div>
+    <div class="col-xm-6 col-sm-6 col-md-6 col-lg-6"><a href="{% url 'rawdactivityddform' %}" id="add_edit_score" name="add_edit" class="btn btn-default">Add Activity </a></div>
+  </div>
+  <div class="col-sm-8 col-md-8 col-lg-8 box">
+  <div class="col-xm-3 col-sm-3 col-md-3 col-lg-3 style1">Happy Birthday To: </div>
+</div>
+<div class="col-sm-8 col-md-8 col-lg-8 box">
+</div>
+
+</div>
+
+  {% for  data in model1 %}
+  <div class="col-xm-3 col-sm-3 col-md-3 col-lg-3 box1">
+    <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12 box card2">
+    <div class="col-xm-6 col-sm-6 col-md-6 col-lg-6">
+      <img src="{{ MEDIA_URL}}/{{data.raw_team.raw_team_icon}}" height='70px' width='100%' alt="Avatar" />
+    </div>
+    <div class="col-xm-6 col-sm-6 col-md-6 col-lg-6">
+      <div class="">{{data.raw_team}}</div>
+      <div class="">Score: <a class="fontstyle1 fontsize12 fontfamilycambria " href="{% url 'rawdscoreeditform' data.raw_score_id %}">{{data.score}} </a></div>
+
+  </div>
+  </div>
+</div>
+  {% endfor %}
+
+<div class="col-sm-12 col-md-12 col-lg-12 box1">
+<div class="col-sm-9 col-md-9 col-lg-9 ">
+  <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12 box">
+    {% for data in model2 %}
+    <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12 ">
+    <div class="col-xm-6 col-sm-6 col-md-6 col-lg-6">Activity Name:  <a class="fontstyle1 fontsize12 fontfamilycambria " href="{% url 'rawdactivityeditform' data.raw_activity_id %}">{{data.raw_activity}} </a></div>
+    <div class="col-xm-6 col-sm-6 col-md-6 col-lg-6">Scheduled Date: {{data.raw_activity_scheduled}}</div>
+    <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">Description: {{data.raw_activity_description}}</div>
+    <img src="{{ MEDIA_URL}}/{{data.raw_activity_img}}" height='550px' width='100%' alt="Avatar" />
+  </div>
+  <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12 box1">
+  </div>
+    {% endfor %}
+  </div>
+  </div>
+
+<div class="col-sm-3 col-md-3 col-lg-3 box ">
+  <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12 ">
+    {% for data in model3 %}
+    <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">Appreciated To: <a class="fontstyle1 fontsize12 fontfamilycambria " href="{% url 'appreciationeditform' data.appreciationid %}">{{data.appreciated_to}} </a></div>
+    <img class="col-xm-12 col-sm-12 col-md-12 col-lg-12" src="{{ MEDIA_URL}}/{{data.appreciated_to.avatar}}" height='150px' width='100%' alt="Avatar" />
+    <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">Description: {{data.description}}</div>
+    <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">Appreciated By: {{data.appreciated_by}}</div>
+    <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12 box1">
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+</div>
+<script type="text/javascript">
+
+$("#id_teamfilter").change(function () {
+    var team_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(team_id)
+   $.ajax({
+     url: "{% url 'ajax_load_mimember' %}",                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'team_id': team_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_memberfilter").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+
+
+ $(".btn-default").click(function () {
+      var url = $("#extractdata").attr("data-mimember-url");
+      var team_id = document.getElementById("id_teamfilter").value;
+      console.log(team_id)
+      $.ajax({
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'team_id': team_id,
+        },
+          success: function (data) {
+          $("#id_memberfilter").html(data);
+            // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+
+</script>
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

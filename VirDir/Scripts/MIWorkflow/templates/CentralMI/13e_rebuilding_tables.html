@@ -6,6 +6,12 @@
 {% block style %}
 <script src="{% static 'jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'jquery/myjquery.js' %}"></script>
+<style>
+.middle{
+  text-align: center;
+}
+</style>
+
 
 {% endblock %}
 
@@ -19,120 +25,122 @@
 {% block navblockfilterform %}
 {% endblock %}
 {% block content %}
-<div class="row">
-
-  <div class="col-sm-2 col-md-2 col-lg-2">
+<div class="col-sm-12 col-md-12 col-lg-12 ">
+  <div class="col-sm-12 col-md-12 col-lg-12 box1">
+  <div class="col-sm-12 col-md-12 col-lg-2 box1">
     <form method = "POST" action = "{% url 'sdate' %}">
       {% csrf_token %}
-      <div class="col-auto col-sm-12 col-md-12 col-lg-12 box3">
-        <div class="col-auto col-sm-12 col-md-12 col-lg-12">
+        <div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
           <label class="">Set Date</label>
           <span  class="">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
         </div>
-        <div class="col-auto col-sm-12 col-md-12 col-lg-12">{% buttons submit='-- Set Date --' %}{% endbuttons layout='inline' %}</div>
-      </div>
-  <!--    <button type="submit" id="setdate"name = "setdate" value="setdate" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Set Date<span class=""></span></button> -->
+        <div class="col-auto col-sm-12 col-md-12 col-lg-12 box1">{% buttons submit='-- Set Date --' %}{% endbuttons layout='inline' %}</div>
     </form>
   </div>
 <div>
-  <div class="col-sm-2 col-md-2 col-lg-2">
-    <span class="">A:Worked(hh:mm):</span>
+
+  <div class="col-sm-12 col-md-12 col-lg-10 middle box1">
+  <div class="col-sm-2 col-md-2 col-lg-3 " >
+    <span class="col-sm-12 col-md-12 col-lg-12">A:Worked(hh:mm)</span>
     {% for key, value in dv.items %}
-    <span class="">{{value}}</span>
+    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
     {% endfor %}
   </div>
-  <div class="col-sm-2 col-md-2 col-lg-2">
-    <span class="">B:OT(hh:mm):</span>
+  <div class="col-sm-2 col-md-2 col-lg-2 " >
+    <span class="col-sm-12 col-md-12 col-lg-12">B:OT(hh:mm)</span>
     {% for key, value in dvOT.items %}
-    <span class="">{{value}}</span>
+    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
     {% endfor %}
   </div>
-  <div class="col-sm-2 col-md-2 col-lg-2">
-    <span class="">Total(A+B): </span>
+  <div class="col-sm-2 col-md-2 col-lg-2 " >
+    <span class="col-sm-12 col-md-12 col-lg-12">C:Total (A+B) </span>
     {% for key, value in dvAll.items %}
-    <span class="">{{value}}</span>
+    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
     {% endfor %}
   </div>
-  <div class="col-sm-2 col-md-2 col-lg-2">
-    <span class="">Core(hh:mm): </span>
+  <div class="col-sm-2 col-md-2 col-lg-2 " >
+    <span class="col-sm-12 col-md-12 col-lg-12">D:Core(hh:mm) </span>
     {% for key, value in dvcore.items %}
-    <span class="">{{value}}</span>
+    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
     {% endfor %}
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-2">
-    <span class="">Utilisation(%): </span>
-    <span class="">{{dvutilisation}}</span>
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-3 " >
+    <span class="col-sm-12 col-md-12 col-lg-12">Util. (B+D/420+B) </span>
+    <span class="col-sm-12 col-md-12 col-lg-12">{{dvutilisation}}</span>
   </div>
 </div>
-<div class="col-sm-2 col-md-4 col-lg-10">
 
-     <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
-      {% csrf_token %}
-
-        <div class="col-auto col-sm-12 col-md-12 col-lg-12 box">
-          <div class="">
-            <label class="hidden">Registered Date</label>
-            <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Tracking Date-time</label>
-            <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Member</label>
-            <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Team</label>
-            <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Category</label>
-            <span  class="">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Sub-Category</label>
-            <span  class="">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Activity</label>
-            <span  class="">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-3 col-md-3 col-lg-3">
-            <label class="">Task</label>
-            <span  class="">{% bootstrap_field form.task  show_label=False layout='inline'  %}</span>
-          </div>
-
-          <div class="">
-            <label class="hidden">Description</label>
-            <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-2 col-md-2 col-lg-2">
-            <label class="">Time</label>
-            <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Comments</label>
-            <span  class="hidden">{% bootstrap_field form.comments   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Start Date-time</label>
-            <span  class="hidden">{% bootstrap_field form.startdatetime   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="">
-            <label class="hidden">Stop Date-time</label>
-            <span  class="hidden">{% bootstrap_field form.stopdatetime   show_label=False layout='inline'  %}</span>
-          </div>
-          <div class="col-auto col-sm-1 col-md-1 col-lg-1">
-            <label class="fontstyle10"> save </label>
-            <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-            </div>
-          </div>
-
-</form>
+<div class="col-sm-12 col-md-12 col-lg-10 box">
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
+  {% csrf_token %}
+      <div class="">
+        <label class="hidden">Registered Date</label>
+        <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Tracking Date-time</label>
+        <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Member</label>
+        <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Team</label>
+        <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2">
+        <label class="">Category</label>
+        <span  class="">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2">
+        <label class="">Sub-Category</label>
+        <span  class="">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2">
+        <label class="">Activity</label>
+        <span  class="">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-3 ">
+        <label class="">Task</label>
+        <span  class="">{% bootstrap_field form.task  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Description</label>
+        <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2 ">
+        <label class="">Time</label>
+        <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
+        </div>
+      <div class="">
+        <label class="hidden">Comments</label>
+        <span  class="hidden">{% bootstrap_field form.comments   show_label=False layout='inline'  %}</span>
+        </div>
+      <div class="">
+        <label class="hidden">Start Date-time</label>
+        <span  class="hidden">{% bootstrap_field form.startdatetime   show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Stop Date-time</label>
+        <span  class="hidden">{% bootstrap_field form.stopdatetime   show_label=False layout='inline'  %}</span>
+      </div>
+        <div class="col-sm-12 col-md-12 col-lg-1 ">
+          <label class="fontstyle10"> save </label>
+          <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12 box1 middle">
+  <span>OT Applied for ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Applied}}</span>
+  <span>OT Accpeted ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Accepted}}</span>
+  <span>OT Rejected ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Rejected}}</span>
+  <span>OT Pending ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Pending}}</span>
+  </div>
+  </div>
 </div>
-
-<div class="row">
   <div class="col-sm-12 col-md-12 col-lg-12">
   <table  class="table " id="example" style="width:100%">
     <thead class="">

@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-sm-6 col-md-4 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12">
   <table  class="table" id="example" style="width:100%">
     <thead class="">
       <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
@@ -86,6 +86,16 @@
       <td >Request Description</td>
       <td >Details</td>
 
+      {% elif activetab1 == "uat" %}
+      <td >Request ID</td>
+      <td >Request Raised Date</td>
+      <td >Request Type</td>
+      <td >Priority Detail</td>
+      <td >Request Owner</td>
+      <td >Request Description</td>
+      <td >Tested By</td>
+      <td >Status</td>
+      <td >Details</td>
       {% elif activetab1 == "completed" %}
       <td >Request ID</td>
       <td >Request Raised Date</td>
@@ -93,6 +103,8 @@
       <td >Priority Detail</td>
       <td >Request Owner</td>
       <td >Request Description</td>
+      <td >Tested By</td>
+      <td >Status</td>
       <td >Details</td>
 
       {% elif activetab1 == "rejected" %}
@@ -113,7 +125,6 @@
   <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
 
   {% if activetab1 == "allrequest" %}
-
       <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
       <td>{{data.requestraiseddate }}</td>
       <td>{{data.requesttypedetail }}</td>
@@ -179,12 +190,22 @@
 
 
       {% elif activetab1 == "wip" %}
-      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'completedform' data.requestdetail.requestid %}">{{data.requestdetail.requestid }} </a> </td>
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'wipform' data.requestdetail.requestid %}">{{data.requestdetail.requestid }} </a> </td>
       <td>{{data.requestdetail.requestraiseddate }}</td>
       <td>{{data.requestdetail.requesttypedetail }}</td>
       <td>{{data.requestdetail.prioritydetail }}</td>
       <td>{{data.requestdetail.username }}</td>
       <td>{{data.requestdetail.requestdescription }}</td>
+      <td ><a href="{% url 'ty' data.requestdetail.requestid %}" class="glyphicon glyphicon-eye-open"></a></td>
+      {% elif activetab1 == "uat" %}
+      <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'uatform' data.requestdetail.requestid %}">{{data.requestdetail.requestid }} </a> </td>
+      <td>{{data.requestdetail.requestraiseddate }}</td>
+      <td>{{data.requestdetail.requesttypedetail }}</td>
+      <td>{{data.requestdetail.prioritydetail }}</td>
+      <td>{{data.requestdetail.username }}</td>
+      <td>{{data.requestdetail.requestdescription }}</td>
+      <td>{{data.testedby }}</td>
+      <td>{{data.uat_status }}</td>
       <td ><a href="{% url 'ty' data.requestdetail.requestid %}" class="glyphicon glyphicon-eye-open"></a></td>
 
       {% elif activetab1 == "completed" %}
@@ -194,6 +215,9 @@
       <td>{{data.requestdetail.prioritydetail }}</td>
       <td>{{data.requestdetail.username }}</td>
       <td>{{data.requestdetail.requestdescription }}</td>
+      <td>{{data.testedby }}</td>
+      <td>{{data.uat_status }}</td>
+
       <td ><a href="{% url 'ty' data.requestdetail.requestid %}" class="glyphicon glyphicon-eye-open"></a></td>
 
       {% elif activetab1 == "rejected" %}

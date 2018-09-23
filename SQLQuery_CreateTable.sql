@@ -388,3 +388,85 @@ date_time datetime default getdate() not null,
 UAT_status int foreign key references UAT_status(UAT_status_id),
 requestdetail int foreign key references requestdetail(requestid) not null
 );
+
+use CentralMI
+create table tbl_Appreciation(
+Appreciationid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+Appreciated_to int foreign key references mimember(mimemberId),
+Appreciated_by varchar(100),
+Description varchar(255)
+);
+
+use CentralMI
+create table tbl_raw_team_master(
+raw_team_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+raw_team varchar(255),
+raw_team_icon varchar(255),
+raw_team_slogan varchar(255),
+
+);
+
+use CentralMI
+drop table tbl_raw_team_member_master
+
+create table tbl_raw_team_member_master(
+raw_team_member_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+raw_team int foreign key references tbl_raw_team_master(raw_team_id),
+raw_member int foreign key references mimember(mimemberId),
+);
+
+
+drop table tbl_raw_score
+use CentralMI
+create table tbl_raw_score(
+raw_score_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+raw_team int foreign key references tbl_raw_team_master(raw_team_id),
+score int,
+Winner varchar(50),
+description varchar(255)
+);
+
+use CentralMI
+create table tbl_raw_activity_detail(
+raw_activity_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+raw_activity varchar(50),
+raw_activity_description varchar(max),
+raw_activity_img varchar(255),
+raw_activity_scheduled date,
+raw_activitystatus int foreign key references activitystatus(activitystatusid)
+);
+
+
+
+
+create table tbl_team_metrics(
+metrics_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+metrics_name varchar(255),
+)
+
+use CentralMI
+create table team_metrics(
+metrics_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+teamdetail int foreign key references teamdetail(teamid),
+metrics_name int foreign key references tbl_team_metrics(metrics_id),
+requesttype int foreign key references  requesttypedetail(requesttypeid),
+description varchar(255)
+);
+
+
+use CentralMI
+create table tbl_useful_links(
+linkid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+teamdetail int foreign key references teamdetail(teamid),
+mimember int foreign key references mimember(mimemberId),
+link varchar(max),
+);
+

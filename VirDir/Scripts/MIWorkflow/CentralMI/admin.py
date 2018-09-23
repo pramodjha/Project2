@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblLeaveRecord, TblLeaveType,TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, UatDetail, UatStatus
+
 
 
 admin.site.register(Mimember)
@@ -65,3 +66,14 @@ class TblNavbarMasterAdmin(admin.ModelAdmin):
     search_fields = ['navbar_id']
 
 admin.site.register(TblNavbarMaster,TblNavbarMasterAdmin)
+admin.site.register(TblLeaveRecord)
+admin.site.register(TblLeaveType)
+admin.site.register(TblAppreciation)
+admin.site.register(TblRawActivityDetail)
+admin.site.register(TblRawTeamMaster)
+admin.site.register(TblRawTeamMemberMaster)
+admin.site.register(TblRawScore)
+admin.site.register(TblTeamMetrics)
+admin.site.register(TeamMetrics)
+admin.site.register(UatDetail)
+admin.site.register(UatStatus)
