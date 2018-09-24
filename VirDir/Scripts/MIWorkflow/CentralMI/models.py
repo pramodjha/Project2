@@ -262,7 +262,7 @@ class Overviewdetail(models.Model):
     mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember')
     sopcreatedoptionsid = models.ForeignKey(Options, models.DO_NOTHING, db_column='sopcreatedoptionsid')
     requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-    document = models.FileField(upload_to='sopdocument',blank=True, null=True)
+    document = models.FileField(upload_to='sopdocument/',blank=True, null=True)
 
     class Meta:
         managed = False
@@ -903,6 +903,7 @@ class TblNavbarFooterMaster(models.Model):
     navbar_footer_id = models.AutoField(primary_key=True)
     navbar_footer_name = models.CharField(max_length=255, blank=True, null=True)
     navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+    ranking = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -915,6 +916,7 @@ class TblNavbarHeaderMaster(models.Model):
     navbar_header_id = models.AutoField(primary_key=True)
     navbar_header_name = models.CharField(max_length=255, blank=True, null=True)
     navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+    ranking = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False

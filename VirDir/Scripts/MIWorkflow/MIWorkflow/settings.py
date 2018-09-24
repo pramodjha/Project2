@@ -163,7 +163,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
 #MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join('F:/Python-Django-Project', "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 

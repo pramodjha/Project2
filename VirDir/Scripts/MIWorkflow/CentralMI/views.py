@@ -44,10 +44,9 @@ from django.http import HttpResponse
 import datetime as dt
 import csv
 from django.db.models import Q
-from django_pivot.pivot import pivot
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEDIA_DIR = os.path.join('F:/Python-Django-Project', "media")
+MEDIA_DIR = os.path.join(BASE_DIR, "media")
 
 
 def export_users_csv(request):
@@ -275,10 +274,10 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
 @login_required
 def navbar(request,view_header=None,username=None):
     group_id = is_group_id(request,username=username)
-    header_navbar = TblNavbarMaster.objects.filter(group_name__in=group_id).order_by('navbar_header__navbar_header_id').values_list('navbar_header__navbar_header_name',flat=True).distinct()
-    header_url = TblNavbarMaster.objects.filter(group_name__in=group_id).order_by('navbar_header__navbar_header_id').values_list('navbar_header__navbar_header_url',flat=True).distinct()
-    footer_navbar = TblNavbarMaster.objects.filter(navbar_header__navbar_header_name__in=[view_header]).filter(group_name__in=group_id).order_by('navbar_footer__navbar_footer_id').values_list('navbar_footer__navbar_footer_name',flat=True).distinct()
-    footer_url = TblNavbarMaster.objects.filter(navbar_header__navbar_header_name__in=[view_header]).filter(group_name__in=group_id).order_by('navbar_footer__navbar_footer_id').values_list('navbar_footer__navbar_header_url',flat=True).distinct()
+    header_navbar = TblNavbarMaster.objects.filter(group_name__in=group_id).order_by('navbar_header__navbar_header_id').values_list('navbar_header__navbar_header_name',flat=True).distinct().order_by('navbar_header__ranking')
+    header_url = TblNavbarMaster.objects.filter(group_name__in=group_id).order_by('navbar_header__navbar_header_id').values_list('navbar_header__navbar_header_url',flat=True).distinct().order_by('navbar_header__ranking')
+    footer_navbar = TblNavbarMaster.objects.filter(navbar_header__navbar_header_name__in=[view_header]).filter(group_name__in=group_id).order_by('navbar_footer__navbar_footer_id').values_list('navbar_footer__navbar_footer_name',flat=True).distinct().order_by('navbar_footer__ranking')
+    footer_url = TblNavbarMaster.objects.filter(navbar_header__navbar_header_name__in=[view_header]).filter(group_name__in=group_id).order_by('navbar_footer__navbar_footer_id').values_list('navbar_footer__navbar_header_url',flat=True).distinct().order_by('navbar_footer__ranking')
     header_navbar_list = zip(header_navbar,header_url)
     footer_navbar_list = zip(footer_navbar,footer_url)
     return header_navbar_list, footer_navbar_list
@@ -292,7 +291,7 @@ def sending_email_test():
 @login_required(login_url='signin')
 def Index(request):
     nameview = request.POST.get('home')
-#    sending_email_test()
+    sending_email_test()
     view_header = 'Home'
     view_footer = ''
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
@@ -2097,7 +2096,6 @@ def Requestassigneddetail_Form(request, requestid):
 
 @login_required
 def Overview_Form(request,requestid):
-    print(settings.MEDIA_ROOT)
     view_header = 'Workflow'
     activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='assigned')
     group_name = is_group(request,username=username)

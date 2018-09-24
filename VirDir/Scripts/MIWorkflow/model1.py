@@ -878,6 +878,7 @@ class TblNavbarFooterMaster(models.Model):
     navbar_footer_id = models.AutoField(primary_key=True)
     navbar_footer_name = models.CharField(max_length=255, blank=True, null=True)
     navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+    ranking = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -888,6 +889,7 @@ class TblNavbarHeaderMaster(models.Model):
     navbar_header_id = models.AutoField(primary_key=True)
     navbar_header_name = models.CharField(max_length=255, blank=True, null=True)
     navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+    ranking = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
