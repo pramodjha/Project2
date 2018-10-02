@@ -8,13 +8,15 @@
 .card {
   padding-left: 10px;
   padding-top: 10px;
-  border-style: double;
+  border-style: ;
 
 }
 .card1 {
+  padding-top: 50px;
+  text-align: center;
   border-style: double;
-  height:100px;
-}
+  height:150px;
+  }
 
 
 .table {
@@ -39,9 +41,8 @@
 {% endblock %}
 
 {% block content %}
-
+{% if group_name == "manager" or group_name == "team_leadear" or group_name == "technical_leadear" or group_name == "mi_team" %}
 <div id=pagecontent data-view-url="{% url 'ajax_load_view' %}" >
-{% if group_name == "manager" or group_name == "team_leadear" or group_name == "technical_leadear" %}
 <div class="col-sm-12 col-md-12 col-lg-12 ">
 <form method="post" id="extractdata"  name="form" novalidate>
 {% csrf_token %}
@@ -59,8 +60,8 @@
       </div>
   </form>
 </div>
-<div class="col-sm-12 col-md-12 col-lg-12 ">
-<div class="col-sm-12 col-md-12 col-lg-9 box">
+<div class="col-sm-12 col-md-12 col-lg-12 box3">
+<div class="col-sm-12 col-md-12 col-lg-9 ">
   <div class="col-sm-4 col-md-6 col-lg-3">
     <div><label class="">------------- A -------------</label></div>
     <div><label class="">Last 10 Days WH</label></div>
@@ -162,9 +163,10 @@
 </div>
 </div>
 </div>
-
-<div class="  col-sm-12 col-md-12 col-lg-12  ">
-<div class="  col-sm-12 col-md-12 col-lg-12 box ">
+<div class="  col-sm-12 col-md-12 col-lg-12 ">
+</div>
+<div class="  col-sm-12 col-md-12 col-lg-12 box">
+<div class="  col-sm-12 col-md-12 col-lg-12 ">
 {% autoescape off %}
 {{ model | safe }}
 {% endautoescape %}
@@ -178,8 +180,120 @@
 </div>
 
 
+{% elif group_name == "authoriser" %}
+<div class="col-sm-12 col-md-12 col-lg-12 box">
+  <div><label class="">Bifurcation: Total Authorised</label></div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 ">
+  <div class="col-sm-4 col-md-6 col-lg-2 box1 card1">
+    <div><label class="">Request</label></div>
+    {{context.total_request_count}}
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box3 card1">
+    <div><label class="">Authorised</label></div>
+    {{context.total_authorised_count}}
+</div>
+<div class="col-sm-4 col-md-4 col-lg-2 box1 card1">
+  <div><label class="">Unauthorised</label></div>
+  {{context.total_unauthorised_count}}
+</div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box3 card1">
+    <div><label class="">Completed</label></div>
+    {{context.total_competed_counts}}
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box1 card1">
+    <div><label class="">Rejected</label></div>
+    {{context.total_rejected_counts}}
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box3 card1">
+    <div><label class="">Pending</label></div>
+    {{context.total_pending_counts}}
+  </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 box">
+  <div><label class="">Bifurcation: You Authorised</label></div>
+</div>
+
+<div class="col-sm-12 col-md-12 col-lg-12 ">
+  <div class="col-sm-4 col-md-4 col-lg-3 box1 card1">
+    <label class="">Authorised </label>
+    {{context.your_authorised_count}}
+
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-3 box3 card1">
+    <label class="">Completed</label>
+    {{context.your_completed_count}}
+
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-3 box1 card1">
+    <label class="">Rejected</label>
+    {{context.your_rejected_count}}
+
+  </div>
+  <div class="  col-sm-4 col-md-4 col-lg-3 box3 card1">
+    <label class="">Pending </label>
+    {{context.your_pending_counts}}
+
+  </div>
+</div>
 
 {% else %}
+<div class="col-sm-12 col-md-12 col-lg-12 box">
+  <div><label class="">Bifurcation: Total Request</label></div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 ">
+  <div class="col-sm-4 col-md-6 col-lg-2 box1 card1">
+    <div><label class="">Request</label></div>
+    {{context.total_request_count}}
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box3 card1">
+    <div><label class="">Authorised</label></div>
+    {{context.total_authorised_count}}
+</div>
+<div class="col-sm-4 col-md-4 col-lg-2 box1 card1">
+  <div><label class="">Unauthorised</label></div>
+  {{context.total_unauthorised_count}}
+</div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box3 card1">
+    <div><label class="">Completed</label></div>
+    {{context.total_competed_counts}}
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box1 card1">
+    <div><label class="">Rejected</label></div>
+    {{context.total_rejected_counts}}
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-2 box3 card1">
+    <div><label class="">Pending</label></div>
+    {{context.total_pending_counts}}
+  </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 box">
+  <div><label class="">Bifurcation: Your Request</label></div>
+</div>
+
+<div class="col-sm-12 col-md-12 col-lg-12 ">
+  <div class="col-sm-4 col-md-4 col-lg-3 box1 card1">
+    <label class="">Request </label>
+    {{context.your_request_count}}
+
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-3 box3 card1">
+    <label class="">Completed</label>
+    {{context.your_completed_count}}
+
+  </div>
+  <div class="col-sm-4 col-md-4 col-lg-3 box1 card1">
+    <label class="">Rejected</label>
+    {{context.your_rejected_count}}
+
+  </div>
+  <div class="  col-sm-4 col-md-4 col-lg-3 box3 card1">
+    <label class="">Pending </label>
+    {{context.your_pending_counts}}
+
+  </div>
+</div>
+
 {% endif %}
 
 </div>

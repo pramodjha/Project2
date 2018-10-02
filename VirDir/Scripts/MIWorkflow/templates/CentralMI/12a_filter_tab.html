@@ -8,9 +8,6 @@
 <script src="{% static 'jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'jquery/myjquery.js' %}"></script>
 <style>
-.active {
-background-color: red;
-}
 .card{
   box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
   padding-left: 10px;
@@ -36,7 +33,6 @@ background-color: red;
   padding-top: 15px;
   border-style: double;
   text-align: center;
-
 }
 </style>
 
@@ -54,36 +50,41 @@ background-color: red;
 {% endblock %}
 
 {% block content %}
-<div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
+<div class="col-auto col-sm-12 col-md-12 col-lg-12">
    <div class="col-auto col-sm-12 col-md-12 col-lg-12  ">
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Start Date : {{startdate}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">End Date : {{enddate}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Data Choice : {{reportno}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Interval : {{interval}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Team : {{team}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2 box card">Member : {{member}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Start Date : {{startdate}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">End Date : {{enddate}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Data Choice : {{reportno}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Interval : {{interval}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Team : {{team}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Member : {{member}}</div>
   </div>
-   <div class="col-auto col-sm-12 col-md-12 col-lg-12 middle ">
-     <div class="col-auto col-sm-6 col-md-6 col-lg-2  ">
+</div>
+   <div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
+     <div class="col-auto col-sm-12 col-md-12 col-lg-12 middle ">
+     <div class="col-auto col-sm-6 col-md-6 col-lg-2 box card">
        <form action="" method="post">
-         <span><a href="{% url 'filterdata' %}" class="btn btn-default">Filter Form</a></span>
+         <span><a href="{% url 'filterdata' %}" class="">Filter Form</a></span>
        </form>
      </div>
+
      <div class="col-auto col-sm-6 col-md-6 col-lg-8">
      <form action="" method="post">
        {% csrf_token %}
        {% for key, values in view_dict.items %}
-       <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="active btn btn-default" {%else%} class="btn btn-default"{% endif %}>
+       <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="box card" {%else%} class="box card"{% endif %}>
        {% endfor %}
-    </form>
-  </div>
-  <div class="col-auto col-sm-6 col-md-6 col-lg-2  ">
+     </form>
+     </div>
+
+  <div class="col-auto col-sm-6 col-md-6 col-lg-2  box card">
     <form action="" method="post">
-      <span><a href="{% url 'export_users_csv' %}" class="btn btn-default">Export to CSV</a></span>
+      <span><a href="{% url 'export_users_csv' %}" class="">Export to CSV</a></span>
     </form>
   </div>
   </div>
 </div>
+
 <div class="col-auto col-sm-12 col-md-12 col-lg-12 middle">
   ----------------------------------------------------------
 </div>
@@ -92,6 +93,7 @@ background-color: red;
      {{ data | safe }}
      {% endautoescape %}
  </div>
+</div>
 <script>
 
 $("#id_team").change(function () {

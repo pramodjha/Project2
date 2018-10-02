@@ -180,7 +180,7 @@ def HomePage_Data(request,username,info,session_teamid,session_memberid):
     return mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form
 
 @login_required
-def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggregate=None,field_name_list=None,value_list=None,days_range=None,range_type=None,year_range=0,type=None,memberid=None,teamid=None,no_of_member=None,averagetime=None):
+def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggregate=None,field_name_list=None,value_list=None,days_range=None,range_type=None,year_range=0,type=None,memberid=None,teamid=None,no_of_member=None,averagetime=None,calculation_type='sum'):
     key = []
     value = []
     cumulativedays = 0
@@ -242,12 +242,8 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
         elif type == "coreandot":
             core = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             core_ot = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
-        #    print(date1)
-        #    print("core" + str(core_ot))
             total_core = core + core_ot
-
             v = hours_min(request,time_in_min=total_core,date=sd,dict="Yes")
-            #print(str(date1) + ":" + str(v))
             key.append(str(date1))
             value.append(str(v))
             result = OrderedDict(zip(key, value))
@@ -257,7 +253,6 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             core_ot = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
             total_core = core + core_ot
             total = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = utilisation_list  ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
-            #print(total)
             totalcoreot = (total + core_ot)
             no_of_member = 1 if no_of_member == 0 else no_of_member
             print(str(date1) + ":" + str(total_core) + ":" + str((averagetime * no_of_member) + core_ot))
@@ -269,8 +264,17 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             key.append(str(date1))
             value.append(str(v))
             result = OrderedDict(zip(key, value))
-
+        elif type == "error":
+            print("error")
+            data = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
+        #    v = hours_min(request,time_in_min=data,date=sd,dict="Yes")
+            key.append(str(date1))
+            value.append(str(data))
+            result = OrderedDict(zip(key, value))
     return result
+
+
+
 @login_required
 def navbar(request,view_header=None,username=None):
     group_id = is_group_id(request,username=username)
@@ -291,12 +295,57 @@ def sending_email_test():
 @login_required(login_url='signin')
 def Index(request):
     nameview = request.POST.get('home')
-    sending_email_test()
+    #sending_email_test()
     view_header = 'Home'
     view_footer = ''
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+
+    if group_name == 'authoriser':
+    # for Authoriser
+        request_data = Requestdetail.objects.all()
+        authorised_items = Authorisedetail.objects.all()
+        competed_items = Completeddetail.objects.all()
+        rejected_items = Requeststatusdetail.objects.filter(statusdetail__statusname__in=['Rejected'])
+        total_request_count = request_data.count()
+        total_authorised_count = authorised_items.count()
+        total_unauthorised_count  = total_request_count - total_authorised_count
+        total_authorised_id = authorised_items.values_list('requestdetail',flat=True)
+        total_competed_counts = competed_items.filter(requestdetail__in=list(total_authorised_id)).count()
+        total_rejected_counts = rejected_items.filter(requestdetail__in=list(total_authorised_id)).count()
+        total_pending_counts = total_authorised_count - (total_competed_counts + total_rejected_counts)
+        your_authorised_count = authorised_items.filter(authoriserdetail__username__in=[username]).count()
+        your_authorised_id = authorised_items.filter(authoriserdetail__username__in=[username]).values_list('requestdetail',flat=True)
+        your_completed_count = competed_items.filter(requestdetail__in=list(your_authorised_id)).count()
+        your_rejected_count = rejected_items.filter(requestdetail__in=list(your_authorised_id)).count()
+        your_pending_counts = your_authorised_count - (your_completed_count + your_rejected_count)
+        context = {'total_request_count':total_request_count,'total_authorised_count':total_authorised_count,'total_unauthorised_count':total_unauthorised_count,
+        'total_authorised_id':total_authorised_id,'total_competed_counts':total_competed_counts,'total_rejected_counts':total_rejected_counts,'total_pending_counts':total_pending_counts,
+        'your_authorised_count':your_authorised_count,'your_authorised_id':your_authorised_id,'your_completed_count':your_completed_count,'your_rejected_count':your_rejected_count,'your_pending_counts':your_pending_counts}
+    elif group_name == 'others':
+        request_data = Requestdetail.objects.all()
+        authorised_items = Authorisedetail.objects.all()
+        competed_items = Completeddetail.objects.all()
+        rejected_items = Requeststatusdetail.objects.filter(statusdetail__statusname__in=['Rejected'])
+        total_request_count = request_data.count()
+        total_authorised_count = authorised_items.count()
+        total_unauthorised_count  = total_request_count - total_authorised_count
+        total_authorised_id = authorised_items.values_list('requestdetail',flat=True)
+        total_competed_counts = competed_items.filter(requestdetail__in=list(total_authorised_id)).count()
+        total_rejected_counts = rejected_items.filter(requestdetail__in=list(total_authorised_id)).count()
+        total_pending_counts = total_authorised_count - (total_competed_counts + total_rejected_counts)
+        your_request_count = request_data.filter(username__username__in=[username]).count()
+        your_request_id = request_data.filter(username__username__in=[username]).values_list('requestid',flat=True)
+        your_completed_count = competed_items.filter(requestdetail__in=list(your_request_id)).count()
+        your_rejected_count = rejected_items.filter(requestdetail__in=list(your_request_id)).count()
+        your_pending_counts = your_request_count - (your_completed_count + your_rejected_count)
+        context = {'total_request_count':total_request_count,'total_authorised_count':total_authorised_count,'total_unauthorised_count':total_unauthorised_count,
+        'total_authorised_id':total_authorised_id,'total_competed_counts':total_competed_counts,'total_rejected_counts':total_rejected_counts,'total_pending_counts':total_pending_counts,
+        'your_request_count':your_request_count,'your_completed_count':your_completed_count,'your_rejected_count':your_rejected_count,'your_pending_counts':your_pending_counts}
+
+    else:
+        context = {'':'nothing'}
     try:
         teamid = request.session.get('sessison_team')
         memberid = request.session.get('sessison_member')
@@ -350,20 +399,23 @@ def Index(request):
         mv = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
         mvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
         mvOT = start_end_date(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
-        dv_error = info.define_day_week_month1(days_range=10,range_type='Daily',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-        wv_error = info.define_day_week_month1(days_range=5,range_type='Weekly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
-        mv_error = info.define_day_week_month1(days_range=6,range_type='Monthly',values='error_reportedto',aggregatefield='error_occurancedate',core_noncore=None,OT=2,teamdetail=teamid,member=memberid,output_type='error')
+        dv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['error_reportedto__mimember','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
+        wv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['error_reportedto__mimember','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
+        mv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=5,range_type='Monthly',year_range=0,field_name_list = ['error_reportedto__mimember','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
+
         dvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=420)
         wvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=2100)
         mvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=9240)
         dvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
+
 
         return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
         'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
         'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'model':pivot})
 
     else:
-        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'model':pivot})
+        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'model':pivot,'context':context
+        })
 
 @login_required
 def report_due(request):
@@ -1202,6 +1254,9 @@ def Data_anlayis(request):
         print(value)
         startdate, enddate, reportno, type, interval, team, member, data = Summary_Type(request,report_type=value)
         view_dict = subnavbar(request,reportno)
+    else:
+        startdate, enddate, reportno, type, interval, team, member, data = Rawdata(request)
+        view_dict = ''
     return render(request, 'CentralMI/12a_filter_tab.html',{'data':data,'view_dict':view_dict,'startdate':startdate, 'enddate':enddate, 'reportno':reportno, 'type':type, 'interval':interval, 'team':team, 'member':member ,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 
@@ -1227,6 +1282,8 @@ def Rawdata(request):
         exportdata = pd.DataFrame(list(Errorlog.objects.all().values()))
     elif reportno == '4':
         exportdata = pd.DataFrame(list(OtDetail.objects.all().values()))
+    else:
+        exportdata = pd.DataFrame(list(Requestdetail.objects.all().values()))
     data = exportdata.to_html(classes="table cell-border")
     return startdate, enddate, reportno, type, interval, team, member, data
 
@@ -1481,10 +1538,7 @@ def Check_Status_View(request):
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     userid = User.objects.get(username=username).id
     model = Requestdetail.objects.filter(username__in=[userid])
-    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedby','estimatedby__teamdetail'],value_list = [memberid,teamid])
-
-
-
+    #filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedby','estimatedby__teamdetail'],value_list = [memberid,teamid])
     return render(request, 'CentralMI/3b_check_status_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 ################## Reports
@@ -2859,24 +2913,31 @@ def filterbydaterange(request,variable_column=None,fromdate=None,todate=None):
     return filter
 
 @login_required
-def calculation(request,datefield=None,model=None,values=None,fromdate=None,todate=None, field_name_list =None, value_list=None,aggregatefield=None,raw_data=None):
+def calculation(request,datefield=None,model=None,values=None,fromdate=None,todate=None, field_name_list =None, value_list=None,aggregatefield=None,raw_data=None,calculation_type='sum'):
     filterdict = create_dict_for_filter(request,field_name_list = field_name_list ,value_list = value_list)
     #print(filterdict)
+    if calculation_type == 'sum':
+        aggregation = Sum(aggregatefield)
+        type = '__sum'
+    elif calculation_type == 'count':
+        aggregation = Count(aggregatefield)
+        type = '__count'
+
     if fromdate != None and todate != None:
         filter =  filterbydaterange(request,variable_column=datefield,fromdate=fromdate,todate=todate)
         daterange = [fromdate,todate]
         if raw_data == 'Y':
-            data = model.filter(**{filter: daterange}).filter(**(filterdict))
+            data = model.filter(**{filter: daterange}).filter(**(filterdict)).aggregate(aggregation)
         elif raw_data == 'N':
-            data = model.filter(**{filter: daterange}).filter(**(filterdict)).values(values).aggregate(Sum(aggregatefield))
-            data = data[aggregatefield +'__sum']
+            data = model.filter(**{filter: daterange}).filter(**(filterdict)).values(values).aggregate(aggregation)
+            data = data[aggregatefield + type]
             data = 0 if data == None else data
     else:
         if raw_data == 'Y':
             data = model.filter(**(filterdict))
         elif raw_data == 'N':
-            data = model.filter(**(filterdict)).values(values).aggregate(Sum(aggregatefield))
-            data = data[aggregatefield +'__sum']
+            data = model.filter(**(filterdict)).values(values).aggregate(aggregation)
+            data = data[aggregatefield + type]
             data = 0 if data == None else data
     return data
 
@@ -2931,10 +2992,10 @@ def TimeTracker_View(request):
     form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
     form.fields['reports'].queryset = Activity.objects.all()
     model = info.modelTracker
-    OT_Applied =  list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd]).values_list('timetrackers',flat=True))
-    OT_Accepted = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[2]).values_list('timetrackers',flat=True))
-    OT_Rejected = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[3]).values_list('timetrackers',flat=True))
-    OT_Pending = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[1]).values_list('timetrackers',flat=True))
+    OT_Applied =  list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
+    OT_Accepted = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[2],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
+    OT_Rejected = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[3],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
+    OT_Pending = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[1],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
 
 
     if request.method == 'POST':
@@ -2956,14 +3017,16 @@ def TimeTracker_View(request):
             model = info.modelTracker
             dv_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,None] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
             dvcore_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
-            dvOT_value = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')
+            dvOT_value = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')
+            total_core_value = dvcore_value + dvOT_value
             dvAll_value = dv_value + dvOT_value
             dv = hours_min(request,time_in_min=dv_value,date=sd)
-            dvcore = hours_min(request,time_in_min=dvcore_value,date=sd)
             dvOT = hours_min(request,time_in_min=dvOT_value,date=sd)
+            dvcore = hours_min(request,time_in_min=dvcore_value,date=sd)
             dvAll = hours_min(request,time_in_min=dvAll_value,date=sd)
-            dvutilisation = 0.00 if dvcore_value == 0 and dvAll_value == 0 else ((dvcore_value / dvAll_value) * 100)
+            dvutilisation = 0.00 if dvcore_value == 0 and dvAll_value == 0 else ((total_core_value / (420 + dvOT_value)) * 100)
             dvutilisation = round(dvutilisation,2)
+
             return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
         else:
             pagename = "report"

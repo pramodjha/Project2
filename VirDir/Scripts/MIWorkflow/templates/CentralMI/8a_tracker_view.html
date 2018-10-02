@@ -8,11 +8,21 @@
 .middle{
   text-align: center;
 }
+.box1 {
+  background-color: #4c4c4c;
+}
+.font{
+  font-size: 13px;
+}
+
+label, option {
+  font-size: 13px;
+
+
+}
 </style>
 
-
 {% endblock %}
-
 {% block navblockleft %}
 <h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
 {% endblock %}
@@ -24,47 +34,42 @@
 {% endblock %}
 {% block content %}
 <div class="col-sm-12 col-md-12 col-lg-12 ">
-  <div class="col-sm-12 col-md-12 col-lg-12 box1">
+  <div class="col-sm-12 col-md-12 col-lg-12 ">
   <div class="col-sm-12 col-md-12 col-lg-2 box1">
-    <form method = "POST" action = "{% url 'sdate' %}">
+    <form method = "POST" action = "{% url 'sdate' %}" >
       {% csrf_token %}
-        <div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
           <label class="">Set Date</label>
-          <span  class="">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
-        </div>
-        <div class="col-auto col-sm-12 col-md-12 col-lg-12 box1">{% buttons submit='-- Set Date --' %}{% endbuttons layout='inline' %}</div>
+          <span  class="">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>{% buttons submit='-- Set Date --' %}{% endbuttons layout='inline' %}
     </form>
   </div>
-<div>
-
-  <div class="col-sm-12 col-md-12 col-lg-10 middle box1">
+  <div class="col-sm-12 col-md-12 col-lg-10 middle box3 font">
   <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="col-sm-12 col-md-12 col-lg-12">A:Worked(hh:mm)</span>
+    <span class="fontstyle4">A:Worked</span>
     {% for key, value in dv.items %}
-    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
+    <span class="">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="col-sm-12 col-md-12 col-lg-12">B:OT(hh:mm)</span>
+    <span class="fontstyle4">B:OT</span>
     {% for key, value in dvOT.items %}
-    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
+    <span class="">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-3 " >
-    <span class="col-sm-12 col-md-12 col-lg-12">C:Total (A+B) </span>
+    <span class="fontstyle4">C:Total (A+B) </span>
     {% for key, value in dvAll.items %}
-    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
+    <span class="">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="col-sm-12 col-md-12 col-lg-12">D:Core(hh:mm) </span>
+    <span class="fontstyle4">D:Core </span>
     {% for key, value in dvcore.items %}
-    <span class="col-sm-12 col-md-12 col-lg-12">{{value}}</span>
+    <span class="">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-3 " >
-    <span class="col-sm-12 col-md-12 col-lg-12">Util. (B+D/420+B) </span>
-    <span class="col-sm-12 col-md-12 col-lg-12">{{dvutilisation}}</span>
+    <span class="fontstyle4">Util. (B+D/420+B) </span>
+    <span class="">{{dvutilisation}}</span>
   </div>
 </div>
 
@@ -131,12 +136,12 @@
       </form>
     </div>
   </div>
-  <div class="col-sm-12 col-md-12 col-lg-12 box1 middle">
+<div class="middle box3 font">
   <span>OT Applied for ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Applied}}</span>
   <span>OT Accpeted ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Accepted}}</span>
   <span>OT Rejected ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Rejected}}</span>
   <span>OT Pending ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Pending}}</span>
-  </div>
+</div>
   </div>
 </div>
   <div class="col-sm-12 col-md-12 col-lg-12">

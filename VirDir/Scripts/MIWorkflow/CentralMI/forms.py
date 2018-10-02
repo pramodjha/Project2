@@ -29,9 +29,6 @@ class RequestdetailForm(forms.ModelForm):
     class Meta():
         model = Requestdetail
         fields = '__all__'
-    def __init__(self, *args, **kwargs):
-        super(RequestdetailForm, self).__init__(*args, **kwargs)
-        self.fields['requestraiseddate'].widget.attrs['id']  = 'hiddenfield'
 
 
 class AuthorisedetailForm(forms.ModelForm):

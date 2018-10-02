@@ -1,54 +1,229 @@
-/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-.row.content {height: 100%}
-
-/* Set gray background color and 100% height */
-.sidenav {
-  background-color: #ff9900;
-  height: 100%;
-}
-
-.body{
-  background-color: #005266;
-}
-/* On small screens, set height to 'auto' for the grid */
-@media screen and (max-width: 768px) {
-  .row.content {height: auto;}
-}
 
 
-}
+  /*------------------------table------------------------------------------------*/
 
-#spin {
-  color:red;
-}
-#spin:after {
-  content:"";
-  animation: spin 15s linear infinite;
-}
-@keyframes spin {
-  0% { content:"EXCEL"; }
-  35% { content:"VBA"; }
-  70% { content:"POWERPOINT"; }
-  100% { content:"SQL"; }
+  #table1 {
+      font-family: "Cambria";
+      width: 100%;
+      font-size: 11px;
+  }
+  #table1 tr:nth-child(odd){background-color: #EAEDED;font-size: 11px;}
+  #table1 tr:nth-child(even){background-color: #E5E8E8; font-size: 11px;}
+  #table1 th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #cc9966;
+      color: white;
+      font-size: 11px;
+
+  }
+  #hiddenid{
+  display: none;
+  }
+
+
+  #table2 {
+      font-family: "Cambria";
+      width: 100%;
+      font-size: 11px;
+  }
+  #table2 tr:nth-child(odd){background-color: #EAEDED;font-size: 11px;}
+  #table2 tr:nth-child(even){background-color: #E5E8E8; font-size: 11px;}
+  #table2 th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #cc9966;
+      color: white;
+      font-size: 11px;
+  }
+
+  #table2 {
+      font-family: "Cambria";
+      width: 100%;
+      font-size: 11px;
+  }
+  #table2 tr:nth-child(odd){background-color: #EAEDED;font-size: 11px;}
+  #table2 tr:nth-child(even){background-color: #E5E8E8; font-size: 11px;}
+  #table2 th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #cc9966;
+      color: white;
+      font-size: 11px;
   }
 
 
 
-.sbheader {
-height: 70%;
-line-height: 200%;
-width: 30%;
-background-color:  #004d66;
-font-family:'Cambria';
-font-size:90%;
-color: white;
-margin-left:  2%;
-display: inline-block;
-padding-left:2%;
+.tbody {
+    height: 27em;
+    overflow: auto;
+    width:100%;
+}
+td {
+    width:1%;
+    }
+
+.thead > tr, .tbody{
+    display:block;}
+
+
+  .tbody1 {
+      height: 19em;
+      overflow: auto;
+      width:100%;
+  }
+
+
+  .thead1 > tr, .tbody1{
+      display:block;}
+
+
+/*------------------------navbar------------------------------------------------*/
+
+.navbar-inverse {
+    background-color: #005266;
+    border-color: #333333;
+
 }
 
-.hidden{
+
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+    color: #999999;
+    background-color: #333333;
+    border-color: #333333;
+}
+
+.maincontent1 {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+
+.maincontent2 {
+  margin-top: 15%;
+  margin-bottom: 5%;
+}
+
+#hiddenfield{
 display: none;
+}
+label[for="hiddenfield"]
+{
+    display:none;
+}
+
+body {
+font-family: "Cambria";
+font-size: 14px;
+line-height: 1.42857143;
+color: #999999;
+background-color: #005266;}
+
+html,
+body {
+overflow-x: hidden; /* Prevent scroll on narrow devices */
+height: 100%;
+}
+
+.filtercontainer {
+  padding-top: 70px;
+}
+
+footer {
+padding: 30px 0;
+}
+@media screen and (min-width: 768px) {
+.row-offcanvas {
+  position: relative;
+  -webkit-transition: all .25s ease-out;
+     -moz-transition: all .25s ease-out;
+          transition: all .25s ease-out;
+}
+.row-offcanvas-right {
+  right: 25%;
+}
+.row-offcanvas-left {
+  left: 25%;
+}
+.row-offcanvas-right .sidebar-offcanvas {
+  right: -75%; /* 3 columns */
+  background-color: #333333;
+}
+.row-offcanvas-left .sidebar-offcanvas {
+  left: -25%; /* 3 columns */
+  background-color: #333333;
+}
+.row-offcanvas-right.active {
+  right: 0; /* 3 columns */
+}
+.row-offcanvas-left.active {
+  left: 0; /* 3 columns */
+}
+.row-offcanvas-right.active .sidebar-offcanvas {
+  background-color: #333333;
+}
+.row-offcanvas-left.active .sidebar-offcanvas {
+  background-color: #333333;
+}
+.row-offcanvas .content {
+   /* width: 75%;  9 columns */
+  -webkit-transition: all .25s ease-out;
+     -moz-transition: all .25s ease-out;
+          transition: all .25s ease-out;
+
+}
+.row-offcanvas.active .content {
+  width: 100%; /* 12 columns */
+}
+.sidebar-offcanvas {
+  position: absolute;
+  top: 0;
+  width: 25%; /* 3 columns */
+}
+}
+@media screen and (max-width: 767px) {
+.row-offcanvas {
+  position: relative;
+  -webkit-transition: all .25s ease-out;
+     -moz-transition: all .25s ease-out;
+          transition: all .25s ease-out;
+}
+
+.row-offcanvas-right {
+  right: 0;
+}
+
+.row-offcanvas-left {
+  left: 0;
+}
+
+.row-offcanvas-right
+.sidebar-offcanvas {
+  right: -50%; /* 6 columns */
+}
+
+.row-offcanvas-left
+.sidebar-offcanvas {
+  left: -50%; /* 6 columns */
+}
+
+.row-offcanvas-right.active {
+  right: 50%; /* 6 columns */
+}
+
+.row-offcanvas-left.active {
+  left: 50%; /* 6 columns */
+}
+
+.sidebar-offcanvas {
+  position: absolute;
+  top: 0;
+  width: 50%; /* 6 columns */
+}
 }
 
 .ui-datepicker {
@@ -88,3 +263,139 @@ float:right;
 text-align: center;
 font-weight:bold;
 }
+
+body .btn-default{
+  color: #999999;
+  background-color: #333333;
+  border-color: #333333;
+}
+
+label {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 15px;
+}
+
+h1 {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 20px;
+}
+
+.headerformat {
+  color: #999999;
+  font-family: Cambria;
+  font-size: 20px;
+  width: 20%;
+}
+
+.subheaderformat {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 12px;
+  width: 20%;
+  font-style: italic;
+}
+
+.tableheaderformat {
+  color: #cc8800;
+  font-family: Cambria;
+  font-size: 12px;
+  width: 20%;
+  background-color: #333333;
+
+}
+
+.box {
+  background-color: #333333;
+  padding-top: 10px;
+}
+
+.box1 {
+  background-color: #4c4c4c;
+  padding-top: 10px;
+}
+.box2 {
+  background-color: #404040;
+  padding-top: 10px;
+}
+.box3 {
+  background-color: #404040;
+  padding-top: 10px;
+}
+
+.tablebodyformat {
+  color:  #999999;
+  font-family: Cambria;
+  font-size: 12px;
+  width: 20%;
+  background-color: #005266;
+}
+
+  /*------------------------font_Color------------------------------------------------*/
+
+.fontstyle1{color: #999999;}
+.fonthoverstyle1{color: #595959;}
+.fontstyle4{color: #cc8800;}
+.fonthoverstyle4{color: #ff6666;}
+
+/*-----------------------------font_Family-------------------------------------------*/
+.fontfamilycambria{font-family: Cambria;}
+/*-----------------------------font_size-------------------------------------------*/
+.fontsize12{font-size: 12px;}
+.fontsize13{font-size: 13px;}
+.fontsize14{font-size: 14px;}
+.fontsize15{font-size: 15px;}
+.fontsize20{font-size: 20px;}
+.fontsize25{font-size: 25px;}
+.fontsize30{font-size: 30px;}
+
+.backgroundcolor1 {background-color: #333333;}
+.backgroundcolor2 {background-color: #005266;}
+.backgroundcolor3 {background-color: #5900b3;}
+.backgroundcolor4 {background-color: #602060;}
+.backgroundcolor5 {background-color: #737373;}
+.backgroundcolor6 {background-color: #e6e6e6;}
+.backgroundcolor7 {background-color:  #804000;}
+.backgroundcolor8 {background-color: #cc5200;}
+/*-----------------------------Box_shadow-------------------------------------------*/
+.shadow1 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow2 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow3 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow4 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow5 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow6 {box-shadow: 0px 0px 3px 5px #003d4sd;}
+.shadow7 {box-shadow: 0px 0px 3px 5px #003d4d;}
+.shadow8 {box-shadow: 0px 0px 3px 5px #003d4d;}
+/*-----------------------------width-------------------------------------------*/
+.widthsize10per {width: 10%}
+.widthsize15per {width: 15%}
+.widthsize20per {width: 20%}
+
+
+
+.position {
+  position:fixed;
+}
+
+/* setting width of table */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;}
+    div.container {width: 90%;}
+
+
+.image1 {
+    border-radius: 50%;
+    box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .team_member{
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+    }
+  .image1:hover {
+      border-radius: 0%;
+      box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+
+    }

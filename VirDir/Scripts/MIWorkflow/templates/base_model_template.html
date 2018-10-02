@@ -1,52 +1,50 @@
-{% load static %}<!DOCTYPE html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- model page link -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<!-- Datetime -->
-<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" type="text/css" />
-<script type="text/javascript" src="{% static 'jquery/jquery-1.8.3.min.js' %}" charset="UTF-8"></script>
-<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.js' %}" charset="UTF-8"></script>
-<script type="text/javascript" src="{% static 'js/locales/bootstrap-datetimepicker.fr.js' %}" charset="UTF-8"></script>
-<!-- formatting -->
-<link rel="stylesheet" href="{% static 'css/navbar0.css' %}" type="text/css" />
-<link rel="stylesheet" href="{% static 'css/fontstyle.css' %}" type="text/css" />
+    <!-- model page link -->
+    <script type="text/javascript" src="{% static 'modelwindow/jquery.min.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'modelwindow/bootstrap.min.js' %}" charset="UTF-8"></script>
+    <link rel="stylesheet" href="{% static 'modelwindow/bootstrap.min.css' %}" type="text/css" />
 
-  </head>
-  <body class="body">
+    <!-- Datetime for ot form-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" type="text/css" />
+    <script type="text/javascript" src="{% static 'jquery/jquery-1.8.3.min.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.js' %}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'js/locales/bootstrap-datetimepicker.fr.js' %}" charset="UTF-8"></script>
+    <!-- formatting -->
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}" type="text/css" />
+</head>
+<body class="body">
     <div class="container ">
       <!-- Trigger the modal with a button -->
       <button type="button" id="modal" class="btn btn-info btn-lg hidden" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">Open Modal</button>
-  <!-- Modal -->
-  <div class="modal fade " id="myModal" role="dialog">
-    <div class="modal-dialog ">
-      <!-- Modal content-->
-      <div class="modal-content box">
-        <div class="modal-body">
-       {% block content %}
-       {% endblock %}
+      <!-- Modal -->
+      <div class="modal fade " id="myModal" role="dialog">
+        <div class="modal-dialog ">
+          <!-- Modal content-->
+          <div class="modal-content box">
+            <div class="modal-body">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
       </div>
-       <div class="modal-footer">
-       </div>
-     </div>
-</div>
-</div>
-</div>
+    </div>
 </body>
 
 <!-- model animation link -->
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-<script>
-$("#modal").trigger('click');
-</script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script> </head>
+<script type="text/javascript" src="{% static 'modelwindow/animated_jquery.min.js' %}" charset="UTF-8"></script>
+<script> $("#modal").trigger('click'); </script>
+<!-- link for data format other than ot_form were datatime required-->
+<link rel="stylesheet" href="{% static 'date/bootstrap-datepicker.css' %}" type="text/css" />
+<script type="text/javascript" src="{% static 'date/jquery.js' %}" charset="UTF-8"></script>
+<script type="text/javascript" src="{% static 'date/bootstrap.min.js' %}" charset="UTF-8"></script>
+<script type="text/javascript" src="{% static 'date/bootstrap-datepicker.js' %}" charset="UTF-8"></script>
 
 </html>

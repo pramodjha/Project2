@@ -2,21 +2,6 @@
 {% load staticfiles %}
 {% block style %}
 <style>
-img {
-    border-radius: 50%;
-    box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.2);
-
-}
-
-span{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
-}
-img:hover {
-  border-radius: 0%;
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-
-}
 </style>
 {% endblock %}
 
@@ -37,18 +22,18 @@ r
 {%for data in model %}
 {% if data.avatar == None %}
 <div class="col-sm-2 col-md-2 col-lg-2">
-  <div><img src="{{ MEDIA_URL}}/about_team/default.gif" height='100%' width='100%'alt="Avatar" /></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.username}} </span></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.teamdetail}} </span></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
+  <div><img class="image1" src="{{ MEDIA_URL}}/about_team/default.gif" height='100%' width='100%'alt="Avatar" /></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.username}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.teamdetail}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.designationmaster}} </span></div>
 
 </div>
 {% else %}
 <div class="col-sm-2 col-md-2 col-lg-2">
-  <div><img src="{{ MEDIA_URL}}/{{data.avatar}}" height='100%' width='100%' alt="Avatar" /></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.username}} </span></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.teamdetail}} </span></div>
-  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
+  <div><img class="image1" src="{{ MEDIA_URL}}/{{data.avatar}}" height='100%' width='100%' alt="Avatar" /></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.username}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.teamdetail}} </span></div>
+  <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.designationmaster}} </span></div>
 
 </div>
 {% endif %}
