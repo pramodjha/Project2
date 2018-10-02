@@ -1026,3 +1026,59 @@ class TblUsefulLinks(models.Model):
     class Meta:
         managed = False
         db_table = 'tbl_useful_links'
+
+
+class AssignView(models.Model):
+    viewassign_id = models.AutoField(primary_key=True)
+    group_name = models.ForeignKey('AuthGroup', models.DO_NOTHING, db_column='group_name')
+    view_type = models.ForeignKey('ViewType', models.DO_NOTHING, db_column='view_type')
+
+    class Meta:
+        managed = False
+        db_table = 'assign_view'
+
+    def __str__(self):
+        return str(self.group_name)
+
+class TblNavbarView(models.Model):
+    navbar_id = models.AutoField(primary_key=True)
+    view_type = models.ForeignKey('ViewType', models.DO_NOTHING, db_column='view_type')
+    navbar_header = models.ForeignKey(TblNavbarHeaderMaster, models.DO_NOTHING)
+    navbar_footer = models.ForeignKey(TblNavbarFooterMaster, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_navbar_view'
+
+    def __str__(self):
+        return str(self.navbar_footer)
+
+
+class TeamMetricsData(models.Model):
+    metrics_id = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
+    requesttype = models.ForeignKey(Requesttypedetail, models.DO_NOTHING, db_column='requesttype', blank=True, null=True)
+    total = models.IntegerField(db_column='Total', blank=True, null=True)  # Field name made lowercase.
+    wip = models.IntegerField(db_column='WIP', blank=True, null=True)  # Field name made lowercase.
+    uat = models.IntegerField(db_column='UAT', blank=True, null=True)  # Field name made lowercase.
+    completed = models.IntegerField(db_column='Completed', blank=True, null=True)  # Field name made lowercase.
+    project = models.IntegerField(db_column='Project', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'team_metrics_data'
+
+    def __str__(self):
+        return str(self.metrics_id)
+
+class ViewType(models.Model):
+    view_id = models.AutoField(primary_key=True)
+    viewname = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'view_type'
+
+    def __str__(self):
+        return str(self.viewname)

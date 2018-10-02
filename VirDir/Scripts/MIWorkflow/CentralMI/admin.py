@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblLeaveRecord, TblLeaveType,TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, UatDetail, UatStatus
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblLeaveRecord, TblLeaveType,TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, UatDetail, UatStatus,AssignView,TblNavbarView,TeamMetricsData,ViewType
 
 
 
@@ -77,3 +77,8 @@ admin.site.register(TblTeamMetrics)
 admin.site.register(TeamMetrics)
 admin.site.register(UatDetail)
 admin.site.register(UatStatus)
+
+admin.site.register(AssignView)
+admin.site.register(TblNavbarView)
+admin.site.register(TeamMetricsData)
+admin.site.register(ViewType)

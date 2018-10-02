@@ -470,3 +470,44 @@ mimember int foreign key references mimember(mimemberId),
 link varchar(max),
 );
 
+
+
+
+
+create table view_type (
+view_id int not null primary key Identity(1,1),
+viewname varchar(255),
+)
+
+create table assign_view (
+viewassign_id int not null primary key Identity(1,1),
+group_name int foreign key references auth_group(id) not null,
+view_type int foreign key references view_type (view_id) not null,
+)
+
+Use CentralMI
+create table tbl_navbar_view(
+navbar_id int not null primary key Identity(1,1),
+view_type int foreign key references view_type (view_id) not null,
+navbar_header_id int foreign key references tbl_navbar_header_master(navbar_header_id) not null,
+navbar_footer_id int foreign key references tbl_navbar_footer_master(navbar_footer_id) not null,
+)
+
+drop table team_metrics_data
+drop column metrics_name
+
+use CentralMI
+create table team_metrics_data(
+metrics_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+teamdetail int foreign key references teamdetail(teamid),
+requesttype int foreign key references  requesttypedetail(requesttypeid),
+Total int,
+WIP int,
+UAT int,
+Completed int,
+Project int
+
+);
+
+select * from team_metrics_data
