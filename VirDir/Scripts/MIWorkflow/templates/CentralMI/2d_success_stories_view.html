@@ -1,40 +1,6 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
-<style>
-.card:hover {
-  background-color:  #006690;
-  padding-left: 5px;
-  padding-top: 5px;
-  border-style: double;
-
-}
-.card {
-  background-color: #006690;
-  padding-left: 10px;
-  padding-top: 10px;
-  height: 50px;
-  border-style: double;
-
-}
-.card1:hover {
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-  background-color:  #006680;
-  padding-left: 5px;
-  padding-top: 5px;
-  border-style: double;
-
-}
-.card1 {
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-  padding-left: 10px;
-  padding-top: 10px;
-  height: 150px;
-  border-style: double;
-
-}
-</style>
-
 {% endblock %}
 
 {% block navblockleft %}
@@ -55,8 +21,8 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
 {%for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4">
-<div class="card">
-    <h5 class="">{{ data.storiesid}}) {{ data.storiesdatetime}}</h5>
+<div class="">
+    <h5 class="card3">{{ data.storiesid}}) {{ data.storiesdatetime}}</h5>
 </div>
 
 <div class="card1">

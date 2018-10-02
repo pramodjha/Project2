@@ -425,13 +425,13 @@ def report_due(request):
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     if sd == None:
         sd = datetime.today().strftime('%Y-%m-%d')
-        datedetail = 'Activity Due is for  today i.e. ' + sd + '. To check for other date please set it in Timetracker'
+        datedetail = 'Activity Due is for  today i.e. ' + str(sd) + '. To check for other date please set it in Timetracker'
     else:
-        datedetail = 'Activity Due is for the date ' + sd + '. To check for other date please set it in Timetracker'
+        datedetail = 'Activity Due is for the date ' + str(sd) + '. To check for other date please set it in Timetracker'
 
-    data_daily = activity_Calendar(request,parameter1=sd,parameter2='daily')
-    data_weekly = activity_Calendar(request,parameter1=sd,parameter2='weekly')
-    data_monthly = activity_Calendar(request,parameter1=sd,parameter2='monthly')
+    data_daily = activity_Calendar(request,parameter1=str(sd),parameter2='daily')
+    data_weekly = activity_Calendar(request,parameter1=str(sd),parameter2='weekly')
+    data_monthly = activity_Calendar(request,parameter1=str(sd),parameter2='monthly')
     return render(request, 'CentralMI/16a_report_due.html', {'datedetail':datedetail,'model1':data_daily,'model2':data_weekly,'model3':data_monthly,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -1085,7 +1085,7 @@ def Ot_Detail_View(request):
 @login_required
 def Useful_link_View(request):
     view_header = 'Details'
-    activetab, activetab1, username, info, sd= create_session(request, header='usefullinks',footer='')
+    activetab, activetab1, username, info, sd= create_session(request, header='details',footer='usefullinks')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     data = TblUsefulLinks.objects.all()
@@ -1249,6 +1249,7 @@ def Data_anlayis(request):
     if type == '1':
         startdate, enddate, reportno, type, interval, team, member, data = Rawdata(request)
         view_dict = ''
+        value=''
     elif type == '2':
         value = request.POST.get('button')
         print(value)
@@ -1257,7 +1258,9 @@ def Data_anlayis(request):
     else:
         startdate, enddate, reportno, type, interval, team, member, data = Rawdata(request)
         view_dict = ''
-    return render(request, 'CentralMI/12a_filter_tab.html',{'data':data,'view_dict':view_dict,'startdate':startdate, 'enddate':enddate, 'reportno':reportno, 'type':type, 'interval':interval, 'team':team, 'member':member ,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+        value = ''
+    return render(request, 'CentralMI/12a_filter_tab.html',{'data':data,'view_dict':view_dict,'startdate':startdate, 'enddate':enddate, 'reportno':reportno, 'type':type, 'interval':interval, 'team':team, 'member':member ,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,
+    'value':value})
 
 
 def Datarequiredforreport(request):
@@ -1681,7 +1684,7 @@ def Feedback_Add_Form(request,feedbackquestionid):
 @login_required
 def Staff_Detail_View(request):
     view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='details')
+    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='staffdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     teamid = request.session.get('sessison_team')

@@ -7,34 +7,6 @@
 {% block style %}
 <script src="{% static 'jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'jquery/myjquery.js' %}"></script>
-<style>
-.card{
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-  padding-left: 10px;
-  padding-top: 10px;
-  border-style: double;
-  height: 40px;
-  text-align: center;
-
-}
-.card1{
-  padding-left: 10px;
-  padding-top: 10px;
-  border-style: double;
-  text-align: center;
-}
-.middle{
-  text-align: center;
-}
-.card:hover {
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-  background-color:  #006680;
-  padding-left: 5px;
-  padding-top: 15px;
-  border-style: double;
-  text-align: center;
-}
-</style>
 
 {% endblock %}
 
@@ -72,7 +44,7 @@
      <form action="" method="post">
        {% csrf_token %}
        {% for key, values in view_dict.items %}
-       <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="box card" {%else%} class="box card"{% endif %}>
+       <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="card4" {%else%} class="card"{% endif %}>
        {% endfor %}
      </form>
      </div>
@@ -139,7 +111,6 @@ $("#id_team").change(function () {
   <link rel="stylesheet" href="{% static 'datatable/dataTables.bootstrap.min.css' %}" rel="stylesheet">
   <script type="text/javascript" src="{% static 'datatable/jquery.dataTables.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'datatable/dataTables.bootstrap.min.js' %}"  charset="UTF-8"></script>
-
 
 {% endblock %}
 

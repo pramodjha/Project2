@@ -1,24 +1,6 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
-<style>
-.testimonial-card{
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.1);
-  vertical-align: middle;
-  padding-left: 5px;
-  padding-top: 5px;
-  background-color:  #006680;
-}
-
-.testimonial-card:hover {
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0);
-  vertical-align: middle;
-  padding-left: 5px;
-  padding-top: 5px;
-  background-color:  #005266;
-}
-
-</style>
 {% endblock %}
 
 {% block navblockleft %}
@@ -36,17 +18,16 @@
 <div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'commsuggadd' %}" id="comments_suggestion" name="Add" class="btn btn-default">Add Comments/suggestion</a></div>
 {% for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4 ">
-<div class="card testimonial-card">
+<div >
     <!-- Bacground color -->
     <div class="card-up indigo lighten-1">
     </div>
     <!-- Avatar -->
     <div class="card-body">
         <!-- Name -->
-        <h5 class="card-title">{{ data.suggestiondatetime}} | {{ data.subject}} | {{ data.suggestedby}} </h5>
-        <hr>
+        <h5 class="card3">{{ data.suggestiondatetime}} | {{ data.subject}} | {{ data.suggestedby}} </h5>
         <!-- Quotation -->
-        <p><i class="fa fa-quote-left"></i> {{ data.suggestion}}</p>
+        <p class="card1"><i class="fa fa-quote-left "></i> {{ data.suggestion}}</p>
     </div>
 </div>
 <!-- Card -->
