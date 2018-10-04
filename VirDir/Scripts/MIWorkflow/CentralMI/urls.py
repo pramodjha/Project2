@@ -77,12 +77,10 @@ urlpatterns = [
 	url(r'^ot_add_form/(?P<trackerid>\d+)$',views.Ot_Add_Form, name = 'otform'),
 	url(r'^ot_edit_form/(?P<requestid>\d+)$', views.Ot_Edit_Form, name='editot'),
 # 7) Employee Detail
-	url(r'^detail_view/',views.My_Detail_View, name = 'details'),
-	url(r'^my_detail_view/',views.My_Detail_View, name = 'mydetail'),
-
+	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'details'),
 	url(r'^staff_edit_form/',views.Staff_Edit_Form, name = 'editstaffdetail'),
 	url(r'^staff_edit_manager_form/(?P<id>\d+)$',views.Staff_Edit_Manager_Form, name = 'editstaffbymanager'),
-	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'staffdetail'),
+	url(r'^my_detail_view/',views.My_Detail_View, name = 'mydetail'),
 	url(r'^leave_form/',views.Leave_Record_Form, name = 'leaverecordform'),
 	url(r'^leave_detail_view/',views.Leave_Record_View, name = 'leaverecorddetail'),
 	url(r'^leave_Edit_form/(?P<leaveid>\d+)$',views.Leave_Record_Edit, name = 'leaverecordeditform'),

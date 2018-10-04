@@ -1,6 +1,33 @@
 {% extends "basetemplate.html" %}
 {% load staticfiles %}
 {% block style %}
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+}
+
+.container img {
+  border-radius: 0%;
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+
+  vertical-align: middle;}
+
+.container .text-block {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0); /* Fallback color */
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+  color: #f1f1f1;
+  width: 50%;
+  padding: 0px;
+}
+
+</style>
+
 {% endblock %}
 
 {% block navblockleft %}
@@ -17,7 +44,7 @@
 {% block content %}
 {%for data in model %}
 
-<div class="process">
+<div class="container">
   <img src="{{ MEDIA_URL}}/{{data.processimg}}" height='450px' width='100%' alt="Avatar" />
   <div class="text-block">
   <h4>{{data.teamdetail}}</h4>

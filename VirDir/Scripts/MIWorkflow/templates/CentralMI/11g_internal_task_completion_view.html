@@ -1,6 +1,20 @@
 {% extends "base_model_template.html" %}
 {% load staticfiles %}
 {% block style %}
+<style>
+/* Ensure that the demo table scrolls */
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+
+    div.container {
+
+        width: 100%;
+
+    }
+
+</style>
 {% endblock %}
 
 {% block navblockleft %}
