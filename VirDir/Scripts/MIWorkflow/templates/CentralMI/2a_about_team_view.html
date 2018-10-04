@@ -20,7 +20,7 @@ r
 <div class="col-sm-12 col-md-12 col-lg-12">
 
 {%for data in model %}
-{% if data.avatar == None %}
+{% if data.avatar == None or data.avatar == ""  %}
 <div class="col-sm-2 col-md-2 col-lg-2">
   <div><img class="image1" src="{{ MEDIA_URL}}/about_team/default.gif" height='100%' width='100%'alt="Avatar" /></div>
   <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.username}} </span></div>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblUsefulLinks, UatDetail
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblUsefulLinks, UatDetail, TeamMetricsData
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime
@@ -370,4 +370,9 @@ class TblUsefulLinksForm(forms.ModelForm):
 class UatDetailForm(forms.ModelForm):
     class Meta():
         model = UatDetail
+        fields = '__all__'
+
+class TeamMetricsDataForm(forms.ModelForm):
+    class Meta():
+        model = TeamMetricsData
         fields = '__all__'

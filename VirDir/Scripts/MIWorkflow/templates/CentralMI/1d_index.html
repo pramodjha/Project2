@@ -165,19 +165,6 @@
 </div>
 <div class="  col-sm-12 col-md-12 col-lg-12 ">
 </div>
-<div class="  col-sm-12 col-md-12 col-lg-12 box">
-<div class="  col-sm-12 col-md-12 col-lg-12 ">
-{% autoescape off %}
-{{ model | safe }}
-{% endautoescape %}
-</div>
-</div>
-
-<div class="col-sm-6 col-md-6 col-lg-12 ">
-  <div class="  col-sm-12 col-md-12 col-lg-12 ">
-    <label class="">Updates:</label>
-  </div>
-</div>
 
 
 {% elif group_name == "authoriser" %}
@@ -294,7 +281,44 @@
   </div>
 </div>
 
+
 {% endif %}
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <table  id="example" class="table" style="width:100%">
+    <thead class="">
+    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+      <td >Team Detail </td>
+      <td >Request Type</td>
+      <td >Total</td>
+      <td >WIP</td>
+      <td >UAT</td>
+      <td >Completed</td>
+      <td >Project</td>
+        </tr>
+    </thead>
+    <tbody class="">
+  {%for data in model_team_metrics %}
+    <tr class="">
+    <td> <a href="{% url 'editmetrics' data.metrics_id %}" class="glyphicon glyphicon-pencil"></a> {{data.teamdetail}}</td>
+    <td>{{data.requesttype }}</td>
+    <td>{{data.total }}</td>
+    <td>{{data.wip }}</td>
+    <td>{{data.uat }}</td>
+    <td>{{data.completed }}</td>
+    <td>{{data.project }}</td>
+  {% endfor %}
+    </tr></br>
+  </tbody>
+  </table>
+</div>
+
+<div class="col-sm-6 col-md-6 col-lg-12 ">
+  <div class="  col-sm-12 col-md-12 col-lg-12 ">
+    <label class="">Updates:</label>
+  </div>
+</div>
+
+
 
 </div>
 <script type="text/javascript">

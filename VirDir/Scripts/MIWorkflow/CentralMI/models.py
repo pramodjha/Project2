@@ -1051,7 +1051,7 @@ class TblNavbarView(models.Model):
         db_table = 'tbl_navbar_view'
 
     def __str__(self):
-        return str(self.navbar_footer)
+        return str(self.navbar_header)
 
 
 class TeamMetricsData(models.Model):

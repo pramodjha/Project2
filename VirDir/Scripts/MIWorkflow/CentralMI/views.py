@@ -4,8 +4,8 @@ from django.template import Context, loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar, Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarMaster, TblNavbarHeaderMaster, TblNavbarFooterMaster, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, TblUsefulLinks, UatDetail
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm,TeamMetricsDataForm
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar, Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarMaster, TblNavbarHeaderMaster, TblNavbarFooterMaster, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, TblUsefulLinks, UatDetail, AssignView, TblNavbarView, TeamMetricsData
 from django.core import serializers
 from django.shortcuts import redirect
 from django.db import connection
@@ -265,7 +265,6 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             value.append(str(v))
             result = OrderedDict(zip(key, value))
         elif type == "error":
-            print("error")
             data = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
         #    v = hours_min(request,time_in_min=data,date=sd,dict="Yes")
             key.append(str(date1))
@@ -278,19 +277,49 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
 @login_required
 def navbar(request,view_header=None,username=None):
     group_id = is_group_id(request,username=username)
+    print(view_header)
     header_navbar = TblNavbarMaster.objects.filter(group_name__in=group_id).order_by('navbar_header__navbar_header_id').values_list('navbar_header__navbar_header_name',flat=True).distinct().order_by('navbar_header__ranking')
     header_url = TblNavbarMaster.objects.filter(group_name__in=group_id).order_by('navbar_header__navbar_header_id').values_list('navbar_header__navbar_header_url',flat=True).distinct().order_by('navbar_header__ranking')
     footer_navbar = TblNavbarMaster.objects.filter(navbar_header__navbar_header_name__in=[view_header]).filter(group_name__in=group_id).order_by('navbar_footer__navbar_footer_id').values_list('navbar_footer__navbar_footer_name',flat=True).distinct().order_by('navbar_footer__ranking')
     footer_url = TblNavbarMaster.objects.filter(navbar_header__navbar_header_name__in=[view_header]).filter(group_name__in=group_id).order_by('navbar_footer__navbar_footer_id').values_list('navbar_footer__navbar_header_url',flat=True).distinct().order_by('navbar_footer__ranking')
-    header_navbar_list = zip(header_navbar,header_url)
-    footer_navbar_list = zip(footer_navbar,footer_url)
+    viewtype = AssignView.objects.filter(group_name__in=group_id).values_list('view_type',flat=True)
+    header_navbar1 = TblNavbarView.objects.filter(view_type__in=list(viewtype)).values_list('navbar_header__navbar_header_name',flat=True).distinct().order_by('navbar_header__ranking')
+    header_url1 = TblNavbarView.objects.filter(view_type__in=list(viewtype)).values_list('navbar_header__navbar_header_url',flat=True).distinct().order_by('navbar_header__ranking')
+    footer_navbar1 = TblNavbarView.objects.filter(view_type__in=list(viewtype)).filter(navbar_header__navbar_header_name__in=[view_header]).values_list('navbar_footer__navbar_footer_name',flat=True).distinct().order_by('navbar_footer__ranking')
+    footer_url1 = TblNavbarView.objects.filter(view_type__in=list(viewtype)).filter(navbar_header__navbar_header_name__in=[view_header]).values_list('navbar_footer__navbar_header_url',flat=True).distinct().order_by('navbar_footer__ranking')
+    #print(header_url1)
+    header_navbar_list = zip(header_navbar1,header_url1)
+    footer_navbar_list = zip(footer_navbar1,footer_url1)
     return header_navbar_list, footer_navbar_list
+
+
+
+
+
 
 def sending_email_test():
     return send_mail('Subject here','Here is the message.','jha.pramod234@gmail.com',['jha.pramod234@gmail.com'],fail_silently=False)
     #msg = EmailMultiAlternatives('subject','text_content', from_email, ['jha.pramod234@gmail.com'])
     #msg.attach_alternative(html_content, "text/html")
     #msg.send()
+
+
+def Edit_Metrics(request,metricsid):
+    view_header = 'Home'
+    activetab, activetab1, username, info, sd= create_session(request, header='home',footer='')
+    group_name = is_group(request,username=username)
+    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    e = TeamMetricsData.objects.get(metrics_id=metricsid)
+    form = TeamMetricsDataForm(instance=e)
+    if request.method == 'POST':
+        form = TeamMetricsDataForm(request.POST,instance=e)
+        if form.is_valid():
+            inst = form.save(commit=True)
+            inst.save()
+            return HttpResponseRedirect(reverse('home'))
+    return render(request, 'CentralMI/edit_metrics_form.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+
+
 
 @login_required(login_url='signin')
 def Index(request):
@@ -353,15 +382,8 @@ def Index(request):
         teamid, memberid = session_view(request,username=username)
     filterdict = create_dict_for_filter(request,field_name_list = ['username','teamdetail'], value_list = [memberid,teamid])
     no_of_member = Mimember.objects.filter(**(filterdict)).count()
-    model = pd.DataFrame(list(TeamMetrics.objects.all().values()))
-    model1 = pd.DataFrame(list(Teamdetail.objects.all().values()))
-    model2 = pd.DataFrame(list(Requesttypedetail.objects.all().values()))
-    model3 = pd.DataFrame(list(TblTeamMetrics.objects.all().values()))
-    merge1 = pd.merge(model, model1,  how='left', left_on=['teamdetail_id'], right_on = ['teamid'])
-    merge2 = pd.merge(merge1, model2,  how='left', left_on=['requesttype_id'], right_on = ['requesttypeid'])
-    merge3 = pd.merge(merge2, model3,  how='left', left_on=['metrics_name_id'], right_on = ['metrics_id'])
-    pivot = pd.pivot_table(merge3,index=['teamname', 'requesttype'], columns='metrics_name', values='volume',aggfunc=sum)
-    pivot = pivot.to_html(classes="table cell-border").replace('border="1"','border="0"')
+    model_team_metrics = TeamMetricsData.objects.all()
+
     if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
         form = FilteredForm(initial={'teamfilter':teamid, 'memberfilter':memberid})
         if request.method == 'POST':
@@ -399,9 +421,9 @@ def Index(request):
         mv = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
         mvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
         mvOT = start_end_date(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
-        dv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['error_reportedto__mimember','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
-        wv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['error_reportedto__mimember','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
-        mv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=5,range_type='Monthly',year_range=0,field_name_list = ['error_reportedto__mimember','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
+        dv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
+        wv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
+        mv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
 
         dvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=420)
         wvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=2100)
@@ -411,10 +433,10 @@ def Index(request):
 
         return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
         'mv':mv,'wv':wv,'dv':dv,'mvOT':mvOT,'wvOT':wvOT,'dvOT':dvOT,'mvcore':mvcore,'wvcore':wvcore,'dvcore':dvcore,'mvutilisation':mvutilisation,'wvutilisation':wvutilisation,'dvutilisation':dvutilisation,
-        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'model':pivot})
+        'dv_error':dv_error,'wv_error':wv_error,'mv_error':mv_error,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'model_team_metrics':model_team_metrics})
 
     else:
-        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'model':pivot,'context':context
+        return render(request, 'CentralMI/1d_index.html',{'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'context':context
         })
 
 @login_required
@@ -425,13 +447,13 @@ def report_due(request):
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     if sd == None:
         sd = datetime.today().strftime('%Y-%m-%d')
-        datedetail = 'Activity Due is for  today i.e. ' + sd + '. To check for other date please set it in Timetracker'
+        datedetail = 'Activity Due is for  today i.e. ' + str(sd) + '. To check for other date please set it in Timetracker'
     else:
-        datedetail = 'Activity Due is for the date ' + sd + '. To check for other date please set it in Timetracker'
+        datedetail = 'Activity Due is for the date ' + str(sd) + '. To check for other date please set it in Timetracker'
 
-    data_daily = activity_Calendar(request,parameter1=sd,parameter2='daily')
-    data_weekly = activity_Calendar(request,parameter1=sd,parameter2='weekly')
-    data_monthly = activity_Calendar(request,parameter1=sd,parameter2='monthly')
+    data_daily = activity_Calendar(request,parameter1=str(sd),parameter2='daily')
+    data_weekly = activity_Calendar(request,parameter1=str(sd),parameter2='weekly')
+    data_monthly = activity_Calendar(request,parameter1=str(sd),parameter2='monthly')
     return render(request, 'CentralMI/16a_report_due.html', {'datedetail':datedetail,'model1':data_daily,'model2':data_weekly,'model3':data_monthly,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -1681,7 +1703,7 @@ def Feedback_Add_Form(request,feedbackquestionid):
 @login_required
 def Staff_Detail_View(request):
     view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='details')
+    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='staffdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     teamid = request.session.get('sessison_team')

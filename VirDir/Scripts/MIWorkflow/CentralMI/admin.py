@@ -79,6 +79,12 @@ admin.site.register(UatDetail)
 admin.site.register(UatStatus)
 
 admin.site.register(AssignView)
-admin.site.register(TblNavbarView)
+#admin.site.register(TblNavbarView)
+class TblNavbarViewAdmin(admin.ModelAdmin):
+    list_display = ('navbar_id','view_type','navbar_header','navbar_footer')
+    search_fields = ['navbar_id']
+admin.site.register(TblNavbarView,TblNavbarViewAdmin)
+
+
 admin.site.register(TeamMetricsData)
 admin.site.register(ViewType)

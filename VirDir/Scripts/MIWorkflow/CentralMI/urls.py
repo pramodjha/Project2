@@ -77,7 +77,8 @@ urlpatterns = [
 	url(r'^ot_add_form/(?P<trackerid>\d+)$',views.Ot_Add_Form, name = 'otform'),
 	url(r'^ot_edit_form/(?P<requestid>\d+)$', views.Ot_Edit_Form, name='editot'),
 # 7) Employee Detail
-	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'details'),
+	url(r'^default_detail_view/',views.My_Detail_View, name = 'details'),
+	url(r'^staff_detail_view/',views.Staff_Detail_View, name = 'staffdetail'),
 	url(r'^staff_edit_form/',views.Staff_Edit_Form, name = 'editstaffdetail'),
 	url(r'^staff_edit_manager_form/(?P<id>\d+)$',views.Staff_Edit_Manager_Form, name = 'editstaffbymanager'),
 	url(r'^my_detail_view/',views.My_Detail_View, name = 'mydetail'),
@@ -148,5 +149,7 @@ url(r'^raw_team_add_form/', views.Raw_Team_Add_Form, name='rawdteamdaddform'),
 url(r'^useful_link/', views.Useful_link_View, name='usefullinks'),
 url(r'^useful_link_edit_form/(?P<linkid>\d+)$', views.Useful_link_Edit_form, name='usefullinkeditform'),
 url(r'^useful_link_add_form/', views.Useful_link_Add_form, name='usefullinkaddform'),
+
+url(r'^edit_metrics/(?P<metricsid>\d+)$', views.Edit_Metrics, name='editmetrics'),
 
 	]
