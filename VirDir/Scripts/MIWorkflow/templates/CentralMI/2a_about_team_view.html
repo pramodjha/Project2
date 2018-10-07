@@ -15,31 +15,24 @@ r
 {% endblock %}
 
 {% block content %}
-<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 about_conai">
 
 {%for data in model %}
-<div class="col-sm-2 col-md-2 col-lg-2">
-
-<div class="flip-card">
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      {% if data.avatar == None or data.avatar == ""  %}
-        <div><img class="image1" src="{{ MEDIA_URL}}/about_team/default.gif" height='200px' width='200px'alt="Avatar" /></div>
-      {% else %}
-        <div><img class="image1" src="{{ MEDIA_URL}}/{{data.avatar}}" height='200px' width='200px' alt="Avatar" /></div>
-      {% endif %}
-
-    </div>
-    <div class="flip-card-back">
-      <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.username}} </span></div>
-      <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.teamdetail}} </span></div>
-      <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.designationmaster}} </span></div>
+<div class="col-xm-6 col-sm-4 col-md-3 col-lg-2 about_container">
+    <div>
+    {% if data.avatar == None or data.avatar == ""  %}
+    <img class="image1" src="{{ MEDIA_URL}}/about_team/default.gif" height='100%' width='100%'alt="Avatar" />
+    {% else %}
+    <img class="image1" src="{{ MEDIA_URL}}/{{data.avatar}}" height='100%' width='100%' alt="Avatar" />
+    {% endif %}
+    <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.username.first_name}}  {{ data.username.last_name}}</span></div>
+    <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.employeeid}} </span></div>
+    <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.DateofBirth}} </span></div>
+    <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.teamdetail}} </span></div>
+    <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.designationmaster}} </span></div>
+    <div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per team_member"> {{ data.email}} </span></div>
     </div>
   </div>
-</div>
-</div>
-
-
 {% endfor %}
 </div>
 </body>

@@ -387,6 +387,30 @@ h1 {
 
 
 /* for index page*/
+* {
+  box-sizing: border-box;
+}
+
+.index_container {
+  position: relative;
+}
+
+.index_container img {
+  border-radius: 0%;
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+
+  vertical-align: middle;}
+
+.index_container .text-block {
+  position: absolute;
+  top: 0;
+  color: #f1f1f1;
+  width: 90%;
+  padding: 0px;
+}
+
+
+
 .card:hover {
   background-color:  #333333;
   padding-left: 5px;
@@ -424,44 +448,17 @@ h1 {
 }
 
     /* for about team page*/
+    .about_container img {
+        border-radius: 50%;
+        box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.2);
 
-    .flip-card {
-      background-color: transparent;
-      width:200px;
-      height: 200px;
-      perspective: 1000px;
     }
 
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    }
+    .about_container img:hover {
+      border-radius: 0%;
+      box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
+      opacity:0.8;
 
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front, .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-    }
-
-    .flip-card-front {
-      background-color: #bbb;
-      color: black;
-    }
-
-    .flip-card-back {
-      background-color: #2980b9;
-      color: white;
-      transform: rotateY(180deg);
     }
 
     /* for what we do*/
