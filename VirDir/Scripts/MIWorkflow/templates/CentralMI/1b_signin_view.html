@@ -28,21 +28,18 @@
   </div>
   </div>
   <div class="col-sm-12 col-md-12 col-lg-6">
-  <div >
-  <label class="col-sm-12 col-md-12 col-lg-4  ">{% bootstrap_label 'Username'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.username  show_label=False  placeholder='Enter Username' %}</span>
-  </div>
-  <div>
-  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Password'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.password  show_label=False placeholder='Enter Password'   %}</span>
-  </div>
-  <div class="col-sm-12 col-md-12 col-lg-12">
-  <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+  <label class="col-sm-12 col-md-12 col-lg-2  ">{% bootstrap_label 'Username'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-6 ">{% bootstrap_field form.username  show_label=False  placeholder='Enter Username' %}</span>
+  <div class="col-sm-12 col-md-12 col-lg-4 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
   </div>
   </form>
-  <div ><a href="{% url 'password_reset' %}" >Forgot Password? </a></div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div class="col-sm-12 col-md-12 col-lg-12"><a href="{% url 'signinother' %}" >Sign In as Other User </a></div>
+  </div>
   {% if error == "Error" %}
+  <div class="col-sm-12 col-md-12 col-lg-12">
   <span class="col-sm-12 col-md-12 col-lg-8" style="color:red">Incorrect Password or Username</span>
+  </div>
   {% endif %}
 
 {% endblock %}

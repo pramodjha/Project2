@@ -22,9 +22,12 @@
   {% bootstrap_form_errors form type='non_fields' %}
 
   <div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12">
   <div class="col-sm-12 col-md-12 col-lg-12 head">
   <h3 >CREATE LOGIN CREDENTIAL</h3>
   </div>
+</div>
+
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2">{% bootstrap_label 'Username'  %}</label>
   <span class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_field form.username  show_label=False  placeholder='Enter Username' %}</span>
@@ -56,6 +59,8 @@
 
   <div class="col-sm-12 col-md-12 col-lg-12">
   <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+  <div class="col-sm-12 col-md-12 col-lg-12 fontstyle4"><i> {{msg}}</i></div>
+
   </div>
   </form>
 

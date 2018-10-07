@@ -4,7 +4,7 @@ from django.template import Context, loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm,TeamMetricsDataForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm,TeamMetricsDataForm, UsersigninasotherForm
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar, Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarMaster, TblNavbarHeaderMaster, TblNavbarFooterMaster, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, TblUsefulLinks, UatDetail, AssignView, TblNavbarView, TeamMetricsData
 from django.core import serializers
 from django.shortcuts import redirect
@@ -44,6 +44,7 @@ from django.http import HttpResponse
 import datetime as dt
 import csv
 from django.db.models import Q
+import getpass
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
@@ -752,6 +753,14 @@ def setdate(request):
 
 def Sign_Up_View(request):
     activetab = 'signup'
+    system_username = getpass.getuser()
+    system_username = system_username.replace(" ", "")
+    form = UserRegistrationForm(initial={'username':system_username})
+    Authusercount = User.objects.filter(username__in=[system_username]).count()
+    if Authusercount >= 1:
+        msg = "Username already Exists, you can't register with same username again"
+    else:
+        msg = ""
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -786,11 +795,11 @@ def Sign_Up_View(request):
                 return render(request,'CentralMI/15a_ErrorPage.html')
 
         else:
-            form = UserRegistrationForm()
-            return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab})
+#            form = UserRegistrationForm()
+            return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab,'msg':msg})
     else:
-        form = UserRegistrationForm()
-        return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab})
+#        form = UserRegistrationForm()
+        return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab,'msg':msg})
 
 
 def Sign_In_View(request):
@@ -799,22 +808,19 @@ def Sign_In_View(request):
     except:
         activetab = 'signin'
     tab = request.session.get('tabname')
+    system_username = getpass.getuser()
+    system_username = system_username.replace(" ", "")
+    form = UsersigninForm(initial={'username':system_username})
     if request.method == 'POST':
         form =  UsersigninForm(request.POST)
         if form.is_valid():
             userObj = form.cleaned_data
             username =  userObj['username']
-            password =  userObj['password']
-            #print(password)
             if (User.objects.filter(username=username).exists()):
-                user = authenticate(username = username, password = password)
-                if user is not None:
-                    login(request, user)
-                    return HttpResponseRedirect(reverse('home'))
-                else:
-                    form =  UsersigninForm()
-                    error = 'Error'
-                    return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
+                user = User.objects.get(username = system_username)
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request, user)
+                return HttpResponseRedirect(reverse('home'))
             else:
                 form =  UsersigninForm()
                 error = 'Error'
@@ -824,9 +830,47 @@ def Sign_In_View(request):
             error = 'Error'
             return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
     else:
-        form =  UsersigninForm()
+        #form =  UsersigninForm()
         error = 'NoError'
         return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
+
+
+def Sign_In_As_Other_View(request):
+    try:
+        activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
+    except:
+        activetab = 'signin'
+    tab = request.session.get('tabname')
+    form = UsersigninasotherForm()
+    if request.method == 'POST':
+        form =  UsersigninasotherForm(request.POST)
+        if form.is_valid():
+            userObj = form.cleaned_data
+            username =  userObj['username']
+            password =  userObj['password']
+            if (User.objects.filter(username=username).exists()):
+                user = authenticate(username = username, password = password)
+                if user is not None:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('home'))
+                else:
+                    form =  UsersigninasotherForm()
+                    error = 'Error'
+                    return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
+
+            else:
+                form =  UsersigninasotherForm()
+                error = 'Error'
+                return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
+        else:
+            form =  UsersigninasotherForm()
+            error = 'Error'
+            return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
+    else:
+        #form =  UsersigninForm()
+        error = 'NoError'
+        return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
+
 
 def Sign_Out(request):
     request.session.delete()

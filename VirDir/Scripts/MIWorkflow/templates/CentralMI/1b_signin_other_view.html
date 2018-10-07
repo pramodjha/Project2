@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+<!-- _________________________________________________________________________ -->
+{% block style %}
+{% endblock %}
+<!-- _________________________________________________________________________ -->
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+<!-- _________________________________________________________________________ -->
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+<!-- _________________________________________________________________________ -->
+{% block content %}
+  <form class="form" method="POST" action="" class='form-inline '>
+  {% csrf_token %}
+  {% bootstrap_form_errors form type='non_fields' %}
+
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div >
+  <h3 class="col-sm-12 col-md-12 col-lg-12 head">ENTER LOGIN CREDENTIAL</h3>
+  </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-6">
+  <div >
+  <label class="col-sm-12 col-md-12 col-lg-4  ">{% bootstrap_label 'Username'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.username  show_label=False  placeholder='Enter Username' %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Password'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.password  show_label=False placeholder='Enter Password'   %}</span>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+  </div>
+  </form>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+
+  <div ><a href="{% url 'password_reset' %}" >Forgot Password? </a></div>
+  <div ><a href="{% url 'signin' %}" >Sign In as Default </a></div>
+  </div>
+  {% if error == "Error" %}
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <span class="col-sm-12 col-md-12 col-lg-8" style="color:red">Incorrect Password or Username</span>
+  </div>
+  {% endif %}
+
+{% endblock %}
+
+
+
+
+<!-- _________________________________________________________________________ -->
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}
