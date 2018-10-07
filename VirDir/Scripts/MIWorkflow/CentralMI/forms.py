@@ -7,11 +7,11 @@ from datetime import datetime
 
 class UserRegistrationForm(forms.Form):
     username = forms.CharField(required = True, min_length=6,label = 'Username', max_length = 32, widget=forms.TextInput(attrs={'readonly':'readonly'}) )
-    email = forms.EmailField(required = True, label = 'Email', max_length = 32, widget=forms.EmailInput(attrs={'placeholder': 'Enter Email ID'}))
-    password = forms.CharField(required = True, label = 'Password', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Enter Password'}))
-    passwordagain = forms.CharField(required = True, label = 'Password1', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Enter Password (Again)'}))
-    firstname = forms.CharField(required = True, label = 'firstname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter First Name'}))
-    lastname = forms.CharField(required = True, label = 'lastname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Enter Last Name'}))
+    email = forms.EmailField(required = True, label = 'Email', max_length = 32, widget=forms.EmailInput(attrs={'placeholder': 'email@willistowerswatson.com'}))
+    password = forms.CharField(required = True, label = 'Password', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    passwordagain = forms.CharField(required = True, label = 'Password1', max_length = 32, widget = forms.PasswordInput(attrs={'placeholder': 'Password (Again)'}))
+    firstname = forms.CharField(required = True, label = 'firstname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
+    lastname = forms.CharField(required = True, label = 'lastname', max_length = 32, widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()

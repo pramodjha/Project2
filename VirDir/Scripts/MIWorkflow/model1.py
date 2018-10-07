@@ -1018,7 +1018,6 @@ class TeamMetricsData(models.Model):
     metrics_id = models.AutoField(primary_key=True)
     date_time = models.DateTimeField()
     teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
-    metrics_name = models.ForeignKey(TblTeamMetrics, models.DO_NOTHING, db_column='metrics_name', blank=True, null=True)
     requesttype = models.ForeignKey(Requesttypedetail, models.DO_NOTHING, db_column='requesttype', blank=True, null=True)
     total = models.IntegerField(db_column='Total', blank=True, null=True)  # Field name made lowercase.
     wip = models.IntegerField(db_column='WIP', blank=True, null=True)  # Field name made lowercase.

@@ -590,6 +590,7 @@ class Errorlog(models.Model):
         managed = False
         db_table = 'errorlog'
 
+
     def __str__(self):
         return str(self.error_id)
 
