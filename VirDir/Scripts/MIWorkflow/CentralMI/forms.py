@@ -130,6 +130,15 @@ class ReportsForm(forms.ModelForm):
         model = Reports
         fields = '__all__'
     deliverytime = forms.DateField(widget=forms.SelectDateWidget, initial=datetime.today())
+
+
+
+
+
+
+
+
+
     #deliverytime = forms.DateField(
     #    widget=forms.DateInput(format='%m/%d/%Y', attrs={'class': 'datetime-input'}),
     #    input_formats=('%m/%d/%Y', ))
@@ -257,6 +266,11 @@ class ActivityForm(forms.ModelForm):
     class Meta():
         model = Activity
         fields = '__all__'
+        widgets = { 'registereddate': forms.HiddenInput(),}
+
+    def __init__(self, *args, **kwargs):
+        super(ActivityForm, self).__init__(*args, **kwargs)
+        self.fields['registereddate'].label = "Registered Date"
 
 class MimemberForm(forms.ModelForm):
     class Meta():

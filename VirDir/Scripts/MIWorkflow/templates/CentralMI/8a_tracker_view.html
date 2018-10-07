@@ -4,24 +4,6 @@
 {% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
-<style>
-.middle{
-  text-align: center;
-}
-.box1 {
-  background-color: #4c4c4c;
-}
-.font{
-  font-size: 13px;
-}
-
-label, option {
-  font-size: 13px;
-
-
-}
-</style>
-
 {% endblock %}
 {% block navblockleft %}
 <h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
@@ -34,8 +16,8 @@ label, option {
 {% endblock %}
 {% block content %}
 <div class="col-sm-12 col-md-12 col-lg-12 ">
-  <div class="col-sm-12 col-md-12 col-lg-12 ">
-  <div class="col-sm-12 col-md-12 col-lg-2 box1">
+  <div class="col-sm-12 col-md-12 col-lg-12  box5">
+  <div class="col-sm-12 col-md-12 col-lg-2">
     <form method = "POST" action = "{% url 'sdate' %}" >
       {% csrf_token %}
           <label class="">Set Date</label>

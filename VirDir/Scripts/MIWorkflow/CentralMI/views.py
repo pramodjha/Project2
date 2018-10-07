@@ -47,6 +47,7 @@ from django.db.models import Q
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
+print(MEDIA_DIR)
 
 
 def export_users_csv(request):
@@ -1271,6 +1272,7 @@ def Data_anlayis(request):
     if type == '1':
         startdate, enddate, reportno, type, interval, team, member, data = Rawdata(request)
         view_dict = ''
+        value = ''
     elif type == '2':
         value = request.POST.get('button')
         print(value)
@@ -1279,7 +1281,9 @@ def Data_anlayis(request):
     else:
         startdate, enddate, reportno, type, interval, team, member, data = Rawdata(request)
         view_dict = ''
-    return render(request, 'CentralMI/12a_filter_tab.html',{'data':data,'view_dict':view_dict,'startdate':startdate, 'enddate':enddate, 'reportno':reportno, 'type':type, 'interval':interval, 'team':team, 'member':member ,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+        value = ''
+    return render(request, 'CentralMI/12a_filter_tab.html',{'data':data,'view_dict':view_dict,'startdate':startdate, 'enddate':enddate, 'reportno':reportno, 'type':type, 'interval':interval, 'team':team, 'member':member ,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,
+    'value':value})
 
 
 def Datarequiredforreport(request):
@@ -1418,6 +1422,7 @@ def About_Team_View(request):
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     model = Mimember.objects.all()
+    #print(MEDIA_URL)
     return render(request, 'CentralMI/2a_about_team_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -1565,9 +1570,46 @@ def Check_Status_View(request):
 
 ################## Reports
 
+#for dynamic form and front page model window
+#@login_required
+#def Report_Detail_View(request,activityid=None):
+#    view_header = 'Report'
+#    oncancel = 'report'
+#    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='reportsdetail')
+#    group_name = is_group(request,username=username)
+#    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+#    teamid = request.session.get('sessison_team')
+#    memberid = request.session.get('sessison_member')
+#    filterdict = create_dict_for_filter(request,field_name_list = ['teamname'], value_list = [teamid])
+#    model = Activity.objects.filter(**(filterdict))
+#    if memberid !=None:
+#        model = Activity.objects.filter(Q(primaryowner__in=memberid)|Q(secondaryowner__in=memberid))
+#    if activityid == None:
+#        form = ActivityForm()
+#        if request.method == 'POST':
+#            form = ActivityForm(request.POST,request.FILES)
+#            if form.is_valid():
+#                inst = form.save(commit=True)
+#                inst.save()
+#            return HttpResponseRedirect(reverse('report'))
+#    else:
+#        print(activityid)
+#        e = Activity.objects.get(activityid=activityid)
+#        model = Activity.objects.filter(activityid=activityid)
+#        form = ActivityForm(instance=e)
+#        if request.method == 'POST':
+#            e = Activity.objects.get(pk=activityid)
+#            form = ActivityForm(request.POST,request.FILES, instance=e)
+#            if form.is_valid():
+#                inst = form.save(commit=True)
+#                inst.save()
+
+#    return render(request, 'CentralMI/5a_reports_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form':form,'oncancel':oncancel})
+
 @login_required
 def Report_Detail_View(request):
     view_header = 'Report'
+    oncancel = 'report'
     activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='reportsdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
@@ -1583,6 +1625,8 @@ def Report_Detail_View(request):
 def Report_Add_Form(request):
     view_header = 'Report'
     activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
+    oncancel = 'report'
+    form_header = 'Add Report'
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
 
@@ -1592,12 +1636,12 @@ def Report_Add_Form(request):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('allreports'))
+            return HttpResponseRedirect(reverse('report'))
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-    return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+        return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header,'oncancel':oncancel})
+    return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header,'oncancel':oncancel})
 
 @login_required
 def Report_Edit_Form(request,requestid):
@@ -1605,7 +1649,6 @@ def Report_Edit_Form(request,requestid):
     activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
     e = Activity.objects.get(activityid=requestid)
     model = Activity.objects.filter(activityid=requestid)
     form = ActivityForm(instance=e)

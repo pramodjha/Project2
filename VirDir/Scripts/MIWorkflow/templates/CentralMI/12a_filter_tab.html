@@ -8,31 +8,11 @@
 <script src="{% static 'jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'jquery/myjquery.js' %}"></script>
 <style>
-.card{
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-  padding-left: 10px;
-  padding-top: 10px;
-  border-style: double;
-  height: 40px;
-  text-align: center;
-
-}
-.card1{
-  padding-left: 10px;
-  padding-top: 10px;
-  border-style: double;
-  text-align: center;
-}
-.middle{
-  text-align: center;
-}
-.card:hover {
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.2);
-  background-color:  #006680;
-  padding-left: 5px;
-  padding-top: 15px;
-  border-style: double;
-  text-align: center;
+thead > tr {
+  color: #cc8800;
+  font-size: 13px;
+  font-family: Cambria;
+  background-color: #333333;
 }
 </style>
 
@@ -52,34 +32,36 @@
 {% block content %}
 <div class="col-auto col-sm-12 col-md-12 col-lg-12">
    <div class="col-auto col-sm-12 col-md-12 col-lg-12  ">
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Start Date : {{startdate}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">End Date : {{enddate}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Data Choice : {{reportno}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Interval : {{interval}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Team : {{team}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card">Member : {{member}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Start Date : {{startdate}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">End Date : {{enddate}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Data Choice : {{reportno}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Interval : {{interval}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Team : {{team}}</div>
+   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Member : {{member}}</div>
   </div>
 </div>
+<div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
+</div>
+
    <div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
      <div class="col-auto col-sm-12 col-md-12 col-lg-12 middle ">
-     <div class="col-auto col-sm-6 col-md-6 col-lg-2 box card">
+     <div class="col-auto col-sm-6 col-md-6 col-lg-2 box card1_filter">
        <form action="" method="post">
-         <span><a href="{% url 'filterdata' %}" class="">Filter Form</a></span>
+         <span><a href="{% url 'filterdata' %}" class="fontstyle4 ">Filter Form</a></span>
        </form>
      </div>
-
      <div class="col-auto col-sm-6 col-md-6 col-lg-8">
      <form action="" method="post">
        {% csrf_token %}
        {% for key, values in view_dict.items %}
-       <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="box card" {%else%} class="box card"{% endif %}>
+       <input type="submit" name = "button" value={{values.value}}   {% if values.value == value %} class="box card1_filter" {%else%} class="box card_filter"{% endif %}>
        {% endfor %}
      </form>
      </div>
 
-  <div class="col-auto col-sm-6 col-md-6 col-lg-2  box card">
+  <div class="col-auto col-sm-6 col-md-6 col-lg-2  box card1_filter">
     <form action="" method="post">
-      <span><a href="{% url 'export_users_csv' %}" class="">Export to CSV</a></span>
+      <span><a href="{% url 'export_users_csv' %}" class="fontstyle4 ">Export to CSV</a></span>
     </form>
   </div>
   </div>

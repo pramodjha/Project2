@@ -53,8 +53,10 @@ urlpatterns = [
 
 # 5) Reports/Activity
 	# Report
+	url(r'^reports_detail_view/(?P<activityid>\d+)$',views.Report_Detail_View, name = 'report'),
 	url(r'^reports_detail_view/',views.Report_Detail_View, name = 'report'),
 	url(r'^reports_detail_view/',views.Report_Detail_View, name = 'reportsdetail'),
+
 	url(r'^report_add_form/',views.Report_Add_Form, name = 'reportform'),
 	url(r'^report_add_form/',views.Report_Add_Form, name = 'addreport'),
 	url(r'^report_edit_form/(?P<requestid>\d+)$', views.Report_Edit_Form, name='editreport'),
@@ -149,7 +151,6 @@ url(r'^raw_team_add_form/', views.Raw_Team_Add_Form, name='rawdteamdaddform'),
 url(r'^useful_link/', views.Useful_link_View, name='usefullinks'),
 url(r'^useful_link_edit_form/(?P<linkid>\d+)$', views.Useful_link_Edit_form, name='usefullinkeditform'),
 url(r'^useful_link_add_form/', views.Useful_link_Add_form, name='usefullinkaddform'),
-
 url(r'^edit_metrics/(?P<metricsid>\d+)$', views.Edit_Metrics, name='editmetrics'),
 
 	]

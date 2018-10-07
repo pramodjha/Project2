@@ -1,0 +1,71 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <table  id="example" class="table" style="width:100%">
+      <thead class="">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+        <td >ID <a href="{% url 'addreport' %}" class="glyphicon glyphicon-plus"></a></td>
+        <td >Report Type</td>
+        <td >Report Name</td>
+        <td >Report Frequency</td>
+        <td >Days Type (WD/CD)</td>
+        <td >Delivery Days</td>
+        <td >Delivery Times</td>
+        <td >Primary Owner</td>
+        <td >Secondary Owner</td>
+        <td >Description</td>
+        <td >Activity Status</td>
+        <td >Add: Error|Feedback  </td>
+        <td >Edit </td>
+
+
+        </tr>
+      </thead>
+      <tbody class="">
+    {%for data in model %}
+      <tr class="">
+      <td>{{data.activityid}} </td>
+      <td>{{data.requestcategorys }}</td>
+      <td>{{data.name }}</td>
+      <td>{{data.frequency }}</td>
+      <td>{{data.date_types }}</td>
+      <td>{{data.delivery_days }}</td>
+      <td>{{data.deliverytime }}</td>
+      <td>{{data.primaryowner }}</td>
+      <td>{{data.secondaryowner }}</td>
+      <td>{{data.description }}</td>
+        <td>{{data.activitystatus }}</td>
+        <td> <a href="{% url 'errorlog' data.activityid %}" class="glyphicon glyphicon-plus"></a> | <a  href="{% url 'viewfeedbackquestion' data.activityid  %}" class="glyphicon glyphicon-plus"></a></td>
+        <td> <a href="{% url 'editreport' data.activityid %}" class="glyphicon glyphicon-pencil"></a></td>
+        {% endfor %}
+      </tr></br>
+    </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+
+{% endblock %}
+{% block footer_right %}
+<span class="subheaderformat"> Click on ID to log Error & Report Name to log Feedback</span>
+{% endblock %}
