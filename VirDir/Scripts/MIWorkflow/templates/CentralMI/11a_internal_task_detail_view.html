@@ -22,7 +22,7 @@
     <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
       {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
       <td >ID <a href="{% url 'addinternaltaskdetail' %}" id="addinternaltask" name="addinternaltask"  class="btn btn-default"></td>
-      {% elif group_name == "mi_team" %}
+      {% else %}
       <td >ID </td>
       {% endif %}
       <td >Internal Task Datetime</td>
@@ -32,15 +32,20 @@
   {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
   <td> View | Add | Edit </td>
   <td> View Response </td>
-  {% elif group_name == "mi_team" %}
+  {% else %}
       <td>Add Response </td>
   {% endif %}
     </tr>
     </thead>
     <tbody class="">
   {%for data in model %}
-    <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+  {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
       <td ><a href="{% url 'editinternaltaskdetail' data.internaltaskid %}">{{data.internaltaskid }} </a></td>
+  {% else %}
+      <td>{{data.internaltaskid }} </td>
+      {% endif %}
+
       <td>{{data.internaltaskdatetime }}</td>
       <td >{{data.internaltaskquestion }}</td>
       <td >{{data.status }}</td>

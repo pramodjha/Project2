@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-{% if group_name == "manager" or group_name == "team_leadear" or group_name == "technical_leadear" or group_name == "mi_team" %}
+{% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" or group_name == "mi_team" %}
 <div id=pagecontent data-view-url="{% url 'ajax_load_view' %}" >
 <div class="col-sm-12 col-md-12 col-lg-12 ">
 <form method="post" id="extractdata"  name="form" novalidate>
@@ -337,7 +337,7 @@ $("#id_teamfilter").change(function () {
 
   });
 
-  
+
 </script>
 
 {% endblock %}

@@ -15,9 +15,12 @@
 {% endblock %}
 
 {% block content %}
+{% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
 <div class="col-sm-12 col-md-12 col-lg-12">
 <div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'successstoriesadd' %}" id="successtories" name="Add" class="btn btn-default">Add Stories</a></div>
 </div>
+{% else %}
+{% endif %}
 <div class="col-sm-12 col-md-12 col-lg-12">
 </div>
 <div class="col-sm-12 col-md-12 col-lg-12">

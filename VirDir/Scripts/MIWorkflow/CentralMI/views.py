@@ -50,6 +50,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 print(MEDIA_DIR)
 
+@login_required(login_url='signin')
+def redirect_to_home(request):
+    return index(request)
 
 def export_users_csv(request):
   response = HttpResponse(content_type='text/csv')

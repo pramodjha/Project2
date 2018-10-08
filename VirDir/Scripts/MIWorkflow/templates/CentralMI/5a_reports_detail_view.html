@@ -19,7 +19,11 @@
     <table  id="example" class="table" style="width:100%">
       <thead class="">
       <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+        {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
         <td >ID <a href="{% url 'addreport' %}" class="glyphicon glyphicon-plus"></a></td>
+        {% else %}
+        <td >ID </td>
+        {% endif %}
         <td >Report Type</td>
         <td >Report Name</td>
         <td >Report Frequency</td>
@@ -31,7 +35,10 @@
         <td >Description</td>
         <td >Activity Status</td>
         <td >Add: Error|Feedback  </td>
+        {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
         <td >Edit </td>
+        {% else %}
+        {% endif %}
 
 
         </tr>
@@ -51,7 +58,10 @@
       <td>{{data.description }}</td>
         <td>{{data.activitystatus }}</td>
         <td> <a href="{% url 'errorlog' data.activityid %}" class="glyphicon glyphicon-plus"></a> | <a  href="{% url 'viewfeedbackquestion' data.activityid  %}" class="glyphicon glyphicon-plus"></a></td>
+        {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
         <td> <a href="{% url 'editreport' data.activityid %}" class="glyphicon glyphicon-pencil"></a></td>
+        {% else %}
+        {% endif %}
         {% endfor %}
       </tr></br>
     </tbody>

@@ -23,6 +23,8 @@ urlpatterns = [
     #url(r'^login/$', auth_views.login, {'template_name': 'CentralMI/LoginForm.html'}, name='login'),
     #url(r'^logout/$', auth_views.logout, {'next_page': 'login'},name='logout'),
     url(r'^admin/', admin.site.urls),
+    url(r'^$', include('CentralMI.urls')),
+
     url(r'^CMI/', include('CentralMI.urls')),
     url(r'^CMI/report_builder/', include('report_builder.urls')),
     url(r'^CMI/password_reset/$', auth_views.password_reset, name='password_reset'),
