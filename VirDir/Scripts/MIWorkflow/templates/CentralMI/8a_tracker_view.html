@@ -129,7 +129,7 @@
   <div class="col-sm-12 col-md-12 col-lg-12">
   <table  class="table " id="example" style="width:100%">
     <thead class="">
-    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+    <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
      <td >Tracking ID</td>
      <td class="hidden">Registered Date</td>
      <td class="hidden">Tracking Date</td>
@@ -151,8 +151,8 @@
    </thead>
    <tbody class="">
    {%for data in model %}
-   <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
-     <td ><a  href="{% url 'otform' data.timetrackerid %}">{{data.timetrackerid }} </a> </td>
+   <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
+     <td ><a  href="{% url 'otform' data.timetrackerid %}" class="fontstyle4">{{data.timetrackerid }} </a> </td>
      <td class="hidden">{{data.registerdatetime    }}</td>
      <td class="hidden">{{data.trackingdatetime }}</td>
      <td class="hidden">{{data.mimember }}</td>

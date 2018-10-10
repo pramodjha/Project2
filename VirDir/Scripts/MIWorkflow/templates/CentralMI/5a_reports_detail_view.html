@@ -18,7 +18,7 @@
   <div class="col-sm-12 col-md-12 col-lg-12">
     <table  id="example" class="table" style="width:100%">
       <thead class="">
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
         {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
         <td >ID <a href="{% url 'addreport' %}" class="glyphicon glyphicon-plus"></a></td>
         {% else %}
@@ -43,7 +43,7 @@
 
         </tr>
       </thead>
-      <tbody class="">
+      <tbody class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
     {%for data in model %}
       <tr class="">
       <td>{{data.activityid}} </td>

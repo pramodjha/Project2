@@ -185,7 +185,7 @@ def HomePage_Data(request,username,info,session_teamid,session_memberid):
     return mv, wv, dv, mvOT, wvOT, dvOT, mvcore, wvcore, dvcore, mvutilisation, wvutilisation, dvutilisation, dv_error, wv_error, mv_error, form
 
 @login_required
-def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggregate=None,field_name_list=None,value_list=None,days_range=None,range_type=None,year_range=0,type=None,memberid=None,teamid=None,no_of_member=None,averagetime=None,calculation_type='sum'):
+def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggregate=None,field_name_list=None,value_list=None,days_range=None,range_type=None,year_range=0,type=None,memberid=None,teamid=None,no_of_member=None,averagetime=None,calculation_type='sum',LeaverecordCount=None):
     key = []
     value = []
     cumulativedays = 0
@@ -260,7 +260,7 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             total = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = utilisation_list  ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             totalcoreot = (total + core_ot)
             no_of_member = 1 if no_of_member == 0 else no_of_member
-            print(str(date1) + ":" + str(total_core) + ":" + str((averagetime * no_of_member) + core_ot))
+            #print(str(date1) + ":" + str(total_core) + ":" + str((averagetime * no_of_member) + core_ot))
             try:
                 v = round((total_core/((no_of_member * averagetime) + core_ot)) * 100,2)
                 v = v if v != 0.0 else '00.00'
@@ -388,6 +388,9 @@ def Index(request):
     filterdict = create_dict_for_filter(request,field_name_list = ['username','teamdetail'], value_list = [memberid,teamid])
     no_of_member = Mimember.objects.filter(**(filterdict)).count()
     model_team_metrics = TeamMetricsData.objects.all()
+    filterdict1 = create_dict_for_filter(request,field_name_list = ['userid','userid__teamdetail'], value_list = [memberid,teamid])
+    LeaverecordCount = TblLeaveRecord.objects.filter(**(filterdict1)).count()
+    print(LeaverecordCount)
 
     if group_name ==  'manager' or group_name ==  'team_leader' or group_name ==  'technical_leader' or group_name ==  'mi_team':
         form = FilteredForm(initial={'teamfilter':teamid, 'memberfilter':memberid})
@@ -430,9 +433,9 @@ def Index(request):
         wv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
         mv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
 
-        dvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=420)
-        wvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=2100)
-        mvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=9240)
+        dvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=420,LeaverecordCount=LeaverecordCount)
+        wvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=2100,LeaverecordCount=LeaverecordCount)
+        mvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=9240,LeaverecordCount=LeaverecordCount)
         dvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
 
 

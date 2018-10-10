@@ -18,7 +18,7 @@
   <div class="col-sm-12 col-md-12 col-lg-12">
     <table  class="table" id="example" style="width:100%">
       <thead class="">
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
         <td >OT ID</td>
         <td >TimeTracker Ref</td>
         <td >Mimember</td>
@@ -26,23 +26,22 @@
         <td >End Date-Time</td>
         <td >OT in Mins.</td>
         <td >OT Status</td>
-        <td> Edit </td>
         </tr>
       </thead>
       <tbody class="">
     {%for data in model %}
-      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
-        <td >{{data.ot_id }} </a> </td>
+      <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
+        {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
+        <td > <a href="{% url 'editot' data.ot_id %}" class="fontstyle4">{{data.ot_id }}</a> </td>
+        {% else %}
+        <td > {{data.ot_id }}</td>
+        {% endif %}
         <td>{{data.timetrackers }}</td>
         <td>{{data.timetrackers.mimember }}</td>
         <td>{{data.ot_startdatetime }}</td>
         <td>{{data.ot_enddatetime }}</td>
         <td>{{data.ot_hrs }}</td>
         <td>{{data.ot_status }}</td>
-        {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-        <td> <a href="{% url 'editot' data.ot_id %}" class="glyphicon glyphicon-pencil"></a> </td>
-        {% else %}
-        {% endif %}
         {% endfor %}
       </tr></br>
     </tbody>

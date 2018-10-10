@@ -334,7 +334,7 @@ h1 {
 
   /*------------------------font_Color------------------------------------------------*/
 
-.fontstyle1{color: #999999;}
+.fontstyle1{color: #e6e6e6;}
 .fonthoverstyle1{color: #595959;}
 .fontstyle4{color: #cc8800;}
 .fonthoverstyle4{color: #ff6666;}
@@ -347,6 +347,8 @@ h1 {
 .fontsize13{font-size: 13px;}
 .fontsize14{font-size: 14px;}
 .fontsize15{font-size: 15px;}
+.fontsize18{font-size: 18px;}
+
 .fontsize20{font-size: 20px;}
 .fontsize25{font-size: 25px;}
 .fontsize30{font-size: 30px;}

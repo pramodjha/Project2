@@ -19,7 +19,7 @@
     <span class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Check Status</span><span class="fontstyle4 fontsize15 fontfamilycambria widthsize30per"> Click on ID to view detail</span>
     <table  class="table " id="example" style="width:100%">
       <thead class="">
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
         <td >Request ID</td>
         <td >Request Raised Date</td>
         <td >Request Type</td>
@@ -30,7 +30,7 @@
       <tbody class="">
     {%for data in model %}
       <tr class="">
-        <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
+        <td ><a class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
         <td>{{data.requestraiseddate }}</td>
         <td>{{data.requesttypedetail }}</td>
         <td>{{data.prioritydetail }}</td>
