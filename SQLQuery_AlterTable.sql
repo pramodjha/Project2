@@ -129,3 +129,11 @@ ADD FOREIGN KEY ([testedby]) REFERENCES auth_user(id);
 
 Alter table [CentralMI].[dbo].[UAT_detail]
 ADD FOREIGN KEY ([updatedby]) REFERENCES auth_user(id);
+
+
+ALTER TABLE mimember
+ALTER COLUMN PhoneNumber varchar(10);
+
+
+ALTER TABLE timetrackers
+ALTER COLUMN PhoneNumber varchar(10);

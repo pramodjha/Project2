@@ -114,4 +114,23 @@
 </div>
 </form>
 
+<script>
+$(document).ready(function () {
+  $('#id_dateofjoining').datepicker({
+    autoclose: true,
+    format: "yyyy-mm-dd"
+  });
+});
+
+
+$(document).ready(function () {
+  $('#id_dateofbirth').datepicker({
+    autoclose: true,
+    format: "yyyy-mm-dd"
+  });
+});
+
+</script>
+
+
 {% endblock %}

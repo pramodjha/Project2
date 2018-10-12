@@ -44,16 +44,15 @@
 </form>
 
 <script>
-$('#id_leave_date').datetimepicker({
-    //language:  'fr',
-weekStart: 1,
-todayBtn:  1,
-autoclose: 1,
-todayHighlight: 1,
-startView: 2,
-forceParse: 0,
-showMeridian: 1
+
+$(document).ready(function () {
+  $('#id_leave_date').datepicker({
+    autoclose: true,
+    format: "yyyy-mm-dd"
+  });
 });
+
+
 </script>
 
 

@@ -24,34 +24,34 @@
           <span  class="">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>{% buttons submit='-- Set Date --' %}{% endbuttons layout='inline' %}
     </form>
   </div>
-  <div class="col-sm-12 col-md-12 col-lg-10 middle box3 font">
+  <div class="col-sm-12 col-md-12 col-lg-10 middle box3">
   <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="fontstyle4">A:Worked</span>
+    <span class="fontstyle4 fontsize15">A:Worked</span>
     {% for key, value in dv.items %}
-    <span class="">{{value}}</span>
+    <span class="fontstyle1 fontsize18">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="fontstyle4">B:OT</span>
+    <span class="fontstyle4 fontsize15">B:OT</span>
     {% for key, value in dvOT.items %}
-    <span class="">{{value}}</span>
+    <span class="fontstyle1 fontsize18">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-3 " >
-    <span class="fontstyle4">C:Total (A+B) </span>
+    <span class="fontstyle4 fontsize15">C:Total (A+B) </span>
     {% for key, value in dvAll.items %}
-    <span class="">{{value}}</span>
+    <span class="fontstyle1 fontsize18">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="fontstyle4">D:Core </span>
+    <span class="fontstyle4 fontsize15">D:Core </span>
     {% for key, value in dvcore.items %}
-    <span class="">{{value}}</span>
+    <span class="fontstyle1 fontsize18">{{value}}</span>
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-3 " >
-    <span class="fontstyle4">Util. (B+D/420+B) </span>
-    <span class="">{{dvutilisation}}</span>
+    <span class="fontstyle4 fontsize15">Util. (B+D/420+B) </span>
+    <span class="fontstyle1 fontsize18">{{dvutilisation}}</span>
   </div>
 </div>
 
@@ -119,10 +119,10 @@
     </div>
   </div>
 <div class="middle box3 font">
-  <span>OT Applied for ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Applied}}</span>
-  <span>OT Accpeted ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Accepted}}</span>
-  <span>OT Rejected ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Rejected}}</span>
-  <span>OT Pending ID:</span><span class="fontstyle4 fontsize12 fontfamilycambria widthsize25per">{{OT_Pending}}</span>
+  <span class="fontstyle1 fontsize15 ">OT Applied for ID:</span><span class="fontstyle4 fontsize15 ">{{OT_Applied}}</span>
+  <span class="fontstyle1 fontsize15 ">OT Accpeted ID:</span><span class="fontstyle4 fontsize15">{{OT_Accepted}}</span>
+  <span class="fontstyle1 fontsize15 ">OT Rejected ID:</span><span class="fontstyle4 fontsize15">{{OT_Rejected}}</span>
+  <span class="fontstyle1 fontsize15 ">OT Pending ID:</span><span class="fontstyle4 fontsize15 ">{{OT_Pending}}</span>
 </div>
   </div>
 </div>

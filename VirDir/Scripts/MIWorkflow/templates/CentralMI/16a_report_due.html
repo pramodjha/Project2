@@ -17,10 +17,10 @@
 <div class="col-sm-4 col-md-4 col-lg-4">
   <table  class="table" id="" style="width:100%">
     <thead class="">
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
       <td >Daily</td>
       </tr>
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
       <td >ID</td>
       <td >Name</td>
       <td >DueDate</td>
@@ -29,7 +29,7 @@
     </thead>
     <tbody class="">
   {%for data in model1 %}
-  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+  <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
       <td><a href="{% url 'addtotimetracker' data.activityid %}" class="fontstyle4">{{data.activityid}}</a></td>
       <td>{{data.name }}</td>
       <td>{{data.date }}</td>
@@ -43,10 +43,10 @@
 <div class="col-sm-4 col-md-4 col-lg-4">
   <table  class="table" id="" style="width:100%">
     <thead class="">
-    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+    <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
     <td >Weekly</td>
     </tr>
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
       <td >ID</td>
       <td >Name</td>
       <td >DueDate</td>
@@ -55,7 +55,7 @@
     </thead>
     <tbody class="">
   {%for data in model2 %}
-  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+  <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
       <td><a href="{% url 'addtotimetracker' data.activityid %}" class="fontstyle4">{{data.activityid}}</a></td>
       <td>{{data.name }}</td>
       <td>{{data.date }}</td>
@@ -72,11 +72,11 @@
 <div class="col-sm-4 col-md-4 col-lg-4">
   <table  class="table" id="" style="width:100%">
     <thead class="">
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
       <td >Monthly</td>
       </tr>
 
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
       <td >ID</td>
       <td >Name</td>
       <td >DueDate</td>
@@ -85,7 +85,7 @@
     </thead>
     <tbody class="">
   {%for data in model3 %}
-  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+  <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
       <td><a href="{% url 'addtotimetracker' data.activityid %}" class="fontstyle4">{{data.activityid}}</a></td>
       <td>{{data.name }}</td>
       <td>{{data.date }}</td>

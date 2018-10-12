@@ -4,8 +4,6 @@
 {% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
-<script src="{% static 'jquery/jquery-ui.js' %}"></script>
-<script src="{% static 'jquery/myjquery.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -53,16 +51,13 @@
 </form>
 
 <script>
-$('#id_leave_date').datetimepicker({
-    //language:  'fr',
-weekStart: 1,
-todayBtn:  1,
-autoclose: 1,
-todayHighlight: 1,
-startView: 2,
-forceParse: 0,
-showMeridian: 1
+$(document).ready(function () {
+  $('#id_raw_activity_scheduled').datepicker({
+    autoclose: true,
+    format: "yyyy-mm-dd"
+  });
 });
+
 </script>
 
 

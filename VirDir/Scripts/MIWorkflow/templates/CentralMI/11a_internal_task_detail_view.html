@@ -19,7 +19,7 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
   <table  class="table " id="example" style="width:100%">
     <thead class="">
-    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
+    <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
       {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
       <td >ID <a href="{% url 'addinternaltaskdetail' %}" id="addinternaltask" name="addinternaltask"  class="btn btn-default"></td>
       {% else %}
@@ -39,7 +39,7 @@
     </thead>
     <tbody class="">
   {%for data in model %}
-      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+      <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
   {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
       <td ><a href="{% url 'editinternaltaskdetail' data.internaltaskid %}">{{data.internaltaskid }} </a></td>
   {% else %}

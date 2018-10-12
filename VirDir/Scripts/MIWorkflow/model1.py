@@ -521,7 +521,7 @@ class Mimember(models.Model):
     dateofjoining = models.DateField(db_column='DateofJoining', blank=True, null=True)  # Field name made lowercase.
     dateofbirth = models.DateField(db_column='DateofBirth', blank=True, null=True)  # Field name made lowercase.
     address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
-    phonenumber = models.IntegerField(db_column='PhoneNumber', blank=True, null=True)  # Field name made lowercase.
+    phonenumber = models.CharField(db_column='PhoneNumber', max_length=10, blank=True, null=True)  # Field name made lowercase.
     avatar = models.CharField(db_column='Avatar', max_length=255, blank=True, null=True)  # Field name made lowercase.
     aboutme = models.TextField(blank=True, null=True)
 

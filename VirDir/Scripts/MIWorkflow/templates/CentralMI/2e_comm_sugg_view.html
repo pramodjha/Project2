@@ -15,10 +15,7 @@
 {% endblock %}
 
 {% block content %}
-{% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
 <div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'commsuggadd' %}" id="comments_suggestion" name="Add" class="btn btn-default">Add Comments/suggestion</a></div>
-{% else %}
-{% endif %}
 
 {% for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4 ">

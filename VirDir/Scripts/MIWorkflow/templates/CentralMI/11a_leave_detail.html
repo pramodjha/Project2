@@ -19,7 +19,7 @@
   <div class="col-sm-9 col-md-9 col-lg-9">
     <table  class="table" id="example" style="width:100%">
       <thead class="">
-      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+      <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1 " >
         <td >ID<a href="{% url 'leaverecordform' %}" class="glyphicon glyphicon-plus"></a></td>
         <td >Date Time</td>
         <td >Leave Date</td>
@@ -29,7 +29,7 @@
       </thead>
       <tbody class="">
     {%for data in model %}
-        <td><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'leaverecordeditform' data.leaverecordid %}">{{data.leaverecordid}} </a></td>
+        <td><a class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'leaverecordeditform' data.leaverecordid %}">{{data.leaverecordid}} </a></td>
         <td>{{data.date_time }}</td>
         <td>{{data.leave_date }}</td>
         <td>{{data.userid }}</td>

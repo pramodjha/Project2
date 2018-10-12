@@ -19,42 +19,41 @@
 <div class="col-sm-12 col-md-12 col-lg-12 ">
 {%for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4">
-<h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Avatar</h>
+<div class="fontstyle1 fontsize25 fontfamilycambria"> Avatar</div>
 <div><img src="{{ MEDIA_URL }}/{{ data.avatar}}" height='100%' width='100%'alt="Avatar" /></div>
-<h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> About Me</h>
-<div><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.aboutme }} </span></div>
-
+<div class="fontstyle1 fontsize20 fontfamilycambria"> About Me</div>
+<div><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.aboutme }} </span></div>
 </div>
 
 {% endfor %}
 
 {%for data in model1 %}
 <div class="col-sm-4 col-md-4 col-lg-4">
-<h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Basic Details (1)</h>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Username : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.username }} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> First Name : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.first_name  }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Last Name : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.last_name}} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Email : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.email}} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Registered Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.date_joined }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Last Login : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.last_login }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Superuser : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.is_superuser }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Staff : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.is_staff}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Active : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.is_active}}</span></div>
+<div class="fontstyle1 fontsize25 fontfamilycambria widthsize25per"> Basic Details (1)</div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Username : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.username }} </span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> First Name : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{data.first_name  }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Last Name : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.last_name}} </span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Email : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.email}} </span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Registered Date : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.date_joined }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Last Login : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.last_login }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Superuser : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.is_superuser }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Staff : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.is_staff}}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Active : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.is_active}}</span></div>
 </div>
 
 {% endfor %}
 
 {%for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4">
-<h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Other Details (2)</h>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Team Detail : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.teamdetail  }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Designation : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Employee ID : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.employeeid}} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> DOJ : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.dateofjoining }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> DOB : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.dateofbirth }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Address : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.address }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Phone No. : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.phonenumber}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Avatar : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.avatar }} </span></div>
+<h class="fontstyle1 fontsize25 fontfamilycambria widthsize25per"> Other Details (2)</h>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Team Detail : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{data.teamdetail  }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Designation : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.designationmaster}} </span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Employee ID : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.employeeid}} </span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> DOJ : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.dateofjoining }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> DOB : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.dateofbirth }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Address : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.address }}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Phone No. : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.phonenumber}}</span></div>
+<div><label class="fontstyle4 fontsize18 fontfamilycambria widthsize25per"> Avatar : </label><span class="fontstyle1 fontsize18 fontfamilycambria widthsize25per"> {{ data.avatar }} </span></div>
 
 </div>
 {% endfor %}
