@@ -3131,7 +3131,7 @@ def TimeTracker_View(request):
     form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'startdatetime':starttime,'stopdatetime':stoptime})
     form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
     form.fields['reports'].queryset = Activity.objects.all()
-    model = Timetrackers.objects.exclude(valid_invalid__in=[2])
+    model = Timetrackers.objects.exclude(valid_invalid__in=[2]).filter(trackingdatetime__in=[sd]).filter(mimember__username__username__in=[username])
     if request.method == 'POST':
         form = TimetrackersForm(request.POST)
         form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
