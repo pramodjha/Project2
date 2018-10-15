@@ -19,7 +19,7 @@
     <table  id="example" class="table" style="width:100%">
       <thead class="">
       <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
-        <td >ID <a href="{% url 'usefullinkaddform' %}" class="glyphicon glyphicon-plus"></a></td>
+        <td >ID <a href="{% url 'usefullinkaddform' %}" class="glyphicon glyphicon-plus fontstyle12"></a></td>
         <td >Date Time</td>
         <td >Team </td>
         <td >Updated By</td>
@@ -29,11 +29,11 @@
       <tbody class="">
     {%for data in model %}
       <tr class="">
-      <td><a href="{% url 'usefullinkeditform' data.linkid %}">{{data.linkid}}</a></td>
+      <td><a href="{% url 'usefullinkeditform' data.linkid %}" class="fontstyle12">{{data.linkid}}</a></td>
       <td>{{data.date_time }}</td>
       <td>{{data.teamdetail }}</td>
       <td>{{data.mimember }}</td>
-      <td><a href='{{data.link }}' id="link" name="link" >{{data.link }}</a</td>
+      <td><a href='{{data.link }}' class="fontstyle12" id="link" name="link" >{{data.link }}</a</td>
    {% endfor %}
       </tr></br>
     </tbody>
@@ -49,5 +49,4 @@
 
 {% endblock %}
 {% block footer_right %}
-<span class="subheaderformat"> Click on ID to log Error & Report Name to log Feedback</span>
 {% endblock %}

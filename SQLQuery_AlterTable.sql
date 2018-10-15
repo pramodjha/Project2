@@ -136,4 +136,26 @@ ALTER COLUMN PhoneNumber varchar(10);
 
 
 ALTER TABLE timetrackers
-ALTER COLUMN PhoneNumber varchar(10);
+ADD  OT_id int;
+
+Alter table [CentralMI].[dbo].[timetrackers]
+ADD FOREIGN KEY ([OT_id]) REFERENCES ot_detail(ot_id);
+
+ALTER TABLE timetrackers
+ADD  valid_invalid int;
+
+Alter table [CentralMI].[dbo].[timetrackers]
+ADD FOREIGN KEY ([valid_invalid]) REFERENCES valid_invalid(valid_invaidid);
+
+ALTER TABLE tbl_raw_team_master
+ADD  valid_invalid int;
+
+Alter table [CentralMI].[dbo].[tbl_raw_team_master]
+ADD FOREIGN KEY ([valid_invalid]) REFERENCES valid_invalid(valid_invaidid);
+
+ALTER TABLE [tbl_raw_team_master]
+ADD  raw_management int;
+
+Alter table [CentralMI].[dbo].[tbl_raw_team_master]
+ADD FOREIGN KEY ([raw_management]) REFERENCES options(optionsid);
+

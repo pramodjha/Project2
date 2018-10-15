@@ -4,7 +4,7 @@ from django.template import Context, loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm,TeamMetricsDataForm, UsersigninasotherForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm,TeamMetricsDataForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar, Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarMaster, TblNavbarHeaderMaster, TblNavbarFooterMaster, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, TblUsefulLinks, UatDetail, AssignView, TblNavbarView, TeamMetricsData
 from django.core import serializers
 from django.shortcuts import redirect
@@ -246,7 +246,7 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             result = OrderedDict(zip(key, value))
         elif type == "coreandot":
             core = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
-            core_ot = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
+            core_ot = calculation(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
             total_core = core + core_ot
             v = hours_min(request,time_in_min=total_core,date=sd,dict="Yes")
             key.append(str(date1))
@@ -255,7 +255,7 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
         elif type == "utilisation":
             utilisation_list = [memberid,teamid,None]
             core = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
-            core_ot = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
+            core_ot = calculation(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
             total_core = core + core_ot
             total = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = utilisation_list  ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             totalcoreot = (total + core_ot)
@@ -420,23 +420,23 @@ def Index(request):
 
         filterdict = create_dict_for_filter(request,field_name_list = ['username','teamdetail'], value_list = [memberid,teamid])
         no_of_member = Mimember.objects.filter(**(filterdict)).count()
-        dv = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
-        dvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
-        dvOT = start_end_date(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
-        wv = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
-        wvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
-        wvOT = start_end_date(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
-        mv = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
-        mvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
-        mvOT = start_end_date(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
+        dv = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
+        dvcore = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
+        dvOT = start_end_date(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
+        wv = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
+        wvcore = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
+        wvOT = start_end_date(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
+        mv = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,None],values='mimember',aggregate='totaltime')
+        mvcore = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
+        mvOT = start_end_date(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'],values='timetrackers__mimember',aggregate='ot_hrs')
         dv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
         wv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
         mv_error = start_end_date(request,model=Errorlog.objects.all(),datefield='error_occurancedate',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['error_reportedto','error_reportedto__teamdetail'], value_list = [memberid,teamid],values='error_reportedto',aggregate='error_reportedto',type="error",calculation_type='count')
 
-        dvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=420,LeaverecordCount=LeaverecordCount)
-        wvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=2100,LeaverecordCount=LeaverecordCount)
-        mvutilisation = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=9240,LeaverecordCount=LeaverecordCount)
-        dvcore = start_end_date(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
+        dvutilisation = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=420,LeaverecordCount=LeaverecordCount)
+        wvutilisation = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=5,range_type='Weekly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=2100,LeaverecordCount=LeaverecordCount)
+        mvutilisation = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=6,range_type='Monthly',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',memberid=memberid,teamid=teamid,type="utilisation",no_of_member=no_of_member,averagetime=9240,LeaverecordCount=LeaverecordCount)
+        dvcore = start_end_date(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',sd=sd,days_range=10,range_type='Daily',year_range=0,field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'],value_list = [memberid,teamid,'core'],values='mimember',aggregate='totaltime',type='coreandot')
 
 
         return render(request, 'CentralMI/1d_index.html',{'form':form,'username':username,'activetab':activetab,
@@ -509,16 +509,13 @@ def Add_To_Timetracker(request,activityid):
                 return HttpResponseRedirect(reverse('reportdue'))
     return render(request, 'CentralMI/16b_add_to_timetracker.html', {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
-
-def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
-    global exportdata
-    df1 = pd.DataFrame(list(Timetrackers.objects.all().values()))
+def data_formation_Timetracker(startdate=None,enddate=None):
+    df1 = pd.DataFrame(list(Timetrackers.objects.filter(trackingdatetime__range=[startdate,enddate]).values()))
     df2 = pd.DataFrame(list(Mimember.objects.all().values()))
     df3 = pd.DataFrame(list(Teamdetail.objects.all().values()))
     df4 = pd.DataFrame(list(AuthUser.objects.all().values()))
     df5 = pd.DataFrame(list(Requestcategorys.objects.all().values()))
     df6 = pd.DataFrame(list(Requestsubcategory.objects.all().values()))
-
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['mimember_id'], right_on = ['mimemberid'])
     df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['teamdetail_id_y'], right_on = ['teamid'])
     df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['username_id'], right_on = ['id'])
@@ -529,6 +526,11 @@ def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=No
     df_merge5['trackingdatetime_monthyear'] = df_merge5['trackingdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
     df_merge5['trackingdatetime_week'] = df_merge5['trackingdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    return df_merge5
+
+def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
+    global exportdata
+    df_merge5 = data_formation_Timetracker(startdate=startdate,enddate=enddate)
     df_merge5 = df_merge5[df_merge5['teamname']==team] if team != 'None' else df_merge5
     df_merge5 = df_merge5[df_merge5['username']==member] if member != 'None' else df_merge5
     if interval == 'Daily':
@@ -561,10 +563,9 @@ def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=No
             data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
     return data
 
-def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
-    global exportdata
-    df1 = pd.DataFrame(list(OtDetail.objects.all().values()))
-    df2 = pd.DataFrame(list(Timetrackers.objects.all().values()))
+def data_formation_ot(startdate=None,enddate=None):
+    df1 = pd.DataFrame(list(OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]).values()))
+    df2 = pd.DataFrame(list(Timetrackers.objects.exclude(valid_invalid__in=[2]).values()))
     df3 = pd.DataFrame(list(Mimember.objects.all().values()))
     df4 = pd.DataFrame(list(Teamdetail.objects.all().values()))
     df5 = pd.DataFrame(list(AuthUser.objects.all().values()))
@@ -577,6 +578,11 @@ def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=
     df_merge4['ot_startdatetime_monthyear'] = df_merge4['ot_startdatetime'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
     df_merge4['ot_startdatetime_week'] = df_merge4['ot_startdatetime'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    return df_merge4
+
+def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
+    global exportdata
+    df_merge4 = data_formation_ot(startdate=startdate,enddate=enddate)
     df_merge4 = df_merge4[df_merge4['teamname']==team] if team != 'None' else df_merge4
     df_merge4 = df_merge4[df_merge4['username']==member] if member != 'None' else df_merge4
     if interval == 'Daily':
@@ -593,14 +599,12 @@ def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=
         data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
     return data
 
-def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
-    global exportdata
+def data_formation_error(startdate=None,enddate=None):
     df1 = pd.DataFrame(list(Errorlog.objects.all().values()))
     df2 = pd.DataFrame(list(Activity.objects.all().values()))
     df3 = pd.DataFrame(list(Mimember.objects.all().values()))
     df4 = pd.DataFrame(list(Teamdetail.objects.all().values()))
     df5 = pd.DataFrame(list(AuthUser.objects.all().values()))
-
     df_merge1 = pd.merge(df1, df2,  how='left', left_on=['error_report_id'], right_on = ['activityid'])
     df_merge2 = pd.merge(df_merge1, df3,  how='left', left_on=['error_reportedto_id'], right_on = ['mimemberid'])
     df_merge3 = pd.merge(df_merge2, df4,  how='left', left_on=['teamdetail_id'], right_on = ['teamid'])
@@ -610,6 +614,11 @@ def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None,te
     df_merge4['errorlog_date_monthyear'] = df_merge4['errorlog_date'].apply(lambda x:
                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
     df_merge4['errorlog_date_week'] = df_merge4['errorlog_date'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    return df_merge4
+
+def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
+    global exportdata
+    df_merge4 = data_formation_error(startdate=startdate,enddate=enddate)
     df_merge4 = df_merge4[df_merge4['teamname']==team] if team != 'None' else df_merge4
     df_merge4 = df_merge4[df_merge4['username']==member] if member != 'None' else df_merge4
 
@@ -642,46 +651,56 @@ def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None,te
             data = pivot_monthly_userwise.to_html(classes="table cell-border")
     return data
 
+
+def data_formation_workflow(startdate=None,enddate=None):
+    countofdata = Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).count()
+    if countofdata > 0:
+        df01 = pd.DataFrame(list(Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).values()))
+        df02 = pd.DataFrame(list(Authorisedetail.objects.all().values()))
+        df03 = pd.DataFrame(list(Assigneddetail.objects.all().values()))
+        df04 = pd.DataFrame(list(Overviewdetail.objects.all().values()))
+        df05 = pd.DataFrame(list(Estimationdetail.objects.all().values()))
+        df06 = pd.DataFrame(list(Acceptrejectdetail.objects.all().values()))
+        df07 = pd.DataFrame(list(Completeddetail.objects.all().values()))
+        df08 = pd.DataFrame(list(Prioritydetail.objects.all().values()))
+        df09 = pd.DataFrame(list(Requesttypedetail.objects.all().values()))
+        df10 = pd.DataFrame(list(Mimember.objects.all().values()))
+        df11 = pd.DataFrame(list(AuthUser.objects.all().values()))
+        df12 = pd.DataFrame(list(Teamdetail.objects.all().values()))
+        df_merge1 = pd.merge(df01, df02,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+        df_merge2 = pd.merge(df_merge1, df03,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+        df_merge3 = pd.merge(df_merge2, df04,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+        df_merge4 = pd.merge(df_merge3, df05,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+        df_merge5 = pd.merge(df_merge4, df06,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+        df_merge6 = pd.merge(df_merge5, df07,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
+        df_merge7 = pd.merge(df_merge6, df08,  how='left', left_on=['prioritydetail_id'], right_on = ['requestpriorityid'])
+        df_merge8 = pd.merge(df_merge7, df09,  how='left', left_on=['requesttypedetail_id'], right_on = ['requesttypeid'])
+        df_merge9 = pd.merge(df_merge8, df10,  how='left', left_on=['username_id'], right_on = ['username_id'])
+        df_merge10 = pd.merge(df_merge9, df11,  how='left', left_on=['username_id'], right_on = ['id'])
+        df_merge11 = pd.merge(df_merge10, df12,  how='left', left_on=['teamdetail_id'], right_on = ['teamid'])
+        df_merge11['requestraiseddate'] = df_merge11['requestraiseddate'].apply(lambda x:
+                                        dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
+        df_merge11['requestraised_monthyear'] = df_merge11['requestraiseddate'].apply(lambda x:
+                                        dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
+        df_merge11['assigneddate'] = df_merge11['assigneddate'].apply(lambda x:
+                                         dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
+        df_merge11['assigneddate_monthyear'] = df_merge11['assigneddate'].apply(lambda x:
+                                         dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
+        df_merge11['completeddate'] = df_merge11['completeddate'].apply(lambda x:
+                                         dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
+        df_merge11['completeddate_monthyear'] = df_merge11['completeddate'].apply(lambda x:
+                                         dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
+        df_merge11['requestraised_week'] = df_merge11['requestraiseddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+        df_merge11['assigneddate_week'] = df_merge11['assigneddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+        df_merge11['completeddate_week'] = df_merge11['completeddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    else:
+        df_merge11 =  pd.DataFrame(list(Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).values()))
+
+    return df_merge11
+
 def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
     global exportdata
-    df01 = pd.DataFrame(list(Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).values()))
-    df02 = pd.DataFrame(list(Authorisedetail.objects.all().values()))
-    df03 = pd.DataFrame(list(Assigneddetail.objects.all().values()))
-    df04 = pd.DataFrame(list(Overviewdetail.objects.all().values()))
-    df05 = pd.DataFrame(list(Estimationdetail.objects.all().values()))
-    df06 = pd.DataFrame(list(Acceptrejectdetail.objects.all().values()))
-    df07 = pd.DataFrame(list(Completeddetail.objects.all().values()))
-    df08 = pd.DataFrame(list(Prioritydetail.objects.all().values()))
-    df09 = pd.DataFrame(list(Requesttypedetail.objects.all().values()))
-    df10 = pd.DataFrame(list(Mimember.objects.all().values()))
-    df11 = pd.DataFrame(list(AuthUser.objects.all().values()))
-    df12 = pd.DataFrame(list(Teamdetail.objects.all().values()))
-    df_merge1 = pd.merge(df01, df02,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-    df_merge2 = pd.merge(df_merge1, df03,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-    df_merge3 = pd.merge(df_merge2, df04,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-    df_merge4 = pd.merge(df_merge3, df05,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-    df_merge5 = pd.merge(df_merge4, df06,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-    df_merge6 = pd.merge(df_merge5, df07,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-    df_merge7 = pd.merge(df_merge6, df08,  how='left', left_on=['prioritydetail_id'], right_on = ['requestpriorityid'])
-    df_merge8 = pd.merge(df_merge7, df09,  how='left', left_on=['requesttypedetail_id'], right_on = ['requesttypeid'])
-    df_merge9 = pd.merge(df_merge8, df10,  how='left', left_on=['username_id'], right_on = ['username_id'])
-    df_merge10 = pd.merge(df_merge9, df11,  how='left', left_on=['username_id'], right_on = ['id'])
-    df_merge11 = pd.merge(df_merge10, df12,  how='left', left_on=['teamdetail_id'], right_on = ['teamid'])
-    df_merge11['requestraiseddate'] = df_merge11['requestraiseddate'].apply(lambda x:
-                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d'))
-    df_merge11['requestraised_monthyear'] = df_merge11['requestraiseddate'].apply(lambda x:
-                                    dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m'))
-    df_merge11['assigneddate'] = df_merge11['assigneddate'].apply(lambda x:
-                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
-    df_merge11['assigneddate_monthyear'] = df_merge11['assigneddate'].apply(lambda x:
-                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
-    df_merge11['completeddate'] = df_merge11['completeddate'].apply(lambda x:
-                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
-    df_merge11['completeddate_monthyear'] = df_merge11['completeddate'].apply(lambda x:
-                                     dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
-    df_merge11['requestraised_week'] = df_merge11['requestraiseddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-    df_merge11['assigneddate_week'] = df_merge11['assigneddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-    df_merge11['completeddate_week'] = df_merge11['completeddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
+    df_merge11 = data_formation_workflow(startdate=startdate,enddate=enddate)
     df_merge11 = df_merge11[df_merge11['teamname']==team] if team != 'None' else df_merge11
     df_merge11 = df_merge11[df_merge11['username']==member] if member != 'None' else df_merge11
     if interval == 'Daily':
@@ -1054,14 +1073,14 @@ def Wip_View(request):
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    print(teamid)
     print(memberid)
     filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedby','estimatedby__teamdetail'],value_list = [memberid,teamid])
-    requestid = Estimationdetail.objects.filter(**filter_dict).values_list('requestdetail',flat=True)
+    requestid = list(Estimationdetail.objects.filter(**filter_dict).values_list('requestdetail',flat=True))
     print(requestid)
     Accepted = list(Completeddetail.objects.all().values_list('requestdetail', flat=True))
-    UAT = list(UatDetail.objects.filter(uat_status__in=[1,None]).values_list('requestdetail', flat=True))
-    data = Acceptrejectdetail.objects.select_related('requestdetail').exclude(requestdetail__in=Accepted).exclude(requestdetail__in=UAT).filter(requestdetail__in=requestid)
+    UAT = list(UatDetail.objects.filter(Q(uat_status__isnull=True) | Q(uat_status__in=[1,None])).values_list('requestdetail', flat=True))
+    print(UAT)
+    data = Acceptrejectdetail.objects.select_related('requestdetail').filter(requestdetail__in=requestid).exclude(requestdetail__in=Accepted).exclude(requestdetail__in=UAT)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -1151,14 +1170,14 @@ def Ot_Detail_View(request):
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['timetrackers__mimember','timetrackers__teamdetail'], value_list = [memberid,teamid])
-    data = OtDetail.objects.filter(**(filterdict))
+    data = OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]).filter(**(filterdict))
     return render(request, 'CentralMI/9a_ot_detail_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 
 @login_required
 def Useful_link_View(request):
     view_header = 'Details'
-    activetab, activetab1, username, info, sd= create_session(request, header='usefullinks',footer='')
+    activetab, activetab1, username, info, sd= create_session(request, header='details',footer='usefullinks')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     data = TblUsefulLinks.objects.all()
@@ -1201,14 +1220,15 @@ def Useful_link_Edit_form(request,linkid):
 @login_required
 def Raw_Team_View(request):
     view_header = 'RAW'
-    activetab, activetab1, username, info, sd= create_session(request, header='rawdetail',footer='otdetail')
+    activetab, activetab1, username, info, sd= create_session(request, header='rawdetail',footer='rawdteamdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    data1 = TblRawTeamMemberMaster.objects.filter(raw_team=1)
-    data2 = TblRawTeamMemberMaster.objects.filter(raw_team=2)
-    data3 = TblRawTeamMemberMaster.objects.filter(raw_team=3)
-    data4 = TblRawTeamMemberMaster.objects.filter(raw_team=4)
-    return render(request, 'CentralMI/raw_team_detail.html', {'model1':data1,'model2':data2,'model3':data3,'model4':data4,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    data1 = TblRawTeamMemberMaster.objects.filter(raw_team=1).filter(raw_team__valid_invalid__in=[1])
+    data2 = TblRawTeamMemberMaster.objects.filter(raw_team=2).filter(raw_team__valid_invalid__in=[1])
+    data3 = TblRawTeamMemberMaster.objects.filter(raw_team=3).filter(raw_team__valid_invalid__in=[1])
+    data4 = TblRawTeamMemberMaster.objects.filter(raw_team=4).filter(raw_team__valid_invalid__in=[1])
+    data5 = TblRawTeamMemberMaster.objects.filter(raw_team=5).filter(raw_team__valid_invalid__in=[1])
+    return render(request, 'CentralMI/raw_team_detail.html', {'model1':data1,'model2':data2,'model3':data3,'model4':data4,'model5':data5,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
 def Raw_Team_Edit_Form(request,teamid):
@@ -1275,7 +1295,10 @@ def Ot_Add_Form(request,trackerid):
                 Totalmin = 0
             if Totalmin > 0:
                 inst.save()
-                return HttpResponseRedirect(reverse('otdetail'))
+                inst1 =  Timetrackers.objects.get(timetrackerid=trackerid)
+                inst1.ot = inst
+                inst1.save()
+                return HttpResponseRedirect(reverse('timetracker'))
                 msg = 'OT recorded'
             else:
                 msg = "OT time cannot be zero or less"
@@ -1351,15 +1374,24 @@ def Rawdata(request):
     global exportdata
     startdate, enddate, reportno, type, interval, team, member = Datarequiredforreport(request)
     if reportno == '1':
-        exportdata = pd.DataFrame(list(Requestdetail.objects.all().values()))
+        df_merge11 = data_formation_workflow(startdate=startdate,enddate=enddate)
+        df_merge11 = df_merge11[['requestid','requestraiseddate','requestpriority','requestdescription','authoriseddate','assigneddate','overviewdate','estimationdate','estacceptrejectdate','completeddate']]
+        exportdata = df_merge11
     elif reportno == '2':
-        exportdata = pd.DataFrame(list(Timetrackers.objects.all().values()))
+        df_merge5 = data_formation_Timetracker(startdate=startdate,enddate=enddate)
+        df_merge5 =  df_merge5[['timetrackerid','registerdatetime','trackingdatetime','username','task','requestcategorys','requestsubcategory','core_noncore','totaltime','comments','description_text']]
+        exportdata = df_merge5
     elif reportno == '3':
-        exportdata = pd.DataFrame(list(Errorlog.objects.all().values()))
+        df_merge4 = data_formation_error(startdate=startdate,enddate=enddate)
+        df_merge4 =  df_merge4[['error_occurancedate','name','username','error_description','description','primaryowner_id','secondaryowner_id']]
+        exportdata = df_merge4
     elif reportno == '4':
-        exportdata = pd.DataFrame(list(OtDetail.objects.all().values()))
+        df_merge4 = data_formation_ot(startdate=startdate,enddate=enddate)
+        df_merge4 =  df_merge4[['ot_id_x','ot_startdatetime','ot_enddatetime','ot_hrs','timetrackerid','trackingdatetime','username','task','totaltime']]
+        exportdata = df_merge4
     else:
-        exportdata = pd.DataFrame(list(Requestdetail.objects.all().values()))
+        exportdata = data_formation_error(startdate=startdate,enddate=enddate)
+
     data = exportdata.to_html(classes="table cell-border")
     return startdate, enddate, reportno, type, interval, team, member, data
 
@@ -1570,8 +1602,8 @@ def Conversation_Form(request,requestid):
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        return render(request, 'CentralMI/4b_conversation_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-    return render(request, 'CentralMI/4b_conversation_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+        return render(request, 'CentralMI/4b_conversation_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'requestid':requestid})
+    return render(request, 'CentralMI/4b_conversation_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'requestid':requestid})
 
 
 
@@ -2075,9 +2107,11 @@ def Internal_Task_And_Choice_View(request,taskid):
             else:
                 return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
     else:
+        print('here')
         form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
         if request.method == 'POST':
             choice = request.POST['choice']
+            print(choice)
             taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
             e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
             #print(choice)
@@ -2089,6 +2123,7 @@ def Internal_Task_And_Choice_View(request,taskid):
                 return HttpResponseRedirect(reverse('internaltaskdetail'))
             else:
                 return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+            return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
     return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
@@ -2153,17 +2188,6 @@ def Request_Form(request):
             inst1 = form1.save(commit=False)
             inst1.requestdetail = inst
             inst1.save()
-#            dataforemail(username=inst.username,
-#                        requestid = inst.requestid,
-#                        sub_user='Request registered successfully',
-#                        L1_user='Your request is sent for approval to Authoriser, any update on your request will be sent through email ',
-#                        sub_auth='Please Authorise the request',
-#                        L1_auth='A request has been raised, pending for your approval',
-#                        sub_miteam='Request raised, pending for approval ',
-#                        L1_miteam='New request has been raised, however peding for Approval',
-#                        sub_manager='Request raised, pending for approval ',
-#                        L1_manager='New request has been raised, however peding for Approval',
-#                        request_status='Pending for Approval')
             return HttpResponseRedirect(reverse('ty',args = (newid,)))
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
@@ -2191,10 +2215,10 @@ def Authorised_Form(request,requestid):
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
         form = AuthorisedetailForm(initial={'requestdetail':requestid, 'authoriserdetail':userid})
-        form1 = RequeststatusdetailForm(initial={'statusdetail':2,'username':userid,'requestdetail':requestid})
+        form1 = AuthoriserstatusdetailForm(initial={'statusdetail':2,'username':userid,'requestdetail':requestid})
         if request.method == 'POST':
             form = AuthorisedetailForm(request.POST)
-            form1 = RequeststatusdetailForm(request.POST)
+            form1 = AuthoriserstatusdetailForm(request.POST)
             if all([form.is_valid() , form1.is_valid()]):
                 inst = form.save(commit=False)
                 inst.save()
@@ -2363,10 +2387,10 @@ def EstimationAcceptance_Form(request,requestid):
         requestfilter = Requestdetail.objects.get(requestid=requestid)
         request_owner = Requestdetail.objects.get(requestid=requestid).username
         form = AcceptrejectdetailForm(initial={'requestdetail':requestid, 'estacceptrejectby':userid})
-        form1 = RequeststatusdetailForm(initial={'statusdetail':7,'username':userid,'requestdetail':requestid})
+        form1 = AcceptRequeststatusdetailForm(initial={'statusdetail':7,'username':userid,'requestdetail':requestid})
         if request.method == 'POST':
             form = AcceptrejectdetailForm(request.POST)
-            form1 = RequeststatusdetailForm(request.POST)
+            form1 = AcceptRequeststatusdetailForm(request.POST)
             if all([form.is_valid() , form1.is_valid()]):
                 inst = form.save(commit=False)
                 inst.save()
@@ -2398,7 +2422,7 @@ def WIP_Form(request,requestid):
 
     userid = User.objects.get(username=username).id
     try:
-        DataModel= UatDetail.objects.all().get(requestdetail=requestid)
+        DataModel= UatDetail.objects.filter(uat_status__in=1).get(requestdetail=requestid)
         return HttpResponseRedirect(reverse('wip'))
     except:
         requestfilter = Requestdetail.objects.get(requestid=requestid)
@@ -2439,17 +2463,18 @@ def UAT_Form(request,requestid):
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     userid = User.objects.get(username=username).id
-    print(requestid)
-    e = UatDetail.objects.all().get(requestdetail=requestid)
+    authuserinstance = AuthUser.objects.get(username=username)
+    e = UatDetail.objects.filter(uat_status=None).get(requestdetail=requestid)
     requestfilter = Requestdetail.objects.get(requestid=requestid)
     request_owner = Requestdetail.objects.get(requestid=requestid).username
-    form = UatDetailForm(instance=e)
+    form  = UatDetailForm(instance=e)
     form1 = RequeststatusdetailForm(initial={'statusdetail':11,'username':userid,'requestdetail':requestid})
     if request.method == 'POST':
-        form =  UatDetailForm(request.POST,instance=e)
+        form = UatDetailForm(request.POST,instance=e)
         form1 = RequeststatusdetailForm(request.POST)
         if all([form.is_valid() , form1.is_valid()]):
             inst = form.save(commit=False)
+            inst.testedby = authuserinstance
             inst.save()
             status = inst.uat_status
             inst1 = form1.save(commit=False)
@@ -2558,7 +2583,7 @@ def Thank_You_Page_View(request,requestid):
         except:
             model7 = "nothing"
         try:
-            model8 = UatDetail.objects.all().get(requestdetail=requestid)
+            model8 = UatDetail.objects.filter(uat_status__in=[1]).get(requestdetail=requestid)
         except:
             model8 = "nothing"
         try:
@@ -3087,9 +3112,9 @@ def TimeTracker_View(request):
     userid = User.objects.get(username__in=[username]).id
     memberid = Mimember.objects.get(username__in=[userid]).mimemberid
     teamid = Mimember.objects.get(username__in=[userid]).teamdetail
-    dv_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,None] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
-    dvcore_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
-    dvOT_value = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')
+    dv_value = calculation(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,None] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
+    dvcore_value = calculation(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
+    dvOT_value = calculation(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')
     total_core_value = dvcore_value + dvOT_value
     dvAll_value = dv_value + dvOT_value
 
@@ -3106,13 +3131,7 @@ def TimeTracker_View(request):
     form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime':sd,'startdatetime':starttime,'stopdatetime':stoptime})
     form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
     form.fields['reports'].queryset = Activity.objects.all()
-    model = info.modelTracker
-    OT_Applied =  list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
-    OT_Accepted = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[2],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
-    OT_Rejected = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[3],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
-    OT_Pending = list(OtDetail.objects.filter(timetrackers__trackingdatetime__in=[sd],ot_status__in=[1],timetrackers__mimember__username__username__in=[username]).values_list('timetrackers',flat=True))
-
-
+    model = Timetrackers.objects.exclude(valid_invalid__in=[2])
     if request.method == 'POST':
         form = TimetrackersForm(request.POST)
         form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
@@ -3120,19 +3139,21 @@ def TimeTracker_View(request):
         if form.is_valid():
             inst = form.save(commit=False)
             inst.mimember
-            if inst.requestcategorys == None or inst.requestsubcategory == None or inst.totaltime == None or (inst.requestdetail!=None and inst.reports!=None):
+
+            if inst.requestcategorys == None or inst.requestsubcategory == None or inst.totaltime == None:
+                msg = "Category, SubCategory and Totaltime cannot be blank"
                 form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
                 model = info.modelTracker
-                return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name})
+                return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'msg':msg})
             else:
                 inst.save()
             form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
             form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
             form.fields['reports'].queryset = Activity.objects.all()
-            model = info.modelTracker
-            dv_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,None] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
-            dvcore_value = calculation(request,model=Timetrackers.objects.all(),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
-            dvOT_value = calculation(request,model=OtDetail.objects.all(),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')
+            model = Timetrackers.objects.exclude(valid_invalid__in=[2])
+            dv_value = calculation(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,None] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
+            dvcore_value = calculation(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
+            dvOT_value = calculation(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')
             total_core_value = dvcore_value + dvOT_value
             dvAll_value = dv_value + dvOT_value
             dv = hours_min(request,time_in_min=dv_value,date=sd)
@@ -3146,8 +3167,8 @@ def TimeTracker_View(request):
         else:
             pagename = "report"
             errormsg1 = "Something went Wrong"
-            return render(request, 'CentralMI/15a_ErrorPage.html',{'OT_Applied':OT_Applied,'OT_Accepted':OT_Accepted,'OT_Rejected':OT_Rejected,'OT_Pending':OT_Pending,'username':username,'pagename':pagename,'errormsg1':errormsg1})
-    return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'OT_Applied':OT_Applied,'OT_Accepted':OT_Accepted,'OT_Rejected':OT_Rejected, 'OT_Pending':OT_Pending,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+            return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
+    return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
 def Tracker_Edit_Form(request,requestid):

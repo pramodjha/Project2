@@ -27,23 +27,21 @@
   <h3 class="col-sm-12 col-md-12 col-lg-12 fontstyle1 fontsize25">ENTER LOGIN CREDENTIAL</h3>
   </div>
   </div>
-  <div class="col-sm-12 col-md-12 col-lg-6">
+  <div class="col-sm-12 col-md-12 col-lg-4">
   <div >
-  <label class="col-sm-12 col-md-12 col-lg-4  ">{% bootstrap_label 'Username'  %}</label>
+  <label class="col-sm-12 col-md-12 col-lg-3  ">{% bootstrap_label 'Username'  %}</label>
   <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.username  show_label=False  placeholder='Enter Username' %}</span>
   </div>
   <div>
-  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Password'  %}</label>
+  <label class="col-sm-12 col-md-12 col-lg-3 ">{% bootstrap_label 'Password'  %}</label>
   <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.password  show_label=False placeholder='Enter Password'   %}</span>
   </div>
-  <div class="col-sm-12 col-md-12 col-lg-12">
-  <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
   </form>
   <div class="col-sm-12 col-md-12 col-lg-12">
 
-  <div ><a href="{% url 'password_reset' %}" >Forgot Password? </a></div>
-  <div ><a href="{% url 'signin' %}" >Sign In as Default </a></div>
+  <div ><a href="{% url 'password_reset' %}" class="fontstyle12">Forgot Password? </a></div>
+  <div ><a href="{% url 'signin' %}" class="fontstyle12">Sign In as Default </a></div>
   </div>
   {% if error == "Error" %}
   <div class="col-sm-12 col-md-12 col-lg-12">

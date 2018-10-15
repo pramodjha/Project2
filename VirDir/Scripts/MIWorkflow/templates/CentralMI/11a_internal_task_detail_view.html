@@ -41,7 +41,7 @@
   {%for data in model %}
       <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
   {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-      <td ><a href="{% url 'editinternaltaskdetail' data.internaltaskid %}">{{data.internaltaskid }} </a></td>
+      <td ><a href="{% url 'editinternaltaskdetail' data.internaltaskid %}" class="fontstyle12">{{data.internaltaskid }} </a></td>
   {% else %}
       <td>{{data.internaltaskid }} </td>
       {% endif %}

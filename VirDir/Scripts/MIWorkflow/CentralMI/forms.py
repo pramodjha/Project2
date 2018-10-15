@@ -2,7 +2,7 @@ from django import forms
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblUsefulLinks, UatDetail, TeamMetricsData
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class UserRegistrationForm(forms.Form):
@@ -65,6 +65,17 @@ class RequeststatusdetailForm(forms.ModelForm):
         model = Requeststatusdetail
         fields = '__all__'
 
+class AcceptRequeststatusdetailForm(forms.ModelForm):
+    statusdetail = forms.ModelChoiceField(queryset=Statusdetail.objects.filter(statusnameid__in=[3,7]),required=False)
+    class Meta():
+        model = Requeststatusdetail
+        fields = '__all__'
+
+class AuthoriserstatusdetailForm(forms.ModelForm):
+    statusdetail = forms.ModelChoiceField(queryset=Statusdetail.objects.filter(statusnameid__in=[3,2]),required=False)
+    class Meta():
+        model = Requeststatusdetail
+        fields = '__all__'
 
 class RequeststatusAcceptanceForm(forms.ModelForm):
     class Meta():
@@ -210,7 +221,7 @@ class SearchForm(forms.Form):
     datachoice = forms.ChoiceField(choices = REPORT_CHOICES, label="Date Choice", initial=1, widget=forms.Select(), required=True)
     datatype = forms.ChoiceField(choices = TYPE_CHOICES, label="Type", initial=1, widget=forms.Select(), required=True)
     interval = forms.ChoiceField(choices = INTERVAL_CHOICES, label="Interval", initial=1, widget=forms.Select(), required=True)
-    startdate = forms.DateField(initial=datetime.now(), label="StartDate",required=False)
+    startdate = forms.DateField(initial=datetime.now() - timedelta(days=1), label="StartDate",required=False)
     enddate = forms.DateField(initial=datetime.now(), required=False,label="EndDate")
     team = forms.ModelChoiceField(queryset=Teamdetail.objects.all(),required =False,label="Team")
     member = forms.ModelChoiceField(queryset=Mimember.objects.all(),required =False,label="Member")

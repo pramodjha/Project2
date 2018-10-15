@@ -33,7 +33,7 @@
   <table  class="table " id="example" style="width:100%">
     <thead class="thead tableheaderformat">
     <tr class="" >
-      <td >ID <a href="{% url 'addinternaltaskoption' taskid  %}" class="glyphicon glyphicon-plus"></td>
+      <td >ID <a href="{% url 'addinternaltaskoption' taskid  %}" class="glyphicon glyphicon-plus fontstyle12"></td>
       <td> Internal Task </td>
       <td >Choice</td>
       <td >Edit </td>
@@ -53,8 +53,8 @@
   </table>
 </div>
 <div class="col-sm-12 col-md-12 col-lg-7">
-  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="submit" name="submit" class="btn btn-default">Done</a></div>
-<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="submit" name="submit" class="btn btn-success">Done</a></div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
 </div>
 
 {% endblock %}

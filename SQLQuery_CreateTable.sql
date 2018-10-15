@@ -510,4 +510,8 @@ Project int
 
 );
 
-select * from team_metrics_data
+use CentralMI
+create table valid_invalid(
+valid_invaidid int not null primary key Identity(1,1),
+type varchar(255)
+)

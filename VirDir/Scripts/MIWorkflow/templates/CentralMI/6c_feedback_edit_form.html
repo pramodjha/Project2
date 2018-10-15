@@ -34,8 +34,8 @@
 <span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.feedback_text  show_label=False  placeholder='Feedback' %}</span>
 </div>
 <div class="col-sm-12 col-md-12 col-lg-7">
-<div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'feedbackdetail' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+<div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'feedbackdetail' %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
 </div>
 </div>
 </form>

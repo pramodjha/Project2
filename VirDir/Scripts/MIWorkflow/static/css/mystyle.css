@@ -89,6 +89,10 @@ label {
   background-color: #404040;
   padding-top: 10px;
 }
+.box4 {
+  background-color: #404040;
+  padding-top: 5px;
+}
 
 
   /*------------------------font_Color------------------------------------------------*/
@@ -98,6 +102,9 @@ label {
 .fontstyle4{color: #e68a00;}
 .fonthoverstyle4{color: #ff6666;}
 .fontstyle11{color: #005266;}
+.fontstyle10{color: #333333;}
+.fontstyle12{color:#66c2ff;}
+.fontstyle12:hover{color:#33adff;}
 
 /*-----------------------------font_Family-------------------------------------------*/
 .fontfamilycambria{font-family: Cambria;}

@@ -16,6 +16,12 @@
     <script type="text/javascript" src="{% static 'js/locales/bootstrap-datetimepicker.fr.js' %}" charset="UTF-8"></script>
     <!-- formatting -->
     <link rel="stylesheet" href="{% static 'css/mystyle.css' %}" type="text/css" />
+<style>
+.tenpx{
+  margin-top: 100px;
+}
+</style>
+
 </head>
 <body class="body">
     <div class="container ">
@@ -25,11 +31,9 @@
       <div class="modal fade " id="myModal" role="dialog">
         <div class="modal-dialog ">
           <!-- Modal content-->
-          <div class="modal-content box">
-            <div class="modal-body">
+            <div class="modal-body box">
                 {% block content %}
                 {% endblock %}
-            </div>
             <div class="modal-footer">
             </div>
           </div>

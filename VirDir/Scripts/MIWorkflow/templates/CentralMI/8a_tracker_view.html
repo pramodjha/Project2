@@ -4,6 +4,32 @@
 {% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
+<style>
+#id_trackingdatetime {
+width: 100%;
+}
+.removepadding{
+  padding-left: 2px;
+  padding-right: 2px
+}
+.form-control{
+  font-size: 14px
+}
+.setbutton{
+  padding-top: 5px;
+  padding-bottom: 0px;
+}
+table {
+  table-layout:fixed;
+}
+table td {
+  word-wrap: break-word;
+  max-width: 400px;
+}
+#example td {
+  white-space:inherit;
+}
+</style>
 {% endblock %}
 {% block navblockleft %}
 <h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
@@ -15,16 +41,15 @@
 {% block navblockfilterform %}
 {% endblock %}
 {% block content %}
-<div class="col-sm-12 col-md-12 col-lg-12 ">
-  <div class="col-sm-12 col-md-12 col-lg-12  box5">
-  <div class="col-sm-12 col-md-12 col-lg-2">
-    <form method = "POST" action = "{% url 'sdate' %}" >
-      {% csrf_token %}
-          <label class="">Set Date</label>
-          <span  class="">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>{% buttons submit='-- Set Date --' %}{% endbuttons layout='inline' %}
-    </form>
-  </div>
-  <div class="col-sm-12 col-md-12 col-lg-10 middle box3">
+<div class="col-sm-12 col-md-12 col-lg-12 box4">
+<div class="col-sm-12 col-md-12 col-lg-2 setbutton">
+  <form method = "POST" action = "{% url 'sdate' %}" >
+    {% csrf_token %}
+        <div  class="col-sm-12 col-md-12 col-lg-9 removepadding ">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</div>
+        <div  class="col-sm-12 col-md-12 col-lg-3 removepadding ">{% buttons submit='Set Date' %}{% endbuttons layout='inline' %}</div>
+  </form>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-10 middle ">
   <div class="col-sm-2 col-md-2 col-lg-2 " >
     <span class="fontstyle4 fontsize15">A:Worked</span>
     {% for key, value in dv.items %}
@@ -54,11 +79,11 @@
     <span class="fontstyle1 fontsize18">{{dvutilisation}}</span>
   </div>
 </div>
-
-<div class="col-sm-12 col-md-12 col-lg-10 box">
-<div class="col-sm-12 col-md-12 col-lg-12">
-  <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
-  {% csrf_token %}
+</div>
+  <div class="col-sm-12 col-md-12 col-lg-12  box">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
+        {% csrf_token %}
       <div class="">
         <label class="hidden">Registered Date</label>
         <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
@@ -75,19 +100,23 @@
         <label class="hidden">Team</label>
         <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-2">
+      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
         <label class="">Category</label>
         <span  class="">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-2">
-        <label class="">Sub-Category</label>
+      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
+        <label class="">Sub Category</label>
         <span  class="">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-2">
+      <div class="col-sm-12 col-md-12 col-lg-1 removepadding ">
+        <label class="">ID</label>
+        <span  class="">{% bootstrap_field form.requestdetail  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
         <label class="">Activity</label>
         <span  class="">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-3 ">
+      <div class="col-sm-12 col-md-12 col-lg-3 removepadding ">
         <label class="">Task</label>
         <span  class="">{% bootstrap_field form.task  show_label=False layout='inline'  %}</span>
       </div>
@@ -95,7 +124,7 @@
         <label class="hidden">Description</label>
         <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-2 ">
+      <div class="col-sm-12 col-md-12 col-lg-1 removepadding ">
         <label class="">Time</label>
         <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
         </div>
@@ -113,46 +142,39 @@
       </div>
         <div class="col-sm-12 col-md-12 col-lg-1 ">
           <label class="fontstyle10"> save </label>
-          <div class="">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
+          <div class="">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
         </div>
       </form>
     </div>
   </div>
-<div class="middle box3 font">
-  <span class="fontstyle1 fontsize15 ">OT Applied for ID:</span><span class="fontstyle4 fontsize15 ">{{OT_Applied}}</span>
-  <span class="fontstyle1 fontsize15 ">OT Accpeted ID:</span><span class="fontstyle4 fontsize15">{{OT_Accepted}}</span>
-  <span class="fontstyle1 fontsize15 ">OT Rejected ID:</span><span class="fontstyle4 fontsize15">{{OT_Rejected}}</span>
-  <span class="fontstyle1 fontsize15 ">OT Pending ID:</span><span class="fontstyle4 fontsize15 ">{{OT_Pending}}</span>
-</div>
-  </div>
-</div>
   <div class="col-sm-12 col-md-12 col-lg-12">
   <table  class="table " id="example" style="width:100%">
     <thead class="">
     <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
-     <td >Tracking ID</td>
+     <td >ID</td>
      <td class="hidden">Registered Date</td>
      <td class="hidden">Tracking Date</td>
      <td class="hidden">Associate Name</td>
      <td class="hidden">Team Name</td>
-     <td>Request Category</td>
-     <td>Request Sub-Category</td>
-     <td>Core_Non-Core</td>
+     <td>Category</td>
+     <td>Sub-Category</td>
+     <td>Type</td>
   <!--       <th>Request ID</th> -->
      <td>Activity</td>
      <td>Task</td>
      <td class="hidden">Descritpion</td>
-     <td>Total Time (Min)</td>
+     <td>Time (Mins)</td>
+     <td>OT</td>
+
      <td class="hidden">Start-Time</td>
      <td class="hidden">Stop-Time</td>
-     <td>Edit | Add OT</td>
-
+     <td>OT (Add/Edit)</td>
      </tr>
    </thead>
    <tbody class="">
    {%for data in model %}
    <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
-     <td ><a  href="{% url 'otform' data.timetrackerid %}" class="fontstyle4">{{data.timetrackerid }} </a> </td>
+     <td ><a  href="{% url 'edittracker' data.timetrackerid %}" class="fontstyle4">{{data.timetrackerid }} </a> </td>
      <td class="hidden">{{data.registerdatetime    }}</td>
      <td class="hidden">{{data.trackingdatetime }}</td>
      <td class="hidden">{{data.mimember }}</td>
@@ -165,9 +187,10 @@
      <td>{{data.task  }}</td>
      <td class="hidden">{{data.description_text   }}</td>
      <td>{{data.totaltime }}</td>
+     <td>{{data.ot.ot_status }}</td>
      <td class="hidden">{{data.startdatetime  }}</td>
      <td class="hidden">{{data.stopdatetime   }}</td>
-     <td> <a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus"></a> </td>
+     <td> <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus"></a> </td>
      {% endfor %}
    </tr></br>
    </tbody>

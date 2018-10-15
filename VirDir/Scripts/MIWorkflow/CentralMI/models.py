@@ -523,7 +523,7 @@ class FeedbackQuestion(models.Model):
 
 class OtDetail(models.Model):
     ot_id = models.AutoField(primary_key=True)
-    timetrackers = models.ForeignKey('Timetrackers', models.DO_NOTHING, db_column='timetrackers')
+    timetrackers = models.ForeignKey('Timetrackers', models.DO_NOTHING, db_column='timetrackers', related_name='tracker')
     ot_startdatetime = models.DateTimeField()
     ot_enddatetime = models.DateTimeField()
     ot_hrs = models.IntegerField(blank=True, null=True)
@@ -535,7 +535,7 @@ class OtDetail(models.Model):
         db_table = 'ot_detail'
 
     def __str__(self):
-        return str(self.timetrackers)
+        return str(self.ot_id)
 
 class OtStatus(models.Model):
     ot_statusid = models.AutoField(primary_key=True)
@@ -579,8 +579,7 @@ class Errorlog(models.Model):
     errorlog_date = models.DateTimeField(default= datetime.datetime.now())
     error_occurancedate = models.DateField(default= datetime.date.today)
     error_report = models.ForeignKey(Activity, models.DO_NOTHING, db_column='error_report')
-    error_reportedby = models.CharField(max_length=50)
-    error_reportedteam = models.CharField(max_length=50)
+    error_reportedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedby', blank=True, null=True)
     error_reportedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='error_reportedto')
     error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
     error_description = models.TextField()
@@ -611,7 +610,7 @@ class Feedback(models.Model):
 class Timetrackers(models.Model):
     timetrackerid = models.AutoField(primary_key=True)
     registerdatetime = models.DateTimeField(default= datetime.datetime.now())
-    trackingdatetime = models.DateTimeField(default= datetime.datetime.now())
+    trackingdatetime = models.DateField(default=datetime.date.today)
     mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember')
     teamdetail = models.ForeignKey(Teamdetail, models.DO_NOTHING, db_column='teamdetail')
     requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys')
@@ -624,6 +623,8 @@ class Timetrackers(models.Model):
     startdatetime = models.DateTimeField(blank=True, null=True)
     stopdatetime = models.DateTimeField(blank=True, null=True)
     reports = models.ForeignKey(Activity, models.DO_NOTHING, db_column='reports', blank=True, null=True)
+    ot = models.ForeignKey(OtDetail, models.DO_NOTHING, db_column='ot', blank=True, null=True, related_name='ot')
+    valid_invalid = models.ForeignKey('ValidInvalid', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -631,6 +632,17 @@ class Timetrackers(models.Model):
 
     def __str__(self):
         return str(self.timetrackerid)
+
+class ValidInvalid(models.Model):
+    valid_invaidid = models.AutoField(primary_key=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'valid_invalid'
+
+    def __str__(self):
+        return str(self.type)
 
 class ActivityCalendar(models.Model):
     date = models.DateField(blank=True, null=True)
@@ -737,6 +749,8 @@ class TblRawTeamMaster(models.Model):
     raw_team = models.CharField(max_length=255, blank=True, null=True)
     raw_team_icon = models.FileField(upload_to='rawteamicon/',blank=True, null=True)
     raw_team_slogan = models.CharField(max_length=255, blank=True, null=True)
+    valid_invalid = models.ForeignKey('ValidInvalid', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
+    raw_management = models.ForeignKey(Options, models.DO_NOTHING, db_column='raw_management', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -820,7 +834,7 @@ class Internaltaskstatus(models.Model):
     internaltaskstatusdatetime = models.DateTimeField(default= datetime.datetime.now())
     mimember = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='mimember')
     internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask')
-    internaltaskchoice = models.ForeignKey(Internaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoice')
+    internaltaskchoice = models.ForeignKey(Internaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoice',blank=True, null=True)
 
     class Meta:
         managed = False

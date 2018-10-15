@@ -20,41 +20,48 @@
 
 </div>
 
-
 <div class="col-sm-12 col-md-12 col-lg-12">
-  <div class="col-sm-3 col-md-3 col-lg-3 ">
-    <div class="col-sm-12 col-md-12 col-lg-12 card">Funtastic 7</div>
+  <div class="col-sm-12 col-md-4 col-lg-4 ">
+    <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">Management</div>
+    <div class="col-sm-12 col-md-12 col-lg-12 card1">
+    {%for data in model5 %}
+    <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" >{{data.raw_member }}</a></li>
+   {% endfor %}
+  </div>
+</div>
+
+
+
+  <div class="col-sm-12 col-md-4 col-lg-2 ">
+    <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">Funtastic 7</div>
     <div class="col-sm-12 col-md-12 col-lg-12 card1">
     {%for data in model1 %}
     <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" >{{data.raw_member }}</a></li>
    {% endfor %}
   </div>
-
 </div>
 
-<div class="col-sm-3 col-md-3 col-lg-3">
-  <div class="col-sm-12 col-md-12 col-lg-12 card">MH-007</div>
+<div class="col-sm-12 col-md-4 col-lg-2">
+  <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">MH-007</div>
   <div class="col-sm-12 col-md-12 col-lg-12 card1">
   {%for data in model2 %}
   <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" class="fontstyle1">{{data.raw_member }}</a></li>
  {% endfor %}
 </div>
-
 </div>
 
-<div class="col-sm-3 col-md-3 col-lg-3">
-  <div class="col-sm-12 col-md-12 col-lg-12 card">Fun Squard</div>
+<div class="col-sm-3 col-md-3 col-lg-2">
+  <div class="col-sm-12 col-md-12 col-lg-12 card  fontstyle4">Fun Squard</div>
   <div class="col-sm-12 col-md-12 col-lg-12 card1">
 
   {%for data in model3 %}
   <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" >{{data.raw_member }}</a></li>
  {% endfor %}
 </div>
-
 </div>
 
-<div class="col-sm-3 col-md-3 col-lg-3">
-  <div class="col-sm-12 col-md-12 col-lg-12 card">ISI</div>
+<div class="col-sm-3 col-md-3 col-lg-2 ">
+  <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">ISI</div>
   <div class="col-sm-12 col-md-12 col-lg-12 card1">
 
   {%for data in model4 %}
@@ -75,5 +82,4 @@
 
 {% endblock %}
 {% block footer_right %}
-<span class="subheaderformat"> Click on ID to log Error & Report Name to log Feedback</span>
 {% endblock %}

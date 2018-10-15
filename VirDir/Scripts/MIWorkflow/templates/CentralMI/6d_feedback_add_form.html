@@ -54,8 +54,8 @@
 <span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.activity  show_label=False  placeholder='Feedback' %}</span>
 </div>
 <div class="col-sm-12 col-md-12 col-lg-7">
-<button type="submit" class="col-sm-12 col-md-12 col-lg-3 btn btn-default" >Submit</button>
-<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'viewfeedbackquestion'  activityid %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+<div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'viewfeedbackquestion'  activityid %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
 </div>
 </form>
 {% endblock %}

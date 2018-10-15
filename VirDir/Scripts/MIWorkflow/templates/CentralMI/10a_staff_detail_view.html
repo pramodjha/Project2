@@ -36,13 +36,12 @@
       <td >Super User</td>
       <td >Staff</td>
       <td >Active</td>
-      <td >Edit</td>
       </tr>
     </thead>
     <tbody class="">
   {%for data, data1 in data %}
     <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
-      <td >{{data.username }} </td>
+      <td  ><a href="{% url 'editstaffbymanager' data.id %}" class="fontstyle12">{{data.username }} </a></td>
       <td >{{data1.employeeid}}</td>
       <td>{{data.first_name }}</td>
       <td >{{data.last_name }}</td>
@@ -58,7 +57,7 @@
       <td>{{data.is_superuser }}</td>
       <td>{{data.is_staff }}</td>
       <td>{{data.is_active }}</td>
-      <td><a href="{% url 'editstaffbymanager' data.id %}" class="glyphicon glyphicon-pencil" ></a></td>
+      <td></td>
 
       {% endfor %}
       </tr></br>

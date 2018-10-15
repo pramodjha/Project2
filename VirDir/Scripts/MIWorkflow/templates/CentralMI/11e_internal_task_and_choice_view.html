@@ -46,16 +46,16 @@
 </div>
 <div class="col-sm-12 col-md-12 col-lg-12">
 <div >
-<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'DateTime'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskstatusdatetime  show_label=False layout='inline'  %}</span>
+<label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'DateTime'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.internaltaskstatusdatetime  show_label=False layout='inline'  %}</span>
 </div>
 <div>
-<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Mimember'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.mimember  show_label=False   %}</span>
+<label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Mimember'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.mimember  show_label=False   %}</span>
 </div>
 <div>
-<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Task'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltask  show_label=False  placeholder='' %}</span>
+<label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Task'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 ">{% bootstrap_field form.internaltask  show_label=False  placeholder='' %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Choice'  %}</label>
@@ -70,7 +70,7 @@
 </div>
 {% endfor %}
 <div class="col-sm-12 col-md-12 col-lg-7">
-<button type="submit" class="col-sm-12 col-md-12 col-lg-3 btn btn-default" >Submit</button>
+<div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
 <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
 </div>
 </form>

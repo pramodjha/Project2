@@ -361,8 +361,7 @@ class Errorlog(models.Model):
     errorlog_date = models.DateTimeField()
     error_occurancedate = models.DateTimeField()
     error_report = models.ForeignKey(Activity, models.DO_NOTHING, db_column='error_report')
-    error_reportedby = models.CharField(max_length=50)
-    error_reportedteam = models.CharField(max_length=50)
+    error_reportedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedby', blank=True, null=True)
     error_reportedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='error_reportedto')
     error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
     error_description = models.TextField()
@@ -961,6 +960,8 @@ class TblRawTeamMaster(models.Model):
     raw_team = models.CharField(max_length=255, blank=True, null=True)
     raw_team_icon = models.CharField(max_length=255, blank=True, null=True)
     raw_team_slogan = models.CharField(max_length=255, blank=True, null=True)
+    valid_invalid = models.ForeignKey('ValidInvalid', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
+    raw_management = models.ForeignKey(Options, models.DO_NOTHING, db_column='raw_management', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -1052,7 +1053,7 @@ class TimeDetail(models.Model):
 class Timetrackers(models.Model):
     timetrackerid = models.AutoField(primary_key=True)
     registerdatetime = models.DateTimeField()
-    trackingdatetime = models.DateTimeField()
+    trackingdatetime = models.DateField()
     mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
     teamdetail = models.ForeignKey(Teamdetail, models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
     requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
@@ -1065,6 +1066,8 @@ class Timetrackers(models.Model):
     startdatetime = models.DateTimeField(blank=True, null=True)
     stopdatetime = models.DateTimeField(blank=True, null=True)
     reports = models.ForeignKey(Activity, models.DO_NOTHING, db_column='reports', blank=True, null=True)
+    ot = models.ForeignKey(OtDetail, models.DO_NOTHING, db_column='ot', blank=True, null=True)
+    valid_invalid = models.ForeignKey('ValidInvalid', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -1079,6 +1082,15 @@ class TlMaster(models.Model):
     class Meta:
         managed = False
         db_table = 'tl_master'
+
+
+class ValidInvalid(models.Model):
+    valid_invaidid = models.AutoField(primary_key=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'valid_invalid'
 
 
 class ViewType(models.Model):

@@ -12,9 +12,9 @@
 {% bootstrap_form_errors form type='non_fields' %}
 
 <div class="col-sm-12 col-md-12 col-lg-12">
-<div class="col-sm-12 col-md-12 col-lg-12 head">Estimation Form</div>
+<div class="col-sm-12 col-md-12 col-lg-12 head fontsize25 ">Estimation Form</div>
 </div>
-<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="col-sm-12 col-md-12 col-lg-12 fontsize1 ">
 <div >
 <label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Estimation Date'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.estimationdate  show_label=False layout='inline'  %}</span>
@@ -54,8 +54,8 @@
 </div>
 
 <div class="col-sm-12 col-md-12 col-lg-7">
-  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'overview' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'overview' %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
 </div>
 </form>
 

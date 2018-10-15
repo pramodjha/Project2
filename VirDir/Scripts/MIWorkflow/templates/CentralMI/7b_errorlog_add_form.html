@@ -42,10 +42,6 @@
   <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedby  show_label=False placeholder='Error Reported By'   %}</span>
   </div>
   <div>
-  <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Error Reported Team'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedteam  show_label=False  placeholder='Error Reported Team' %}</span>
-  </div>
-  <div>
   <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Reported To'  %}</label>
   <span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.error_reportedto  show_label=False  placeholder='Error Reported To' %}</span>
   </div>
@@ -63,8 +59,8 @@
   </div>
 
   <div class="col-sm-12 col-md-12 col-lg-7">
-  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'report' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'report' %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
   </div>
 </form>
 

@@ -73,10 +73,19 @@
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Stop Date-time'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.stopdatetime  show_label=False  %}</span>
 </div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Stop Date-time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.ot  show_label=False  %}</span>
+</div>
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Stop Date-time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.valid_invalid  show_label=False  %}</span>
+</div>
 
 <div class="col-sm-12 col-md-12 col-lg-7">
-<div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons submit='Submit' %}{% endbuttons layout='inline' %}</div>
-<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'timetracker' %}" id="cancel" name="cancel" class="btn btn-default">Cancel</a></div>
+  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'timetracker' %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
 
 </div>
 </form>
