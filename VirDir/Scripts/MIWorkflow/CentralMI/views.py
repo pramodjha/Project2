@@ -3208,14 +3208,14 @@ def TimeTracker_View(request):
             if inst.requestcategorys == None or inst.requestsubcategory == None or inst.totaltime == None:
                 msg = "Category, SubCategory and Totaltime cannot be blank"
                 form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
-                model = info.modelTracker
+                model = Timetrackers.objects.exclude(valid_invalid__in=[2]).filter(trackingdatetime__in=[sd]).filter(mimember__username__username__in=[username])
                 return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'msg':msg})
             else:
                 inst.save()
             form = TimetrackersForm(initial={'mimember':info.mimemberid,'teamdetail':info.teamid,'options':2,'trackingdatetime': sd,'startdatetime':starttime,'stopdatetime':stoptime})
             form.fields['requestdetail'].queryset = Requestdetail.objects.filter(requestid__in=requestid_filter)
             form.fields['reports'].queryset = Activity.objects.all()
-            model = Timetrackers.objects.exclude(valid_invalid__in=[2])
+            model = Timetrackers.objects.exclude(valid_invalid__in=[2]).filter(trackingdatetime__in=[sd]).filter(mimember__username__username__in=[username])
             dv_value = calculation(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,None] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
             dvcore_value = calculation(request,model=Timetrackers.objects.exclude(valid_invalid__in=[2]),datefield='trackingdatetime',field_name_list = ['mimember','teamdetail','requestsubcategory__core_noncore'], value_list = [memberid,teamid,'core'] ,values='mimember',aggregatefield='totaltime',fromdate=sd,todate=sd,raw_data='N')
             dvOT_value = calculation(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'core','accepted'] ,values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=sd,todate=sd,raw_data='N')

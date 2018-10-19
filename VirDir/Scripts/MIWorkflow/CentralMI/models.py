@@ -806,6 +806,8 @@ class Internaltask(models.Model):
     internaltaskquestion = models.CharField(db_column='internaltaskQuestion', max_length=255)  # Field name made lowercase.
     status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='status')
     owner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='Owner')  # Field name made lowercase.
+    targetdate = models.DateTimeField(default= datetime.datetime.now())
+    link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False

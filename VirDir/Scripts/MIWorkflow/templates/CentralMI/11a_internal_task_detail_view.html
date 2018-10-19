@@ -21,7 +21,7 @@
     <thead class="">
     <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
       {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-      <td >ID <a href="{% url 'addinternaltaskdetail' %}" id="addinternaltask" name="addinternaltask"  class="btn btn-default"></td>
+      <td >ID <a href="{% url 'addinternaltaskdetail' %}" id="addinternaltask" name="addinternaltask"  class="glyphicon glyphicon-plus"></td>
       {% else %}
       <td >ID </td>
       {% endif %}
@@ -29,8 +29,11 @@
       <td >Question</td>
       <td> Status </td>
       <td> Owner </td>
+      <td> Targetdate </td>
+      <td> Link </td>
+
   {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-  <td> View | Add | Edit </td>
+  <td>Choice</td>
   <td> View Response </td>
   {% else %}
       <td>Add Response </td>
@@ -50,6 +53,9 @@
       <td >{{data.internaltaskquestion }}</td>
       <td >{{data.status }}</td>
       <td >{{data.owner }}</td>
+      <td >{{data.targetdate }}</td>
+      <td >{{data.link}}</td>
+
       {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
       <td> <a href="{% url 'viewinternaltaskoption' data.internaltaskid %}"  class="btn btn-default">View | Add | Edit</a></td>
       <td> <a href="{% url 'internaltaskcompetionview' data.internaltaskid %}" class="btn btn-default">View Response</a></td>
