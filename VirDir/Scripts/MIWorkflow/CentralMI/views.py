@@ -4,7 +4,7 @@ from django.template import Context, loader
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView,ListView
 from django.db import connection, transaction
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm,TeamMetricsDataForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, ReportsForm,EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm,TeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm,TeamMetricsDataForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES
 from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports, Emaildetail, Errorlog, OtDetail,Activity, FeedbackQuestion,Feedback, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, FeedbackQuestion, ActivitystatusCalendar, Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarMaster, TblNavbarHeaderMaster, TblNavbarFooterMaster, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, TblUsefulLinks, UatDetail, AssignView, TblNavbarView, TeamMetricsData
 from django.core import serializers
 from django.shortcuts import redirect
@@ -55,10 +55,14 @@ def redirect_to_home(request):
     return index(request)
 
 def export_users_csv(request):
-  response = HttpResponse(content_type='text/csv')
-  response['Content-Disposition'] = 'attachment; filename=filename.csv'
-  exportdata.to_csv(path_or_buf=response,index = False, sep=',', encoding='utf-8')
-  return response
+    try:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=filename.csv'
+        exportdata.to_csv(path_or_buf=response,index = False, sep=',', encoding='utf-8')
+        return response
+    except:
+
+        return HttpResponseRedirect(reverse('filtertab'))
 
 
 @login_required
@@ -159,7 +163,7 @@ def session_view(request,username=None):
 def create_dict_for_filter(request,field_name_list = None,value_list = None):
     filter_dict = {}
     for list_number in range(len(value_list)):
-        if value_list[list_number]  != None:
+        if value_list[list_number]  != None and value_list[list_number]  != 'None'  :
             filter_dict[field_name_list[list_number]] = value_list[list_number]
     return filter_dict
 
@@ -376,6 +380,7 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             core = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             core_ot = calculation(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
             total_core = core + core_ot
+            #leave_fullday =
             v = hours_min(request,time_in_min=total_core,date=sd,dict="Yes")
             key.append(str(date1))
             value.append(str(v))
@@ -388,9 +393,16 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             total = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = utilisation_list  ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             totalcoreot = (total + core_ot)
             no_of_member = 1 if no_of_member == 0 else no_of_member
+            halfdaycode = 2,4,6
+            fulldaycode = 1,3,5,7,8
+            leave_halfday = calculation(request,model=TblLeaveRecord.objects.all(),datefield='leave_date',field_name_list = ['userid__mimemberid','userid__teamdetail','leave_type'], value_list = [memberid,teamid,halfdaycode],values='userid',aggregatefield='userid',fromdate=StartDate,todate=EndDate,raw_data='N',calculation_type='count')
+            leave_fullday = calculation(request,model=TblLeaveRecord.objects.all(),datefield='leave_date',field_name_list = ['userid__mimemberid','userid__teamdetail','leave_type'], value_list = [memberid,teamid,fulldaycode],values='userid',aggregatefield='userid',fromdate=StartDate,todate=EndDate,raw_data='N',calculation_type='count')
+            reduce_time = (leave_halfday * (averagetime/2)) +  (leave_fullday * (averagetime))
+            print(str(StartDate) + "'" + str(reduce_time) + "'" + str(EndDate))
+            #print(str(StartDate) + "'" + str(leave_halfday) + "'" + str(EndDate))
             #print(str(date1) + ":" + str(total_core) + ":" + str((averagetime * no_of_member) + core_ot))
             try:
-                v = round((total_core/((no_of_member * averagetime) + core_ot)) * 100,2)
+                v = round((total_core/(((no_of_member * averagetime) - reduce_time) + core_ot)) * 100,2)
                 v = v if v != 0.0 else '00.00'
             except:
                 v = '00.00'
@@ -639,9 +651,10 @@ def Add_To_Timetracker(request,activityid):
 
 @login_required
 def data_formation_Timetracker(request,startdate=None,enddate=None,team=None,member=None):
-    print(team)
-    print(member)
-    filter_dict = create_dict_for_filter(request,field_name_list = ['teamdetail','mimember'],value_list = [team,member])
+    #print(team)
+    #print(member)
+    filter_dict = create_dict_for_filter(request,field_name_list = ['teamdetail__teamname','mimember__username__username'],value_list = [team,member])
+    #print(filter_dict)
     countofdata = Timetrackers.objects.filter(trackingdatetime__range=[startdate,enddate]).filter(**filter_dict).count()
     if countofdata > 0:
         df1 = pd.DataFrame(list(Timetrackers.objects.filter(trackingdatetime__range=[startdate,enddate]).filter(**filter_dict).values()))
@@ -701,8 +714,8 @@ def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=No
     return data
 @login_required
 def data_formation_ot(request,startdate=None,enddate=None,team=None,member=None):
-    filter_dict = create_dict_for_filter(request,field_name_list = ['timetrackers__teamdetail','timetrackers__mimember'],value_list = [team,member])
-    countofdata = OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]).filter(ot_startdatetime__range=[startdate,enddate]).count()
+    filter_dict = create_dict_for_filter(request,field_name_list = ['timetrackers__teamdetail__teamname','timetrackers__mimember__username__username'],value_list = [team,member])
+    countofdata = OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]).filter(ot_startdatetime__range=[startdate,enddate]).filter(**filter_dict).count()
     if countofdata > 0:
         df1 = pd.DataFrame(list(OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]).filter(ot_startdatetime__range=[startdate,enddate]).filter(**filter_dict).values()))
         df2 = pd.DataFrame(list(Timetrackers.objects.exclude(valid_invalid__in=[2]).values()))
@@ -743,10 +756,10 @@ def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=
     return data
 @login_required
 def data_formation_error(request,startdate=None,enddate=None,team=None,member=None):
-    filter_dict = create_dict_for_filter(request,field_name_list = ['error_reportedto__teamdetail','error_reportedto'],value_list = [team,member])
-    countofdata = Errorlog.objects.filter(errorlog_date__range=[startdate,enddate]).count()
+    filter_dict = create_dict_for_filter(request,field_name_list = ['error_reportedto__teamdetail__teamname','error_reportedto__username__username'],value_list = [team,member])
+    countofdata = Errorlog.objects.filter(errorlog_date__range=[startdate,enddate]).filter(**filter_dict).count()
     if countofdata > 0:
-        df1 = pd.DataFrame(list(Errorlog.objects.filter(errorlog_date__range=[startdate,enddate]).values()))
+        df1 = pd.DataFrame(list(Errorlog.objects.filter(errorlog_date__range=[startdate,enddate]).filter(**filter_dict).values()))
         df2 = pd.DataFrame(list(Activity.objects.all().values()))
         df3 = pd.DataFrame(list(Mimember.objects.all().values()))
         df4 = pd.DataFrame(list(Teamdetail.objects.all().values()))
@@ -1347,10 +1360,10 @@ def Filter_Data(request):
     if request.method == 'POST':
         form =  SearchForm(request.POST)
         if form.is_valid():
-            request.session['reportno'] = form.cleaned_data['datachoice']
+            request.session['reportno'] = dict(REPORT_CHOICES)[int(form.cleaned_data['datachoice'])]
             request.session['startdate'] = str(form.cleaned_data['startdate'])
             request.session['interval'] = dict(INTERVAL_CHOICES)[int(form.cleaned_data["interval"])]
-            request.session['type'] = str(form.cleaned_data['datatype'])
+            request.session['type'] = dict(TYPE_CHOICES)[int(form.cleaned_data['datatype'])]
             request.session['enddate'] = str(form.cleaned_data['enddate'])
             request.session['team'] = str(form.cleaned_data['team'])
             request.session['member'] = str(form.cleaned_data['member'])
@@ -1370,11 +1383,11 @@ def Data_anlayis(request):
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     startdate, enddate, reportno, type, interval, team, member = Datarequiredforreport(request)
-    if type == '1':
+    if type == 'Raw Data':
         startdate, enddate, reportno, type, interval, team, member, data = Rawdata(request)
         view_dict = ''
         value = ''
-    elif type == '2':
+    elif type == 'Summary':
         value = request.POST.get('button')
         print(value)
         startdate, enddate, reportno, type, interval, team, member, data = Summary_Type(request,report_type=value)
@@ -1401,7 +1414,7 @@ def Datarequiredforreport(request):
 def Rawdata(request):
     global exportdata
     startdate, enddate, reportno, type, interval, team, member = Datarequiredforreport(request)
-    if reportno == '1':
+    if reportno == 'Workflow':
         data, countofdata = data_formation_workflow(request,startdate=startdate,enddate=enddate,team=team, member=member)
         if countofdata >0:
             data = data[['requestid','requestraiseddate','requestpriority','requestdescription','authoriseddate','assigneddate','overviewdate','estimationdate','estacceptrejectdate','completeddate']]
@@ -1409,7 +1422,10 @@ def Rawdata(request):
             data = exportdata.to_html(classes="table cell-border")
         else:
             data = data
-    elif reportno == '2':
+
+    elif reportno == 'TimeTracker':
+        print('startdate' + str(startdate) )
+        print(enddate)
         data, countofdata = data_formation_Timetracker(request,startdate=startdate,enddate=enddate,team=team, member=member)
         if countofdata >0:
             data =  data[['timetrackerid','registerdatetime','trackingdatetime','username','task','requestcategorys','requestsubcategory','core_noncore','totaltime','comments','description_text']]
@@ -1417,7 +1433,7 @@ def Rawdata(request):
             data = exportdata.to_html(classes="table cell-border")
         else:
             data = data
-    elif reportno == '3':
+    elif reportno == 'ErrorLog':
         data, countofdata = data_formation_error(request,startdate=startdate,enddate=enddate,team=team, member=member)
         if countofdata >0:
             data =  data[['error_occurancedate','name','username','error_description','description','primaryowner_id','secondaryowner_id']]
@@ -1426,7 +1442,7 @@ def Rawdata(request):
         else:
             data = data
 
-    elif reportno == '4':
+    elif reportno == 'OT':
         data, countofdata = data_formation_ot(request,startdate=startdate,enddate=enddate,team=team, member=member)
         if countofdata >0:
             data =  data[['ot_id_x','ot_startdatetime','ot_enddatetime','ot_hrs','timetrackerid','trackingdatetime','username','task','totaltime']]
@@ -1447,32 +1463,32 @@ def Rawdata(request):
 
 
 def subnavbar(request,reportno=None):
-    if reportno == '1':
+    if reportno == 'Workflow':
         view_dict = {'Requesttype':{'view':'Request Type','url':'data','value':'Request_Type'},
                      'Request_Priority': {'view':'Request Priority','url':'data','value':'Request_Priority'},
                      'Request_Assigned': {'view':'Request Assigned','url':'data','value':'Request_Assigned'},
                      'Request_Completed':{'view':'Request Completed','url':'data','value':'Request_Completed'}}
 
-    elif reportno == '2':
+    elif reportno == 'TimeTracker':
         view_dict = {'TimeTracker_CoreNonCore':{'view':'Core Non-Core','url':'data','value':'Core_Non-Core'},
                      'TimeTracker_Activity_view': {'view':'Activity View','url':'data','value':'Activity_View'}}
-    elif reportno == '3':
+    elif reportno == 'ErrorLog':
             view_dict = {'Error_User_Wise':{'view':'User Wise','url':'data','value':'User_Wise'},
                          'Error_Report_Wise': {'view':'Report Wise','url':'data','value':'Report_Wise'}}
-    elif reportno == '4':
+    elif reportno == 'OT':
             view_dict = {'OT_view':{'view':'Request_Type','url':'data','value':'OT_view'}}
     return view_dict
 
 def Summary_Type(request,report_type=None):
     global exportdata
     startdate, enddate, reportno, type, interval, team, member = Datarequiredforreport(request)
-    if reportno == '1' and report_type == None:
+    if reportno == 'Workflow' and report_type == None:
         report_type = 'Request_Type'
-    elif reportno == '2' and report_type == None:
+    elif reportno == 'TimeTracker' and report_type == None:
         report_type = 'Core_Non-Core'
-    elif reportno == '3' and report_type == None:
+    elif reportno == 'ErrorLog' and report_type == None:
         report_type = 'User_Wise'
-    elif reportno == '4' and report_type == None:
+    elif reportno == 'OT' and report_type == None:
         report_type = 'OT_view'
 
     if report_type == 'Request_Type':
@@ -1952,7 +1968,7 @@ def Staff_Edit_Manager_Form(request,id):
         if  form1.is_valid():
             inst1 = form1.save(commit=True)
             inst1.save()
-            return HttpResponseRedirect(reverse('details'))
+            return HttpResponseRedirect(reverse('staffdetail'))
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
@@ -1967,7 +1983,6 @@ def Internal_Task_Detail_View(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
     model = Internaltask.objects.all()
     return render(request, 'CentralMI/11a_internal_task_detail_view.html',{'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 

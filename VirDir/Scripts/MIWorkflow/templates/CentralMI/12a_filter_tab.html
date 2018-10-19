@@ -30,13 +30,35 @@ thead > tr {
 {% block content %}
 <div class="col-auto col-sm-12 col-md-12 col-lg-12">
    <div class="col-auto col-sm-12 col-md-12 col-lg-12  ">
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Start Date : {{startdate}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">End Date : {{enddate}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Data Choice : {{reportno}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Interval : {{interval}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Team : {{team}}</div>
-   <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter">Member : {{member}}</div>
-  </div>
+  <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter fontsize12">
+   <div class="fontstyle4"> Start Date </div>
+   <div class="fontstyle1">{{startdate}}</div>
+ </div>
+ <div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter fontsize12">
+  <div class="fontstyle4"> End Date </div>
+  <div class="fontstyle1">{{enddate}}</div>
+</div>
+<div class="col-auto col-sm-6 col-md-2 col-lg-1  card_filter fontsize12">
+ <div class="fontstyle4"> Interval </div>
+ <div class="fontstyle1">{{interval}}</div>
+</div>
+
+<div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter fontsize12">
+ <div class="fontstyle4"> Data </div>
+ <div class="fontstyle1">{{reportno}}</div>
+</div>
+<div class="col-auto col-sm-6 col-md-2 col-lg-1  card_filter fontsize12">
+ <div class="fontstyle4"> Type </div>
+ <div class="fontstyle1">{{type}}</div>
+</div>
+<div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter fontsize12">
+ <div class="fontstyle4"> Team </div>
+ <div class="fontstyle1">{{team}}</div>
+</div>
+<div class="col-auto col-sm-6 col-md-2 col-lg-2  card_filter fontsize12">
+ <div class="fontstyle4"> Member </div>
+ <div class="fontstyle1">{{member}}</div>
+</div>
 </div>
 <div class="col-auto col-sm-12 col-md-12 col-lg-12 ">
 </div>
