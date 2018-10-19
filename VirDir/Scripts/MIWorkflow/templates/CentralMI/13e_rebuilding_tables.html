@@ -1,203 +1,99 @@
-{% extends "basetemplate.html" %}
+{% extends "base_model_template.html" %}
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load staticfiles %}
 {% block style %}
-<style>
-#id_trackingdatetime {
-width: 100%;
-}
-.removepadding{
-  padding-left: 2px;
-  padding-right: 2px
-}
-.form-control{
-  font-size: 14px
-}
-.setbutton{
-  padding-top: 5px;
-  padding-bottom: 0px;
-}
-table {
-  table-layout:fixed;
-}
-table td {
-  word-wrap: break-word;
-  max-width: 400px;
-}
-#example td {
-  white-space:inherit;
-}
-</style>
-{% endblock %}
-{% block navblockleft %}
-<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
 {% endblock %}
 
-{% block navblockright %}
-{% include "userprofiletest1.html" %}
-{% endblock %}
-{% block navblockfilterform %}
-{% endblock %}
 {% block content %}
-<div class="col-sm-12 col-md-12 col-lg-12 box4">
-<div class="col-sm-12 col-md-12 col-lg-2 setbutton">
-  <form method = "POST" action = "{% url 'sdate' %}" >
-    {% csrf_token %}
-        <div  class="col-sm-12 col-md-12 col-lg-9 removepadding ">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</div>
-        <div  class="col-sm-12 col-md-12 col-lg-3 removepadding ">{% buttons submit='Set Date' %}{% endbuttons layout='inline' %}</div>
-  </form>
-</div>
-<div class="col-sm-12 col-md-12 col-lg-10 middle ">
-  <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="fontstyle4 fontsize15">A:Worked</span>
-    {% for key, value in dv.items %}
-    <span class="fontstyle1 fontsize18">{{value}}</span>
-    {% endfor %}
-  </div>
-  <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="fontstyle4 fontsize15">B:OT</span>
-    {% for key, value in dvOT.items %}
-    <span class="fontstyle1 fontsize18">{{value}}</span>
-    {% endfor %}
-  </div>
-  <div class="col-sm-2 col-md-2 col-lg-3 " >
-    <span class="fontstyle4 fontsize15">C:Total (A+B) </span>
-    {% for key, value in dvAll.items %}
-    <span class="fontstyle1 fontsize18">{{value}}</span>
-    {% endfor %}
-  </div>
-  <div class="col-sm-2 col-md-2 col-lg-2 " >
-    <span class="fontstyle4 fontsize15">D:Core </span>
-    {% for key, value in dvcore.items %}
-    <span class="fontstyle1 fontsize18">{{value}}</span>
-    {% endfor %}
-  </div>
-  <div class="col-sm-2 col-md-2 col-lg-3 " >
-    <span class="fontstyle4 fontsize15">Util. (B+D/420+B) </span>
-    <span class="fontstyle1 fontsize18">{{dvutilisation}}</span>
-  </div>
-</div>
-</div>
-  <div class="col-sm-12 col-md-12 col-lg-12  box">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-      <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
-        {% csrf_token %}
-      <div class="">
-        <label class="hidden">Registered Date</label>
-        <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="">
-        <label class="hidden">Tracking Date-time</label>
-        <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="">
-        <label class="hidden">Member</label>
-        <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="">
-        <label class="hidden">Team</label>
-        <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
-        <label class="">Category</label>
-        <span  class="">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
-        <label class="">Sub Category</label>
-        <span  class="">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-1 removepadding ">
-        <label class="">ID</label>
-        <span  class="">{% bootstrap_field form.requestdetail  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
-        <label class="">Activity</label>
-        <span  class="">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-3 removepadding ">
-        <label class="">Task</label>
-        <span  class="">{% bootstrap_field form.task  show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="">
-        <label class="hidden">Description</label>
-        <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="col-sm-12 col-md-12 col-lg-1 removepadding ">
-        <label class="">Time</label>
-        <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
-        </div>
-      <div class="">
-        <label class="hidden">Comments</label>
-        <span  class="hidden">{% bootstrap_field form.comments   show_label=False layout='inline'  %}</span>
-        </div>
-      <div class="">
-        <label class="hidden">Start Date-time</label>
-        <span  class="hidden">{% bootstrap_field form.startdatetime   show_label=False layout='inline'  %}</span>
-      </div>
-      <div class="">
-        <label class="hidden">Stop Date-time</label>
-        <span  class="hidden">{% bootstrap_field form.stopdatetime   show_label=False layout='inline'  %}</span>
-      </div>
-        <div class="col-sm-12 col-md-12 col-lg-1 ">
-          <label class="fontstyle10"> save </label>
-          <div class="">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="col-sm-12 col-md-12 col-lg-12">
-  <table  class="table " id="example" style="width:100%">
-    <thead class="">
-    <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
-     <td >ID</td>
-     <td class="hidden">Registered Date</td>
-     <td class="hidden">Tracking Date</td>
-     <td class="hidden">Associate Name</td>
-     <td class="hidden">Team Name</td>
-     <td>Category</td>
-     <td>Sub-Category</td>
-     <td>Type</td>
-  <!--       <th>Request ID</th> -->
-     <td>Activity</td>
-     <td>Task</td>
-     <td class="hidden">Descritpion</td>
-     <td>Time (Mins)</td>
-     <td>OT</td>
+<form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
 
-     <td class="hidden">Start-Time</td>
-     <td class="hidden">Stop-Time</td>
-     <td>OT (Add/Edit)</td>
-     </tr>
-   </thead>
-   <tbody class="">
-   {%for data in model %}
-   <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
-     <td ><a  href="{% url 'edittracker' data.timetrackerid %}" class="fontstyle4">{{data.timetrackerid }} </a> </td>
-     <td class="hidden">{{data.registerdatetime    }}</td>
-     <td class="hidden">{{data.trackingdatetime }}</td>
-     <td class="hidden">{{data.mimember }}</td>
-     <td class="hidden">{{data.teamdetail }}</td>
-     <td>{{data.requestcategorys }}</td>
-     <td>{{data.requestsubcategory.requestsubcategory  }}</td>
-     <td>{{data.requestsubcategory.core_noncore  }}</td>
-     <!--       <td>{{form.requestdetail }}</td> -->
-     <td>{{data.reports }}</td>
-     <td>{{data.task  }}</td>
-     <td class="hidden">{{data.description_text   }}</td>
-     <td>{{data.totaltime }}</td>
-     <td>{{data.ot.ot_status }}</td>
-     <td class="hidden">{{data.startdatetime  }}</td>
-     <td class="hidden">{{data.stopdatetime   }}</td>
-     <td> <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus"></a> </td>
-     {% endfor %}
-   </tr></br>
-   </tbody>
-   </table>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Edit Tracker</h3>
 </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-4 hidden ">{% bootstrap_label 'Registered Datetime'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.registerdatetime   show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Tracking Datetime'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.trackingdatetime  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Associate'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden" >{% bootstrap_field form.mimember  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'TeamName'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.teamdetail  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Category'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestcategorys  show_label=False %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Sub-Category'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestsubcategory  show_label=False %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Request Detail'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestdetail  show_label=False %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Task'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.task  show_label=False %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Description'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.description_text  show_label=False  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Activity'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.reports  show_label=False  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Total-Time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.totaltime  show_label=False  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Comments'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.comments  show_label=False %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Start Date-time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.startdatetime  show_label=False  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Stop Date-time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.stopdatetime  show_label=False  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Stop Date-time'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.ot  show_label=False  %}</span>
+</div>
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Valid/Invalid'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.valid_invalid  show_label=False  %}</span>
+</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-7">
+  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+<div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'timetracker' %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
+
+</div>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
-
 $("#id_requestcategorys").change(function () {
    var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
    var category_id = $(this).val();  // get the selected country ID from the HTML input
@@ -223,20 +119,18 @@ $("#id_requestcategorys").change(function () {
         'categories': category_id     // add the country id to the GET parameters
       },
         success: function (data) {   // `data` is the return of the `load_cities` view function
-        $("#id_teamfilter").html(data);  // replace the contents of the city input with the data that came from the server
+        $("#id_reports").html(data);  // replace the contents of the city input with the data that came from the server
       }
     });
   });
 
 
-  $(document).ready(function () {
-    $('#id_trackingdatetime').datepicker({
-      autoclose: true,
-      format: "yyyy-mm-dd"
-    });
+  $(document).ready(function() {
+    $("#id_trackingdatetime").datepicker({
+      dateFormat: 'yy-mm-dd',
+       altField: '#thealtdate',
+       altFormat: 'yy-mm-dd'});
   });
-
-
 
 $("#submitbutton").click(function () {
     var datevalue = $("#id_trackingdatetime").val() // get the selected country ID from the HTML input
@@ -251,21 +145,12 @@ $("#submitbutton").click(function () {
     });
   });
 
-
-
-
 </script>
-
-{% endblock %}
-{% block javascript %}
 
 {% endblock %}
 
 {% block footer %}
-{% include "userprofilefootertest1.html" %}
 {% endblock %}
 
-{% block footer_right %}
-{% endblock %}
-
+</body>
 </html>

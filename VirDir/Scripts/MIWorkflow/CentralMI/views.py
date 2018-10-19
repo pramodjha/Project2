@@ -370,6 +370,8 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             StartDate = cd - timedelta(days=(days + (cumulativedays)))
             EndDate  = StartDate + timedelta(days=(No_of_days -2))
             date1 = month
+            print("Monthly " + str(StartDate))
+            print("Monthly " + str(EndDate))
         if type == None:
             data = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             v = hours_min(request,time_in_min=data,date=sd,dict="Yes")
