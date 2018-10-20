@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblLeaveRecord, TblLeaveType,TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, UatDetail, UatStatus,AssignView,TblNavbarView,TeamMetricsData,ViewType,ValidInvalid
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Deliverydays, Frequency, Reports,Emaildetail,TimeDetail,Filteroption,Fielddetail, Errortype, Errorlog, Feedback, FeedbackQuestion, OtDetail, OtStatus,ReportType, Activitystatus,Designationmaster, Internaltask, Internaltaskstatus, Internaltaskchoice,Whatwedo, Reply, Suggestion, Governance, SuccessStories, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblLeaveRecord, TblLeaveType,TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblRawScore, UatDetail, UatStatus,AssignView,TblNavbarView,TeamMetricsData,ViewType,ValidInvalid,  IssueAction , Shiftupdate , Gallery, Publicholidays
 
+
+admin.site.register(IssueAction)
+admin.site.register(Shiftupdate)
+admin.site.register(Gallery)
+admin.site.register(Publicholidays)
 
 admin.site.register(ValidInvalid)
 admin.site.register(Mimember)

@@ -1099,3 +1099,49 @@ class ViewType(models.Model):
 
     def __str__(self):
         return str(self.viewname)
+
+class IssueAction(models.Model):
+    issue_action_id = models.AutoField(db_column='Issue_Action_id', primary_key=True)  # Field name made lowercase.
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    issue = models.CharField(db_column='Issue', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    action_taken = models.CharField(db_column='Action_taken', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    targetdate = models.DateField(blank=True, null=True)
+    updatedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='updatedby', blank=True, null=True)
+    status = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='status', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Issue_Action'
+
+class Shiftupdate(models.Model):
+    updateid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    updateinbrief = models.TextField(blank=True, null=True)
+    updatedrecordedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='updatedrecordedby', blank=True, null=True)
+    updatestatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='updatestatus', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ShiftUpdate'
+
+
+class Gallery(models.Model):
+    imgid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField(default= datetime.datetime.now())
+    uploadedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='uploadedby', blank=True, null=True)
+    img = models.FileField(upload_to='gallery/',blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Gallery'
+
+
+class Publicholidays(models.Model):
+    holidaysid = models.AutoField(primary_key=True)
+    date = models.DateField(blank=True, null=True)
+    holidays_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'PublicHolidays'

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblUsefulLinks, UatDetail, TeamMetricsData
+from .models import Acceptrejectdetail, Acceptrejectoption, Assigneddetail, Authorisedetail, Authoriserdetail, Completeddetail, Estimationdetail, Mimember, Options, Overviewdetail, Prioritydetail, Requestcategorys, Requestdetail, Requeststatusdetail, Requestsubcategory, Requesttypedetail, Statusdetail, Teamdetail, Timetrackers, Reports,Emaildetail, Errorlog, Feedback, OtDetail, Activity, Designationmaster, AuthUser, Internaltask, Internaltaskchoice, Internaltaskstatus, ActivitystatusCalendar, SuccessStories,Governance, Suggestion, Reply, Whatwedo, TblConversation, TblLeaveRecord, TblAppreciation, TblRawActivityDetail, TblRawScore, TblRawTeamMaster,TblRawTeamMemberMaster,TblTeamMetrics,TeamMetrics, TblUsefulLinks, UatDetail, TeamMetricsData, IssueAction , Shiftupdate , Gallery, Publicholidays
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime, timedelta
@@ -404,4 +404,25 @@ class UatDetailForm(forms.ModelForm):
 class TeamMetricsDataForm(forms.ModelForm):
     class Meta():
         model = TeamMetricsData
+        fields = '__all__'
+
+
+class IssueActionForm(forms.ModelForm):
+    class Meta():
+        model = IssueAction
+        fields = '__all__'
+
+class ShiftupdateForm(forms.ModelForm):
+    class Meta():
+        model = Shiftupdate
+        fields = '__all__'
+
+class GalleryForm(forms.ModelForm):
+    class Meta():
+        model = Gallery
+        fields = '__all__'
+
+class PublicholidaysForm(forms.ModelForm):
+    class Meta():
+        model = Publicholidays
         fields = '__all__'

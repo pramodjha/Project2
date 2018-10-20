@@ -155,4 +155,15 @@ url(r'^useful_link_edit_form/(?P<linkid>\d+)$', views.Useful_link_Edit_form, nam
 url(r'^useful_link_add_form/', views.Useful_link_Add_form, name='usefullinkaddform'),
 url(r'^edit_metrics/(?P<metricsid>\d+)$', views.Edit_Metrics, name='editmetrics'),
 
+# update, issue/action
+url(r'^update_form_add/', views.IssueAction_Add_Form, name='issueactionadd'),
+url(r'^issue_action_form_add/', views.Shiftupdate_Add_Form, name='updateadd'),
+url(r'^update_form_edit/(?P<updateid>\d+)$', views.Shiftupdate_Edit_Form, name='updateedit'),
+url(r'^issue_action_form_edit/(?P<issueactionid>\d+)$', views.IssueAction_Edit_Form, name='issueactionedit'),
+
+# gallery
+url(r'^gallery_view/', views.Gallery_View, name='gallery'),
+url(r'^gallery_form_add/', views.Gallery_Add_Form, name='galleryadd'),
+url(r'^gallery_form_edit/(?P<imgid>\d+)$', views.Gallery_Edit_Form, name='galleryedit'),
+
 	]

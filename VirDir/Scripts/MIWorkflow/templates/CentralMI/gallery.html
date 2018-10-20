@@ -1,0 +1,41 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'galleryadd' %}" id="gallery" name="Add" class="fontstyle12">Add Img</a></div>
+
+{% for data in model %}
+<div class="col-sm-4 col-md-4 col-lg-4 ">
+<div class="">
+    <!-- Avatar -->
+    <div class="card fontstyle4 fontsize18">
+        <!-- Name -->
+        {{ data.date_time}} | {{ data.uploadedby}} | <a href="{% url 'galleryedit' data.imgid %}" id="galleryedit" name="edit" class="glyphicon glyphicon-pencil"></a>
+    </div>
+        <!-- Quotation -->
+    <div class="card1 ">
+      <img class="image1" src="{{ MEDIA_URL}}/{{data.img}}" height='100%' width='100%' alt="Avatar" />
+    </div>
+</div>
+<!-- Card -->
+</div>
+
+{% endfor %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

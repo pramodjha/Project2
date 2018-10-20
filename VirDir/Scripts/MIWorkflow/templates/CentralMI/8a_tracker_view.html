@@ -39,7 +39,16 @@ table td {
 {% include "userprofiletest1.html" %}
 {% endblock %}
 {% block navblockfilterform %}
+{% if msg1 != "ok" %}
+<div class="col-sm-12 col-md-12 col-lg-12 fontstyle5 fontsize12 middle">{{msg1}}</div>
+{% elif msg2 != "ok" %}
+<div class="col-sm-12 col-md-12 col-lg-12  fontstyle5 fontsize12 middle">{{msg2}}</div>
+{% elif msg3 != "ok" %}
+<div class="col-sm-12 col-md-12 col-lg-12  fontstyle5 fontsize12 middle">{{msg3}}</div>
+{% endif %}
+
 {% endblock %}
+
 {% block content %}
 <div class="col-sm-12 col-md-12 col-lg-12 box4">
 <div class="col-sm-12 col-md-12 col-lg-2 setbutton">
@@ -75,8 +84,8 @@ table td {
     {% endfor %}
   </div>
   <div class="col-sm-2 col-md-2 col-lg-3 " >
-    <span class="fontstyle4 fontsize15">Util. (B+D/420+B) </span>
-    <span class="fontstyle1 fontsize18">{{dvutilisation}}</span>
+    <span class="fontstyle4 fontsize15">{{utiliationtext}}</span>
+    <span class="fontstyle1 fontsize18">{{dvutilisation}}:{{daystype}}</span>
   </div>
 </div>
 </div>

@@ -1,0 +1,60 @@
+{% extends "base_model_template.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<script src="{% static 'jquery/myjquery.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div >
+<h3 class="col-sm-12 col-md-12 col-lg-12 head">Upload Img</h3>
+</div>
+</div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Date Time'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.date_time  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Uploaded by'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.uploadedby  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Upload Img'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.img  show_label=False   %}</span>
+  </div>
+  <div>
+  <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Description'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.description  show_label=False   %}</span>
+  </div>
+</div>
+  <div class="col-sm-12 col-md-12 col-lg-7">
+  <div class="col-sm-12 col-md-12 col-lg-3 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+  <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'gallery' %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
+</div>
+
+</form>
+
+<script>
+$('#id_leave_date').datetimepicker({
+    //language:  'fr',
+weekStart: 1,
+todayBtn:  1,
+autoclose: 1,
+todayHighlight: 1,
+startView: 2,
+forceParse: 0,
+showMeridian: 1
+});
+</script>
+
+
+{% endblock %}

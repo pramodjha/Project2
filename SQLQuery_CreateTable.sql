@@ -515,3 +515,44 @@ create table valid_invalid(
 valid_invaidid int not null primary key Identity(1,1),
 type varchar(255)
 )
+
+
+use 
+create table PublicHolidays(
+holidaysid int not null primary key Identity(1,1),
+date date,
+holidays_name varchar(255)
+)
+
+drop table Gallery
+
+create table Gallery(
+imgid int not null primary key Identity(1,1),
+date_time  datetime default getdate() not null,
+uploadedby int foreign key references mimember(mimemberId),
+img varchar(255),
+description varchar(max),
+)
+
+create table ShiftUpdate(
+updateid int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+updateinbrief varchar(max),
+updatedrecordedby int foreign key references mimember(mimemberId),
+updatestatus int foreign key references  activitystatus(activitystatusid),
+)
+
+create table Issue_Action(
+Issue_Action_id int not null primary key Identity(1,1),
+date_time datetime default getdate() not null,
+Issue varchar(255),
+Action_taken varchar(255),
+targetdate date,
+updatedby int foreign key references mimember(mimemberId),
+status int foreign key references  activitystatus(activitystatusid),
+)
+
+
+
+
+
