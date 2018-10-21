@@ -1145,3 +1145,7 @@ class Publicholidays(models.Model):
     class Meta:
         managed = False
         db_table = 'PublicHolidays'
+
+
+    def __str__(self):
+        return str(self.date)

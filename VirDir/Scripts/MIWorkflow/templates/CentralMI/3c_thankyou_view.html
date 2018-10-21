@@ -25,7 +25,11 @@
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Type : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requesttypedetail }} </span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Owner : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.username }}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Description : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requestdescription }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> BRD : </label><span> <a href="{{ MEDIA_URL }}/media/{{ detail1.requestdocument}}"><span class="glyphicon glyphicon-cloud-download"></span></a></div>
+{% if detail1.requestdocument == None or detail1.requestdocument == ""  %}
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> BRD : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> Not Available</span></div>
+{% else %}
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> BRD : </label><span> <a href="{{ MEDIA_URL }}/{{ detail1.requestdocument}}"><span class="glyphicon glyphicon-cloud-download fontstyle12"></span></a></div>
+{% endif %}
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Authorise Details (2)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Authorised Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{detail2.authoriseddate }}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Authorised By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail2.authoriserdetail }}</span></div>
@@ -40,7 +44,12 @@
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Provided By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.providedby}}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Given To : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.mimember}}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> SOP Created : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.sopcreatedoptionsid}} </p></span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Download SOP: </label><span> <a href="{{ MEDIA_URL }}/media/{{ detail5.document}}"><span class="glyphicon glyphicon-cloud-download"></span></a></div>
+{% if detail5.document == None or detail5.document == ""  %}
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Download SOP: </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> Not Available</span></div>
+{% else %}
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Download SOP: </label><span> <a href="{{ MEDIA_URL }}/{{ detail5.document}}"><span class="glyphicon glyphicon-cloud-download fontstyle12"></span></a></div>
+{% endif %}
+
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Estimation Details (5)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Estimation Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail6.estimationdate}}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Estimation By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail6.estimatedby}} </span></div>

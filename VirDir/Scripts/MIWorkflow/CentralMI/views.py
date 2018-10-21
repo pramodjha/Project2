@@ -2189,8 +2189,9 @@ def Leave_Record_View(request):
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['userid','userid__teamdetail'], value_list = [memberid,teamid])
     model = TblLeaveRecord.objects.filter(**(filterdict))
+    model1 = Publicholidays.objects.all()
     count = model.values('leave_type__leave_type','userid__username__username').annotate(dcount=Count('leave_type'))
-    return render(request, 'CentralMI/11a_leave_detail.html',{'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'count':count})
+    return render(request, 'CentralMI/11a_leave_detail.html',{'model':model, 'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'count':count})
 
 
 
@@ -2272,7 +2273,7 @@ def Internal_Task_And_Choice_View(request,taskid):
     print(checkmember)
     if checkmember > 0:
         taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
-    #    print(taskstatusid)
+        print(taskstatusid)
         e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
         form = InternaltaskstatusForm(instance=e)
         #print(form)
@@ -2294,8 +2295,9 @@ def Internal_Task_And_Choice_View(request,taskid):
             choice = request.POST['choice']
             print(choice)
             taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
+            print(taskchoiceid)
             e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
-            #print(choice)
+            print(e)
             form =  InternaltaskstatusForm(request.POST)
             if form.is_valid():
                 inst = form.save(commit=True)

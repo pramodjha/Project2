@@ -98,13 +98,13 @@ label {
   /*------------------------font_Color------------------------------------------------*/
 
 .fontstyle1{color: #d9d9d9;}
-.fonthoverstyle1{color: #595959;}
+.fontstyle1:hover{color:#ffffff;}
 .fontstyle4{color: #e68a00;}
-.fonthoverstyle4{color: #ff6666;}
+.fontstyle4:hover{color:#ffa31a;}
 .fontstyle11{color: #005266;}
 .fontstyle10{color: #333333;}
 .fontstyle12{color:#66c2ff;}
-.fontstyle12:hover{color:#33adff;}
+.fontstyle12:hover{color:#e68a00;}
 .fontstyle5{color:#ff6666;}
 .fontstyle5:hover{color:#ff8080;}
 

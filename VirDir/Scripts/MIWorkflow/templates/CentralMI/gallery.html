@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'galleryadd' %}" id="gallery" name="Add" class="fontstyle12">Add Img</a></div>
+<div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'galleryadd' %}" id="gallery" name="Add" class="glyphicon glyphicon-plus fontstyle12"></a></div>
 
 {% for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4 ">
@@ -23,7 +23,7 @@
     <!-- Avatar -->
     <div class="card fontstyle4 fontsize18">
         <!-- Name -->
-        {{ data.date_time}} | {{ data.uploadedby}} | <a href="{% url 'galleryedit' data.imgid %}" id="galleryedit" name="edit" class="glyphicon glyphicon-pencil"></a>
+        {{ data.date_time}} | {{ data.uploadedby}} | <a href="{% url 'galleryedit' data.imgid %}" id="galleryedit" name="edit" class="glyphicon glyphicon-pencil fontstyle12"></a>
     </div>
         <!-- Quotation -->
     <div class="card1 ">

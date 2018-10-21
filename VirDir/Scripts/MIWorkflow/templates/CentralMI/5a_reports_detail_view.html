@@ -20,7 +20,7 @@
       <thead class="">
       <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
         {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-        <td >ID <a href="{% url 'addreport' %}" class="glyphicon glyphicon-plus"></a></td>
+        <td >ID <a href="{% url 'addreport' %}" class="glyphicon glyphicon-plus fontstyle12"></a></td>
         {% else %}
         <td >ID </td>
         {% endif %}
@@ -57,9 +57,9 @@
       <td>{{data.secondaryowner }}</td>
       <td>{{data.description }}</td>
         <td>{{data.activitystatus }}</td>
-        <td> <a href="{% url 'errorlog' data.activityid %}" class="glyphicon glyphicon-plus"></a> | <a  href="{% url 'viewfeedbackquestion' data.activityid  %}" class="glyphicon glyphicon-plus"></a></td>
+        <td> <a href="{% url 'errorlog' data.activityid %}" class="glyphicon glyphicon-plus fontstyle12"></a> | <a  href="{% url 'viewfeedbackquestion' data.activityid  %}" class="glyphicon glyphicon-plus fontstyle12"></a></td>
         {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
-        <td> <a href="{% url 'editreport' data.activityid %}" class="glyphicon glyphicon-pencil"></a></td>
+        <td> <a href="{% url 'editreport' data.activityid %}" class="glyphicon glyphicon-pencil fontstyle12"></a></td>
         {% else %}
         {% endif %}
         {% endfor %}
