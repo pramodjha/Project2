@@ -323,6 +323,7 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
     key = []
     value = []
     cumulativedays = 0
+    currentreviseddate = '2018-01-01'
     for i in range(days_range):
         currentdate = datetime.today()
         cd = datetime.strftime(currentdate, '%y/%m/%d')
@@ -353,28 +354,30 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             No_of_days = (7 * i)
             Start = cd - timedelta(days=cd.weekday())
             StartDate = Start - timedelta(days=No_of_days)
-            EndDate  = StartDate  + timedelta(days=(days))
+            EndDate  = StartDate  + timedelta(days=(days-1))
             currentyear = datetime.strftime(StartDate, '%Y')
             currentmonth = datetime.strftime(StartDate, '%m')
             currentdays = datetime.strftime(StartDate, '%d')
             date1 = date(int(currentyear),int(currentmonth),int(currentdays))
         elif range_type == 'Monthly':
-            currentmonth = datetime.strftime(currentdate, '%m')
-            currentyear = datetime.strftime(currentdate, '%Y')
-            month  = int(currentmonth) - i
-            year  = int(currentyear) - year_range
+            if currentreviseddate == '2018-01-01':
+                currentmonth = datetime.strftime(currentdate, '%m')
+                currentyear = datetime.strftime(currentdate, '%Y')
+                currentreviseddate = currentdate
+            else:
+                currentmonth = datetime.strftime(currentreviseddate, '%m')
+                currentyear = datetime.strftime(currentreviseddate, '%Y')
+            month  = int(currentmonth)
+            year  = int(currentyear)
             No_of_daystest = calendar.monthrange(year,month)[1]
             currentdays = datetime.strftime(currentdate, '%d')
-            days  = (int(currentdays) -1)
-            daystoloop = calendar.monthrange(year,month)[1]
-            No_of_days = calendar.monthrange(year,month)[1]
-            cumulativedays = (cumulativedays + No_of_days) -1
-            StartDate = cd - timedelta(days=(days + (cumulativedays)))
-            EndDate  = StartDate + timedelta(days=(No_of_days -2))
-            date1 = month
-            print("daysinmonth" + str(No_of_daystest))
-            print("Monthly start" + str(StartDate))
-            #print("Monthly End" + str(EndDate))
+            dateforstartofmonth = (str(year)+"-"+str(month)+"-1")
+            dateforstartofmonth = datetime.strptime(dateforstartofmonth, '%Y-%m-%d')
+            StartDate = dateforstartofmonth
+            EndDate = dateforstartofmonth + timedelta(days=(No_of_daystest-1))
+            month = str("0")+str(month) if month <= 9 else str(month)
+            date1 = str(str(year) + "-" +str(month))
+            currentreviseddate = currentreviseddate - timedelta(days=(No_of_daystest))
         if type == None:
             data = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             v = hours_min(request,time_in_min=data,date=sd,dict="Yes")
@@ -385,7 +388,6 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             core = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
             core_ot = calculation(request,model=OtDetail.objects.exclude(timetrackers__valid_invalid__in=[2]),datefield='timetrackers__trackingdatetime',field_name_list = ['timetrackers__mimember','timetrackers__teamdetail','timetrackers__requestsubcategory__core_noncore','ot_status__ot_status'], value_list = [memberid,teamid,'Core','Accepted'],values='timetrackers__mimember',aggregatefield='ot_hrs',fromdate=StartDate,todate=EndDate,raw_data='N')
             total_core = core + core_ot
-            #leave_fullday =
             v = hours_min(request,time_in_min=total_core,date=sd,dict="Yes")
             key.append(str(date1))
             value.append(str(v))
@@ -402,14 +404,19 @@ def start_end_date(request,model=None,datefield=None,sd=None,values=None,aggrega
             fulldaycode = 1,3,5,7,8
             leave_halfday = calculation(request,model=TblLeaveRecord.objects.all(),datefield='leave_date',field_name_list = ['userid__mimemberid','userid__teamdetail','leave_type'], value_list = [memberid,teamid,halfdaycode],values='userid',aggregatefield='userid',fromdate=StartDate,todate=EndDate,raw_data='N',calculation_type='count')
             leave_fullday = calculation(request,model=TblLeaveRecord.objects.all(),datefield='leave_date',field_name_list = ['userid__mimemberid','userid__teamdetail','leave_type'], value_list = [memberid,teamid,fulldaycode],values='userid',aggregatefield='userid',fromdate=StartDate,todate=EndDate,raw_data='N',calculation_type='count')
-            reduce_time = (leave_halfday * (averagetime/2)) +  (leave_fullday * (averagetime))
+            reduce_time = (leave_halfday * (420/2)) +  (leave_fullday * (420))
             try:
                 v = round((total_core/(((no_of_member * averagetime) - reduce_time) + core_ot)) * 100,2)
                 v = v if v != 0.0 else '00.00'
+                v = "0"+str(v) if str(v).find('.') == 1 else str(v)
+
+                #print(position)
+
             except:
                 v = '00.00'
             key.append(str(date1))
             value.append(str(v))
+
             result = OrderedDict(zip(key, value))
         elif type == "error":
             data = calculation(request,model=model,datefield=datefield,field_name_list = field_name_list, value_list = value_list ,values=values,aggregatefield=aggregate,fromdate=StartDate,todate=EndDate,raw_data='N')
@@ -3248,6 +3255,8 @@ def calculation(request,datefield=None,model=None,values=None,fromdate=None,toda
 
     if fromdate != None and todate != None:
         filter =  filterbydaterange(request,variable_column=datefield,fromdate=fromdate,todate=todate)
+        #print("Startdate" + str(fromdate))
+        #print("Startdate" + str(todate))
         daterange = [fromdate,todate]
         if raw_data == 'Y':
             data = model.filter(**{filter: daterange}).filter(**(filterdict)).aggregate(aggregation)
@@ -3358,17 +3367,17 @@ def TimeTracker_View(request):
                 dvutilisation = round(dvutilisation,2)
                 msg2 = "ok"
                 msg1 = "ok"
-                return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1,'msg3':msg3})
+                return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
             else:
                 msg2 = "Category, SubCategory and Totaltime cannot be blank"
                 print(msg1)
                 print(msg2)
                 print(msg3)
 
-                return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1,'msg3':msg3})
+                return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
         else:
             msg2 = "ok"
-            return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg1':msg1,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1,'msg3':msg3})
+            return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg1':msg1,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
     return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg1':msg1,'utiliationtext':utiliationtext, 'daystype':daystype})
 
 @login_required
