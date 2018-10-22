@@ -691,37 +691,42 @@ def data_formation_Timetracker(request,startdate=None,enddate=None,team=None,mem
 
 def Timetrcker_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
     global exportdata
-    data = data_formation_Timetracker(request,startdate=startdate,enddate=enddate,team=team,member=member)
-    data = data[data['teamname']==team] if team != 'None' else data
-    data = data[data['username']==member] if member != 'None' else data
-    if interval == 'Daily':
-        if view == "core_noncore":
-            pivot_daily_corenoncore = pd.pivot_table(data,index=['trackingdatetime', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
-            exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
-            #print(exportdata.head(5))
-            data = pivot_daily_corenoncore.to_html(classes="table cell-border")
-        elif view == "activity":
-            pivot_daily_corenoncore = pd.pivot_table(data,index=['requestcategorys','requestsubcategory'], columns='username', values='totaltime',aggfunc=sum)
-            exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
-            data = pivot_daily_corenoncore.to_html(classes="table cell-border")
-    elif  interval == 'Monthly':
-        if view == "core_noncore":
-            pivot_monthly_corenoncore = pd.pivot_table(data,index=['trackingdatetime_monthyear', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
-            exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
-            data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
-        elif view == "activity":
-            pivot_monthly_corenoncore = pd.pivot_table(data,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
-            exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
-            data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
-    elif  interval == 'Weekly':
-        if view == "core_noncore":
-            pivot_weekly_corenoncore = pd.pivot_table(data,index=['trackingdatetime_week', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
-            exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
-            data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
-        elif view == "activity":
-            pivot_weekly_corenoncore = pd.pivot_table(data,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
-            exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
-            data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    data, countofdata = data_formation_Timetracker(request,startdate=startdate,enddate=enddate,team=team,member=member)
+    if countofdata > 0:
+
+        data = data[data['teamname']==team] if team != 'None' else data
+        data = data[data['username']==member] if member != 'None' else data
+        print(type(data))
+        if interval == 'Daily':
+            if view == "core_noncore":
+                pivot_daily_corenoncore = pd.pivot_table(data,index=['trackingdatetime', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+                exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
+                #print(exportdata.head(5))
+                data = pivot_daily_corenoncore.to_html(classes="table cell-border")
+            elif view == "activity":
+                pivot_daily_corenoncore = pd.pivot_table(data,index=['requestcategorys','requestsubcategory'], columns='username', values='totaltime',aggfunc=sum)
+                exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
+                data = pivot_daily_corenoncore.to_html(classes="table cell-border")
+        elif  interval == 'Monthly':
+            if view == "core_noncore":
+                pivot_monthly_corenoncore = pd.pivot_table(data,index=['trackingdatetime_monthyear', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+                exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
+                data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
+            elif view == "activity":
+                pivot_monthly_corenoncore = pd.pivot_table(data,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+                exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
+                data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
+        elif  interval == 'Weekly':
+            if view == "core_noncore":
+                pivot_weekly_corenoncore = pd.pivot_table(data,index=['trackingdatetime_week', 'core_noncore'], columns='username', values='totaltime',aggfunc=sum).unstack('core_noncore')
+                exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
+                data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+            elif view == "activity":
+                pivot_weekly_corenoncore = pd.pivot_table(data,index=['requestcategorys'], columns='username', values='totaltime',aggfunc=sum)
+                exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
+                data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    else:
+        data = "Data Not Available"
     return data
 @login_required
 def data_formation_ot(request,startdate=None,enddate=None,team=None,member=None):
@@ -749,21 +754,24 @@ def data_formation_ot(request,startdate=None,enddate=None,team=None,member=None)
 @login_required
 def Ot_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
     global exportdata
-    data = data_formation_ot(request,startdate=startdate,enddate=enddate,team=team,member=member)
-    data = data[data['teamname']==team] if team != 'None' else data
-    data = data[data['username']==member] if member != 'None' else data
-    if interval == 'Daily':
-        pivot_daily_corenoncore = pd.pivot_table(data,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
-        exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
-        data = pivot_daily_corenoncore.to_html(classes="table cell-border")
-    elif  interval == 'Monthly':
-        pivot_monthly_corenoncore = pd.pivot_table(data,index=['ot_startdatetime_monthyear'], columns='username', values='ot_hrs',aggfunc=sum)
-        exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
-        data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
-    elif  interval == 'Weekly':
-        pivot_weekly_corenoncore = pd.pivot_table(data,index=['ot_startdatetime_week'], columns='username', values='ot_hrs',aggfunc=sum)
-        exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
-        data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    data, countofdata  = data_formation_ot(request,startdate=startdate,enddate=enddate,team=team,member=member)
+    if countofdata > 0:
+        data = data[data['teamname']==team] if team != 'None' else data
+        data = data[data['username']==member] if member != 'None' else data
+        if interval == 'Daily':
+            pivot_daily_corenoncore = pd.pivot_table(data,index=['ot_startdatetime'], columns='username', values='ot_hrs',aggfunc=sum)
+            exportdata = pd.DataFrame(pivot_daily_corenoncore.reset_index())
+            data = pivot_daily_corenoncore.to_html(classes="table cell-border")
+        elif  interval == 'Monthly':
+            pivot_monthly_corenoncore = pd.pivot_table(data,index=['ot_startdatetime_monthyear'], columns='username', values='ot_hrs',aggfunc=sum)
+            exportdata = pd.DataFrame(pivot_monthly_corenoncore.reset_index())
+            data = pivot_monthly_corenoncore.to_html(classes="table cell-border")
+        elif  interval == 'Weekly':
+            pivot_weekly_corenoncore = pd.pivot_table(data,index=['ot_startdatetime_week'], columns='username', values='ot_hrs',aggfunc=sum)
+            exportdata = pd.DataFrame(pivot_weekly_corenoncore.reset_index())
+            data = pivot_weekly_corenoncore.to_html(classes="table cell-border")
+    else:
+        data = "Data Not Available"
     return data
 @login_required
 def data_formation_error(request,startdate=None,enddate=None,team=None,member=None):
@@ -791,42 +799,44 @@ def data_formation_error(request,startdate=None,enddate=None,team=None,member=No
 
 def Error_Summary(request,startdate=None,enddate=None,interval=None,view=None,team=None,member=None):
     global exportdata
-    data = data_formation_error(request,startdate=startdate,enddate=enddate,team=team,member=member)
-    data = data[data['teamname']==team] if team != 'None' else data
-    data = data[data['username']==member] if member != 'None' else data
+    data, countofdata = data_formation_error(request,startdate=startdate,enddate=enddate,team=team,member=member)
+    if countofdata > 0:
+        data = data[data['teamname']==team] if team != 'None' else data
+        data = data[data['username']==member] if member != 'None' else data
 
-    if interval == 'Daily':
-        if view == 'erroruserwise':
-            pivot_daily_userwise = pd.pivot_table(data,index=['errorlog_date'], columns='username', values='error_reportedto_id',aggfunc=len)
-            exportdata = pd.DataFrame(pivot_daily_userwise.reset_index())
-            data = pivot_daily_userwise.to_html(classes="table cell-border")
-        elif view == 'errorreportwise':
-            pivot_daily_userwise = pd.pivot_table(data,index=['errorlog_date'], columns='name', values='error_reportedto_id',aggfunc=len)
-            exportdata = pd.DataFrame(pivot_daily_userwise.reset_index())
-            data = pivot_daily_userwise.to_html(classes="table cell-border")
-    elif  interval == 'Monthly':
-        if view == 'erroruserwise':
-            pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_monthyear'], columns='username', values='error_reportedto_id',aggfunc=len)
-            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
-            data = pivot_monthly_userwise.to_html(classes="table cell-border")
-        elif view == 'errorreportwise':
-            pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_monthyear'], columns='name', values='error_reportedto_id',aggfunc=len)
-            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
-            data = pivot_monthly_userwise.to_html(classes="table cell-border")
-    elif  interval == 'Weekly':
-        if view == 'erroruserwise':
-            pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_week'], columns='username', values='error_reportedto_id',aggfunc=len)
-            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
-            data = pivot_monthly_userwise.to_html(classes="table cell-border")
-        elif view == 'errorreportwise':
-            pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_week'], columns='name', values='error_reportedto_id',aggfunc=len)
-            exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
-            data = pivot_monthly_userwise.to_html(classes="table cell-border")
+        if interval == 'Daily':
+            if view == 'erroruserwise':
+                pivot_daily_userwise = pd.pivot_table(data,index=['errorlog_date'], columns='username', values='error_reportedto_id',aggfunc=len)
+                exportdata = pd.DataFrame(pivot_daily_userwise.reset_index())
+                data = pivot_daily_userwise.to_html(classes="table cell-border")
+            elif view == 'errorreportwise':
+                pivot_daily_userwise = pd.pivot_table(data,index=['errorlog_date'], columns='name', values='error_reportedto_id',aggfunc=len)
+                exportdata = pd.DataFrame(pivot_daily_userwise.reset_index())
+                data = pivot_daily_userwise.to_html(classes="table cell-border")
+        elif  interval == 'Monthly':
+            if view == 'erroruserwise':
+                pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_monthyear'], columns='username', values='error_reportedto_id',aggfunc=len)
+                exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+                data = pivot_monthly_userwise.to_html(classes="table cell-border")
+            elif view == 'errorreportwise':
+                pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_monthyear'], columns='name', values='error_reportedto_id',aggfunc=len)
+                exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+                data = pivot_monthly_userwise.to_html(classes="table cell-border")
+        elif  interval == 'Weekly':
+            if view == 'erroruserwise':
+                pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_week'], columns='username', values='error_reportedto_id',aggfunc=len)
+                exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+                data = pivot_monthly_userwise.to_html(classes="table cell-border")
+            elif view == 'errorreportwise':
+                pivot_monthly_userwise = pd.pivot_table(data,index=['errorlog_date_week'], columns='name', values='error_reportedto_id',aggfunc=len)
+                exportdata = pd.DataFrame(pivot_monthly_userwise.reset_index())
+                data = pivot_monthly_userwise.to_html(classes="table cell-border")
+    else:
+        data = "Data Not Available"
     return data
 
 @login_required
 def data_formation_workflow(request,startdate=None,enddate=None,team=None,member=None):
-
     countofdata = Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).count()
     if countofdata > 0:
         df01 = pd.DataFrame(list(Requestdetail.objects.filter(requestraiseddate__range=[startdate,enddate]).values()))
@@ -961,7 +971,7 @@ def IssueAction_Add_Form(request):
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     mimemberid = Mimember.objects.get(username__username__in=[username]).mimemberid
-    form = IssueActionForm(initial={'updatedby':updatedby})
+    form = IssueActionForm(initial={'updatedby':mimemberid})
     if request.method == 'POST':
         form = IssueActionForm(request.POST)
         if form.is_valid():

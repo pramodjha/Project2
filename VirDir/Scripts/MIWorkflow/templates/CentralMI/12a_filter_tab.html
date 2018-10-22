@@ -117,12 +117,9 @@ $("#id_team").change(function () {
      $(document).ready(function() {
          $('.dataframe').DataTable(
          {
-           destroy: true,
            fixedHeader: true,
            scrollY: '100vh',
            scrollCollapse: true,
-           scrollX: true,
-           fixedColumns: true,
            "lengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
 
          });

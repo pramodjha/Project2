@@ -43,6 +43,8 @@ table td {
 <div class="col-sm-12 col-md-12 col-lg-12 fontstyle5 fontsize12 middle">{{msg1}}</div>
 {% elif msg2 != "ok" %}
 <div class="col-sm-12 col-md-12 col-lg-12  fontstyle5 fontsize12 middle">{{msg2}}</div>
+{% elif msg3 != "ok" %}
+<div class="col-sm-12 col-md-12 col-lg-12  fontstyle5 fontsize12 middle">{{msg3}}</div>
 {% endif %}
 
 {% endblock %}
@@ -197,7 +199,7 @@ table td {
      <td>{{data.ot.ot_status }}</td>
      <td class="hidden">{{data.startdatetime  }}</td>
      <td class="hidden">{{data.stopdatetime   }}</td>
-     <td> <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus"></a> </td>
+     <td> <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-pencil fontstyle12"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus fontstyle12"></a> </td>
      {% endfor %}
    </tr></br>
    </tbody>
