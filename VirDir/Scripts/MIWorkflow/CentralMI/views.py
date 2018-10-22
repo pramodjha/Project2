@@ -2272,15 +2272,12 @@ def Internal_Choice_Edit_Form(request,choiceid):
     return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 
-
-
 @login_required
 def Internal_Task_And_Choice_View(request,taskid):
     view_header = 'Details'
     activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
     userid = User.objects.get(username=username).id
     memberid = Mimember.objects.get(username=userid).mimemberid
     model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
@@ -2291,7 +2288,7 @@ def Internal_Task_And_Choice_View(request,taskid):
     if checkmember > 0:
         taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
         print(taskstatusid)
-        e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
+        e = Internaltaskstatus.objects.get(pk=taskstatusid)
         form = InternaltaskstatusForm(instance=e)
         #print(form)
         if request.method == 'POST':
@@ -2313,7 +2310,60 @@ def Internal_Task_And_Choice_View(request,taskid):
             print(choice)
             taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
             print(taskchoiceid)
-            e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
+            e = Internaltaskchoice.objects.get(pk=taskchoiceid)
+            print(e)
+            form =  InternaltaskstatusForm(request.POST)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.internaltaskchoice = e
+                inst.save()
+                return HttpResponseRedirect(reverse('internaltaskdetail'))
+            else:
+                return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+            return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+
+
+
+@login_required
+def Internal_Task_And_Choice_View(request,taskid):
+    view_header = 'Details'
+    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
+    group_name = is_group(request,username=username)
+    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    userid = User.objects.get(username=username).id
+    memberid = Mimember.objects.get(username=userid).mimemberid
+    model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
+    model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
+    checkmember = Internaltaskstatus.objects.filter(internaltask__in=[taskid]).filter(mimember__in=[memberid]).count()
+    model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
+    print(checkmember)
+    if checkmember > 0:
+        taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
+        print(taskstatusid)
+        e = Internaltaskstatus.objects.get(pk=taskstatusid)
+        form = InternaltaskstatusForm(instance=e)
+        #print(form)
+        if request.method == 'POST':
+            choice = request.POST['choice']
+            e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
+            form =  InternaltaskstatusForm(request.POST,instance=e)
+            if form.is_valid():
+                inst = form.save(commit=True)
+                inst.internaltaskchoice = e
+                inst.save()
+                return HttpResponseRedirect(reverse('internaltaskdetail'))
+            else:
+                return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    else:
+        print('here')
+        form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
+        if request.method == 'POST':
+            choice = request.POST['choice']
+            print(choice)
+            taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
+            print(taskchoiceid)
+            e = Internaltaskchoice.objects.get(pk=taskchoiceid)
             print(e)
             form =  InternaltaskstatusForm(request.POST)
             if form.is_valid():
