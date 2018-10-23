@@ -39,7 +39,7 @@
 <label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Choice'  %}</label>
 <span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskchoice  show_label=False  placeholder='Feedback' %}</span>
 </div>
-
+</div>
 {% for choices in model1 %}
 <div class="col-sm-12 col-md-12 col-lg-12">
 <input type="radio" name="choice" id="choices{{ forloop.counter }}" value="{{ choices.internaltaskchoice }}" {% if choices.internaltaskchoice == choice %} checked="checked" {%else%} {% endif %} />

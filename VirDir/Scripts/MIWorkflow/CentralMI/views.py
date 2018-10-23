@@ -51,7 +51,6 @@ MEDIA_DIR = os.path.join(BASE_DIR, "media")
 print(MEDIA_DIR)
 
 
-
 def Sign_Up_View(request):
     activetab = 'signup'
     system_username = getpass.getuser()
@@ -171,6 +170,7 @@ def Sign_In_As_Other_View(request):
         #form =  UsersigninForm()
         error = 'NoError'
         return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
+
 
 
 def Sign_Out(request):
@@ -845,7 +845,6 @@ def data_formation_workflow(request,startdate=None,enddate=None,team=None,member
         df04 = pd.DataFrame(list(Overviewdetail.objects.all().values()))
         df05 = pd.DataFrame(list(Estimationdetail.objects.all().values()))
         df06 = pd.DataFrame(list(Acceptrejectdetail.objects.all().values()))
-        df07 = pd.DataFrame(list(Completeddetail.objects.all().values()))
         df08 = pd.DataFrame(list(Prioritydetail.objects.all().values()))
         df09 = pd.DataFrame(list(Requesttypedetail.objects.all().values()))
         df10 = pd.DataFrame(list(Mimember.objects.all().values()))
@@ -856,8 +855,7 @@ def data_formation_workflow(request,startdate=None,enddate=None,team=None,member
         df_merge3 = pd.merge(df_merge2, df04,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
         df_merge4 = pd.merge(df_merge3, df05,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
         df_merge5 = pd.merge(df_merge4, df06,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-        df_merge6 = pd.merge(df_merge5, df07,  how='left', left_on=['requestid'], right_on = ['requestdetail_id'])
-        df_merge7 = pd.merge(df_merge6, df08,  how='left', left_on=['prioritydetail_id'], right_on = ['requestpriorityid'])
+        df_merge7 = pd.merge(df_merge5, df08,  how='left', left_on=['prioritydetail_id'], right_on = ['requestpriorityid'])
         df_merge8 = pd.merge(df_merge7, df09,  how='left', left_on=['requesttypedetail_id'], right_on = ['requesttypeid'])
         df_merge9 = pd.merge(df_merge8, df10,  how='left', left_on=['username_id'], right_on = ['username_id'])
         df_merge10 = pd.merge(df_merge9, df11,  how='left', left_on=['username_id'], right_on = ['id'])
@@ -870,13 +868,8 @@ def data_formation_workflow(request,startdate=None,enddate=None,team=None,member
                                          dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
         df_merge11['assigneddate_monthyear'] = df_merge11['assigneddate'].apply(lambda x:
                                          dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
-        df_merge11['completeddate'] = df_merge11['completeddate'].apply(lambda x:
-                                         dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m/%d'),'%y/%m/%d')  if pd.notnull(x) else None)
-        df_merge11['completeddate_monthyear'] = df_merge11['completeddate'].apply(lambda x:
-                                         dt.datetime.strptime(dt.datetime.strftime(x,'%y/%m'),'%y/%m')  if pd.notnull(x) else None)
         df_merge11['requestraised_week'] = df_merge11['requestraiseddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
         df_merge11['assigneddate_week'] = df_merge11['assigneddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
-        df_merge11['completeddate_week'] = df_merge11['completeddate'].apply(lambda x: x - timedelta(days=x.weekday()) if pd.notnull(x) else None)
         data = df_merge11
     else:
         data =  'Data Not Available'
@@ -902,10 +895,6 @@ def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None
                 pivot_daily_assigned = pd.pivot_table(data,index=['assigneddate'], columns='assignedto_id', values='assignedid',aggfunc=len)
                 exportdata = pd.DataFrame(pivot_daily_assigned.reset_index())
                 data = pivot_daily_assigned.to_html(classes="table cell-border")
-            elif view == "requestcompleted":
-                pivot_daily_completed = pd.pivot_table(data,index=['completeddate'], columns='completedby_id', values='completedid',aggfunc=len)
-                exportdata = pd.DataFrame(pivot_daily_completed.reset_index())
-                data = pivot_daily_completed.to_html(classes="table cell-border")
         elif  interval == 'Monthly':
             if view == "requesttype":
                 pivot_monthly_type = pd.pivot_table(data,index=['requestraised_monthyear'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
@@ -919,10 +908,6 @@ def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None
                 pivot_monthly_assigned = pd.pivot_table(data,index=['assigneddate_monthyear'], columns='assignedto_id', values='assignedid',aggfunc=len)
                 exportdata = pd.DataFrame(pivot_monthly_assigned.reset_index())
                 data = pivot_monthly_assigned .to_html(classes="table cell-border")
-            elif view == "requestcompleted":
-                pivot_monthly_Completed = pd.pivot_table(data,index=['completeddate_monthyear'], columns='completedby_id', values='completedid',aggfunc=len)
-                exportdata = pd.DataFrame(pivot_monthly_Completed.reset_index())
-                data = pivot_monthly_Completed.to_html(classes="table cell-border")
         elif  interval == 'Weekly':
             if view == "requesttype":
                 pivot_weekly_type = pd.pivot_table(data,index=['requestraised_week'], columns='requesttype', values='requesttypedetail_id',aggfunc=len)
@@ -936,10 +921,6 @@ def Workflow_Summary(request,startdate=None,enddate=None,interval=None,view=None
                 pivot_weekly_assigned = pd.pivot_table(data,index=['assigneddate_week'], columns='assignedto_id', values='assignedid',aggfunc=len)
                 exportdata = pd.DataFrame(pivot_weekly_assigned.reset_index())
                 data = pivot_weekly_assigned .to_html(classes="table cell-border")
-            elif view == "requestcompleted":
-                pivot_weekly_completed = pd.pivot_table(data,index=['completeddate_week'], columns='completedby_id', values='completedid',aggfunc=len)
-                exportdata = pd.DataFrame(pivot_weekly_completed.reset_index())
-                data = pivot_weekly_completed.to_html(classes="table cell-border")
     else:
         data = 'Data Not Available'
     return data
@@ -1549,7 +1530,7 @@ def Rawdata(request):
     if reportno == 'Workflow':
         data, countofdata = data_formation_workflow(request,startdate=startdate,enddate=enddate,team=team, member=member)
         if countofdata >0:
-            data = data[['requestid','requestraiseddate','requestpriority','requestdescription','authoriseddate','assigneddate','overviewdate','estimationdate','estacceptrejectdate','completeddate']]
+            data = data[['requestid','requestraiseddate','requestpriority','requestdescription','authoriseddate','assigneddate','overviewdate','estimationdate','estacceptrejectdate']]
             exportdata = data
             data = exportdata.to_html(classes="table cell-border")
         else:
@@ -1585,7 +1566,7 @@ def Rawdata(request):
     else:
         data, countofdata = data_formation_workflow(request,startdate=startdate,enddate=enddate,team=team, member=member)
         if countofdata >0:
-            data = data[['requestid','requestraiseddate','requestpriority','requestdescription','authoriseddate','assigneddate','overviewdate','estimationdate','estacceptrejectdate','completeddate']]
+            data = data[['requestid','requestraiseddate','requestpriority','requestdescription','authoriseddate','assigneddate','overviewdate','estimationdate','estacceptrejectdate']]
             exportdata = data
             data = exportdata.to_html(classes="table cell-border")
         else:
@@ -1598,8 +1579,7 @@ def subnavbar(request,reportno=None):
     if reportno == 'Workflow':
         view_dict = {'Requesttype':{'view':'Request Type','url':'data','value':'Request_Type'},
                      'Request_Priority': {'view':'Request Priority','url':'data','value':'Request_Priority'},
-                     'Request_Assigned': {'view':'Request Assigned','url':'data','value':'Request_Assigned'},
-                     'Request_Completed':{'view':'Request Completed','url':'data','value':'Request_Completed'}}
+                     'Request_Assigned': {'view':'Request Assigned','url':'data','value':'Request_Assigned'}}
 
     elif reportno == 'TimeTracker':
         view_dict = {'TimeTracker_CoreNonCore':{'view':'Core Non-Core','url':'data','value':'Core_Non-Core'},
@@ -1632,8 +1612,6 @@ def Summary_Type(request,report_type=None):
         data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='requestpriority')
     elif report_type == 'Request_Assigned':
         data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='requestassigned')
-    elif report_type == 'Request_Completed':
-        data = Workflow_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='requestcompleted')
     elif report_type == 'Core_Non-Core':
         data = Timetrcker_Summary(request,startdate=startdate,enddate=enddate,interval=interval,team=team,member=member,view='core_noncore')
     elif report_type == 'Activity_View':
@@ -1998,8 +1976,9 @@ def Feedback_Add_Form(request,feedbackquestionid):
     checkmember = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid]).count()
     model1 = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid])
     if checkmember > 0:
-        feedbackid = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid])
-        #print(feedbackid)
+        feedbackid = Feedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activity__in=[activityid]).values_list('feedback_id',flat=True)
+        feedbackid = list(feedbackid)
+        feedbackid = feedbackid[0]
         e = Feedback.objects.get(feedback_id=feedbackid)
         form = FeedbackForm(instance=e)
         if request.method == 'POST':
@@ -2212,6 +2191,7 @@ def Leave_Record_View(request):
 
 
 
+
 @login_required
 def Internal_Task_Choice_view(request,taskid):
     view_header = 'Details'
@@ -2272,12 +2252,15 @@ def Internal_Choice_Edit_Form(request,choiceid):
     return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 
+
+
 @login_required
 def Internal_Task_And_Choice_View(request,taskid):
     view_header = 'Details'
     activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+
     userid = User.objects.get(username=username).id
     memberid = Mimember.objects.get(username=userid).mimemberid
     model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
@@ -2286,9 +2269,11 @@ def Internal_Task_And_Choice_View(request,taskid):
     model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
     print(checkmember)
     if checkmember > 0:
-        taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
+        taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid]).values_list('internaltaskstatusid',flat=True)
+        taskstatusid = list(taskstatusid)
+        taskstatusid= taskstatusid[0]
         print(taskstatusid)
-        e = Internaltaskstatus.objects.get(pk=taskstatusid)
+        e = Internaltaskstatus.objects.get(internaltaskstatusid=taskstatusid)
         form = InternaltaskstatusForm(instance=e)
         #print(form)
         if request.method == 'POST':
@@ -2307,63 +2292,13 @@ def Internal_Task_And_Choice_View(request,taskid):
         form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
         if request.method == 'POST':
             choice = request.POST['choice']
-            print(choice)
-            taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
+
+            taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice=choice).filter(internaltask=taskid).values_list('internaltaskchoiceid', flat=True)
+
+            taskchoiceid = list(taskchoiceid)
+            taskchoiceid = taskchoiceid[0]
             print(taskchoiceid)
-            e = Internaltaskchoice.objects.get(pk=taskchoiceid)
-            print(e)
-            form =  InternaltaskstatusForm(request.POST)
-            if form.is_valid():
-                inst = form.save(commit=True)
-                inst.internaltaskchoice = e
-                inst.save()
-                return HttpResponseRedirect(reverse('internaltaskdetail'))
-            else:
-                return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-            return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-    return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-
-
-
-@login_required
-def Internal_Task_And_Choice_View(request,taskid):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    userid = User.objects.get(username=username).id
-    memberid = Mimember.objects.get(username=userid).mimemberid
-    model =  Internaltask.objects.filter(internaltaskid__in=[taskid])
-    model1 = Internaltaskchoice.objects.filter(internaltask__in=[taskid])
-    checkmember = Internaltaskstatus.objects.filter(internaltask__in=[taskid]).filter(mimember__in=[memberid]).count()
-    model2 = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
-    print(checkmember)
-    if checkmember > 0:
-        taskstatusid = Internaltaskstatus.objects.filter(mimember__in=[memberid]).filter(internaltask__in=[taskid])
-        print(taskstatusid)
-        e = Internaltaskstatus.objects.get(pk=taskstatusid)
-        form = InternaltaskstatusForm(instance=e)
-        #print(form)
-        if request.method == 'POST':
-            choice = request.POST['choice']
-            e = Internaltaskchoice.objects.get(internaltaskchoice=choice)
-            form =  InternaltaskstatusForm(request.POST,instance=e)
-            if form.is_valid():
-                inst = form.save(commit=True)
-                inst.internaltaskchoice = e
-                inst.save()
-                return HttpResponseRedirect(reverse('internaltaskdetail'))
-            else:
-                return render(request, 'CentralMI/11e_internal_task_and_choice_view.html',{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-    else:
-        print('here')
-        form =  InternaltaskstatusForm(initial={'internaltask':taskid, 'mimember':memberid})
-        if request.method == 'POST':
-            choice = request.POST['choice']
-            print(choice)
-            taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=[taskid])
-            print(taskchoiceid)
-            e = Internaltaskchoice.objects.get(pk=taskchoiceid)
+            e = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
             print(e)
             form =  InternaltaskstatusForm(request.POST)
             if form.is_valid():
@@ -2389,7 +2324,9 @@ def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
     internaltaskchoice = Internaltaskstatus.objects.filter(internaltaskstatusid__in=[taskstatusid]).values_list('internaltaskchoice', flat=True)
     #print(internaltaskchoice)
     taskid = Internaltaskstatus.objects.filter(internaltaskstatusid__in=[taskstatusid]).values_list('internaltask', flat=True)
-    internaltaskid = Internaltask.objects.get(internaltaskid=taskid).internaltaskid
+    taskid1 = list(taskid)
+    taskid1 = taskid1[0]
+    internaltaskid = Internaltask.objects.get(internaltaskid=taskid1).internaltaskid
     #print(internaltaskid)
     choice = Internaltaskchoice.objects.filter(internaltaskchoiceid__in=list(internaltaskchoice)).values_list('internaltaskchoice',flat=True)
     choice_string = ', '.join(choice)
@@ -2401,6 +2338,8 @@ def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
     if request.method == 'POST':
         choice = request.POST['choice']
         taskchoiceid = Internaltaskchoice.objects.filter(internaltaskchoice__in=[choice]).filter(internaltask__in=list(taskid)).values_list('internaltaskchoiceid',flat=True)
+        taskchoiceid = list(taskchoiceid)
+        taskchoiceid = taskchoiceid[0]
         #print(taskchoiceid)
         #taskchoiceid = ', '.join(taskchoiceid)
         f = Internaltaskchoice.objects.get(internaltaskchoiceid=taskchoiceid)
@@ -2414,6 +2353,7 @@ def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     return render(request, 'CentralMI/11f_internal_task_and_choice_edit_form.html',{'form':form,'model':model,'model1':model1,'choice':choice_string,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+
 
 
 
@@ -3315,8 +3255,6 @@ def calculation(request,datefield=None,model=None,values=None,fromdate=None,toda
 
     if fromdate != None and todate != None:
         filter =  filterbydaterange(request,variable_column=datefield,fromdate=fromdate,todate=todate)
-        #print("Startdate" + str(fromdate))
-        #print("Startdate" + str(todate))
         daterange = [fromdate,todate]
         if raw_data == 'Y':
             data = model.filter(**{filter: daterange}).filter(**(filterdict)).aggregate(aggregation)
