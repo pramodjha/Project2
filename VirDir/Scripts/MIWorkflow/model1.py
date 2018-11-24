@@ -10,206 +10,6 @@ from __future__ import unicode_literals
 from django.db import models
 
 
-class Calendar(models.Model):
-    date = models.DateField(blank=True, null=True)
-    calendar_days = models.IntegerField(blank=True, null=True)
-    calendar_weekday = models.IntegerField(db_column='calendar_Weekday', blank=True, null=True)  # Field name made lowercase.
-    calendar_months = models.IntegerField(blank=True, null=True)
-    calendar_days_rest = models.IntegerField(blank=True, null=True)
-    working_days = models.IntegerField(blank=True, null=True)
-    working_weekday = models.IntegerField(blank=True, null=True)
-    working_months = models.IntegerField(blank=True, null=True)
-    working_days_rest = models.IntegerField(blank=True, null=True)
-    weeknum = models.IntegerField(blank=True, null=True)
-    month = models.IntegerField(blank=True, null=True)
-    year = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Calendar'
-
-
-class Calendarholidays(models.Model):
-    calendardate = models.DateTimeField(db_column='CalendarDate', primary_key=True)  # Field name made lowercase.
-    calendarfunction = models.IntegerField(db_column='CalendarFunction')  # Field name made lowercase.
-    holidaytype = models.CharField(db_column='HolidayType', max_length=100, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'CalendarHolidays'
-        unique_together = (('calendardate', 'calendarfunction'),)
-
-
-class Gallery(models.Model):
-    imgid = models.AutoField(primary_key=True)
-    date_time = models.DateTimeField()
-    uploadedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='uploadedby', blank=True, null=True)
-    img = models.CharField(max_length=255, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Gallery'
-
-
-class IssueAction(models.Model):
-    issue_action_id = models.AutoField(db_column='Issue_Action_id', primary_key=True)  # Field name made lowercase.
-    date_time = models.DateTimeField()
-    issue = models.CharField(db_column='Issue', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    action_taken = models.CharField(db_column='Action_taken', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    targetdate = models.DateField(blank=True, null=True)
-    updatedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='updatedby', blank=True, null=True)
-    status = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='status', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Issue_Action'
-
-
-class Publicholidays(models.Model):
-    holidaysid = models.AutoField(primary_key=True)
-    date = models.DateField(blank=True, null=True)
-    holidays_name = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'PublicHolidays'
-
-
-class Shiftupdate(models.Model):
-    updateid = models.AutoField(primary_key=True)
-    date_time = models.DateTimeField()
-    updateinbrief = models.TextField(blank=True, null=True)
-    updatedrecordedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='updatedrecordedby', blank=True, null=True)
-    updatestatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='updatestatus', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'ShiftUpdate'
-
-
-class UatDetail(models.Model):
-    uatid = models.AutoField(primary_key=True)
-    date_time = models.DateTimeField()
-    uat_status = models.ForeignKey('UatStatus', models.DO_NOTHING, db_column='UAT_status', blank=True, null=True)  # Field name made lowercase.
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-    testedby = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='testedby', blank=True, null=True)
-    updatedby = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='updatedby', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'UAT_detail'
-
-
-class UatStatus(models.Model):
-    uat_status_id = models.AutoField(db_column='UAT_status_id', primary_key=True)  # Field name made lowercase.
-    date_time = models.DateTimeField()
-    uat_status = models.CharField(db_column='UAT_status', max_length=100, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'UAT_status'
-
-
-class Acceptrejectdetail(models.Model):
-    estacceptrejectid = models.AutoField(primary_key=True)
-    estacceptrejectdate = models.DateTimeField()
-    estacceptrejectby = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='estacceptrejectby')
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-
-    class Meta:
-        managed = False
-        db_table = 'acceptrejectdetail'
-
-
-class Acceptrejectoption(models.Model):
-    acceptrejectoptionid = models.AutoField(primary_key=True)
-    acceptrejectoptionname = models.CharField(unique=True, max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'acceptrejectoption'
-
-
-class Activity(models.Model):
-    activityid = models.AutoField(primary_key=True)
-    registereddate = models.DateTimeField()
-    name = models.CharField(max_length=255, blank=True, null=True)
-    frequency = models.ForeignKey('Frequency', models.DO_NOTHING, db_column='frequency', blank=True, null=True)
-    date_types = models.ForeignKey('DateTypes', models.DO_NOTHING, db_column='date_types', blank=True, null=True)
-    delivery_days = models.IntegerField(blank=True, null=True)
-    deliverytime = models.TimeField(blank=True, null=True)
-    teamname = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamname', blank=True, null=True)
-    primaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='primaryowner', blank=True, null=True)
-    secondaryowner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True, null=True)
-    requestcategorys = models.ForeignKey('Requestcategorys', models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
-    activitystatus = models.ForeignKey('Activitystatus', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
-    activitydocument = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'activity'
-
-
-class ActivityCalendar(models.Model):
-    date = models.DateField(blank=True, null=True)
-    daytype = models.CharField(max_length=50, blank=True, null=True)
-    weekname = models.CharField(max_length=50, blank=True, null=True)
-    cd_wd_days = models.IntegerField(db_column='CD_WD_days', blank=True, null=True)  # Field name made lowercase.
-    activityid = models.IntegerField(blank=True, null=True)
-    frequency = models.CharField(max_length=50, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'activity_calendar'
-
-
-class Activitystatus(models.Model):
-    activitystatusid = models.AutoField(primary_key=True)
-    activitystatus = models.CharField(unique=True, max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'activitystatus'
-
-
-class ActivitystatusCalendar(models.Model):
-    activitystatuscalendarid = models.AutoField(primary_key=True)
-    activitystatusdate = models.DateTimeField()
-    activitystatus = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
-    activityid = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
-    activitycalendardate = models.DateField(blank=True, null=True)
-    reallocatedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='reallocatedto', blank=True, null=True)
-    recordenteredby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='recordenteredby', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'activitystatus_calendar'
-
-
-class AssignView(models.Model):
-    viewassign_id = models.AutoField(primary_key=True)
-    group_name = models.ForeignKey('AuthGroup', models.DO_NOTHING, db_column='group_name')
-    view_type = models.ForeignKey('ViewType', models.DO_NOTHING, db_column='view_type')
-
-    class Meta:
-        managed = False
-        db_table = 'assign_view'
-
-
-class Assigneddetail(models.Model):
-    assignedid = models.AutoField(primary_key=True)
-    assigneddate = models.DateTimeField(db_column='assignedDate')  # Field name made lowercase.
-    assignedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='assignedto', blank=True, null=True)
-    assignedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='assignedby', blank=True, null=True)
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-
-    class Meta:
-        managed = False
-        db_table = 'assigneddetail'
-
-
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=80)
 
@@ -276,71 +76,23 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
-class Authorisedetail(models.Model):
-    authorisedid = models.AutoField(primary_key=True)
-    authoriseddate = models.DateTimeField()
-    authoriserdetail = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='authoriserdetail', blank=True, null=True)
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
+class Calendar(models.Model):
+    date = models.DateField(blank=True, null=True)
+    calendar_days = models.IntegerField(blank=True, null=True)
+    calendar_weekday = models.IntegerField(db_column='calendar_Weekday', blank=True, null=True)  # Field name made lowercase.
+    calendar_months = models.IntegerField(blank=True, null=True)
+    calendar_days_rest = models.IntegerField(blank=True, null=True)
+    working_days = models.IntegerField(blank=True, null=True)
+    working_weekday = models.IntegerField(blank=True, null=True)
+    working_months = models.IntegerField(blank=True, null=True)
+    working_days_rest = models.IntegerField(blank=True, null=True)
+    weeknum = models.IntegerField(blank=True, null=True)
+    month = models.IntegerField(blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'authorisedetail'
-
-
-class Authoriserdetail(models.Model):
-    authoriserid = models.AutoField(primary_key=True)
-    username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
-
-    class Meta:
-        managed = False
-        db_table = 'authoriserdetail'
-
-
-class Completeddetail(models.Model):
-    completedid = models.AutoField(primary_key=True)
-    completeddate = models.DateTimeField()
-    completedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='completedby', blank=True, null=True)
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-
-    class Meta:
-        managed = False
-        db_table = 'completeddetail'
-
-
-class DateTypes(models.Model):
-    date_typesid = models.AutoField(primary_key=True)
-    date_types = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'date_types'
-
-
-class DeliveryDays(models.Model):
-    delivery_daysid = models.AutoField(primary_key=True)
-    delivery_days = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'delivery_days'
-
-
-class Deliverydays(models.Model):
-    deliverydaysid = models.AutoField(primary_key=True)
-    days = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'deliverydays'
-
-
-class Designationmaster(models.Model):
-    designationid = models.AutoField(primary_key=True)
-    designation = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'designationmaster'
+        db_table = 'calendar'
 
 
 class DjangoAdminLog(models.Model):
@@ -387,500 +139,167 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class Emaildetail(models.Model):
-    emailid = models.AutoField(primary_key=True)
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
-    emaildate = models.DateTimeField()
-    stage = models.TextField()
-    emailsubject = models.TextField()
-    emailbody = models.TextField()
-    emailto = models.TextField()
-    emailfrom = models.TextField()
-    emailstatus = models.CharField(max_length=255, blank=True, null=True)
-    requeststatus = models.CharField(db_column='RequestStatus', max_length=255, blank=True, null=True)  # Field name made lowercase.
+class TblWhatwedo(models.Model):
+    recordid = models.AutoField(primary_key=True)
+    data = models.CharField(db_column='Data', max_length=255)  # Field name made lowercase.
+    description = models.TextField(db_column='Description')  # Field name made lowercase.
+    type = models.CharField(db_column='Type', max_length=100)  # Field name made lowercase.
+    image = models.CharField(db_column='Image', max_length=100, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'emaildetail'
+        db_table = 'tbL_whatwedo'
 
 
-class Errorlog(models.Model):
-    error_id = models.AutoField(primary_key=True)
-    errorlog_date = models.DateTimeField()
-    error_occurancedate = models.DateTimeField()
-    error_report = models.ForeignKey(Activity, models.DO_NOTHING, db_column='error_report')
-    error_reportedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='error_reportedby', blank=True, null=True)
-    error_reportedto = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='error_reportedto')
-    error_type = models.ForeignKey('Errortype', models.DO_NOTHING, db_column='error_type')
-    error_description = models.TextField()
-    errordocument = models.CharField(max_length=255, blank=True, null=True)
+class TblIssueAction(models.Model):
+    issue_action_id = models.AutoField(db_column='Issue_Action_id', primary_key=True)  # Field name made lowercase.
+    date_time = models.DateTimeField()
+    issue = models.CharField(db_column='Issue', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    action_taken = models.CharField(db_column='Action_taken', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    targetdate = models.DateField(blank=True, null=True)
+    updatedbyid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='updatedbyid', blank=True, null=True)
+    statusid = models.ForeignKey('TblOpenClose', models.DO_NOTHING, db_column='statusid', blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'errorlog'
+        db_table = 'tbl_Issue_Action'
 
 
-class Errortype(models.Model):
-    error_typeid = models.AutoField(primary_key=True)
-    error_type = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'errortype'
-
-
-class Estimationdetail(models.Model):
-    estimationid = models.AutoField(primary_key=True)
-    estimationdate = models.DateTimeField()
-    estimatedby = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='estimatedby', blank=True, null=True)
-    estimateddays = models.IntegerField(blank=True, null=True)
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
+class TblUatDetail(models.Model):
+    uatid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    uat_statusid = models.ForeignKey('TblUatStatusMaster', models.DO_NOTHING, db_column='UAT_statusid', blank=True, null=True)  # Field name made lowercase.
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
+    testedbyid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='testedbyid', blank=True, null=True)
+    updatedbyid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='updatedbyid', blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'estimationdetail'
+        db_table = 'tbl_UAT_detail'
 
 
-class Feedback(models.Model):
-    feedback_id = models.AutoField(primary_key=True)
-    feedback_date = models.DateTimeField()
-    feedback_question = models.ForeignKey('FeedbackQuestion', models.DO_NOTHING, db_column='feedback_question')
-    feedback_text = models.CharField(max_length=255, blank=True, null=True)
-    activity = models.ForeignKey(Activity, models.DO_NOTHING, db_column='activity', blank=True, null=True)
+class TblUatStatusMaster(models.Model):
+    uat_status_id = models.AutoField(db_column='UAT_status_id', primary_key=True)  # Field name made lowercase.
+    date_time = models.DateTimeField()
+    uat_status = models.CharField(db_column='UAT_status', max_length=100, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'feedback'
+        db_table = 'tbl_UAT_status_master'
 
 
-class FeedbackQuestion(models.Model):
-    feedback_questionid = models.AutoField(primary_key=True)
-    feedback_questiondate = models.DateTimeField()
-    feedback_question = models.CharField(max_length=255)
-    feedback_answerdatatype = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'feedback_question'
-
-
-class FieldDetail(models.Model):
-    fieldid = models.AutoField(primary_key=True)
-    tablename = models.TextField()
-    fieldname = models.TextField()
+class TblAcceptrejectdetail(models.Model):
+    estacceptrejectid = models.AutoField(primary_key=True)
+    estacceptrejectdate = models.DateTimeField()
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
 
     class Meta:
         managed = False
-        db_table = 'field_detail'
+        db_table = 'tbl_acceptrejectdetail'
 
 
-class Fielddetail(models.Model):
-    fieldid = models.AutoField(primary_key=True)
-    tablename = models.CharField(max_length=255)
-    fieldname = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'fielddetail'
-
-
-class Filteroption(models.Model):
-    filterid = models.AutoField(primary_key=True)
-    filteroption = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'filteroption'
-
-
-class Frequency(models.Model):
-    frequencyid = models.AutoField(primary_key=True)
-    frequency = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'frequency'
-
-
-class Governance(models.Model):
-    governancedatetime = models.DateTimeField()
-    governanceid = models.AutoField(primary_key=True)
-    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail')
-    processimg = models.CharField(max_length=100)
-    description = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'governance'
-
-
-class Internaltask(models.Model):
-    internaltaskid = models.AutoField(primary_key=True)
-    internaltaskdatetime = models.DateTimeField()
-    internaltaskquestion = models.CharField(db_column='internaltaskQuestion', max_length=255)  # Field name made lowercase.
-    status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='status', blank=True, null=True)
-    owner = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='Owner', blank=True, null=True)  # Field name made lowercase.
-    targetdate = models.DateTimeField(blank=True, null=True)
-    link = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'internaltask'
-
-
-class Internaltaskchoice(models.Model):
-    internaltaskchoiceid = models.AutoField(primary_key=True)
-    internaltaskchoicedatetime = models.DateTimeField()
-    internaltaskchoice = models.CharField(max_length=255)
-    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask')
-
-    class Meta:
-        managed = False
-        db_table = 'internaltaskchoice'
-
-
-class Internaltaskstatus(models.Model):
-    internaltaskstatusid = models.AutoField(primary_key=True)
-    internaltaskstatusdatetime = models.DateTimeField()
-    mimember = models.ForeignKey('Mimember', models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    internaltask = models.ForeignKey(Internaltask, models.DO_NOTHING, db_column='internaltask', blank=True, null=True)
-    internaltaskchoice = models.ForeignKey(Internaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoice', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'internaltaskstatus'
-
-
-class Managermaster(models.Model):
-    managerid = models.AutoField(primary_key=True)
-    managername = models.CharField(max_length=100, blank=True, null=True)
-    employeeid = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'managermaster'
-
-
-class Mimember(models.Model):
-    mimemberid = models.AutoField(primary_key=True)
-    username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
-    teamdetail = models.IntegerField()
-    designationmaster = models.ForeignKey(Designationmaster, models.DO_NOTHING, db_column='designationmaster', blank=True, null=True)
-    employeeid = models.IntegerField(blank=True, null=True)
-    dateofjoining = models.DateField(db_column='DateofJoining', blank=True, null=True)  # Field name made lowercase.
-    dateofbirth = models.DateField(db_column='DateofBirth', blank=True, null=True)  # Field name made lowercase.
-    address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
-    phonenumber = models.CharField(db_column='PhoneNumber', max_length=10, blank=True, null=True)  # Field name made lowercase.
-    avatar = models.CharField(db_column='Avatar', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    aboutme = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'mimember'
-
-
-class Options(models.Model):
-    optionsid = models.AutoField(primary_key=True)
-    optionsname = models.CharField(unique=True, max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'options'
-
-
-class OtDetail(models.Model):
-    ot_id = models.AutoField(primary_key=True)
-    timetrackers = models.ForeignKey('Timetrackers', models.DO_NOTHING, db_column='timetrackers')
-    ot_startdatetime = models.DateTimeField(blank=True, null=True)
-    ot_enddatetime = models.DateTimeField(blank=True, null=True)
-    ot_hrs = models.IntegerField(blank=True, null=True)
-    ot_status = models.ForeignKey('OtStatus', models.DO_NOTHING, db_column='ot_status')
-    otdocument = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'ot_detail'
-
-
-class OtStatus(models.Model):
-    ot_statusid = models.AutoField(primary_key=True)
-    ot_status = models.CharField(max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'ot_status'
-
-
-class Overviewdetail(models.Model):
-    overviewid = models.AutoField(primary_key=True)
-    overviewdate = models.DateTimeField()
-    providedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='providedby')
-    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    sopcreatedoptionsid = models.ForeignKey(Options, models.DO_NOTHING, db_column='sopcreatedoptionsid', blank=True, null=True)
-    requestdetail = models.ForeignKey('Requestdetail', models.DO_NOTHING, db_column='requestdetail')
-    document = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'overviewdetail'
-
-
-class Prioritydetail(models.Model):
-    requestpriorityid = models.AutoField(primary_key=True)
-    requestpriority = models.CharField(unique=True, max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'prioritydetail'
-
-
-class Reply(models.Model):
-    replydatetime = models.DateTimeField()
-    replyid = models.AutoField(primary_key=True)
-    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    reply = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'reply'
-
-
-class ReportBuilderDisplayfield(models.Model):
-    path = models.CharField(max_length=2000)
-    path_verbose = models.CharField(max_length=2000)
-    field = models.CharField(max_length=2000)
-    field_verbose = models.CharField(max_length=2000)
-    name = models.CharField(max_length=2000)
-    sort = models.IntegerField(blank=True, null=True)
-    sort_reverse = models.BooleanField()
-    width = models.IntegerField()
-    aggregate = models.CharField(max_length=5)
-    position = models.SmallIntegerField(blank=True, null=True)
-    total = models.BooleanField()
-    group = models.BooleanField()
-    display_format = models.ForeignKey('ReportBuilderFormat', models.DO_NOTHING, blank=True, null=True)
-    report = models.ForeignKey('ReportBuilderReport', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'report_builder_displayfield'
-
-
-class ReportBuilderFilterfield(models.Model):
-    path = models.CharField(max_length=2000)
-    path_verbose = models.CharField(max_length=2000)
-    field = models.CharField(max_length=2000)
-    field_verbose = models.CharField(max_length=2000)
-    filter_type = models.CharField(max_length=20)
-    filter_value = models.CharField(max_length=2000)
-    filter_value2 = models.CharField(max_length=2000)
-    exclude = models.BooleanField()
-    position = models.SmallIntegerField(blank=True, null=True)
-    report = models.ForeignKey('ReportBuilderReport', models.DO_NOTHING)
-    filter_delta = models.BigIntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'report_builder_filterfield'
-
-
-class ReportBuilderFormat(models.Model):
-    name = models.CharField(max_length=50)
-    string = models.CharField(max_length=300)
-
-    class Meta:
-        managed = False
-        db_table = 'report_builder_format'
-
-
-class ReportBuilderReport(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.CharField(max_length=50)
-    description = models.TextField()
-    created = models.DateField()
-    modified = models.DateField()
-    distinct = models.BooleanField()
-    report_file = models.CharField(max_length=100)
-    report_file_creation = models.DateTimeField(blank=True, null=True)
-    root_model = models.ForeignKey(DjangoContentType, models.DO_NOTHING)
-    user_created = models.ForeignKey(AuthUser, models.DO_NOTHING, blank=True, null=True)
-    user_modified = models.ForeignKey(AuthUser, models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'report_builder_report'
-
-
-class ReportBuilderReportStarred(models.Model):
-    report = models.ForeignKey(ReportBuilderReport, models.DO_NOTHING)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'report_builder_report_starred'
-        unique_together = (('report', 'user'),)
-
-
-class ReportCalendar(models.Model):
-    datecol = models.DateTimeField()
-    calendar_days = models.IntegerField()
-    calendar_weeknum = models.IntegerField()
-    calendar_month = models.IntegerField()
-    calendar_days_rest = models.IntegerField()
-    working_days = models.IntegerField()
-    working_weeknum = models.IntegerField()
-    working_month = models.IntegerField()
-    working_days_rest = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'report_calendar'
-
-
-class ReportType(models.Model):
-    report_typid = models.AutoField(primary_key=True)
-    report_type = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'report_type'
-
-
-class Reports(models.Model):
-    reportid = models.AutoField(primary_key=True)
+class TblActivity(models.Model):
+    activityid = models.AutoField(primary_key=True)
     registereddate = models.DateTimeField()
     name = models.CharField(max_length=255, blank=True, null=True)
-    frequency = models.ForeignKey(Frequency, models.DO_NOTHING, db_column='frequency', blank=True, null=True)
-    deliverydays = models.ForeignKey(Deliverydays, models.DO_NOTHING, db_column='deliverydays', blank=True, null=True)
-    deliverytime = models.DateTimeField()
-    primaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='primaryowner', blank=True, null=True)
-    secondaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True, null=True)
-    delivery_time = models.ForeignKey('TimeDetail', models.DO_NOTHING, db_column='delivery_time', blank=True, null=True)
-    report_type = models.ForeignKey(ReportType, models.DO_NOTHING, db_column='report_type', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'reports'
-
-
-class Reports1(models.Model):
-    reportid = models.AutoField(primary_key=True)
-    registereddate = models.DateTimeField()
-    name = models.CharField(max_length=255, blank=True, null=True)
-    frequency = models.ForeignKey(Frequency, models.DO_NOTHING, db_column='frequency', blank=True, null=True)
-    date_types = models.ForeignKey(DateTypes, models.DO_NOTHING, db_column='date_types', blank=True, null=True)
+    frequency = models.ForeignKey('TblFrequency', models.DO_NOTHING, db_column='frequency', blank=True, null=True)
+    date_types = models.ForeignKey('TblDateTypesMaster', models.DO_NOTHING, db_column='date_types', blank=True, null=True)
     delivery_days = models.IntegerField(blank=True, null=True)
-    deliverytime = models.TimeField()
-    teamname = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamname', blank=True, null=True)
-    primaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='primaryowner', blank=True, null=True)
-    secondaryowner = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True)
+    deliverytime = models.TimeField(blank=True, null=True)
+    teamname = models.ForeignKey('TblTeamMaster', models.DO_NOTHING, db_column='teamname', blank=True, null=True)
+    primaryowner = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='primaryowner', blank=True, null=True)
+    secondaryowner = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='secondaryowner', blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
+    requestcategorys = models.ForeignKey('TblCategorysMaster', models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
+    activitystatus = models.ForeignKey('TblOpenClose', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+    activitydocument = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'reports1'
+        db_table = 'tbl_activity'
 
 
-class Requestcategorys(models.Model):
-    requestcategoryid = models.AutoField(primary_key=True)
-    requestcategorydatetime = models.DateTimeField()
-    requestcategorys = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'requestcategorys'
-
-
-class Requestdetail(models.Model):
-    requestid = models.AutoField(primary_key=True)
-    requestraiseddate = models.DateTimeField()
-    requesttypedetail = models.ForeignKey('Requesttypedetail', models.DO_NOTHING, db_column='requesttypedetail')
-    prioritydetail = models.ForeignKey(Prioritydetail, models.DO_NOTHING, db_column='prioritydetail')
-    username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
-    requestdescription = models.TextField()
-    requestdocument = models.CharField(max_length=255, blank=True, null=True)
+class TblActivityCalendar(models.Model):
+    date = models.DateField(blank=True, null=True)
+    daytype = models.CharField(max_length=50, blank=True, null=True)
+    weekname = models.CharField(max_length=50, blank=True, null=True)
+    cd_wd_days = models.IntegerField(db_column='CD_WD_days', blank=True, null=True)  # Field name made lowercase.
+    activityid = models.IntegerField(blank=True, null=True)
+    frequency = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'requestdetail'
+        db_table = 'tbl_activity_calendar'
 
 
-class Requeststatusdetail(models.Model):
-    requeststatusid = models.AutoField(primary_key=True)
-    requeststatusdate = models.DateTimeField()
-    username = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='username')
-    statusdetail = models.ForeignKey('Statusdetail', models.DO_NOTHING, db_column='statusdetail', blank=True, null=True)
-    requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail')
-
-    class Meta:
-        managed = False
-        db_table = 'requeststatusdetail'
-
-
-class Requestsubcategory(models.Model):
-    requestsubcategoryid = models.AutoField(primary_key=True)
-    requestsubcategorydatetime = models.DateTimeField()
-    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
-    requestsubcategory = models.CharField(max_length=100, blank=True, null=True)
-    core_noncore = models.CharField(max_length=50, blank=True, null=True)
+class TblActivitystatusCalendar(models.Model):
+    activitystatuscalendarid = models.AutoField(primary_key=True)
+    activitystatusdate = models.DateTimeField()
+    activitystatus = models.ForeignKey('TblStatusMaster', models.DO_NOTHING, db_column='activitystatus', blank=True, null=True)
+    activityid = models.ForeignKey(TblActivity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
+    activitycalendardate = models.DateField(blank=True, null=True)
+    reallocatedtoid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='reallocatedtoid', blank=True, null=True)
+    recordenteredbyid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='recordenteredbyid', blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'requestsubcategory'
-
-
-class Requesttypedetail(models.Model):
-    requesttypeid = models.AutoField(primary_key=True)
-    requesttype = models.CharField(unique=True, max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'requesttypedetail'
-
-
-class Statusdetail(models.Model):
-    statusnameid = models.AutoField(primary_key=True)
-    statusname = models.CharField(unique=True, max_length=50)
-
-    class Meta:
-        managed = False
-        db_table = 'statusdetail'
-
-
-class SuccessStories(models.Model):
-    storiesdatetime = models.DateTimeField()
-    storiesid = models.AutoField(primary_key=True)
-    stories = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'success_stories'
-
-
-class Suggestion(models.Model):
-    suggestiondatetime = models.DateTimeField()
-    suggestionid = models.AutoField(primary_key=True)
-    suggestion = models.TextField()
-    subject = models.CharField(max_length=100, blank=True, null=True)
-    suggestedby = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='suggestedby', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'suggestion'
+        db_table = 'tbl_activitystatus_calendar'
 
 
 class TblAppreciation(models.Model):
     appreciationid = models.AutoField(db_column='Appreciationid', primary_key=True)  # Field name made lowercase.
     date_time = models.DateTimeField()
-    appreciated_to = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='Appreciated_to', blank=True, null=True)  # Field name made lowercase.
+    appreciated_to = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='Appreciated_to', blank=True, null=True)  # Field name made lowercase.
     appreciated_by = models.CharField(db_column='Appreciated_by', max_length=100, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    appreciation_status = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='appreciation_status', blank=True, null=True)
+    appreciation_status = models.ForeignKey('TblOpenClose', models.DO_NOTHING, db_column='appreciation_status', blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'tbl_Appreciation'
+        db_table = 'tbl_appreciation'
+
+
+class TblAssignView(models.Model):
+    viewassign_id = models.AutoField(primary_key=True)
+    group_name = models.ForeignKey(AuthGroup, models.DO_NOTHING, db_column='group_name')
+    view_type = models.ForeignKey('TblViewTypeMaster', models.DO_NOTHING, db_column='view_type')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_assign_view'
+
+
+class TblAssigneddetail(models.Model):
+    assignedid = models.AutoField(primary_key=True)
+    assigneddate = models.DateTimeField(db_column='assignedDate')  # Field name made lowercase.
+    assignedtoid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='assignedtoid', blank=True, null=True)
+    assignedbyid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='assignedbyid', blank=True, null=True)
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_assigneddetail'
+
+
+class TblAuthorisedetail(models.Model):
+    authorisedid = models.AutoField(primary_key=True)
+    authoriseddate = models.DateTimeField()
+    authoriserid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='authoriserid', blank=True, null=True)
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_authorisedetail'
+
+
+class TblAuthoriserdetail(models.Model):
+    authoriserid = models.AutoField(primary_key=True)
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_authoriserdetail'
 
 
 class TblCalendar(models.Model):
@@ -896,13 +315,45 @@ class TblCalendar(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'tbl_Calendar'
+        db_table = 'tbl_calendar'
+
+
+class TblCalendarHolidays(models.Model):
+    calendardate = models.DateTimeField(db_column='CalendarDate', primary_key=True)  # Field name made lowercase.
+    calendarfunction = models.IntegerField(db_column='CalendarFunction')  # Field name made lowercase.
+    holidaytype = models.CharField(db_column='HolidayType', max_length=100, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_calendar_holidays'
+        unique_together = (('calendardate', 'calendarfunction'),)
+
+
+class TblCategorysMaster(models.Model):
+    requestcategoryid = models.AutoField(primary_key=True)
+    requestcategorydatetime = models.DateTimeField()
+    requestcategorys = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_categorys_master'
+
+
+class TblCompleteddetail(models.Model):
+    completedid = models.AutoField(primary_key=True)
+    completeddate = models.DateTimeField()
+    completedbyid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='completedbyid', blank=True, null=True)
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_completeddetail'
 
 
 class TblConversation(models.Model):
     conversationid = models.AutoField(primary_key=True)
     date_time = models.DateTimeField()
-    requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail')
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
     userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
     comments = models.TextField(blank=True, null=True)
 
@@ -911,26 +362,218 @@ class TblConversation(models.Model):
         db_table = 'tbl_conversation'
 
 
+class TblDateTypesMaster(models.Model):
+    date_typesid = models.AutoField(primary_key=True)
+    date_types = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_date_types_master'
+
+
+class TblDeliveryDaysMaster(models.Model):
+    deliverydaysid = models.AutoField(primary_key=True)
+    days = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_delivery_days_master'
+
+
+class TblDesignationMaster(models.Model):
+    designationid = models.AutoField(primary_key=True)
+    designation = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_designation_master'
+
+
+class TblEmaildetail(models.Model):
+    emailid = models.AutoField(primary_key=True)
+    requestdetail = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
+    emaildate = models.DateTimeField()
+    stage = models.TextField()
+    emailsubject = models.TextField()
+    emailbody = models.TextField()
+    emailto = models.TextField()
+    emailfrom = models.TextField()
+    emailstatus = models.CharField(max_length=255, blank=True, null=True)
+    requeststatus = models.CharField(db_column='RequestStatus', max_length=255, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_emaildetail'
+
+
+class TblErrorlog(models.Model):
+    error_id = models.AutoField(primary_key=True)
+    datetime = models.DateTimeField()
+    occurancedate = models.DateField()
+    activityid = models.ForeignKey(TblActivity, models.DO_NOTHING, db_column='activityid')
+    reportedbyid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='reportedbyid', blank=True, null=True)
+    reportedtoid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='reportedtoid')
+    errortypeid = models.ForeignKey('TblErrortypeMaster', models.DO_NOTHING, db_column='errortypeid')
+    description = models.TextField()
+    document = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_errorlog'
+
+
+class TblErrortypeMaster(models.Model):
+    error_typeid = models.AutoField(primary_key=True)
+    error_type = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_errortype_master'
+
+
+class TblEstimationdetail(models.Model):
+    estimationid = models.AutoField(primary_key=True)
+    estimationdate = models.DateTimeField()
+    estimatedbyid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='estimatedbyid', blank=True, null=True)
+    estimateddays = models.IntegerField(blank=True, null=True)
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_estimationdetail'
+
+
+class TblFeedback(models.Model):
+    feedback_id = models.AutoField(primary_key=True)
+    feedback_date = models.DateTimeField()
+    feedback_question = models.ForeignKey('TblFeedbackQuestionMaster', models.DO_NOTHING, db_column='feedback_question')
+    feedback_text = models.CharField(max_length=255, blank=True, null=True)
+    activityid = models.ForeignKey(TblActivity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_feedback'
+
+
+class TblFeedbackQuestionMaster(models.Model):
+    feedback_questionid = models.AutoField(primary_key=True)
+    feedback_questiondate = models.DateTimeField()
+    feedback_question = models.CharField(max_length=255)
+    feedback_answerdatatype = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_feedback_question_master'
+
+
+class TblFrequency(models.Model):
+    frequencyid = models.AutoField(primary_key=True)
+    frequency = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_frequency'
+
+
+class TblGallery(models.Model):
+    imgid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    uploadedbyid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='uploadedbyid', blank=True, null=True)
+    img = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_gallery'
+
+
+class TblGovernance(models.Model):
+    governancedatetime = models.DateTimeField()
+    governanceid = models.AutoField(primary_key=True)
+    teamid = models.ForeignKey('TblTeamMaster', models.DO_NOTHING, db_column='teamid')
+    processimg = models.CharField(max_length=100)
+    description = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_governance'
+
+
+class TblInternaltask(models.Model):
+    internaltaskid = models.AutoField(primary_key=True)
+    internaltaskdatetime = models.DateTimeField()
+    internaltaskquestion = models.CharField(db_column='internaltaskQuestion', max_length=255)  # Field name made lowercase.
+    statusid = models.ForeignKey('TblOpenClose', models.DO_NOTHING, db_column='statusid', blank=True, null=True)
+    ownerid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='ownerid', blank=True, null=True)
+    targetdate = models.DateTimeField(blank=True, null=True)
+    link = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_internaltask'
+
+
+class TblInternaltaskchoice(models.Model):
+    internaltaskchoiceid = models.AutoField(primary_key=True)
+    internaltaskchoicedatetime = models.DateTimeField()
+    internaltaskchoice = models.CharField(max_length=255)
+    internaltaskid = models.ForeignKey(TblInternaltask, models.DO_NOTHING, db_column='internaltaskid')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_internaltaskchoice'
+
+
+class TblInternaltaskstatus(models.Model):
+    internaltaskstatusid = models.AutoField(primary_key=True)
+    internaltaskstatusdatetime = models.DateTimeField()
+    memberid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='memberid', blank=True, null=True)
+    internaltaskid = models.ForeignKey(TblInternaltask, models.DO_NOTHING, db_column='internaltaskid', blank=True, null=True)
+    internaltaskchoiceid = models.ForeignKey(TblInternaltaskchoice, models.DO_NOTHING, db_column='internaltaskchoiceid', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_internaltaskstatus'
+
+
 class TblLeaveRecord(models.Model):
     leaverecordid = models.AutoField(primary_key=True)
     date_time = models.DateTimeField()
     leave_date = models.DateField()
-    userid = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='userid')
-    leave_type = models.ForeignKey('TblLeaveType', models.DO_NOTHING, db_column='leave_type')
+    userid = models.ForeignKey('TblMember', models.DO_NOTHING, db_column='userid')
+    leave_type = models.ForeignKey('TblLeaveTypeMaster', models.DO_NOTHING, db_column='leave_type')
 
     class Meta:
         managed = False
         db_table = 'tbl_leave_record'
 
 
-class TblLeaveType(models.Model):
+class TblLeaveTypeMaster(models.Model):
     leavetypeid = models.AutoField(primary_key=True)
     date_time = models.DateTimeField()
     leave_type = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'tbl_leave_type'
+        db_table = 'tbl_leave_type_master'
+
+
+class TblMember(models.Model):
+    memberid = models.AutoField(primary_key=True)
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    teamid = models.ForeignKey('TblTeamMaster', models.DO_NOTHING, db_column='teamid')
+    designationid = models.ForeignKey(TblDesignationMaster, models.DO_NOTHING, db_column='designationid', blank=True, null=True)
+    employeeid = models.IntegerField(blank=True, null=True)
+    dateofjoining = models.DateField(db_column='DateofJoining', blank=True, null=True)  # Field name made lowercase.
+    dateofbirth = models.DateField(db_column='DateofBirth', blank=True, null=True)  # Field name made lowercase.
+    address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
+    phonenumber = models.CharField(db_column='PhoneNumber', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    avatar = models.CharField(db_column='Avatar', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    aboutme = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_member'
 
 
 class TblNavbarFooterMaster(models.Model):
@@ -968,13 +611,78 @@ class TblNavbarMaster(models.Model):
 
 class TblNavbarView(models.Model):
     navbar_id = models.AutoField(primary_key=True)
-    view_type = models.ForeignKey('ViewType', models.DO_NOTHING, db_column='view_type')
+    view_type = models.ForeignKey('TblViewTypeMaster', models.DO_NOTHING, db_column='view_type')
     navbar_header = models.ForeignKey(TblNavbarHeaderMaster, models.DO_NOTHING)
     navbar_footer = models.ForeignKey(TblNavbarFooterMaster, models.DO_NOTHING)
 
     class Meta:
         managed = False
         db_table = 'tbl_navbar_view'
+
+
+class TblOpenClose(models.Model):
+    activitystatusid = models.AutoField(primary_key=True)
+    activitystatus = models.CharField(unique=True, max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_open_close'
+
+
+class TblOtDetail(models.Model):
+    ot_id = models.AutoField(primary_key=True)
+    timetrackerid = models.ForeignKey('TblTimeTracker', models.DO_NOTHING, db_column='timetrackerid')
+    ot_startdatetime = models.DateTimeField(blank=True, null=True)
+    ot_enddatetime = models.DateTimeField(blank=True, null=True)
+    ot_time = models.IntegerField(blank=True, null=True)
+    statusid = models.ForeignKey('TblOtStatusMaster', models.DO_NOTHING, db_column='statusid')
+    otdocument = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_ot_detail'
+
+
+class TblOtStatusMaster(models.Model):
+    ot_statusid = models.AutoField(primary_key=True)
+    ot_status = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_ot_status_master'
+
+
+class TblOverviewdetail(models.Model):
+    overviewid = models.AutoField(primary_key=True)
+    overviewdate = models.DateTimeField()
+    providedbyid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='providedbyid')
+    giventoid = models.ForeignKey(TblMember, models.DO_NOTHING, db_column='giventoid', blank=True, null=True)
+    sopcreatedid = models.ForeignKey('TblYesNo', models.DO_NOTHING, db_column='sopcreatedid', blank=True, null=True)
+    requestid = models.ForeignKey('TblRequestdetail', models.DO_NOTHING, db_column='requestid')
+    document = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_overviewdetail'
+
+
+class TblPriorityMaster(models.Model):
+    requestpriorityid = models.AutoField(primary_key=True)
+    requestpriority = models.CharField(unique=True, max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_priority_master'
+
+
+class TblPublicHolidaysMaster(models.Model):
+    holidaysid = models.AutoField(primary_key=True)
+    date = models.DateField(blank=True, null=True)
+    holidays_name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_public_holidays_master'
 
 
 class TblRawActivityDetail(models.Model):
@@ -984,7 +692,7 @@ class TblRawActivityDetail(models.Model):
     raw_activity_description = models.TextField(blank=True, null=True)
     raw_activity_img = models.CharField(max_length=255, blank=True, null=True)
     raw_activity_scheduled = models.DateField(blank=True, null=True)
-    raw_activitystatus = models.ForeignKey(Activitystatus, models.DO_NOTHING, db_column='raw_activitystatus', blank=True, null=True)
+    raw_statusid = models.ForeignKey(TblOpenClose, models.DO_NOTHING, db_column='raw_statusid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -994,7 +702,7 @@ class TblRawActivityDetail(models.Model):
 class TblRawScore(models.Model):
     raw_score_id = models.AutoField(primary_key=True)
     date_time = models.DateTimeField()
-    raw_team = models.ForeignKey('TblRawTeamMaster', models.DO_NOTHING, db_column='raw_team', blank=True, null=True)
+    raw_teamid = models.ForeignKey('TblRawTeamMaster', models.DO_NOTHING, db_column='raw_teamid', blank=True, null=True)
     score = models.IntegerField(blank=True, null=True)
     winner = models.CharField(db_column='Winner', max_length=50, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -1010,8 +718,8 @@ class TblRawTeamMaster(models.Model):
     raw_team = models.CharField(max_length=255, blank=True, null=True)
     raw_team_icon = models.CharField(max_length=255, blank=True, null=True)
     raw_team_slogan = models.CharField(max_length=255, blank=True, null=True)
-    valid_invalid = models.ForeignKey('ValidInvalid', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
-    raw_management = models.ForeignKey(Options, models.DO_NOTHING, db_column='raw_management', blank=True, null=True)
+    valid_invalid = models.ForeignKey('TblValidInvalidMaster', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
+    raw_managementid = models.ForeignKey('TblYesNo', models.DO_NOTHING, db_column='raw_managementid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -1022,54 +730,129 @@ class TblRawTeamMemberMaster(models.Model):
     raw_team_member_id = models.AutoField(primary_key=True)
     date_time = models.DateTimeField()
     raw_team = models.ForeignKey(TblRawTeamMaster, models.DO_NOTHING, db_column='raw_team', blank=True, null=True)
-    raw_member = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='raw_member', blank=True, null=True)
+    raw_member = models.ForeignKey(TblMember, models.DO_NOTHING, db_column='raw_member', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'tbl_raw_team_member_master'
 
 
+class TblReply(models.Model):
+    replydatetime = models.DateTimeField()
+    replyid = models.AutoField(primary_key=True)
+    memberid = models.ForeignKey(TblMember, models.DO_NOTHING, db_column='memberid', blank=True, null=True)
+    reply = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_reply'
+
+
+class TblRequestdetail(models.Model):
+    requestid = models.AutoField(primary_key=True)
+    requestraiseddate = models.DateTimeField()
+    requesttypeid = models.ForeignKey('TblRequesttypeMaster', models.DO_NOTHING, db_column='requesttypeid')
+    priorityid = models.ForeignKey(TblPriorityMaster, models.DO_NOTHING, db_column='priorityid')
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    requestdescription = models.TextField()
+    requestdocument = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_requestdetail'
+
+
+class TblRequeststatusdetail(models.Model):
+    requeststatusid = models.AutoField(primary_key=True)
+    requeststatusdate = models.DateTimeField()
+    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    statusid = models.ForeignKey('TblStatusMaster', models.DO_NOTHING, db_column='statusid', blank=True, null=True)
+    requestid = models.ForeignKey(TblRequestdetail, models.DO_NOTHING, db_column='requestid')
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_requeststatusdetail'
+
+
+class TblRequesttypeMaster(models.Model):
+    requesttypeid = models.AutoField(primary_key=True)
+    requesttype = models.CharField(unique=True, max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_requesttype_master'
+
+
+class TblShiftUpdate(models.Model):
+    updateid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    updateinbrief = models.TextField(blank=True, null=True)
+    recordedbyid = models.ForeignKey(TblMember, models.DO_NOTHING, db_column='recordedbyid', blank=True, null=True)
+    statusid = models.ForeignKey(TblOpenClose, models.DO_NOTHING, db_column='statusid', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_shift_update'
+
+
+class TblStatusMaster(models.Model):
+    statusnameid = models.AutoField(primary_key=True)
+    statusname = models.CharField(unique=True, max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_status_master'
+
+
+class TblSubcategoryMaster(models.Model):
+    requestsubcategoryid = models.AutoField(primary_key=True)
+    requestsubcategorydatetime = models.DateTimeField()
+    categorysid = models.ForeignKey(TblCategorysMaster, models.DO_NOTHING, db_column='categorysid', blank=True, null=True)
+    requestsubcategory = models.CharField(max_length=100, blank=True, null=True)
+    core_noncore = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_subcategory_master'
+
+
+class TblSuccessStories(models.Model):
+    storiesdatetime = models.DateTimeField()
+    storiesid = models.AutoField(primary_key=True)
+    stories = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_success_stories'
+
+
+class TblSuggestion(models.Model):
+    suggestiondatetime = models.DateTimeField()
+    suggestionid = models.AutoField(primary_key=True)
+    suggestion = models.TextField()
+    subject = models.CharField(max_length=100, blank=True, null=True)
+    suggestedbyid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='suggestedbyid', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_suggestion'
+
+
+class TblTeamMaster(models.Model):
+    teamid = models.AutoField(primary_key=True)
+    teamdatetime = models.DateTimeField()
+    teamname = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_team_master'
+
+
 class TblTeamMetrics(models.Model):
     metrics_id = models.AutoField(primary_key=True)
     date_time = models.DateTimeField()
-    metrics_name = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'tbl_team_metrics'
-
-
-class TblUsefulLinks(models.Model):
-    linkid = models.AutoField(primary_key=True)
-    date_time = models.DateTimeField()
-    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
-    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    link = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'tbl_useful_links'
-
-
-class TeamMetrics(models.Model):
-    metrics_id = models.AutoField(primary_key=True)
-    date_time = models.DateTimeField()
-    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
-    metrics_name = models.ForeignKey(TblTeamMetrics, models.DO_NOTHING, db_column='metrics_name', blank=True, null=True)
-    requesttype = models.ForeignKey(Requesttypedetail, models.DO_NOTHING, db_column='requesttype', blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True, null=True)
-    volume = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'team_metrics'
-
-
-class TeamMetricsData(models.Model):
-    metrics_id = models.AutoField(primary_key=True)
-    date_time = models.DateTimeField()
-    teamdetail = models.ForeignKey('Teamdetail', models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
-    requesttype = models.ForeignKey(Requesttypedetail, models.DO_NOTHING, db_column='requesttype', blank=True, null=True)
+    teamid = models.ForeignKey(TblTeamMaster, models.DO_NOTHING, db_column='teamid', blank=True, null=True)
+    requesttypeid = models.ForeignKey(TblRequesttypeMaster, models.DO_NOTHING, db_column='requesttypeid', blank=True, null=True)
     total = models.IntegerField(db_column='Total', blank=True, null=True)  # Field name made lowercase.
     wip = models.IntegerField(db_column='WIP', blank=True, null=True)  # Field name made lowercase.
     uat = models.IntegerField(db_column='UAT', blank=True, null=True)  # Field name made lowercase.
@@ -1078,87 +861,67 @@ class TeamMetricsData(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'team_metrics_data'
+        db_table = 'tbl_team_metrics'
 
 
-class Teamdetail(models.Model):
-    teamid = models.AutoField(primary_key=True)
-    teamdatetime = models.DateTimeField()
-    teamname = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'teamdetail'
-
-
-class TimeDetail(models.Model):
-    timeid = models.AutoField(primary_key=True)
-    time = models.TextField()
-
-    class Meta:
-        managed = False
-        db_table = 'time_detail'
-
-
-class Timetrackers(models.Model):
+class TblTimeTracker(models.Model):
     timetrackerid = models.AutoField(primary_key=True)
     registerdatetime = models.DateTimeField()
     trackingdatetime = models.DateField()
-    mimember = models.ForeignKey(Mimember, models.DO_NOTHING, db_column='mimember', blank=True, null=True)
-    teamdetail = models.ForeignKey(Teamdetail, models.DO_NOTHING, db_column='teamdetail', blank=True, null=True)
-    requestcategorys = models.ForeignKey(Requestcategorys, models.DO_NOTHING, db_column='requestcategorys', blank=True, null=True)
-    requestsubcategory = models.ForeignKey(Requestsubcategory, models.DO_NOTHING, db_column='requestsubcategory', blank=True, null=True)
+    memberid = models.ForeignKey(TblMember, models.DO_NOTHING, db_column='memberid', blank=True, null=True)
+    teamid = models.ForeignKey(TblTeamMaster, models.DO_NOTHING, db_column='teamid', blank=True, null=True)
+    categorysid = models.ForeignKey(TblCategorysMaster, models.DO_NOTHING, db_column='categorysid', blank=True, null=True)
+    subcategoryid = models.ForeignKey(TblSubcategoryMaster, models.DO_NOTHING, db_column='subcategoryid', blank=True, null=True)
     task = models.CharField(max_length=100, blank=True, null=True)
-    requestdetail = models.ForeignKey(Requestdetail, models.DO_NOTHING, db_column='requestdetail', blank=True, null=True)
+    requestid = models.ForeignKey(TblRequestdetail, models.DO_NOTHING, db_column='requestid', blank=True, null=True)
     description_text = models.CharField(max_length=255, blank=True, null=True)
     totaltime = models.IntegerField(blank=True, null=True)
     comments = models.CharField(max_length=255, blank=True, null=True)
     startdatetime = models.DateTimeField(blank=True, null=True)
     stopdatetime = models.DateTimeField(blank=True, null=True)
-    reports = models.ForeignKey(Activity, models.DO_NOTHING, db_column='reports', blank=True, null=True)
-    ot = models.ForeignKey(OtDetail, models.DO_NOTHING, db_column='ot', blank=True, null=True)
-    valid_invalid = models.ForeignKey('ValidInvalid', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
+    activityid = models.ForeignKey(TblActivity, models.DO_NOTHING, db_column='activityid', blank=True, null=True)
+    otid = models.ForeignKey(TblOtDetail, models.DO_NOTHING, db_column='otid', blank=True, null=True)
+    valid_invalid = models.ForeignKey('TblValidInvalidMaster', models.DO_NOTHING, db_column='valid_invalid', blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'timetrackers'
+        db_table = 'tbl_time_tracker'
 
 
-class TlMaster(models.Model):
-    tl_id = models.AutoField(primary_key=True)
-    tl_name = models.CharField(max_length=100, blank=True, null=True)
-    employeeid = models.IntegerField(blank=True, null=True)
+class TblUsefulLinks(models.Model):
+    linkid = models.AutoField(primary_key=True)
+    date_time = models.DateTimeField()
+    teamid = models.ForeignKey(TblTeamMaster, models.DO_NOTHING, db_column='teamid', blank=True, null=True)
+    memberid = models.ForeignKey(TblMember, models.DO_NOTHING, db_column='memberid', blank=True, null=True)
+    link = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'tl_master'
+        db_table = 'tbl_useful_links'
 
 
-class ValidInvalid(models.Model):
+class TblValidInvalidMaster(models.Model):
     valid_invaidid = models.AutoField(primary_key=True)
     type = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'valid_invalid'
+        db_table = 'tbl_valid_invalid_master'
 
 
-class ViewType(models.Model):
+class TblViewTypeMaster(models.Model):
     view_id = models.AutoField(primary_key=True)
     viewname = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'view_type'
+        db_table = 'tbl_view_type_master'
 
 
-class Whatwedo(models.Model):
-    recordid = models.AutoField(primary_key=True)
-    data = models.CharField(db_column='Data', max_length=255)  # Field name made lowercase.
-    description = models.TextField(db_column='Description')  # Field name made lowercase.
-    type = models.CharField(db_column='Type', max_length=100)  # Field name made lowercase.
-    image = models.CharField(db_column='Image', max_length=100, blank=True, null=True)  # Field name made lowercase.
+class TblYesNo(models.Model):
+    optionsid = models.AutoField(primary_key=True)
+    optionsname = models.CharField(unique=True, max_length=50)
 
     class Meta:
         managed = False
-        db_table = 'whatwedo'
+        db_table = 'tbl_yes_no'

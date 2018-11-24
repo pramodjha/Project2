@@ -33,12 +33,12 @@
     {%for data in model %}
       <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
         <td>{{data.error_id}}</td>
-        <td>{{data.errorlog_date }}</td>
-        <td>{{data.error_report }}</td>
-        <td>{{data.error_reportedby }}</td>
-        <td>{{data.error_reportedto }}</td>
-        <td>{{data.error_type }}</td>
-        <td>{{data.error_description }}</td>
+        <td>{{data.occurancedate }}</td>
+        <td>{{data.activityid }}</td>
+        <td>{{data.reportedbyid }}</td>
+        <td>{{data.reportedtoid }}</td>
+        <td>{{data.errortypeid }}</td>
+        <td>{{data.description }}</td>
         <td> <a href="{% url 'editerrorlog' data.error_id %}" class="glyphicon glyphicon-pencil fontstyle12"></a> </td>
         {% endfor %}
       </tr></br>

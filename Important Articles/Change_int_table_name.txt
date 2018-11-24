@@ -1,0 +1,9 @@
+chanted 
+teamdetail to  tbl_teamdetail
+acceptrejectdetail to tbl_AcceptrejectDetail
+acceptrejectoption to tbl_acceptrejectoption
+activity to tbl_activity
+activity_calendar to tbl_activity_calendar
+activitystatus to tbl_OpenClose
+activitystatus_calendar to tbl_activitystatus_calendar
+assign_view to tbl_assign_view

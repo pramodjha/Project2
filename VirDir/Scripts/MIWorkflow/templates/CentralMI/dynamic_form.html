@@ -1,27 +1,26 @@
-{% load widget_tweaks %}
+<form class="form" method="POST" action="" class='form-inline' enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if template_type == 'template_with_parameter' %}
+  {% include 'CentralMI/form_template_with_parameter.html' with form=form %}
+  {% elif template_type == 'template_with_choice' %}
+  {% include 'CentralMI/form_template_with_choice.html' with form=form %}
+  {% else %}
+  {% include 'CentralMI/form_template.html' with form=form %}
+  {% endif %}
+</form>
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#id_ot_startdatetime").datepicker({
+    dateFormat: 'yy-mm-dd',
+     altField: '#thealtdate',
+     altFormat: 'yy-mm-dd'});
+});
 
-  <h2>{{form_header}}</h2>
-  <form method="post">
-    {% csrf_token %}
+$(document).ready(function() {
+  $("#id_ot_enddatetime").datepicker({
+    dateFormat: 'yy-mm-dd',
+     altField: '#thealtdate',
+     altFormat: 'yy-mm-dd'});
+});
 
-    {% for hidden in form.hidden_fields %}
-      {{ hidden }}
-    {% endfor %}
-
-    {% for field in form.visible_fields %}
-      <div class="form-group">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field|add_class:'form-control' }}
-        {% for error in field.errors %}
-          <span class="help-block">{{ error }}</span>
-        {% endfor %}
-      </div>
-    {% endfor %}
-
-    <div class="form-group">
-      <button type="submit" class="btn btn-success">
-        <span class="glyphicon glyphicon-ok"></span> Submit
-      </button>
-      <a href="{% url oncancel %}" class="btn btn-danger">Cancel</a>
-    </div>
-  </form>
+</script>

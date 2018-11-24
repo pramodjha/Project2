@@ -23,9 +23,9 @@
 <div class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Current Selection </div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> ID : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.internaltaskstatusid }} </span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> DateTime : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.internaltaskstatusdatetime  }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Mimember : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.mimember}} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Task : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.internaltask }} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Choice : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.internaltaskchoice }} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Member : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.memberid}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Task : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.internaltaskid }} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Choice : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ data.internaltaskchoiceid }} </span></div>
 </div>
 <div class="col-sm-12 col-md-12 col-lg-7">
 <div class="col-sm-12 col-md-12 col-lg-3 "><a href="{% url 'internaltaskdetail'  %}" id="submit" name="submit" class="btn btn-success">Done</a></div>
@@ -49,16 +49,16 @@
 <span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskstatusdatetime  show_label=False layout='inline'  %}</span>
 </div>
 <div>
-<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Mimember'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.mimember  show_label=False   %}</span>
+<label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'member'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.memberid  show_label=False   %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Task'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltask  show_label=False  placeholder='' %}</span>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskid  show_label=False  placeholder='' %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-2 hidden">{% bootstrap_label 'Choice'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskchoice  show_label=False  placeholder='Feedback' %}</span>
+<span class="col-sm-12 col-md-12 col-lg-10 hidden">{% bootstrap_field form.internaltaskchoiceid  show_label=False  placeholder='Feedback' %}</span>
 </div>
 
 

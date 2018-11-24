@@ -30,15 +30,15 @@
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Request Type'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requesttypedetail  show_label=False   %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requesttypeid  show_label=False   %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Priority'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 " >{% bootstrap_field form.prioritydetail   show_label=False   %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 " >{% bootstrap_field form.priorityid   show_label=False   %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Owner'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.username  show_label=False    %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.userid  show_label=False    %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Request Description'  %}</label>
@@ -55,11 +55,11 @@
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Username'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.username  show_label=False   %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.userid  show_label=False   %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.statusdetail  show_label=False  placeholder='Error Reported To' %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.statusid  show_label=False  placeholder='Error Reported To' %}</span>
 </div>
 <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
 </div>

@@ -103,27 +103,27 @@ table td {
       </div>
       <div class="">
         <label class="hidden">Member</label>
-        <span  class="hidden">{% bootstrap_field form.mimember  show_label=False layout='inline'  %}</span>
+        <span  class="hidden">{% bootstrap_field form.memberid  show_label=False layout='inline'  %}</span>
       </div>
       <div class="">
         <label class="hidden">Team</label>
-        <span  class="hidden">{% bootstrap_field form.teamdetail  show_label=False layout='inline'  %}</span>
+        <span  class="hidden">{% bootstrap_field form.teamid  show_label=False layout='inline'  %}</span>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
         <label class="">Category</label>
-        <span  class="">{% bootstrap_field form.requestcategorys  show_label=False layout='inline'  %}</span>
+        <span  class="">{% bootstrap_field form.categorysid  show_label=False layout='inline'  %}</span>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
         <label class="">Sub Category</label>
-        <span  class="">{% bootstrap_field form.requestsubcategory  show_label=False layout='inline'  %}</span>
+        <span  class="">{% bootstrap_field form.subcategoryid  show_label=False layout='inline'  %}</span>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-1 removepadding ">
         <label class="">ID</label>
-        <span  class="">{% bootstrap_field form.requestdetail  show_label=False layout='inline'  %}</span>
+        <span  class="">{% bootstrap_field form.requestid  show_label=False layout='inline'  %}</span>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
         <label class="">Activity</label>
-        <span  class="">{% bootstrap_field form.reports  show_label=False layout='inline'  %}</span>
+        <span  class="">{% bootstrap_field form.activityid  show_label=False layout='inline'  %}</span>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-3 removepadding ">
         <label class="">Task</label>
@@ -186,17 +186,17 @@ table td {
      <td ><a  href="{% url 'edittracker' data.timetrackerid %}" class="fontstyle12">{{data.timetrackerid }} </a> </td>
      <td class="hidden">{{data.registerdatetime    }}</td>
      <td class="hidden">{{data.trackingdatetime }}</td>
-     <td class="hidden">{{data.mimember }}</td>
-     <td class="hidden">{{data.teamdetail }}</td>
-     <td>{{data.requestcategorys }}</td>
-     <td>{{data.requestsubcategory.requestsubcategory  }}</td>
-     <td>{{data.requestsubcategory.core_noncore  }}</td>
+     <td class="hidden">{{data.memberid }}</td>
+     <td class="hidden">{{data.teamid }}</td>
+     <td>{{data.categorysid }}</td>
+     <td>{{data.subcategoryid  }}</td>
+     <td>{{data.subcategoryid.core_noncore  }}</td>
      <!--       <td>{{form.requestdetail }}</td> -->
-     <td>{{data.reports }}</td>
+     <td>{{data.activityid }}</td>
      <td>{{data.task  }}</td>
      <td class="hidden">{{data.description_text   }}</td>
      <td>{{data.totaltime }}</td>
-     <td>{{data.ot.ot_status }}</td>
+     <td>{{data.otid.statusid }}</td>
      <td class="hidden">{{data.startdatetime  }}</td>
      <td class="hidden">{{data.stopdatetime   }}</td>
      <td> <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-pencil fontstyle12"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus fontstyle12"></a> </td>
@@ -207,7 +207,7 @@ table td {
 </div>
 <script>
 
-$("#id_requestcategorys").change(function () {
+$("#id_categorysid").change(function () {
    var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
    var category_id = $(this).val();  // get the selected country ID from the HTML input
    console.log(category_id)
@@ -217,12 +217,12 @@ $("#id_requestcategorys").change(function () {
        'categories': category_id     // add the country id to the GET parameters
      },
        success: function (data) {   // `data` is the return of the `load_cities` view function
-       $("#id_requestsubcategory").html(data);  // replace the contents of the city input with the data that came from the server
+       $("#id_subcategoryid").html(data);  // replace the contents of the city input with the data that came from the server
      }
    });
  });
 
- $("#id_requestcategorys").change(function () {
+ $("#id_categorysid").change(function () {
     var url = $("#trackingform").attr("data-activity-url");  // get the url of the `load_cities` view
     var category_id = $(this).val();  // get the selected country ID from the HTML input
     console.log(category_id)

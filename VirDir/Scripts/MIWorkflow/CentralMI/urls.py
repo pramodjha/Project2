@@ -108,6 +108,7 @@ urlpatterns = [
 	url(r'^Data_Analysis/',views.Data_anlayis, name = 'filtertab'),
 	url(r'^Filter_Data/',views.Filter_Data, name = 'filterdata'),
 
+
 #### Ajax call
 	url(r'^ajax/load-subcategories/', views.Load_Subcategories, name='ajax_load_subcategories'),
 	url(r'^ajax/load-activity/', views.Load_Activity, name='ajax_load_activity'),
@@ -141,9 +142,9 @@ url(r'^export/csv/$', views.export_users_csv, name='export_users_csv'),
 # Raw 13)
 url(r'^raw/', views.Raw_View, name='rawdetail'),
 url(r'^appreciation_form_add/', views.Raw_Appreciation_Add_Form, name='appreciationaddform'),
-url(r'^raw_appreciation_form_add/', views.Raw_rawactivity_Add_Form, name='rawdactivityddform'),
+url(r'^raw_activity_form_add/', views.Raw_rawactivity_Add_Form, name='rawdactivityddform'),
 url(r'^appreciation_form_edit/(?P<appreciationid>\d+)$', views.Raw_Appreciation_Edit_Form, name='appreciationeditform'),
-url(r'^raw_appreciation_form_edit/(?P<activityid>\d+)$', views.Raw_rawactivity_Edit_Form, name='rawdactivityeditform'),
+url(r'^raw_activity_form_edit/(?P<activityid>\d+)$', views.Raw_rawactivity_Edit_Form, name='rawdactivityeditform'),
 url(r'^raw_score_form_edit/(?P<activityid>\d+)$', views.Raw_Score_Edit_Form, name='rawdscoreeditform'),
 url(r'^raw_team_detail/', views.Raw_Team_View, name='rawdteamdetail'),
 url(r'^raw_team_edit_form/(?P<teamid>\d+)$', views.Raw_Team_Edit_Form, name='rawdteameditform'),
@@ -165,5 +166,6 @@ url(r'^issue_action_form_edit/(?P<issueactionid>\d+)$', views.IssueAction_Edit_F
 url(r'^gallery_view/', views.Gallery_View, name='gallery'),
 url(r'^gallery_form_add/', views.Gallery_Add_Form, name='galleryadd'),
 url(r'^gallery_form_edit/(?P<imgid>\d+)$', views.Gallery_Edit_Form, name='galleryedit'),
+
 
 	]

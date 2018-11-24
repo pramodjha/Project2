@@ -1,0 +1,4 @@
+add related_name to below table:
+TblActivity
+TblAssigneddetail
+TblUatDetail

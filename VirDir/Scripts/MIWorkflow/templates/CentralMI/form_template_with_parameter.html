@@ -1,0 +1,64 @@
+{% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block modelcontent %}
+<!-- Button trigger modal -->
+<button type="button" id="modal" class="btn btn-info btn-lg hidden" data-toggle="modal" data-target="#exampleModalLong" data-backdrop="static" data-keyboard="false">Open Modal</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLongTitle">{{title}}</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h2>{{form_header}}</h2>
+          {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+          {% for field in form.visible_fields %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field|add_class:'form-control' }}
+              {% for error in field.errors %}
+                <span class="help-block">{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          {% for hidden in form1.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+          {% for field in form1.visible_fields %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field|add_class:'form-control' }}
+              {% for error in field.errors %}
+                <span class="help-block">{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+      <div class="modal-footer">
+        <div>{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+        <div><a href="{% url url|add:redirect_url reverseid %}" id="cancel" name="cancel" class="btn btn-danger">Cancel</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script> $("#modal").trigger('click'); </script>
+
+{% endblock %}
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

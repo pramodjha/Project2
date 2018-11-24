@@ -1,4 +1,9 @@
-<option value="">---------</option>
-{% for m in mimembers %}
-<option value="{{ m.mimemberid }}">{{ m.username }}</option>
+<option id="newvalue" value="">---------</option>
+{% for m in members %}
+{{member_id}}
+{% if member_id == m.memberid %}
+<option value="{{ m.memberid }}" selected>{{ m.userid }}</option>
+{% else %}
+<option value="{{ m.memberid }}" >{{ m.userid }}</option>
+{% endif %}
 {% endfor %}

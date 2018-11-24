@@ -21,9 +21,9 @@
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Request Details (1)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request ID : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requestid }} </span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Raised Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requestraiseddate  }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Priority : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.prioritydetail}} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Type : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requesttypedetail }} </span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Owner : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.username }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Priority : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.priorityid}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Type : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requesttypeid }} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Owner : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.userid }}</span></div>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Request Description : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail1.requestdescription }}</span></div>
 {% if detail1.requestdocument == None or detail1.requestdocument == ""  %}
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> BRD : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> Not Available</span></div>
@@ -32,18 +32,18 @@
 {% endif %}
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Authorise Details (2)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Authorised Date : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{detail2.authoriseddate }}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Authorised By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail2.authoriserdetail }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Authorised By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail2.authoriserid }}</span></div>
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Assigning Details (3)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Assigning Date: </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail4.assigneddate}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Assigned By :  </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail4.assignedby}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Assigned To :  </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail4.assignedto}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Assigned By :  </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail4.assignedbyid}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Assigned To :  </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail4.assignedtoid}}</span></div>
 </div>
 <div class="col-sm-12 col-md-6 col-lg-4">
 <h class="fontstyle1 fontsize20 fontfamilycambria widthsize25per"> Overview Details (4)</h>
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Overview Date: </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.overviewdate}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Provided By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.providedby}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Given To : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.mimember}}</span></div>
-<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> SOP Created : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.sopcreatedoptionsid}} </p></span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Provided By : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.providedbyid}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Given To : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.giventoid}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> SOP Created : </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{ detail5.sopcreatedid}} </p></span></div>
 {% if detail5.document == None or detail5.document == ""  %}
 <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per"> Download SOP: </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> Not Available</span></div>
 {% else %}

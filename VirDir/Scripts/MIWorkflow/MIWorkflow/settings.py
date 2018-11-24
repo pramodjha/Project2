@@ -24,16 +24,13 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ')3ou*dlgfjcxuz41lmjwzn-hq@0-ys(6wb6ccwqmb7cjs=afn+'
 
+#SECRET_KEY = os.environ['SECRET_KEY']
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'jha.pramod234@gmail.com'
-EMAIL_HOST_PASSWORD = 'raghav234'
-EMAIL_PORT = 587
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
