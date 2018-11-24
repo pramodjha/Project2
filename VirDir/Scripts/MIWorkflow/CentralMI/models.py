@@ -201,7 +201,7 @@ class TblUatStatusMaster(models.Model):
         db_table = 'tbl_UAT_status_master'
 
     def __str__(self):
-        return str(self.uat_status_id)
+        return str(self.uat_status)
 
 class TblAcceptrejectdetail(models.Model):
     estacceptrejectid = models.AutoField(primary_key=True)

@@ -107,6 +107,29 @@ class RequeststatusdetailForm(forms.ModelForm):
         self.fields['statusid'].widget  = forms.HiddenInput()
         self.fields['requestid'].widget  = forms.HiddenInput()
 
+class RequeststatusdetailForm(forms.ModelForm):
+    class Meta():
+        model = TblRequeststatusdetail
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(RequeststatusdetailForm, self).__init__(*args, **kwargs)
+        self.fields['requeststatusdate'].widget = forms.HiddenInput()
+        self.fields['userid'].widget = forms.HiddenInput()
+        self.fields['statusid'].widget  = forms.HiddenInput()
+        self.fields['requestid'].widget  = forms.HiddenInput()
+
+class UATstatusdetailForm(forms.ModelForm):
+    class Meta():
+        model = TblRequeststatusdetail
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(UATstatusdetailForm, self).__init__(*args, **kwargs)
+        self.fields['requeststatusdate'].widget = forms.HiddenInput()
+        self.fields['userid'].widget = forms.HiddenInput()
+        self.fields['requestid'].widget  = forms.HiddenInput()
+
 
 class AcceptRequeststatusdetailForm(forms.ModelForm):
     statusid = forms.ModelChoiceField(queryset=TblStatusMaster.objects.filter(statusnameid__in=[3,7]),required=False)
@@ -159,6 +182,12 @@ class TblConversationForm(forms.ModelForm):
     class Meta():
         model = TblConversation
         fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(TblConversationForm, self).__init__(*args, **kwargs)
+        self.fields['date_time'].widget = forms.HiddenInput()
+        self.fields['requestid'].widget = forms.HiddenInput()
+        self.fields['userid'].widget  = forms.HiddenInput()
+
 
 class AcceptrejectdetailForm(forms.ModelForm):
     class Meta():
@@ -452,8 +481,6 @@ class TblLeaveRecordForm(forms.ModelForm):
         self.fields['date_time'].widget = forms.HiddenInput()
         self.fields['userid'].widget = forms.HiddenInput()
 
-
-
 class TblAppreciationForm(forms.ModelForm):
     class Meta():
         model = TblAppreciation
@@ -532,6 +559,19 @@ class UatDetailForm(forms.ModelForm):
         self.fields['requestid'].widget  = forms.HiddenInput()
         self.fields['testedbyid'].widget  = forms.HiddenInput()
         self.fields['updatedbyid'].widget  = forms.HiddenInput()
+
+class UatDetail1Form(forms.ModelForm):
+    class Meta():
+        model = TblUatDetail
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(UatDetail1Form, self).__init__(*args, **kwargs)
+        self.fields['date_time'].widget = forms.HiddenInput()
+        self.fields['requestid'].widget  = forms.HiddenInput()
+        self.fields['testedbyid'].widget  = forms.HiddenInput()
+        self.fields['updatedbyid'].widget  = forms.HiddenInput()
+        self.fields['uat_statusid'].label = "UAT Status"
 
 
 class IssueActionForm(forms.ModelForm):

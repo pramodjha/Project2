@@ -57,7 +57,12 @@
   </div>
 </div>
 <script> $("#modal").trigger('click'); </script>
-
+<script>
+$('#modal').submit( function(event) {
+    // disable to avoid double submission
+    $('#submit_button').attr('disabled', true);
+});
+</script>
 {% endblock %}
 {% block footer %}
 {% include "userprofilefootertest1.html" %}

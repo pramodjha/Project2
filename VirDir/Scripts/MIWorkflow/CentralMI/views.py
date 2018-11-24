@@ -44,7 +44,7 @@ import csv
 from django.db.models import Q
 import getpass
 
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES, IssueActionForm, ShiftupdateForm, GalleryForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES, IssueActionForm, ShiftupdateForm, GalleryForm, UatDetail1Form
 from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster, AuthUser
 
 
@@ -1295,6 +1295,7 @@ def UAT_View(request):
     memberid = request.session.get('sessison_member')
     filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid'],value_list = [memberid,teamid])
     requestid = TblEstimationdetail.objects.filter(**filter_dict).values_list('requestid',flat=True)
+    print(requestid)
     Accepted = list(TblCompleteddetail.objects.all().values_list('requestid', flat=True))
     data = TblUatDetail.objects.select_related('requestid').exclude(uat_statusid__in=[None]).exclude(requestid__in=Accepted).filter(requestid__in=requestid)
     return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
@@ -2776,53 +2777,44 @@ def WIP_Form(request,requestid):
 @login_required
 def UAT_Form(request,requestid):
     view_header = 'Workflow'
+    title = 'UAT Form'
+    form_template = 'CentralMI/dynamic_form.html'
+    redirect_url = 'uat'
+    template_type = 'template'
     activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='uat')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     userid = User.objects.get(username=username).id
     authuserinstance = AuthUser.objects.get(username=username)
     e = TblUatDetail.objects.filter(uat_statusid=None).get(requestid=requestid)
+    #print(e)
     requestfilter = TblRequestdetail.objects.get(requestid=requestid)
     request_owner = TblRequestdetail.objects.get(requestid=requestid).userid
-    form  = UatDetailForm(instance=e)
+    form  = UatDetail1Form(instance=e)
+    #print(form)
     form1 = RequeststatusdetailForm(initial={'statusid':11,'userid':userid,'requestid':requestid})
     if request.method == 'POST':
-        form = UatDetailForm(request.POST,instance=e)
+        form = UatDetail1Form(request.POST,instance=e)
         form1 = RequeststatusdetailForm(request.POST)
         if all([form.is_valid() , form1.is_valid()]):
             inst = form.save(commit=False)
-            inst.testedby = authuserinstance
+            inst.testedbyid = authuserinstance
             inst.save()
-            status = inst.uat_status
+            status = inst.uat_statusid
             inst1 = form1.save(commit=False)
             inst1.save()
             if str(status) == 'Failed':
-                stageinst = Statusdetail.objects.get(statusnameid=8)
+                stageinst = TblStatusMaster.objects.get(statusnameid=8)
             elif str(status) == 'Pass':
-                stageinst = Statusdetail.objects.get(statusnameid=9)
+                stageinst = TblStatusMaster.objects.get(statusnameid=9)
             else:
-                stageinst = Statusdetail.objects.get(statusnameid=11)
-#                print(inst1.requeststatusid)
-            #print(stage)
+                stageinst = TblStatusMaster.objects.get(statusnameid=11)
             ins = TblRequeststatusdetail.objects.get(requeststatusid=inst1.requeststatusid)
-            ins.statusdetail = stageinst
+            ins.statusid = stageinst
             ins.save()
-    #        dataforemail(username= request_owner,
-    #                requestid = requestid,
-    #                sub_user=  str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
-    #                L1_user= 'You have accepted the Estimation of your request ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
-    #                sub_auth= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
-    #                L1_auth='Request ID ' + str(requestid) + ' moved to WIP ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required' ,
-    #                sub_miteam= str(inst1.statusdetail) + 'for Request ID' + str(requestid),
-    #                L1_miteam= str(inst1.statusdetail) + ' and it moved to WIP ' if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
-    #                sub_manager= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
-    #                L1_manager="Estimation has been Accepted, it's moved to WIP bucket"  if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
-    #                request_status=str(inst1.statusdetail))
             return HttpResponseRedirect(reverse('uat'))
-        else:
-            return render(request, 'CentralMI/15a_ErrorPage.html')
-        context = {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
-        return render(request, form_template,context)
+    context = {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
+    return render(request, form_template,context)
 
 
 @login_required
@@ -2881,7 +2873,7 @@ def Thank_You_Page_View(request,requestid):
         except:
             model2 = "nothing"
         try:
-            model3 = Options.objects.all().get(requestid=requestid)
+            model3 = TblYesNo.objects.all().get(requestid=requestid)
         except:
             model3 = "nothing"
         try:
@@ -2893,7 +2885,7 @@ def Thank_You_Page_View(request,requestid):
         except:
             model5 = "nothing"
         try:
-            model6 = Estimationdetail.objects.all().get(requestid=requestid)
+            model6 = TblEstimationdetail.objects.all().get(requestid=requestid)
         except:
             model6 = "nothing"
         try:
