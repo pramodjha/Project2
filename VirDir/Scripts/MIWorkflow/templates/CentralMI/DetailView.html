@@ -1,0 +1,201 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+  <!-- _________________________________________________________________________ -->
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+{% block content %}
+
+<div id="id1" class = "item1">
+<table  class="table" >
+  <thead class="thead">
+
+  <tr class="backgroundcolor1 fontstyle4 fontsize15 fontfamilycambria widtdsize25per"  onclick="openWindow();" >
+    {% if para == "'All'" %}
+    <label onclick="openWindow();" class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Detail Log Table</label>
+    <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request RaisedDate <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Type <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Priority <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Description <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Status <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    {% elif para == "'RequestStage'" %}
+    <label class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Unapproved Request</label><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per">  Authoriser need to authorise the request (Click on ID)</span>
+    <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request RaisedDate <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Type <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Priority <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Description <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    {% elif para == "'AuthorisedStage'" %}
+    <label  class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Approved Request</label ><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per"> Assign tde request to appropriate candidate (Click on ID)</span>
+    <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request RaisedDate <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Type <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Priority <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Description <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Authorised Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Authorised By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    {% elif para == "'AssignedStage'" %}
+    <label  class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Assigned Request</label ><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per"> Overview of request to be taken/given (Click on ID)</span>
+    <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Authorised Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Authorised By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Assigned Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Assigned By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Assigned To <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    {% elif para == "'OverviewStage'" %}
+    <label  class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Overview of Request</label ><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per"> Estimation to be given for completion (Click on ID)</span>
+    <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Assigned Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Assigned To <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Overview Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Provided By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Given To <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>SOP Created <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Document <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    {% elif para == "'EstimateStage'" %}
+    <label  class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Estimation of Request</label ><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per"> Estimation need to be Accepted/Rejected by requester (Click on ID)</span>
+    <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Overview Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Provided By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Given To <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>SOP Created <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Document <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Estimated Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Estimated By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Estimated Hrs <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+  {% elif para == "'WIPStage'" %}
+  <label  class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Work In Progress</label ><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per"> To mark it as Complete (Click on ID)</span>
+  <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+  <td>Overviewed By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+  <td>Estimated By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+  <td>Estimated Hrs <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+  <td>Est. Accepted Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+  <td>Document <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+   {% elif para == "'CompletedStage'" %}
+   <label  class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Completed</label ><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per">
+   <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+   <td>Request RaisedDate <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+   <td>Request Type <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+   <td>Request Priority <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+   <td>Request Description <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+   <td>Completed Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+   <td>Completed By <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+
+    {% elif para == "'RejectedStage'" %}
+    <label  class="fontstyle1 fontsize30 fontfamilycambria widtdsize30per"> Rejected</label ><span class="fontfamilycambria widtdsize25per backgroundcolor2"><a onclick="openWindow();" class="fontstyle10 fontsize20 glyphicon glyphicon-filter"></a></span><span class="fontstyle4 fontsize15 fontfamilycambria widtdsize30per">
+    <td>Request ID <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request RaisedDate <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Type <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Priority <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Request Description <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+    <td>Est. Rejected Date <a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></td>
+    <td>Request Description<a class="fontstyle4 fontsize10 glyphicon glyphicon-filter"></a></td>
+
+  {% endif %}
+    </tr>
+</thead>
+<tbody class="tbody">
+{%for element in data %}
+
+  <tr  class="fontstyle1 fontsize12 fontfamilycambria widtdsize25per backgroundcolor2 ">
+    {% if para == "'All'" %}
+      <td>{{element.requestid}}</td>
+      <td>{{element.requestraiseddate}}</td>
+      <td>{{element.requesttype}}</td>
+      <td>{{element.requestpriority}}</td>
+      <td>{{element.statusname}}</td>
+      <td>{{element.requestdescription}}</td>
+      {% elif para == "'RequestStage'" %}
+      <td><a class="fontstyle1 fontsize12 fontfamilycambria widtdsize25per backgroundcolor2" href="{% url 'authform' element.requestid %}">{{element.requestid}}</a></td>
+      <td>{{element.requestraiseddate}}</td>
+      <td>{{element.requesttype}}</td>
+      <td>{{element.requestpriority}}</td>
+      <td>{{element.requestdescription}}</td>
+      {% elif para == "'AuthorisedStage'" %}
+      <td><a class="fontstyle1 fontsize12 fontfamilycambria widtdsize25per backgroundcolor2" href="{% url 'assignedform' element.requestid %}">{{element.requestid}}</a></td>
+      <td>{{element.requestraiseddate}}</td>
+      <td>{{element.requesttype}}</td>
+      <td>{{element.requestpriority}}</td>
+      <td>{{element.requestdescription}}</td>
+      <td>{{element.authoriseddate}}</td>
+      <td>{{element.authorisedby}}</td>
+      {% elif para == "'AssignedStage'" %}
+      <td><a class="fontstyle1 fontsize12 fontfamilycambria widtdsize25per backgroundcolor2" href="{% url 'overviewform' element.requestid %}">{{element.requestid}}</a></td>
+      <td>{{element.authoriseddate}}</td>
+      <td>{{element.authorisedby}}</td>
+      <td>{{element.assignedDate	}}</td>
+      <td>{{element.assignedby}}</td>
+      <td>{{element.assignedto }}</td>
+      {% elif para == "'OverviewStage'" %}
+      <td><a class="fontstyle1 fontsize12 fontfamilycambria widtdsize25per backgroundcolor2" href="{% url 'estimationform' element.requestid %}">{{element.requestid}}</a></td>
+      <td>{{element.assignedDate	}}</td>
+      <td>{{element.assignedto }}</td>
+      <td>{{element.overviewdate}}</td>
+      <td>{{element.providedby}}</td>
+      <td>{{element.givenby}}</td>
+      <td>{{element.optionsname }}</td>
+      <td><a href="{{ MEDIA_URL }}/media/{{ element.document}}"><span class="glyphicon glyphicon-cloud-download"></span></a></td>
+      {% elif para == "'EstimateStage'" %}
+      <td><a class="fontstyle1 fontsize12 fontfamilycambria widtdsize25per backgroundcolor2" href="{% url 'estimationformar' element.requestid %}">{{element.requestid}}</a></td>
+      <td>{{element.overviewdate}}</td>
+      <td>{{element.providedby}}</td>
+      <td>{{element.givenby}}</td>
+      <td>{{element.optionsname }}</td>
+      <td><a href="{{ MEDIA_URL }}/media/{{ element.document}}"><span class="glyphicon glyphicon-cloud-download"></span></a></td>
+      <td>{{element.estimationdate}}</td>
+      <td>{{element.estimatedby}}</td>
+      <td>{{element.estimateddays}}</td>
+      {% elif para == "'WIPStage'" %}
+      <td><a class="fontstyle1 fontsize12 fontfamilycambria widtdsize25per backgroundcolor2" href="{% url 'completedform' element.requestid %}">{{element.requestid}}</a></td>
+      <td>{{element.assignedto }}</td>
+      <td>{{element.givenby}}</td>
+      <td>{{element.estimatedby}}</td>
+      <td>{{element.estimateddays}}</td>
+      <td>{{element.estacceptrejectdate}}</td>
+      <td>{{element.estacceptrejectby}}</td>
+      <td><a href="{{ MEDIA_URL }}/media/{{ element.document}}"><span class="glyphicon glyphicon-cloud-download"></span></a></td>
+      {% elif para == "'CompletedStage'" %}
+      <td>{{element.requestid}}</td>
+      <td>{{element.requestraiseddate}}</td>
+      <td>{{element.requesttype}}</td>
+      <td>{{element.requestpriority}}</td>
+      <td>{{element.requestdescription}}</td>
+      <td>{{element.completeddate}}</td>
+      <td>{{element.completedby}}</td>
+      {% elif para == "'RejectedStage'" %}
+      <td>{{element.requestid}}</td>
+      <td>{{element.requestraiseddate}}</td>
+      <td>{{element.requesttype}}</td>
+      <td>{{element.requestpriority}}</td>
+      <td>{{element.requestdescription}}</td>
+      <td>{{element.estacceptrejectdate}}</td>
+      <td>{{element.estacceptrejectby}}</td>
+
+      {% endif %}
+
+{% endfor %}
+
+</tr></br>
+</tbody>
+</table>
+
+<script>
+function openWindow() {
+    window.open('/CMI/search','','height=300,width=500,status=yes,toolbar=no,menubar=no,location=200');
+  }
+</script>
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefooter1.html" %}
+{% endblock %}

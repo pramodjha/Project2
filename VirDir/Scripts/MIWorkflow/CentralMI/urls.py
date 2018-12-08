@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^signin_view/', views.Sign_In_View, name='signin'),
     url(r'^signinasother_view/', views.Sign_In_As_Other_View, name='signinother'),
 
+    url(r'^check_details/', views.Check_Userdetail, name='checkdetail'),
+
 	url(r'^signout/', views.Sign_Out, name='signout'),
 # 2) Home
 	url(r'^$',views.Index, name = 'home'),

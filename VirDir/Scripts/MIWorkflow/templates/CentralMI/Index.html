@@ -1,0 +1,116 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+<html>
+  {% block style %}
+  <link rel="stylesheet" href="{% static 'css/grid5.css' %}" type="text/css" />
+  <script src="{% static 'jquery/jquery-ui.js' %}"></script>
+  <script src="{% static 'jquery/myjquery.js' %}"></script>
+
+  <script>
+  function onloadfunction()  {
+         window.open('http://127.0.0.1:8000/CMI/', '', 'fullscreen=yes, scrollbars=auto');
+       }
+  </script>
+{% endblock %}
+<body onload="onloadfunction();">
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+{% if authority == "manager" %}
+{% elif authority == "authoriser" %}
+{% elif authority == "associate" %}
+{% elif authority == "miteam" %}
+
+<div id="id2" class = "item2">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Workingdays</label>
+{% for key, value in dv.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+</div>
+<div id="id3" class = "item3">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days OT</label>
+{% for key, value in dvOT.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}<span></li>
+{% endfor %}
+</div>
+<div id="id4" class = "item4">
+  <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Core</label>
+  {% for key, value in dvcore.items %}
+  <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+  {% endfor %}
+</div>
+<div id="id5" class = "item5">
+  <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Days Utilisation</label>
+  {% for key, value in dvutilisation.items %}
+  <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+  {% endfor %}
+</div>
+<div id="id6" class = "item6">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks </label>
+{% for key, value in wv.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+</div>
+<div id="id7" class = "item7">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks OT </label>
+{% for key, value in wvOT.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+</div>
+<div id="id8" class = "item8">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks Core</label>
+{% for key, value in wvcore.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+</div>
+<div id="id9" class = "item9">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 5 Weeks Utilisaion </label>
+{% for key, value in wvutilisation.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+</div>
+<div id="id10" class = "item10">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months </label>
+{% for key, value in mv.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+</div>
+<div id="id11" class = "item11">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months OT </label>
+{% for key, value in mvOT.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+</div>
+<div id="id12" class = "item12">
+  <label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months Core </label>
+  {% for key, value in mvcore.items %}
+  <li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+  {% endfor %}
+</div>
+<div id="id13" class = "item13">
+<label class="fontstyle1 fontsize15 fontfamilycambria widthsize12per">Last 3 Months Utilisation </label>
+{% for key, value in mvutilisation.items %}
+<li class="fontstyle4 fontsize12 fontfamilycambria widthsize12per">{{key}} <span class="fontstyle1 fontsize12 fontfamilycambria widthsize12per">{{value}}</li>
+{% endfor %}
+
+
+</div>
+</div>
+{% else %}
+
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefooter1.html" %}
+{% endblock %}
+
+</body>
+</html>

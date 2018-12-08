@@ -1,0 +1,189 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<script src="{% static 'jquery/myjquery.js' %}"></script>
+{% endblock %}
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+{% block navblockcenter %}
+{% endblock %}
+{% block content %}
+
+<div id="id1" class = "item1">
+  <div >
+    <form method = "POST" action = "{% url 'sdate' %}">
+    {% csrf_token %}
+    <label class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">Tracking Date</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize15per">{{form.trackingdatetime }}</span>
+    <button type="submit" id="setdate"name = "setdate" value="setdate" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Set Date<span class=""></span></button>
+
+    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">A:Worked(hh:mm):</span>
+    {% for key, value in dv.items %}
+    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
+    {% endfor %}
+
+    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">B:OT(hh:mm):</span>
+    {% for key, value in dvOT.items %}
+    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
+    {% endfor %}
+
+    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Total(A+B): </span>
+    {% for key, value in dvAll.items %}
+    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
+    {% endfor %}
+
+    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Core(hh:mm): </span>
+    {% for key, value in dvcore.items %}
+    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
+    {% endfor %}
+
+    <span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Utilisation(%): </span>
+    {% for key, value in dvutilisation.items %}
+    <span class="fontstyle1 fontsize14 fontfamilycambria widthsize15per">{{value}}</span>
+    {% endfor %}
+
+    </form>
+</div>
+  <table id="table1" class="table table-striped" >
+  <tbody>
+    <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}" novalidate>
+     {% csrf_token %}
+    <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
+      <th class="hidden">Tracking ID</th>
+      <th class="hidden">Registered Date</th>
+      <th class="hidden">Tracking Date</th>
+      <th class="hidden">Associate Name</th>
+      <th>Team Name</th>
+      <th>Request Category</th>
+      <th>Request Sub-Category</th>
+      <th>Request ID</th>
+      <th>Reports</th>
+      <th>Task</th>
+      <th>OT</th>
+      <th>Time(Min)</th>
+      <th>Save</th>
+      <th class="hidden">Start/Stop</th>
+      </tr>
+      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+        <td class="hidden">{{form.timetrackerid }}</td>
+        <td class="hidden">{{form.registerdatetime    }}</td>
+        <td class="hidden">{{form.trackingdatetime }}</td>
+        <td class="hidden">{{form.mimember }}</td>
+        <td>{{form.teamdetail }}</td>
+        <td>{{form.requestcategorys }}</td>
+        <td>{{form.requestsubcategory  }}</td>
+        <td>{{form.requestdetail }}</td>
+        <td>{{form.reports }}</td>
+        <td>{{form.task}}</td>
+        <td>{{form.options}}</td>
+        <td class="hidden">{{form.description_text   }}</td>
+        <td>{{form.totaltime}}</td>
+        <td class="hidden">{{form.comments}}</td>
+        <td class="hidden">{{form.startdatetime}}</td>
+        <td class="hidden">{{form.stopdatetime }}</td>
+        <td><button id="submitbutton" type="submit">Submit</button></td>
+
+
+      </form>
+      <td class="hidden"><button onClick="setstartTime();" id="1" value="Start"  >Start</button></td>
+  </tr></br>
+  </tbody>
+  </table>
+
+<table  class="table" >
+<thead class="thead1">
+  <tr class="backgroundcolor1 fontstyle4 fontsize12 fontfamilycambria widthsize25per">
+    <td class="hidden">Tracking ID</td>
+    <td class="hidden">Registered Date</td>
+    <td class="hidden">Tracking Date</td>
+    <td class="hidden">Associate Name</td>
+    <td class="hidden">Team Name</td>
+    <td>Request Category</td>
+    <td>Request Sub-Category</td>
+    <td>Core_Non-Core</td>
+    <td>Request ID</td>
+    <td>Reports</td>
+    <td>Task</td>
+    <td>OT</td>
+    <td class="hidden">Descritpion</td>
+    <td>Total Time (Min)</td>
+    <td class="hidden">Start-Time</td>
+    <td class="hidden">Stop-Time</td>
+    <td>View</td>
+    </tr>
+</thead>
+<tbody class="tbody1">
+{%for data in model %}
+  <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2">
+    <td class="hidden">{{form.timetrackerid }}</td>
+    <td class="hidden">{{data.registerdatetime    }}</td>
+    <td class="hidden">{{data.trackingdatetime }}</td>
+    <td class="hidden">{{data.mimember }}</td>
+    <td class="hidden">{{data.teamdetail }}</td>
+    <td>{{data.requestcategorys }}</td>
+    <td>{{data.requestsubcategory.requestsubcategory  }}</td>
+    <td>{{data.requestsubcategory.core_noncore  }}</td>
+    <td>{{data.requestdetail   }}</td>
+    <td>{{data.reports }}</td>
+    <td>{{data.task  }}</td>
+    <td>{{data.options   }}</td>
+    <td class="hidden">{{data.description_text   }}</td>
+    <td>{{data.totaltime }}</td>
+    <td class="hidden">{{data.startdatetime  }}</td>
+    <td class="hidden">{{data.stopdatetime   }}</td>
+    <td> <a href="{% url 'viewtracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a> </td>
+    {% endfor %}
+</tr></br>
+</tbody>
+</table>
+
+
+
+<script>
+$("#id_requestcategorys").change(function () {
+   var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
+   var category_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(category_id)
+   $.ajax({                       // initialize an AJAX request
+     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'categories': category_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_requestsubcategory").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+
+$("#submitbutton").click(function () {
+    var datevalue = $("#id_trackingdatetime").val() // get the selected country ID from the HTML input
+    $.ajax({
+        type: "GET",
+        url: "{% url 'ajax_load_datavalues' %}",  // URL to your view that serves new info
+        data: {'datev': datevalue}
+    })
+    .done(function(response) {
+        $('#table2').html(response);
+        console.log(response)
+    });
+  });
+</script>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+</body>
+
+
+
+</html>

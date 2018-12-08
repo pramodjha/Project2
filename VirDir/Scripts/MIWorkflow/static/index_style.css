@@ -1,0 +1,88 @@
+.row1, .row2, .row3 {
+display: inline-block; 
+    }
+
+ .row1{
+   margin-top: 4%;
+ }   
+ .row2{
+   margin-top:0.2%;
+ }   
+ 
+ .row3{
+   margin-top:0.2%;
+ }   
+ 
+ .bar{
+fill: #005266;
+ }   
+.bar:hover{
+fill: #008fb3;
+ } 
+
+
+
+ .d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+#piechart1, #piechart3,#piechart4, #piechart6,#piechart7,#piechart8, #barchart4,#barchart7, #barchart9 {
+    background-color:  #cccccc;
+}
+
+#refresh_DatasetCharts{
+  background-color:  #cc7a00;
+}
+
+#piechart1, #barchart7,  #barchart9{
+  
+  margin-left: 3.5%
+}
+#btnclearfillter{
+    background-color: #222222;
+    border-color: #222222;
+    color: #999999;
+    width: 100PX;
+    height:30px;
+    text-align: center;
+}
+
+.shadow {
+    -webkit-filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.5) );
+    filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.5) );
+}
+
+
+p {color: #666666;
+text-align: center;
+background-color: #d9d9d9;
+font-family: Calibri;
+border-bottom-style: dotted;
+border-bottom-color: #cc7a00;
+border-bottom-width: 1px;
+    }

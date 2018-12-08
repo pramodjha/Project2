@@ -1,0 +1,23 @@
+
+@media (min-width: 768px) {
+.container {
+  display: grid;
+  margin: auto;
+  margin-top: 4%;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-rows: 100%;
+  grid-template-areas:
+    "a a a a a a a a a a a a"
+    "a a a a a a a a a a a a"
+    "a a a a a a a a a a a a"
+    "a a a a a a a a a a a a"
+    "a a a a a a a a a a a a"
+    "a a a a a a a a a a a a"
+    "a a a a a a a a a a a a"
+    "a a a a a a a a a a a a"
+
+    }
+.item1 {
+  grid-area: a;
+}
+}

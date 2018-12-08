@@ -1,0 +1,72 @@
+{% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block content %}
+<form class="form" method="POST" action="" class='form-inline ' enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_form_errors form type='non_fields' %}
+
+<div class="col-sm-12 col-md-12 col-lg-12 ">
+<div class="col-sm-12 col-md-12 col-lg-6  box3 fontstyle1 fontsize25">Request Details</div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 ">
+<div class="col-sm-12 col-md-12 col-lg-6 box">
+<div >
+<label class="col-sm-12 col-md-12 col-lg-4  hidden">{% bootstrap_label 'Request Raised Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.requestraiseddate  show_label=False layout='inline'  %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Request Type'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requesttypeid  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_label 'Priority'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 " >{% bootstrap_field form.priorityid   show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Owner'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.userid  show_label=False    %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Request Description'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestdescription  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'BRD'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestdocument  show_label=False   %}</span>
+</div>
+
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status Date'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.requeststatusdate  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Username'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.userid  show_label=False   %}</span>
+</div>
+<div>
+<label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Request Status'  %}</label>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form1.statusid  show_label=False  placeholder='Error Reported To' %}</span>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+</div>
+</div>
+</form>
+
+{% endblock %}
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

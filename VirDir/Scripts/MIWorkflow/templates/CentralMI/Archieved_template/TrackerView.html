@@ -1,0 +1,98 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid6.css' %}" type="text/css" />
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+
+{% block navblockcenter %}
+{% endblock %}
+
+{% block content %}
+
+  {%for data in model %}
+  <div id="id1" class = "item1 ">
+  <h class="fontstyle1 fontsize25 fontfamilycambria widthsize15per"> Tracking Details</h><span><a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a></span>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Tracking ID </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.timetrackerid }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Registered Date</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.registerdatetime }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Tracking Date</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.trackingdatetime }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Associate Name</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.mimember }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Team Name</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.teamdetail }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">OT (IF Any)</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.options   }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Total Time (Minutes)</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.totaltime }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Comments</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.comments }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Start-Time</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.startdatetime  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Stop-Time</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.stopdatetime   }}</span></div>
+
+</div>
+  <div id="id2" class = "item2 ">
+
+  <h class="fontstyle1 fontsize25 fontfamilycambria widthsize15per"> Categories Details</h><span><a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a></span>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Request Category</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestcategorys}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Request Sub-Category</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestsubcategory.requestsubcategory  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Core_Non-Core</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestsubcategory.core_noncore  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Task</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.task  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Descritpion</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.description_text   }}</span></div>
+
+  <h class="fontstyle1 fontsize25 fontfamilycambria widthsize15per"> Request Details</h><span><a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a></span>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Request ID</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestdetail   }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Request Type</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestdetail.requesttypedetail}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Request Priority</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestdetail.prioritydetail}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Request Owner</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestdetail.username}}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Request Description</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.requestdetail.requestdescription}}</span></div>
+
+</div>
+<div id="id3" class = "item3 ">
+
+  <h class="fontstyle1 fontsize25 fontfamilycambria widthsize15per"> Report Details</h><span><a href="{% url 'edittracker' data.timetrackerid %}" class="glyphicon glyphicon-pencil"></a></span>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Reports Name</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.reports.name  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Reports Frequency</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.reports.frequency  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Report Owner - Primary</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.reports.primaryowner  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Report Owner - Secondary</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.reports.secondaryowner  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Report Description</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per"> {{data.reports.description  }}</span></div>
+  <div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize25per">Edit</label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize25per">
+  </div>
+      {% endfor %}
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+$("#id_requestcategorys").change(function () {
+   var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
+   var category_id = $(this).val();  // get the selected country ID from the HTML input
+   $.ajax({                       // initialize an AJAX request
+     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'categories': category_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_requestsubcategory").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+
+
+</script>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,33 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block content %}
+<div id="id1" class = "item1">
+<form class="form" method="POST" action="" >
+{% csrf_token %}
+<div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per ">Request Detail</label></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Raised Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{ form.requestraiseddate}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Type</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.requesttypedetail}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Priority</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.prioritydetail }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Owner</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.username }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Request Description</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per">{{form.requestdescription}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.requeststatusdate}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status By</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.username}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.statusdetail }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status ID </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.requestdetail}}</span></div>
+<div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
+</form>
+</div>
+{% endblock %}

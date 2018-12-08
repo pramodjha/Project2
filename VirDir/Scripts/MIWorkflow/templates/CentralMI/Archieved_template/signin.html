@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+<!-- _________________________________________________________________________ -->
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+<!-- _________________________________________________________________________ -->
+{% block navblockright %}
+{% include "userprofile2.html" %}
+{% endblock %}
+<!-- _________________________________________________________________________ -->
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+<!-- _________________________________________________________________________ -->
+{% block content %}
+<div id="id1" class = "item1">
+  <p class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> ENTER LOGIN CREDENTIAL</p>
+  <form method="POST">
+      {% csrf_token %}
+      {% if error %}
+      {{error}}
+      {% endif %}
+      <div ><label class="fontstyle4 fontsize20 fontfamilycambria widthsize10per">User Name </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize10per "> {{ form.username }}</span></div>
+      <div ><label class="fontstyle4 fontsize20 fontfamilycambria widthsize10per"> Password   </label><span class="fontstyle1 fontsize15 fontfamilycambria widthsize10per ">  {{ form.password }}</span><span><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Sign In</button></span></div>
+  </form>
+  </div>
+{% endblock %}
+<!-- _________________________________________________________________________ -->

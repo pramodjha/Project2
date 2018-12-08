@@ -1,0 +1,52 @@
+{% if authority == "manager" %}
+<form method = "POST" action = "{% url 'detailview' %}">
+{% csrf_token %}
+<button {% if activetab1 == 'All' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %}  type="submit" name= "tab" value="All" >All</button>
+<button {% if activetab1 == 'RequestStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %}  type="submit" name= "tab" value="RequestStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Unapproved</button>
+<button {% if activetab1 == 'AuthorisedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="AuthorisedStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Approved</button>
+<button {% if activetab1 == 'AssignedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="AssignedStage"  class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Assign</button>
+<button {% if activetab1 == 'OverviewStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %}  type="submit" name= "tab" value="OverviewStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Overview</button>
+<button {% if activetab1 == 'EstimateStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="EstimateStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Estimate</button>
+<button {% if activetab1 == 'WIPStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="WIPStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >WIP</button>
+<button {% if activetab1 == 'CompletedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="CompletedStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Completed</button>
+<button {% if activetab1 == 'RejectedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="RejectedStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Rejected</button>
+</form>
+{% elif authority == "authoriser" %}
+<form method = "POST" action = "{% url 'detailview' %}">
+{% csrf_token %}
+<button {% if activetab1 == 'RequestStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %}  type="submit" name= "tab" value="RequestStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Unapproved</button>
+<button {% if activetab1 == 'AuthorisedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="AuthorisedStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Approved</button>
+</form>
+{% elif authority == "miteam" %}
+<form method = "POST" action = "{% url 'detailview' %}">
+{% csrf_token %}
+<button {% if activetab1 == 'All' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %}  type="submit" name= "tab" value="All" >All</button>
+<button {% if activetab1 == 'RequestStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %}  type="submit" name= "tab" value="RequestStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Unapproved</button>
+<button {% if activetab1 == 'AuthorisedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="AuthorisedStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Approved</button>
+<button {% if activetab1 == 'AssignedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="AssignedStage"  class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Assign</button>
+<button {% if activetab1 == 'OverviewStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %}  type="submit" name= "tab" value="OverviewStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Overview</button>
+<button {% if activetab1 == 'EstimateStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="EstimateStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Estimate</button>
+<button {% if activetab1 == 'WIPStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="WIPStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >WIP</button>
+<button {% if activetab1 == 'CompletedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="CompletedStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Completed</button>
+<button {% if activetab1 == 'RejectedStage' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "tab" value="RejectedStage" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Rejected</button>
+</form>
+{% elif authority == "associate" %}
+<form method = "POST" action = "">
+{% csrf_token %}
+<button type="submit" name= "statusfiltered" value="About Team" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >About Team</button>
+<button type="submit" name= "statusfiltered" value="What we do?" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >What we do?</button>
+<button type="submit" name= "statusfiltered" value="Governance Process" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Governance Process</button>
+<button type="submit" name= "statusfiltered" value="Success Stories"  class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Success Stories</button>
+<button type="submit" name= "statusfiltered" value="Comments and Suggestion" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Comments and Suggestion</button>
+</form>
+{% else  %}
+<form method = "POST" action = "">
+{% csrf_token %}
+<button type="submit" name= "statusfiltered" value="About Team" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >About Team</button>
+<button type="submit" name= "statusfiltered" value="What we do?" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >What we do?</button>
+<button type="submit" name= "statusfiltered" value="Governance Process" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Governance Process</button>
+<button type="submit" name= "statusfiltered" value="Success Stories"  class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Success Stories</button>
+<button type="submit" name= "statusfiltered" value="Comments and Suggestion" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Comments and Suggestion</button>
+</form>
+
+{% endif %}

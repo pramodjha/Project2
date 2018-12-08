@@ -1,0 +1,62 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+ {% endblock %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+<div id="id1" class = "item1">
+  <form method="post" id="personForm" data-cities-url="{% url 'ajax_load_subcategories' %}" novalidate>
+      {% csrf_token %}
+        {{ form.as_table }}
+        <button type="submit">Save</button>
+        <a href="">Nevermind</a>
+    </form>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+
+
+$("#id_requestcategorys").change(function () {
+   var url = $("#personForm").attr("data-cities-url");  // get the url of the `load_cities` view
+   var countryId = $(this).val();  // get the selected country ID from the HTML input
+       console.log($(this).val());
+   $.ajax({                       // initialize an AJAX request
+     type: 'GET',
+     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'country': countryId     // add the country id to the GET parameters
+     },
+
+     success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_requestsubcategory").html(data);  // replace the contents of the city input with the data that came from the server
+       console.log(data)
+     }
+   });
+
+ });
+
+</script>
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+</body>
+</html>

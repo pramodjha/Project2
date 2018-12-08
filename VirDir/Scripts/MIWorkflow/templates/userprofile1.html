@@ -1,0 +1,44 @@
+{% if authority == "manager" %}
+
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token %}
+<button {% if activetab == 'home' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "Action" value="home"  >Home <span class=""></span></button>
+<button {% if activetab == 'loginrequest' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="loginrequest">Login Request <span class=""></span></button>
+<button {% if activetab == 'checkstatus' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="checkstatus"  >Check Status <span class=""></span></button>
+<button {% if activetab == 'timetracker' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="timetracker" >Time Tracker <span class=""></span></button>
+<button {% if activetab == 'signin' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="signout">Sign Out <span class=""></span></button>
+<button {% if activetab == 'Admin' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1 active"{else} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="Admin" >Admin  <span class=""></span></button>
+</form>
+{% elif authority == "authoriser" %}
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token {% templatetag closeblock %}
+<button {% if activetab == 'home' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "Action" value="home"  >Home <span class=""></span></button>
+<button {% if activetab == 'signin' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="signout">Sign Out <span class=""></span></button>
+</form>
+{% elif authority == "miteam" %}
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token %}
+
+<button {% if activetab == 'home' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "Action" value="home"  >Home <span class=""></span></button>
+<button {% if activetab == 'loginrequest' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="loginrequest">Login Request <span class=""></span></button>
+<button {% if activetab == 'checkstatus' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="checkstatus"  >Check Status <span class=""></span></button>
+<button {% if activetab == 'timetracker' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="timetracker" >Time Tracker <span class=""></span></button>
+<button {% if activetab == 'report' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="report" >Report <span class=""></span></button>
+<button {% if activetab == 'signin' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="signout">Sign Out <span class=""></span></button>
+</form>
+{% elif authority == "associate" %}
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token %}
+<button {% if activetab == 'home' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name= "Action" value="home"  >Home <span class=""></span></button>
+<button {% if activetab == 'loginrequest' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="loginrequest">Login Request <span class=""></span></button>
+<button {% if activetab == 'checkstatus' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="checkstatus"  >Check Status <span class=""></span></button>
+<button {% if activetab == 'signin' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="signout">Sign Out <span class=""></span></button>
+</form>
+{% else %}
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token %}
+<button  {% if activetab == 'signin' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="signin" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1">Sign In <span class=""></span></button>
+<button  {% if activetab == 'signup' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="signup" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1">Sign Up <span class=""></span></button>
+<button {% if activetab == 'signin' %} class="backgroundcolor1 fontstyle1 fontfamilycambria fontsize14 bordercolor1"{%else%} class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" {% endif %} type="submit" name = "Action" value="signout">Sign Out <span class=""></span></button>
+</form>
+{% endif %}

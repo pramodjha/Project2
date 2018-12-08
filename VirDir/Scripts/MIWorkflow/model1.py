@@ -302,6 +302,15 @@ class TblAuthoriserdetail(models.Model):
         db_table = 'tbl_authoriserdetail'
 
 
+class TblBusinessUnitMaster(models.Model):
+    bu_id = models.AutoField(db_column='BU_id', primary_key=True)  # Field name made lowercase.
+    business_unit = models.CharField(db_column='Business_Unit', max_length=255, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_business_unit_master'
+
+
 class TblCalendar(models.Model):
     date = models.DateField(blank=True, null=True)
     days_type = models.CharField(db_column='Days Type', max_length=50, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -842,6 +851,7 @@ class TblTeamMaster(models.Model):
     teamid = models.AutoField(primary_key=True)
     teamdatetime = models.DateTimeField()
     teamname = models.CharField(max_length=100, blank=True, null=True)
+    buid = models.ForeignKey(TblBusinessUnitMaster, models.DO_NOTHING, db_column='buid', blank=True, null=True)
 
     class Meta:
         managed = False

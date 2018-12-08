@@ -44,134 +44,61 @@ import csv
 from django.db.models import Q
 import getpass
 
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MimemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES, IssueActionForm, ShiftupdateForm, GalleryForm, UatDetail1Form
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES, IssueActionForm, ShiftupdateForm, GalleryForm, UatDetail1Form
 from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster, AuthUser
-
+from .views_signin_signup import Sign_Up_View_Version1,Sign_Up_View_Version2,Sign_In_View_Version1,Sign_In_View_Version2,Sign_In_As_Other_View_Version1
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
 print(MEDIA_DIR)
 
 def Sign_Up_View(request):
-    activetab = 'signup'
-    system_username = getpass.getuser()
-    system_username = system_username.replace(" ", "")
-    form = UserRegistrationForm(initial={'username':system_username})
-    Authusercount = User.objects.filter(username__in=[system_username]).count()
-    if Authusercount >= 1:
-        msg = "Username already Exists, you can't register with same username again"
+    view_type = ''
+    if view_type == 'remote':
+        return  Sign_Up_View_Version2(request)
     else:
-        msg = ""
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            userObj = form.cleaned_data
-            username =  userObj['username']
-            email =  userObj['email']
-            password =  userObj['password']
-            passwordagain =  userObj['passwordagain']
-            firstname =  userObj['firstname']
-            lastname =  userObj['lastname']
-            if password == passwordagain:
-                if not (User.objects.filter(username=username).exists() ):
-                    new_user = User.objects.create_user(username, email, password)
-                    new_user.is_active = True
-                    new_user.first_name = firstname
-                    new_user.last_name = lastname
-                    new_user.save()
-                    my_group = Group.objects.get(name='others')
-                    new_user.groups.add(my_group)
-                    try:
-                        user = authenticate(username = username, password = password)
-                        login(request, user)
-                        return HttpResponseRedirect(reverse('home'))
-                    except:
-                        form =  UserRegistrationForm()
-                        return render(request,'CentralMI/15a_ErrorPage.html')
-                else:
-                    form = UserRegistrationForm()
-                    return render(request,'CentralMI/15a_ErrorPage.html')
-            else:
-                form = UserRegistrationForm()
-                return render(request,'CentralMI/15a_ErrorPage.html')
-
-        else:
-#            form = UserRegistrationForm()
-            return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab,'msg':msg})
-    else:
-#        form = UserRegistrationForm()
-        return render(request, 'CentralMI/1a_signup_view.html', {'form' : form,'activetab':activetab,'msg':msg})
-
+        return  Sign_Up_View_Version1(request)
 
 def Sign_In_View(request):
-    try:
-        activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
-    except:
-        activetab = 'signin'
-    tab = request.session.get('tabname')
-    system_username = getpass.getuser()
-    system_username = system_username.replace(" ", "")
-    form = UsersigninForm(initial={'username':system_username})
-    if request.method == 'POST':
-        form =  UsersigninForm(request.POST)
-        if form.is_valid():
-            userObj = form.cleaned_data
-            username =  userObj['username']
-            if (User.objects.filter(username=username).exists()):
-                user = User.objects.get(username = system_username)
-                user.backend = 'django.contrib.auth.backends.ModelBackend'
-                login(request, user)
-                return HttpResponseRedirect(reverse('home'))
-            else:
-                form =  UsersigninForm()
-                error = 'Error'
-                return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
-        else:
-            form =  UsersigninForm()
-            error = 'Error'
-            return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
+    view_type = ''
+    if view_type == 'remote':
+        return  Sign_In_View_Version2(request)
     else:
-        #form =  UsersigninForm()
-        error = 'NoError'
-        return render(request, 'CentralMI/1b_signin_view.html', {'form' : form,'activetab':activetab,'error':error})
-
+        return  Sign_In_View_Version1(request)
 
 def Sign_In_As_Other_View(request):
-    try:
-        activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
-    except:
-        activetab = 'signin'
-    tab = request.session.get('tabname')
-    form = UsersigninasotherForm()
-    if request.method == 'POST':
-        form =  UsersigninasotherForm(request.POST)
-        if form.is_valid():
-            userObj = form.cleaned_data
-            username =  userObj['username']
-            password =  userObj['password']
-            if (User.objects.filter(username=username).exists()):
-                user = authenticate(username = username, password = password)
-                if user is not None:
-                    login(request, user)
-                    return HttpResponseRedirect(reverse('home'))
-                else:
-                    form =  UsersigninasotherForm()
-                    error = 'Error'
-                    return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
-
-            else:
-                form =  UsersigninasotherForm()
-                error = 'Error'
-                return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
-        else:
-            form =  UsersigninasotherForm()
-            error = 'Error'
-            return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
+    view_type = ''
+    if view_type == 'remote':
+        return  Sign_In_As_Other_View_Version1(request)
     else:
-        #form =  UsersigninForm()
-        error = 'NoError'
-        return render(request, 'CentralMI/1b_signin_other_view.html', {'form' : form,'activetab':activetab,'error':error})
+        return  Sign_In_As_Other_View_Version1(request)
 
+@login_required
+def Check_Userdetail(request):
+    activetab, activetab1, username, info, sd= create_session(request, header='home',footer='')
+    group_name = is_group(request,username=username)
+    title = 'Add Details'
+    form_template = 'CentralMI/dynamic_form.html'
+    redirect_url = 'home'
+    template_type = 'template'
+    userid = User.objects.get(username=username).id
+    print(userid)
+    try:
+        memberid = TblMember.objects.get(userid=userid)
+        return HttpResponseRedirect(reverse('home'))
+    except:
+        if group_name == 'others':
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            form = MemberForm(initial={'userid':userid})
+            if request.method == 'POST':
+                form = MemberForm(request.POST,request.FILES)
+                if form.is_valid():
+                    inst = form.save(commit=True)
+                    inst.save()
+                    return HttpResponseRedirect(reverse('home'))
+    context = {'form':form,'username':username,'title':userid,'redirect_url':redirect_url,'form_template':form_template,'template_type':template_type}
+    return render(request, form_template,context)
 
 
 def Sign_Out(request):
@@ -195,9 +122,6 @@ def data_extraction(request,parameter1=None,parameter2=None):
 
 @login_required
 def activity_Calendar(request,parameter1=None,parameter2=None):
-    #print(parameter1)
-    #print(parameter2)
-    #print("[CentralMI].[dbo].[usp_activity_calendar] " + "'" + parameter1 + "'"  + ","  + "'" + parameter2 + "'")
     cur = connection.cursor()
     ret = cur.execute("[CentralMI].[dbo].[usp_activity_calendar] "  + "'" + parameter1 + "'"  + ","  + "'" + parameter2 + "'")
 
@@ -448,17 +372,6 @@ def navbar(request,view_header=None,username=None):
     return header_navbar_list, footer_navbar_list
 
 
-
-
-
-
-#def sending_email_test():
-#    return send_mail('Subject here','Here is the message.','jha.pramod234@gmail.com',['jha.pramod234@gmail.com'],fail_silently=False)
-    #msg = EmailMultiAlternatives('subject','text_content', from_email, ['jha.pramod234@gmail.com'])
-    #msg.attach_alternative(html_content, "text/html")
-    #msg.send()
-
-
 def Edit_Metrics(request,metricsid):
     view_header = 'Home'
     template = 'CentralMI/dynamic_form.html'
@@ -487,6 +400,7 @@ def Index(request):
     activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='')
     group_name = is_group(request,username=username)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+
     if group_name == 'authoriser':
     # for Authoriser
         request_data = TblRequestdetail.objects.all()
@@ -510,8 +424,8 @@ def Index(request):
         'your_authorised_count':your_authorised_count,'your_authorised_id':your_authorised_id,'your_completed_count':your_completed_count,'your_rejected_count':your_rejected_count,'your_pending_counts':your_pending_counts}
     elif group_name == 'others':
         request_data = TblRequestdetail.objects.all()
-        authorised_items = Authorisedetail.objects.all()
-        competed_items = TblTblCompleteddetail.objects.all()
+        authorised_items = TblAuthorisedetail.objects.all()
+        competed_items = TblCompleteddetail.objects.all()
         rejected_items = TblRequeststatusdetail.objects.filter(statusid__statusname__in=['Rejected'])
         total_request_count = request_data.count()
         total_authorised_count = authorised_items.count()
@@ -520,8 +434,8 @@ def Index(request):
         total_competed_counts = competed_items.filter(requestid__in=list(total_authorised_id)).count()
         total_rejected_counts = rejected_items.filter(requestid__in=list(total_authorised_id)).count()
         total_pending_counts = total_authorised_count - (total_competed_counts + total_rejected_counts)
-        your_request_count = request_data.filter(username__username__in=[username]).count()
-        your_request_id = request_data.filter(username__username__in=[username]).values_list('requestid',flat=True)
+        your_request_count = request_data.filter(userid__username__in=[username]).count()
+        your_request_id = request_data.filter(userid__username__in=[username]).values_list('requestid',flat=True)
         your_completed_count = competed_items.filter(requestid__in=list(your_request_id)).count()
         your_rejected_count = rejected_items.filter(requestid__in=list(your_request_id)).count()
         your_pending_counts = your_request_count - (your_completed_count + your_rejected_count)
@@ -1537,7 +1451,7 @@ def Ot_Add_Form(request,trackerid):
             if Totalmin > 0:
                 inst.save()
                 inst1 =  TblTimeTracker.objects.get(timetrackerid=trackerid)
-                inst1.ot = inst
+                inst1.otid = inst
                 inst1.save()
                 return HttpResponseRedirect(reverse('timetracker'))
                 msg = 'OT recorded'
@@ -2152,9 +2066,9 @@ def Staff_Edit_Form(request):
     model1 = User.objects.filter(username__in=username)
     model = TblMember.objects.filter(userid__in=[userid])
     form1 = UserForm(instance=e1)
-    form = MimemberForm(instance=e)
+    form = MemberForm(instance=e)
     if request.method == 'POST':
-        form = MimemberForm(request.POST,request.FILES,instance=e)
+        form = MemberForm(request.POST,request.FILES,instance=e)
         form1 = UserForm (request.POST,instance=e1)
         if all([form.is_valid() , form1.is_valid()]):
             inst = form.save(commit=True)
@@ -3382,7 +3296,7 @@ def TimeTracker_View(request):
                 dvutilisation = round(dvutilisation,2)
                 msg2 = "ok"
                 msg1 = "ok"
-                return render(request, 'CentralMI/13e_rebuilding_tables.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
+                return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
             else:
                 msg2 = "Category, SubCategory and Totaltime cannot be blank"
                 print(msg1)
@@ -3436,15 +3350,10 @@ def Ot_Edit_Form(request,requestid):
 
 @login_required
 def Load_Datevalues(request):
-    try:
-        activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
-        memberid = User.objects.get(username=username).id
-        model = TblTimeTracker.objects.filter(memberid__in=[memberid]).filter(trackingdatetime=sd)
-        return render(request, 'CentralMI/13b_rebuilding_datevalues.html', {'model': model,'activetab':activetab})
-    except:
-        pagename = "report"
-        errormsg1 = "Something went Wrong"
-        return render(request, 'CentralMI/15a_ErrorPage.html',{'username':username,'pagename':pagename,'errormsg1':errormsg1})
+    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
+    memberid = User.objects.get(username=username).id
+    model = TblTimeTracker.objects.filter(memberid__in=[memberid]).filter(trackingdatetime=sd)
+    return render(request, 'CentralMI/13b_rebuilding_datevalues.html', {'model': model,'activetab':activetab})
 
 @login_required
 def Load_Subcategories(request):

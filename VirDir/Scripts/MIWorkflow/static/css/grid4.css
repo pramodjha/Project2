@@ -1,0 +1,41 @@
+@media (min-width: 768px) {
+.container {
+  display: grid;
+  margin-top: 4%;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 8px;
+  grid-auto-rows: 45px;
+  grid-template-areas:
+    "a a a a a a a a a a a a"
+    "b b b b b b b b b b b b"
+    "b b b b b b b b b b b b"
+    "b b b b b b b b b b b b"
+    "b b b b b b b b b b b b"
+    "c c c c c c c c c c c c"
+    "c c c c c c c c c c c c"
+    "c c c c c c c c c c c c"
+    }
+
+.item1 {
+  grid-area: a;
+  background-color: #005266;
+}
+
+.item2 {
+  grid-area: b;
+  background-color:  #d9b38c;
+  -webkit-box-shadow: 0px 0px 3px 5px #003d4d;
+    -moz-box-shadow:     0px 0px 3px 5px #003d4d;
+    box-shadow:          0px 0px 3px 5px #003d4d;
+}
+
+
+.item3 {
+    grid-area: c;
+    background-color:  #d9b38c;
+    -webkit-box-shadow: 0px 0px 3px 5px #003d4d;
+      -moz-box-shadow:     0px 0px 3px 5px #003d4d;
+      box-shadow:          0px 0px 3px 5px #003d4d;
+
+    }
+}

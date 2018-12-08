@@ -1,0 +1,39 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+
+{% block navblockright %}
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token %}
+<button type="submit" name= "Action" value="home" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >home <span class=""></span></button>
+<button type="submit" name= "Action" value="signout" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Sign Out <span class=""></span></button>
+</form>
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+
+{% block content %}
+<div id="id1" class = "item1">
+<form class="form" action="" method="POST" >
+{% csrf_token %}
+<div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per">Completed Detail</label></div>
+<div><label  class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Completed Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">{{ form.completeddate}}</span></div>
+<div><label  class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Completed By </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> {{form.completedby}} </span></div>
+<div><label  class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> Request Id </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden"> {{form.requestdetail}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.requeststatusdate}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status By</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.username}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.statusdetail }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status ID </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per hidden">{{form1.requestdetail}}</span></div>
+<div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
+</form>
+</div>
+{% endblock %}
+{% block footer %}
+{% include "userprofilefooter1.html" %}
+{% endblock %}
