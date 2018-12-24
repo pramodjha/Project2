@@ -1,0 +1,280 @@
+{% extends "basetemplate.html" %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block style %}
+<style>
+#id_trackingdatetime {
+width: 100%;
+}
+.removepadding{
+  padding-left: 2px;
+  padding-right: 2px
+}
+.form-control{
+  font-size: 14px
+}
+.setbutton{
+  padding-top: 5px;
+  padding-bottom: 0px;
+}
+table {
+  table-layout:fixed;
+}
+table td {
+  word-wrap: break-word;
+  max-width: 400px;
+}
+#example td {
+  white-space:inherit;
+}
+</style>
+{% endblock %}
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+{% block navblockfilterform %}
+{% if msg1 != "ok" %}
+<div class="col-sm-12 col-md-12 col-lg-12 fontstyle5 fontsize12 middle">{{msg1}}</div>
+{% elif msg2 != "ok" %}
+<div class="col-sm-12 col-md-12 col-lg-12  fontstyle5 fontsize12 middle">{{msg2}}</div>
+{% elif msg3 != "ok" %}
+<div class="col-sm-12 col-md-12 col-lg-12  fontstyle5 fontsize12 middle">{{msg3}}</div>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-12 col-md-12 col-lg-12 box4">
+<div class="col-sm-12 col-md-12 col-lg-2 setbutton">
+  <form method = "POST" action = "{% url 'sdate' %}" >
+    {% csrf_token %}
+        <div  class="col-sm-12 col-md-12 col-lg-9 removepadding ">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</div>
+        <div  class="col-sm-12 col-md-12 col-lg-3 removepadding ">{% buttons submit='Set Date' %}{% endbuttons layout='inline' %}</div>
+  </form>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-10 middle ">
+  <div class="col-sm-2 col-md-2 col-lg-2 " >
+    <span class="fontstyle4 fontsize15">A:Worked</span>
+    {% for key, value in dv.items %}
+    <span class="fontstyle1 fontsize18">{{value}}</span>
+    {% endfor %}
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2 " >
+    <span class="fontstyle4 fontsize15">B:OT</span>
+    {% for key, value in dvOT.items %}
+    <span class="fontstyle1 fontsize18">{{value}}</span>
+    {% endfor %}
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-3 " >
+    <span class="fontstyle4 fontsize15">C:Total (A+B) </span>
+    {% for key, value in dvAll.items %}
+    <span class="fontstyle1 fontsize18">{{value}}</span>
+    {% endfor %}
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2 " >
+    <span class="fontstyle4 fontsize15">D:Core </span>
+    {% for key, value in dvcore.items %}
+    <span class="fontstyle1 fontsize18">{{value}}</span>
+    {% endfor %}
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-3 " >
+    <span class="fontstyle4 fontsize15">{{utiliationtext}}</span>
+    <span class="fontstyle1 fontsize18">{{dvutilisation}}:{{daystype}}</span>
+  </div>
+</div>
+</div>
+  <div class="col-sm-12 col-md-12 col-lg-12  box">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <form method="post" id="trackingform" data-subcategories-url="{% url 'ajax_load_subcategories' %}"  data-activity-url="{% url 'ajax_load_activity' %}"novalidate>
+        {% csrf_token %}
+      <div class="">
+        <label class="hidden">Registered Date</label>
+        <span  class="hidden">{% bootstrap_field form.registerdatetime  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Tracking Date-time</label>
+        <span  class="hidden">{% bootstrap_field form.trackingdatetime  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Member</label>
+        <span  class="hidden">{% bootstrap_field form.memberid  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Team</label>
+        <span  class="hidden">{% bootstrap_field form.teamid  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
+        <label class="">Category</label>
+        <span  class="">{% bootstrap_field form.categorysid  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
+        <label class="">Sub Category</label>
+        <span  class="">{% bootstrap_field form.subcategoryid  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-1 removepadding ">
+        <label class="">ID</label>
+        <span  class="">{% bootstrap_field form.requestid  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-2 removepadding ">
+        <label class="">Activity</label>
+        <span  class="">{% bootstrap_field form.activityid  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-3 removepadding ">
+        <label class="">Task</label>
+        <span  class="">{% bootstrap_field form.task  show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Description</label>
+        <span  class="hidden">{% bootstrap_field form.description_text   show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-1 removepadding ">
+        <label class="">Time</label>
+        <span  class="">{% bootstrap_field form.totaltime   show_label=False layout='inline'  placeholder="mins"%}</span>
+        </div>
+      <div class="">
+        <label class="hidden">Comments</label>
+        <span  class="hidden">{% bootstrap_field form.comments   show_label=False layout='inline'  %}</span>
+        </div>
+      <div class="">
+        <label class="hidden">Start Date-time</label>
+        <span  class="hidden">{% bootstrap_field form.startdatetime   show_label=False layout='inline'  %}</span>
+      </div>
+      <div class="">
+        <label class="hidden">Stop Date-time</label>
+        <span  class="hidden">{% bootstrap_field form.stopdatetime   show_label=False layout='inline'  %}</span>
+      </div>
+        <div class="col-sm-12 col-md-12 col-lg-1 ">
+          <label class="fontstyle10"> save </label>
+          <div class="">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <table  class="table " id="example" style="width:100%">
+    <thead class="">
+    <tr class="fontstyle4 fontsize18 fontfamilycambria widthsize25per backgroundcolor1" >
+     <td >ID</td>
+     <td class="hidden">Registered Date</td>
+     <td class="hidden">Tracking Date</td>
+     <td class="hidden">Associate Name</td>
+     <td class="hidden">Team Name</td>
+     <td>Category</td>
+     <td>Sub-Category</td>
+     <td>Type</td>
+  <!--       <th>Request ID</th> -->
+     <td>Activity</td>
+     <td>Task</td>
+     <td class="hidden">Descritpion</td>
+     <td>Time (Mins)</td>
+     <td>OT</td>
+
+     <td class="hidden">Start-Time</td>
+     <td class="hidden">Stop-Time</td>
+     <td>OT (Add/Edit)</td>
+     </tr>
+   </thead>
+   <tbody class="">
+   {%for data in model %}
+   <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
+     <td ><a  href="{% url 'edittracker' data.timetrackerid %}" class="fontstyle12">{{data.timetrackerid }} </a> </td>
+     <td class="hidden">{{data.registerdatetime    }}</td>
+     <td class="hidden">{{data.trackingdatetime }}</td>
+     <td class="hidden">{{data.memberid }}</td>
+     <td class="hidden">{{data.teamid }}</td>
+     <td>{{data.categorysid }}</td>
+     <td>{{data.subcategoryid  }}</td>
+     <td>{{data.subcategoryid.core_noncore  }}</td>
+     <!--       <td>{{form.requestdetail }}</td> -->
+     <td>{{data.activityid }}</td>
+     <td>{{data.task  }}</td>
+     <td class="hidden">{{data.description_text   }}</td>
+     <td>{{data.totaltime }}</td>
+     <td>{{data.otid.statusid }}</td>
+     <td class="hidden">{{data.startdatetime  }}</td>
+     <td class="hidden">{{data.stopdatetime   }}</td>
+     <td> <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-pencil fontstyle12"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus fontstyle12"></a> </td>
+     {% endfor %}
+   </tr></br>
+   </tbody>
+   </table>
+</div>
+<script>
+
+$("#id_categorysid").change(function () {
+   var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
+   var category_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(category_id)
+   $.ajax({                       // initialize an AJAX request
+     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'categories': category_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_subcategoryid").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+ $("#id_categorysid").change(function () {
+    var url = $("#trackingform").attr("data-activity-url");  // get the url of the `load_cities` view
+    var category_id = $(this).val();  // get the selected country ID from the HTML input
+    console.log(category_id)
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+      data: {
+        'categories': category_id     // add the country id to the GET parameters
+      },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+        $("#id_teamfilter").html(data);  // replace the contents of the city input with the data that came from the server
+      }
+    });
+  });
+
+
+  $(document).ready(function () {
+    $('#id_trackingdatetime').datepicker({
+      autoclose: true,
+      format: "yyyy-mm-dd"
+    });
+  });
+
+
+
+$("#submitbutton").click(function () {
+    var datevalue = $("#id_trackingdatetime").val() // get the selected country ID from the HTML input
+    $.ajax({
+        type: "GET",
+        url: "{% url 'ajax_load_datavalues' %}",  // URL to your view that serves new info
+        data: {'datev': datevalue}
+    })
+    .done(function(response) {
+        $('#table3').html(response);
+        console.log(response)
+    });
+  });
+
+
+
+
+</script>
+
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}
+
+{% block footer_right %}
+{% endblock %}
+
+</html>

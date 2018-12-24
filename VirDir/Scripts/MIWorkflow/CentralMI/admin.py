@@ -1,6 +1,33 @@
 from django.contrib import admin
-from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster
+from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster,TblBusinessUnitMaster
 
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+
+class ProfileInline(admin.StackedInline):
+    model = TblMember
+    can_delete = False
+    fk_name = 'userid'
+
+class CustomUserAdmin(UserAdmin):
+    inlines = (ProfileInline, )
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_select_related = ('tblmember', )
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+
+class TblMemberAdmin(admin.ModelAdmin):
+    list_display = ('memberid','userid','teamid','designationid','employeeid','dateofjoining','dateofbirth','viewid','individual_view','team_view','bu_view')
+    search_fields = ['userid']
+admin.site.register(TblMember,TblMemberAdmin)
+admin.site.register(TblBusinessUnitMaster)
 admin.site.register(TblWhatwedo)
 admin.site.register(TblIssueAction)
 admin.site.register(TblUatDetail)
@@ -32,11 +59,23 @@ admin.site.register(TblInternaltaskchoice)
 admin.site.register(TblInternaltaskstatus)
 admin.site.register(TblLeaveRecord)
 admin.site.register(TblLeaveTypeMaster)
-admin.site.register(TblMember)
-admin.site.register(TblNavbarFooterMaster)
-admin.site.register(TblNavbarHeaderMaster)
+#admin.site.register(TblMember)
+class TblNavbarFooterMasterAdmin(admin.ModelAdmin):
+    list_display = ('navbar_footer_id','navbar_footer_name','navbar_footer_url','ranking','navbar_header')
+    search_fields = ['navbar_footer_name']
+admin.site.register(TblNavbarFooterMaster,TblNavbarFooterMasterAdmin)
+
+class TblNavbarHeaderMasterAdmin(admin.ModelAdmin):
+    list_display = ('navbar_header_id','navbar_header_name','navbar_header_url','ranking')
+    search_fields = ['navbar_header_name']
+admin.site.register(TblNavbarHeaderMaster,TblNavbarHeaderMasterAdmin)
 admin.site.register(TblNavbarMaster)
-admin.site.register(TblNavbarView)
+
+class TblNavbarViewAdmin(admin.ModelAdmin):
+    list_display = ('navbar_id','view_type','navbar_footer','can_edit','can_view','can_delete')
+    search_fields = ['navbar_footer']
+admin.site.register(TblNavbarView,TblNavbarViewAdmin)
+
 admin.site.register(TblOpenClose)
 admin.site.register(TblYesNo)
 admin.site.register(TblOtDetail)

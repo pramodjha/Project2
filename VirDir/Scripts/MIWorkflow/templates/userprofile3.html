@@ -1,0 +1,12 @@
+{% if user.is_superuser %}
+<button type="submit" name= "Action" value="signin" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Sign In <span class=""></span></button>
+</form>
+{% elif user.is_authenticated %}
+<button type="submit" name= "Action" value="signin" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Sign In <span class=""></span></button>
+</form>
+{% else %}
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token %}
+<button type="submit" name= "Action" value="signin" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Sign In <span class=""></span></button>
+</form>
+{% endif %}

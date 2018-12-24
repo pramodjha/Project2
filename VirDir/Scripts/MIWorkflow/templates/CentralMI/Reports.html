@@ -1,0 +1,35 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+
+{% block content %}
+<div id="id1" class = "item1">
+<form class="form" action="" method="POST" >
+{% csrf_token %}
+<div><label class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Add Reports</label></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Registered Date </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.registereddate}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Report Name </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.name}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Report Frequency </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{ form.frequency}} </span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per"> Delivery Days</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">{{ form.deliverydays}}</div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per ">Due Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.deliverytime}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Delivery Time (Before)</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.delivery_time}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Primary Owner</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.primaryowner}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Secondary Owner</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.secondaryowner }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">Report Description </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form.description}}</span></div>
+<div><button type="submit" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize15 bordercolor1 widthsize10per">Submit</button></span></div>
+</form>
+<p class="fontstyle4 fontsize15 fontfamilycambria widthsize15per">{{successmsg}}</p>
+</div>
+{% endblock %}

@@ -10,6 +10,8 @@ from __future__ import unicode_literals
 from django.db import models
 import datetime
 import django
+from django.contrib.auth.models import User
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=80)
 
@@ -17,6 +19,8 @@ class AuthGroup(models.Model):
         managed = False
         db_table = 'auth_group'
 
+    def __str__(self):
+        return str(self.name)
 
 class AuthGroupPermissions(models.Model):
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
@@ -68,6 +72,8 @@ class AuthUserGroups(models.Model):
         db_table = 'auth_user_groups'
         unique_together = (('user', 'group'),)
 
+    def __str__(self):
+        return str(self.group)
 
 class AuthUserUserPermissions(models.Model):
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
@@ -296,7 +302,7 @@ class TblAssignView(models.Model):
         db_table = 'tbl_assign_view'
 
     def __str__(self):
-        return str(self.viewassign_id)
+        return str(self.view_type)
 
 
 class TblAssigneddetail(models.Model):
@@ -648,7 +654,7 @@ class TblLeaveTypeMaster(models.Model):
 
 class TblMember(models.Model):
     memberid = models.AutoField(primary_key=True)
-    userid = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='userid')
+    userid = models.OneToOneField(User, on_delete=models.CASCADE, db_column='userid')
     teamid = models.ForeignKey('TblTeamMaster', models.DO_NOTHING, db_column='teamid')
     designationid = models.ForeignKey(TblDesignationMaster, models.DO_NOTHING, db_column='designationid', blank=True, null=True)
     employeeid = models.IntegerField(blank=True, null=True)
@@ -657,7 +663,11 @@ class TblMember(models.Model):
     address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
     phonenumber = models.CharField(db_column='PhoneNumber', max_length=10, blank=True, null=True)  # Field name made lowercase.
     avatar = models.CharField(db_column='Avatar', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    aboutme = models.TextField(blank=True, null=True)
+    aboutme = models.FileField(upload_to='about_team/',blank=True, null=True)
+    viewid = models.ForeignKey('TblViewTypeMaster', models.DO_NOTHING, db_column='viewid', blank=True, null=True)
+    individual_view = models.BooleanField(db_column='Individual_view')  # Field name made lowercase.
+    team_view = models.BooleanField()
+    bu_view = models.BooleanField(db_column='BU_view')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -669,15 +679,16 @@ class TblMember(models.Model):
 class TblNavbarFooterMaster(models.Model):
     navbar_footer_id = models.AutoField(primary_key=True)
     navbar_footer_name = models.CharField(max_length=255, blank=True, null=True)
-    navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+    navbar_footer_url = models.CharField(max_length=255, blank=True, null=True)
     ranking = models.IntegerField(blank=True, null=True)
+    navbar_header = models.ForeignKey('TblNavbarHeaderMaster', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'tbl_navbar_footer_master'
 
     def __str__(self):
-        return str(self.navbar_footer_id)
+        return str(self.navbar_footer_name)
 
 class TblNavbarHeaderMaster(models.Model):
     navbar_header_id = models.AutoField(primary_key=True)
@@ -690,7 +701,7 @@ class TblNavbarHeaderMaster(models.Model):
         db_table = 'tbl_navbar_header_master'
 
     def __str__(self):
-        return str(self.navbar_header_id)
+        return str(self.navbar_header_name)
 
 class TblNavbarMaster(models.Model):
     navbar_id = models.AutoField(primary_key=True)
@@ -709,15 +720,18 @@ class TblNavbarMaster(models.Model):
 class TblNavbarView(models.Model):
     navbar_id = models.AutoField(primary_key=True)
     view_type = models.ForeignKey('TblViewTypeMaster', models.DO_NOTHING, db_column='view_type')
-    navbar_header = models.ForeignKey(TblNavbarHeaderMaster, models.DO_NOTHING)
     navbar_footer = models.ForeignKey(TblNavbarFooterMaster, models.DO_NOTHING)
+    can_edit = models.BooleanField()
+    can_view = models.BooleanField()
+    can_delete = models.BooleanField()
+    can_add = models.BooleanField()
 
     class Meta:
         managed = False
         db_table = 'tbl_navbar_view'
 
     def __str__(self):
-        return str(self.navbar_id)
+        return str(self.navbar_footer)
 
 
 class TblOpenClose(models.Model):
@@ -985,11 +999,23 @@ class TblSuggestion(models.Model):
     def __str__(self):
         return str(self.suggestionid)
 
+class TblBusinessUnitMaster(models.Model):
+    bu_id = models.AutoField(db_column='BU_id', primary_key=True)  # Field name made lowercase.
+    business_unit = models.CharField(db_column='Business_Unit', max_length=255, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_business_unit_master'
+
+    def __str__(self):
+        return str(self.business_unit)
+
 
 class TblTeamMaster(models.Model):
     teamid = models.AutoField(primary_key=True)
     teamdatetime = models.DateTimeField(default= datetime.datetime.now())
     teamname = models.CharField(max_length=100, blank=True, null=True)
+    buid = models.ForeignKey(TblBusinessUnitMaster, models.DO_NOTHING, db_column='buid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -1079,7 +1105,7 @@ class TblViewTypeMaster(models.Model):
         db_table = 'tbl_view_type_master'
 
     def __str__(self):
-        return str(self.view_id)
+        return str(self.viewname)
 
 
 class TblYesNo(models.Model):

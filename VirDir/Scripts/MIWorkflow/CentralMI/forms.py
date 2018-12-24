@@ -1,8 +1,14 @@
 from django import forms
-from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster
+from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster,TblBusinessUnitMaster
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime, timedelta
+
+class ViewListForm():
+    navbar_footer_name = forms.ModelChoiceField(queryset=TblNavbarFooterMaster.objects.all(),required=False)
+    class Meta():
+        model = TblNavbarFooterMaster
+        fields = '__all__'
 
 
 class UserRegistrationForm(forms.Form):
@@ -217,7 +223,7 @@ class TimetrackersForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TimetrackersForm, self).__init__(*args, **kwargs)
-        self.fields['trackingdatetime'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['trackingdatetime'].widget.attrs['class']  = 'date form-control'
         self.fields['categorysid'].widget.attrs['class']  = 'form-control'
         self.fields['subcategoryid'].widget.attrs['class']  = 'form-control'
         self.fields['activityid'].widget.attrs['class']  = 'form-control'
@@ -254,6 +260,7 @@ class ErrorlogForm(forms.ModelForm):
         self.fields['datetime'].widget  = forms.HiddenInput()
         self.fields['activityid'].widget  = forms.HiddenInput()
         self.fields['occurancedate'].label = "Occurance Date"
+        self.fields['occurancedate'].widget.attrs['class']  = 'date'
         self.fields['reportedbyid'].label = "Reported By"
         self.fields['reportedtoid'].widget  = forms.HiddenInput()
         self.fields['errortypeid'].label = "Error Type"
@@ -276,14 +283,14 @@ class OtDetailForm(forms.ModelForm):
         fields = '__all__'
     def __init__(self, *args, **kwargs):
         super(OtDetailForm, self).__init__(*args, **kwargs)
-        self.fields['ot_startdatetime'].widget.attrs['class']  = 'form_datetime'
-        self.fields['ot_enddatetime'].widget.attrs['class']  = 'form_datetime'
+        self.fields['ot_startdatetime'].widget.attrs['class']  = 'datetime'
+        self.fields['ot_enddatetime'].widget.attrs['class']  = 'datetime'
         self.fields['timetrackerid'].widget  = forms.HiddenInput()
         self.fields['ot_time'].widget  = forms.HiddenInput()
         self.fields['ot_startdatetime'].label = "Start DateTime"
         self.fields['ot_enddatetime'].label = "End DateTime"
-        self.fields['statusid'].label = "Status"
         self.fields['otdocument'].label = "Upload Document (if any)"
+        self.fields['statusid'].widget  = forms.HiddenInput()
 
 
 class OtDetail1Form(forms.ModelForm):
@@ -329,9 +336,9 @@ class SearchForm(forms.Form):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['datachoice'].widget.attrs['class']  = 'form-control'
         self.fields['datatype'].widget.attrs['class']  = 'form-control'
-        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
-        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
-        self.fields['enddate'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['startdate'].widget.attrs['class']  = 'date form-control'
+        self.fields['startdate'].widget.attrs['class']  = 'date form-control'
+        self.fields['enddate'].widget.attrs['class']  = 'date form-control'
         self.fields['team'].widget.attrs['class']  = 'form-control'
         self.fields['member'].widget.attrs['class']  = 'form-control'
 
@@ -349,9 +356,9 @@ class SearchForm1(forms.Form):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['datachoice'].widget.attrs['class']  = 'form-control'
         self.fields['datatype'].widget.attrs['class']  = 'form-control hidden'
-        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
-        self.fields['startdate'].widget.attrs['class']  = 'datetime-input form-control'
-        self.fields['enddate'].widget.attrs['class']  = 'datetime-input form-control'
+        self.fields['startdate'].widget.attrs['class']  = 'date form-control'
+        self.fields['startdate'].widget.attrs['class']  = 'date form-control'
+        self.fields['enddate'].widget.attrs['class']  = 'date form-control'
         self.fields['team'].widget.attrs['class']  = 'form-control'
         self.fields['member'].widget.attrs['class']  = 'form-control'
 
@@ -360,6 +367,7 @@ class SearchForm1(forms.Form):
 
 
 class FilteredForm(forms.Form):
+    bufilter = forms.ModelChoiceField(queryset=TblBusinessUnitMaster.objects.all(),required =False)
     teamfilter = forms.ModelChoiceField(queryset=TblTeamMaster.objects.all(),required =False)
     memberfilter = forms.ModelChoiceField(queryset=TblMember.objects.all(),required =False)
     def __init__(self, *args, **kwargs):
@@ -386,17 +394,19 @@ class ActivityForm(forms.ModelForm):
         super(ActivityForm, self).__init__(*args, **kwargs)
         self.fields['registereddate'].label = "Registered Date"
 
-class MimemberForm(forms.ModelForm):
+class MemberForm(forms.ModelForm):
     class Meta():
         model = TblMember
         fields = '__all__'
     def __init__(self, *args, **kwargs):
-        super(MimemberForm, self).__init__(*args, **kwargs)
+        super(MemberForm, self).__init__(*args, **kwargs)
         self.fields['userid'].widget  = forms.HiddenInput()
         self.fields['dateofjoining'].label = "Date of Joining"
         self.fields['dateofbirth'].label = "Date of Birth"
         self.fields['phonenumber'].label = "Ph. No"
         self.fields['aboutme'].label = "About Me"
+        self.fields['dateofjoining'].widget.attrs['class']  = 'date'
+        self.fields['dateofbirth'].widget.attrs['class']  = 'date'
 
 class UserForm(forms.ModelForm):
     class Meta():

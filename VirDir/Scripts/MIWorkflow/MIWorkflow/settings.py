@@ -30,11 +30,12 @@ SECRET_KEY = ')3ou*dlgfjcxuz41lmjwzn-hq@0-ys(6wb6ccwqmb7cjs=afn+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pranav','localhost','127.0.0.1']
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -61,10 +62,17 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_panel.middleware.DebugPanelMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+
+AUTHENTICATION_BACKENDS = [
+    #'django.contrib.auth.backends.RemoteUserBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 ROOT_URLCONF = 'MIWorkflow.urls'
@@ -102,9 +110,9 @@ DATABASES = {
     'NAME': 'CentralMI',
     'ENGINE': 'sql_server.pyodbc',
     'HOST': 'PRANAV\\SQLEXPRESS',
-    'Trusted_Connection' : 'yes',
-    'USER': '',
-    'PASSWORD': '',
+    'Trusted_Connection' : 'false',
+    'USER': 'sdpm',
+    'PASSWORD': 'sdpm',
 
     'OPTIONS' : {
         'driver' : 'SQL Server Native Client 11.0'

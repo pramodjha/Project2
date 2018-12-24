@@ -1,0 +1,128 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+{% block style %}
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofiletest1.html" %}
+{% endblock %}
+
+{% block navblockfilterform %}
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-6 col-md-4 col-lg-12">
+  <div class="col-sm-6 col-md-4 col-lg-3">
+
+  <div class="col-sm-6 col-md-4 col-lg-12">
+    <table  class="table" style="width:100%">
+      <thead class="">
+      <tr class="fontstyle4 fontsize14 fontfamilycambria widthsize15per backgroundcolor1" >
+        <td >Group Name</td>
+        </tr>
+      </thead>
+      <tbody class="">
+    {%for data in model %}
+      <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
+        <td>{{data.name }}</td>
+        {% endfor %}
+      </tr></br>
+    </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-6 col-md-4 col-lg-12">
+  <table  class="table" style="width:100%">
+    <thead class="">
+    <tr class="fontstyle4 fontsize14 fontfamilycambria widthsize15per backgroundcolor1" >
+      <td >View Name</td>
+      </tr>
+    </thead>
+    <tbody class="">
+  {%for data in model1 %}
+    <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
+      <td>{{data.viewname }}</td>
+        {% endfor %}
+    </tr></br>
+  </tbody>
+  </table>
+</div>
+
+  <div class="col-sm-6 col-md-4 col-lg-12">
+    <table  class="table" style="width:100%">
+      <thead class="">
+      <tr class="fontstyle4 fontsize14 fontfamilycambria widthsize15per backgroundcolor1" >
+        <td >Group Name</td>
+        <td >Assigned View</td>
+        </tr>
+      </thead>
+      <tbody class="">
+    {%for data in model2 %}
+      <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
+        <td>{{data.group_name }}</td>
+        <td>{{data.view_type }}</td>
+        {% endfor %}
+      </tr></br>
+    </tbody>
+    </table>
+  </div>
+</div>
+
+
+        <div class="col-sm-6 col-md-4 col-lg-3">
+        <table  class="table" style="width:100%">
+          <thead class="">
+          <tr class="fontstyle4 fontsize14 fontfamilycambria widthsize15per backgroundcolor1" >
+            <td >Header Name</td>
+            <td >Header Url</td>
+            <td >Order</td>
+            </tr>
+          </thead>
+          <tbody class="">
+        {%for data in model3 %}
+          <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
+            <td>{{data.navbar_header_name }}</td>
+            <td>{{data.navbar_header_url }}</td>
+            <td>{{data.ranking }}</td>
+
+            {% endfor %}
+          </tr></br>
+        </tbody>
+        </table>
+      </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-2">
+              <table  class="table" style="width:100%">
+                <thead class="">
+                <tr class="fontstyle4 fontsize14 fontfamilycambria widthsize15per backgroundcolor1" >
+                  <td >Footer Name</td>
+                  <td >Header Url</td>
+                  <td >Order</td>
+                  </tr>
+                </thead>
+                <tbody class="">
+              {%for data in model4 %}
+                <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
+                  <td>{{data.navbar_footer_name }}</td>
+                  <td>{{data.navbar_header_url }}</td>
+                  <td>{{data.ranking }}</td>
+
+                  {% endfor %}
+                </tr></br>
+              </tbody>
+              </table>
+            </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefootertest1.html" %}
+{% endblock %}

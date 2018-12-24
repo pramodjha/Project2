@@ -1,4 +1,5 @@
-<form class="form" method="POST" action="" class='form-inline' enctype="multipart/form-data">
+{% load static %}
+<form class="form" method="POST" action="" class='form-inline' enctype="multipart/form-data" >
   {% csrf_token %}
   {% if template_type == 'template_with_parameter' %}
   {% include 'CentralMI/form_template_with_parameter.html' with form=form %}
@@ -9,18 +10,4 @@
   {% endif %}
 </form>
 <script type="text/javascript">
-$(document).ready(function() {
-  $("#id_ot_startdatetime").datepicker({
-    dateFormat: 'yy-mm-dd',
-     altField: '#thealtdate',
-     altFormat: 'yy-mm-dd'});
-});
-
-$(document).ready(function() {
-  $("#id_ot_enddatetime").datepicker({
-    dateFormat: 'yy-mm-dd',
-     altField: '#thealtdate',
-     altFormat: 'yy-mm-dd'});
-});
-
 </script>

@@ -1,0 +1,49 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+<script src="{% static 'jquery/jquery-ui.js' %}"></script>
+<script src="{% static 'jquery/myjquery.js' %}"></script>
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{systemname}} </h4>
+{% endblock %}
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+{% block content %}
+  <div id="id2" class = "item1" >
+    <span class="fontstyle1 fontsize30 fontfamilycambria widthsize30per"> Check Status</span><span class="fontstyle4 fontsize15 fontfamilycambria widthsize30per"> Click on ID to view detail</span>
+    <table  class="table" >
+      <thead class="thead">
+      <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1 " >
+        <td >Request ID</td>
+        <td >Request Raised Date</td>
+        <td >Request Type</td>
+        <td >Priority Detail</td>
+        <td >Request Description</td>
+        </tr>
+      </thead>
+      <tbody class="tbody">
+    {%for data in model %}
+      <tr class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2 ">
+        <td ><a class="fontstyle1 fontsize12 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
+        <td>{{data.requestraiseddate }}</td>
+        <td>{{data.requesttypedetail }}</td>
+        <td>{{data.prioritydetail }}</td>
+        <td>{{data.requestdescription }}</td>
+        {% endfor %}
+      </tr></br>
+    </tbody>
+    </table>
+    </div>
+    <script>
+
+    </script>
+  </div>
+{% endblock %}
+
+</body>
+</html>

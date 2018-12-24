@@ -1,0 +1,29 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+
+{% block navblockright %}
+{% include "userprofile1.html" %}
+{% endblock %}
+
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+
+{% block content %}
+<div id="id1" class = "item1 backgroundcolor1 backgroundcolor1">
+
+  <p><label class="fontstyle4 fontsize15  fontfamilycambria widtdsize35per">   {{errormsg1}}</label></p>
+  <p><label class="fontstyle4 fontsize15  fontfamilycambria widtdsize35per">   {{errormsg2}}</label></p>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include "userprofilefooter1.html" %}
+{% endblock %}

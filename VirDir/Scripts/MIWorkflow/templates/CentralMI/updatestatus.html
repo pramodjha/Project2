@@ -1,0 +1,29 @@
+{% extends "basetemplate.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/grid2.css' %}" type="text/css" />
+{% endblock %}
+
+{% block navblockright %}
+<form method = "POST" action = "{% url 'rooting' %}">
+{% csrf_token %}
+<button type="submit" name= "Action" value="home" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Home <span class=""></span></button>
+<button type="submit" name= "Action" value="signout" class="backgroundcolor2 fontstyle1 fontfamilycambria fontsize14 bordercolor1" >Sign Out <span class=""></span></button>
+</form>
+{% endblock %}
+
+{% block navblockleft %}
+<h4 class="fontstyle1"><span class ="glyphicon glyphicon-user"></span> {{username}} </h4>
+{% endblock %}
+
+{% block content %}
+<div id="id1" class = "item1">
+<form class="form" method="Get" action="" >
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status Date</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.requeststatusdate}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status By</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.username}}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status</label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.statusdetail }}</span></div>
+<div><label class="fontstyle4 fontsize15 fontfamilycambria widthsize15per hidden">Request Status ID </label><span class="fontstyle4 fontsize15 fontfamilycambria widthsize10per ">{{form1.requestdetail}}</span></div>
+</form>
+</div>
+{% endblock %}

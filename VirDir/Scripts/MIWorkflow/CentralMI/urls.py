@@ -7,9 +7,13 @@ urlpatterns = [
     url(r'^signin_view/', views.Sign_In_View, name='signin'),
     url(r'^signinasother_view/', views.Sign_In_As_Other_View, name='signinother'),
 
+#    url(r'^check_details/', views.Check_Userdetail, name='checkdetail'),
+    url(r'^group_details/', views.add_edit_user_to_group, name='groupdetails'),
+
 	url(r'^signout/', views.Sign_Out, name='signout'),
 # 2) Home
 	url(r'^$',views.Index, name = 'home'),
+	url(r'^$',views.Index, name = 'landingpage'),
 
 # 3) About us
 	url(r'^about_team_view/',views.About_Team_View, name = 'aboutteam'),

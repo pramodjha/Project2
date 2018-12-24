@@ -302,6 +302,15 @@ class TblAuthoriserdetail(models.Model):
         db_table = 'tbl_authoriserdetail'
 
 
+class TblBusinessUnitMaster(models.Model):
+    bu_id = models.AutoField(db_column='BU_id', primary_key=True)  # Field name made lowercase.
+    business_unit = models.CharField(db_column='Business_Unit', max_length=255, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_business_unit_master'
+
+
 class TblCalendar(models.Model):
     date = models.DateField(blank=True, null=True)
     days_type = models.CharField(db_column='Days Type', max_length=50, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -570,6 +579,10 @@ class TblMember(models.Model):
     phonenumber = models.CharField(db_column='PhoneNumber', max_length=10, blank=True, null=True)  # Field name made lowercase.
     avatar = models.CharField(db_column='Avatar', max_length=255, blank=True, null=True)  # Field name made lowercase.
     aboutme = models.TextField(blank=True, null=True)
+    viewid = models.ForeignKey('TblViewTypeMaster', models.DO_NOTHING, db_column='viewid', blank=True, null=True)
+    individual_view = models.NullBooleanField(db_column='Individual_view')  # Field name made lowercase.
+    team_view = models.NullBooleanField()
+    bu_view = models.NullBooleanField(db_column='BU_view')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -579,8 +592,9 @@ class TblMember(models.Model):
 class TblNavbarFooterMaster(models.Model):
     navbar_footer_id = models.AutoField(primary_key=True)
     navbar_footer_name = models.CharField(max_length=255, blank=True, null=True)
-    navbar_header_url = models.CharField(max_length=255, blank=True, null=True)
+    navbar_footer_url = models.CharField(max_length=255, blank=True, null=True)
     ranking = models.IntegerField(blank=True, null=True)
+    navbar_header = models.ForeignKey('TblNavbarHeaderMaster', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -612,8 +626,11 @@ class TblNavbarMaster(models.Model):
 class TblNavbarView(models.Model):
     navbar_id = models.AutoField(primary_key=True)
     view_type = models.ForeignKey('TblViewTypeMaster', models.DO_NOTHING, db_column='view_type')
-    navbar_header = models.ForeignKey(TblNavbarHeaderMaster, models.DO_NOTHING)
     navbar_footer = models.ForeignKey(TblNavbarFooterMaster, models.DO_NOTHING)
+    can_edit = models.NullBooleanField()
+    can_view = models.NullBooleanField()
+    can_delete = models.NullBooleanField()
+    can_add = models.NullBooleanField()
 
     class Meta:
         managed = False
@@ -842,6 +859,7 @@ class TblTeamMaster(models.Model):
     teamid = models.AutoField(primary_key=True)
     teamdatetime = models.DateTimeField()
     teamname = models.CharField(max_length=100, blank=True, null=True)
+    buid = models.ForeignKey(TblBusinessUnitMaster, models.DO_NOTHING, db_column='buid', blank=True, null=True)
 
     class Meta:
         managed = False

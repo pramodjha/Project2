@@ -1,0 +1,19 @@
+
+{% if requestid == None %}
+<p> Hello <strong> {{username}}</strong></p>
+<p> {{line1}}</p>
+<p> {{line2}}</p>
+<p> {{line3}}</p>
+{% else %}
+
+<p>Hello <strong> {{username}}</strong></p>
+<p> {{line1}}</p>
+<p> {{line2}}</p>
+<p> {{line3}}</p>
+
+<p><strong>Request Detail mentioned Below</strong></p>
+<p><strong>RequestID:</strong><span> {{requestid}}</span></p>
+<p><strong>Request Status:</strong><span>  {{request_status}}</span></p>
+<p><strong>{{linktext}}:</strong><span> {{link}} </span></p>
+
+{% endif %}
