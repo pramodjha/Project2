@@ -136,7 +136,7 @@ def Sign_In_View_Version2(request):
                 user = User.objects.get(username = system_username)
                 user.backend = 'django.contrib.auth.backends.ModelBackend'
                 login(request, user)
-                return HttpResponseRedirect(reverse('home'))
+                return HttpResponseRedirect(reverse('checkdetail'))
     context = {'form' : form,'activetab':activetab,'system_username':system_username}
     return render(request, 'CentralMI/1b_signin_view.html', context)
 
