@@ -46,7 +46,7 @@ import getpass
 
 from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES, IssueActionForm, ShiftupdateForm, GalleryForm, UatDetail1Form
 from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster, AuthUser
-from .views_signin_signup import Sign_Up_View_Version1,Sign_Up_View_Version2,Sign_In_View_Version1,Sign_In_View_Version2,Sign_In_As_Other_View_Version1
+from .views_signin_signup import Sign_Up_View_Version1,Sign_Up_View_Version2,Sign_In_View_Version1,Sign_In_View_Version3,Sign_In_View_Version4
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
@@ -2780,11 +2780,9 @@ def hours_min(request,time_in_min=None,date=None,dict=None):
 
 @login_required
 def TimeTracker_View(request):
-    view_header = 'Time Tracker'
-    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
-    #print(sd)
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header, view_footer =  'timetracker', 'timetracker'
+    template = 'CentralMI/8a_tracker_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     starttime = request.POST.get('startdatetime')
     stoptime = request.POST.get('stopdatetime')
     userid = User.objects.get(username__in=[username]).id
@@ -2853,18 +2851,18 @@ def TimeTracker_View(request):
                 dvutilisation = round(dvutilisation,2)
                 msg2 = "ok"
                 msg1 = "ok"
-                return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
+                return render(request, template, {'form':form,'model':model, 'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
             else:
                 msg2 = "Category, SubCategory and Totaltime cannot be blank"
                 print(msg1)
                 print(msg2)
                 print(msg3)
 
-                return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
+                return render(request, template, {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
         else:
             msg2 = "ok"
-            return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg1':msg1,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
-    return render(request, 'CentralMI/8a_tracker_view.html', {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg1':msg1,'utiliationtext':utiliationtext, 'daystype':daystype})
+            return render(request, template, {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg1':msg1,'utiliationtext':utiliationtext, 'daystype':daystype,'msg2':msg2,'msg1':msg1})
+    return render(request, template, {'form':form,'model':model,'username':username,'dv':dv,'dvOT':dvOT,'dvAll':dvAll,'dvcore':dvcore,'dvutilisation':dvutilisation,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg1':msg1,'utiliationtext':utiliationtext, 'daystype':daystype})
 
 @login_required
 def Tracker_Edit_Form(request,requestid):
