@@ -360,10 +360,7 @@ def add_edit_user_to_group(request):
 def Edit_Metrics(request,metricsid):
     view_header,view_footer = 'home','landingpage'
     template = 'CentralMI/dynamic_form.html'
-    activetab, activetab1, username, info, sd= create_session(request, header=view_header,footer=view_footer)
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    can_edit, can_view, can_delete = permission(request,view_footer=view_footer,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = tbl_team_metrics.objects.get(metrics_id=metricsid)
     form = ViewListForm()
     if request.method == 'POST':
@@ -371,7 +368,7 @@ def Edit_Metrics(request,metricsid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse(view_footer))
     return render(request, template,context)
 
 
@@ -456,7 +453,7 @@ def IssueAction_Edit_Form(request,issueactionid):
     view_header,view_footer = 'home','landingpage'
     title = 'Add Shift-Update'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'home'
+    redirect_url = view_footer
     template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = IssueAction.objects.get(issue_action_id=issueactionid)
@@ -475,7 +472,7 @@ def Shiftupdate_Add_Form(request):
     view_header,view_footer = 'home','landingpage'
     title = 'Add Shift-Update'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'home'
+    redirect_url = view_footer
     template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     memberid = TblMember.objects.get(userid__username__in=[username]).memberid
@@ -495,7 +492,7 @@ def Shiftupdate_Edit_Form(request,updateid):
     view_header,view_footer = 'home','landingpage'
     title = 'Edit Shift-Update'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'home'
+    redirect_url = view_footer
     template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblShiftUpdate.objects.get(updateid=updateid)
@@ -515,7 +512,7 @@ def Gallery_Add_Form(request):
     view_header,view_footer = 'home','gallery'
     title = 'Add Gallery'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'gallery'
+    redirect_url = view_footer
     template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     memberid = TblMember.objects.get(userid__username__in=[username]).memberid
@@ -534,7 +531,7 @@ def Gallery_Edit_Form(request,imgid ):
     view_header,view_footer = 'home','gallery'
     title = 'Add Gallery'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'gallery'
+    redirect_url = view_footer
     template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblGallery.objects.get(imgid =imgid )
@@ -572,7 +569,7 @@ def Raw_Appreciation_Add_Form(request):
     view_header,view_footer = 'rawdetail','rawdetail'
     title = 'Add Appreciation'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'rawdetail'
+    redirect_url = view_footer
     template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     form = TblAppreciationForm()
@@ -587,10 +584,10 @@ def Raw_Appreciation_Add_Form(request):
 
 @login_required
 def Raw_Appreciation_Edit_Form(request,appreciationid):
-    view_header = 'RAW'
+    view_header,view_footer = 'raw','rawdetail'
     title = 'Edit Appreciation'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'rawdetail'
+    redirect_url = view_footer
     template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblAppreciation.objects.get(appreciationid=appreciationid)
@@ -607,34 +604,30 @@ def Raw_Appreciation_Edit_Form(request,appreciationid):
 
 @login_required
 def Raw_rawactivity_Add_Form(request):
-    view_header = 'RAW'
+    view_header,view_footer = 'raw','rawdetail'
     title = 'Add Activity'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'rawdetail'
+    redirect_url = view_footer
     template_type = 'template'
-    activetab, activetab1, username, info, sd= create_session(request, header='rawdetail',footer='rawdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     form = TblRawActivityDetailForm()
     if request.method == 'POST':
         form = TblRawActivityDetailForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('rawdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
 @login_required
 def Raw_rawactivity_Edit_Form(request,activityid):
-    view_header = 'RAW'
+    view_header,view_footer = 'raw','rawdetail'
     title = 'Edit Activity'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'rawdetail'
+    redirect_url = view_footer
     template_type = 'template'
-    activetab, activetab1, username, info, sd= create_session(request, header='rawdetail',footer='rawdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblRawActivityDetail.objects.get(raw_activity_id=activityid)
     form = TblRawActivityDetailForm(instance=e)
     if request.method == 'POST':
@@ -642,22 +635,20 @@ def Raw_rawactivity_Edit_Form(request,activityid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('rawdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
 
 @login_required
 def Raw_Score_Edit_Form(request,activityid):
-    view_header = 'RAW'
+    view_header,view_footer = 'raw','rawdetail'
     title = 'Edit Score'
     template = 'CentralMI/dynamic_form.html'
-    redirect_url = 'rawdetail'
+    redirect_url = view_footer
     template_type = 'template'
-
-    activetab, activetab1, username, info, sd= create_session(request, header='rawdetail',footer='rawdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    template = 'CentralMI/1d_index.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblRawScore.objects.get(raw_score_id=activityid)
     form = TblRawScoreForm(instance=e)
     if request.method == 'POST':
@@ -665,88 +656,87 @@ def Raw_Score_Edit_Form(request,activityid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('rawdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
 
 @login_required
 def All_Request_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='allrequest')
-    group_name = is_group(request,username=username)
+    view_header,view_footer = 'workflow','allrequest'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     data = TblRequestdetail.objects.all()
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context  = {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 @login_required
 def Unapproved_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='unapproved')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','unapproved'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     approved = list(TblAuthorisedetail.objects.all().values_list('requestid', flat=True))
     data = TblRequestdetail.objects.exclude(requestid__in=approved)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 @login_required
 def Approved_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='approved')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','approved'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     assigned = list(TblAssigneddetail.objects.all().values_list('requestid', flat=True))
     data = TblAuthorisedetail.objects.select_related('requestid').exclude(requestid__in=assigned)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 @login_required
 def Assigned_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='assigned')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','assigned'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filter_dict = create_dict_for_filter(request,field_name_list = ['assignedtoid','assignedtoid__teamid'],value_list = [memberid,teamid])
     overviewed = list(TblOverviewdetail.objects.all().values_list('requestid', flat=True))
     data = TblAssigneddetail.objects.select_related('requestid').exclude(requestid__in=overviewed).filter(**filter_dict)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 
 @login_required
 def Overview_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='overview')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','overview'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filter_dict = create_dict_for_filter(request,field_name_list = ['giventoid','giventoid__teamid'],value_list = [memberid,teamid])
     Estimated = list(TblEstimationdetail.objects.all().values_list('requestid', flat=True))
     data = TblOverviewdetail.objects.select_related('requestid').exclude(requestid__in=Estimated).filter(**filter_dict)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 @login_required
 def Estimate_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='estimate')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','estimate'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid'],value_list = [memberid,teamid])
     Accepted = list(TblAcceptrejectdetail.objects.all().values_list('requestid', flat=True))
     data = TblEstimationdetail.objects.select_related('requestid').exclude(requestid__in=Accepted).filter(**filter_dict)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 
 @login_required
 def Wip_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='wip')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','wip'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid'],value_list = [memberid,teamid])
@@ -754,14 +744,14 @@ def Wip_View(request):
     Accepted = list(TblCompleteddetail.objects.all().values_list('requestid', flat=True))
     UAT = list(TblUatDetail.objects.filter(Q(uat_statusid__isnull=True) | Q(uat_statusid__in=[1,None])).values_list('requestid', flat=True))
     data = TblAcceptrejectdetail.objects.select_related('requestid').filter(requestid__in=requestid).exclude(requestid__in=Accepted).exclude(requestid__in=UAT)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 @login_required
 def UAT_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='uat')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','uat'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid'],value_list = [memberid,teamid])
@@ -769,37 +759,37 @@ def UAT_View(request):
     print(requestid)
     Accepted = list(TblCompleteddetail.objects.all().values_list('requestid', flat=True))
     data = TblUatDetail.objects.select_related('requestid').exclude(uat_statusid__in=[None]).exclude(requestid__in=Accepted).filter(requestid__in=requestid)
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 
 @login_required
 def Completed_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd= create_session(request,  header='workflow',footer='completed')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','completed'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     data = TblUatDetail.objects.select_related('requestid').filter(uat_statusid__uat_status__in=['Pass'])
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 @login_required
 def Rejected_View(request):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request, header='workflow',footer='rejected')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','rejected'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     data = TblRequeststatusdetail.objects.select_related('statusid','requestid').filter(statusid__in=[3])
-    return render(request, 'CentralMI/3a_request_view.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template ,context )
 
 @login_required
 def Errorlog_Add_Form(request,reportid):
-    view_header = 'Report'
+    view_header,view_footer = 'report','errordetail'
     title = 'Add Error'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'reportsdetail'
     template_type = 'template'
-    activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     memberid = TblMember.objects.get(userid__username__in=[username]).memberid
     form = ErrorlogForm(initial={'activityid':reportid,'reportedtoid':memberid})
     if request.method == 'POST':
@@ -807,16 +797,15 @@ def Errorlog_Add_Form(request,reportid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('errordetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
 @login_required
 def Errorlog_Detail_View(request):
-    view_header = 'Report'
-    activetab, activetab1, username, info, sd= create_session(request, header='report',footer='errordetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'report','errordetail'
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['reportedtoid','reportedtoid__teamid'], value_list = [memberid,teamid])
@@ -825,15 +814,13 @@ def Errorlog_Detail_View(request):
 
 @login_required
 def Errorlog_Edit_Form(request,requestid):
-    view_header = 'Report'
+    view_header,view_footer = 'report','errordetail'
     template = 'CentralMI/dynamic_form.html'
     title = 'Edit Error'
-    redirect_url = 'errordetail'
+    redirect_url = view_footer
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    template = 'CentralMI/3a_request_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblErrorlog.objects.get(error_id=requestid)
     model = TblErrorlog.objects.filter(error_id=requestid)
     form = ErrorlogForm(instance=e)
@@ -843,15 +830,13 @@ def Errorlog_Edit_Form(request,requestid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('errordetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template, context)
 
 def Ot_Detail_View(request):
-    view_header = 'Time Tracker'
-    activetab, activetab1, username, info, sd= create_session(request, header='timetracker',footer='otdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'timetracker','otdetail'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['timetrackerid__memberid','timetrackerid__teamid'], value_list = [memberid,teamid])
@@ -861,25 +846,20 @@ def Ot_Detail_View(request):
 
 @login_required
 def Useful_link_View(request):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd= create_session(request, header='details',footer='usefullinks')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'details','usefullinks'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     data = TblUsefulLinks.objects.all()
     return render(request, 'CentralMI/useful_link_detail.html', {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 
 @login_required
 def Useful_link_Add_form(request):
-    view_header = 'Details'
+    view_header,view_footer = 'details','usefullinks'
     template = 'CentralMI/dynamic_form.html'
     title = 'Add Link'
-    redirect_url = 'usefullinks'
+    redirect_url = view_footer
     template_type = 'template'
-
-    activetab, activetab1, username, info, sd = create_session(request, header='usefullinks',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     memberid = TblMember.objects.get(userid__username=username).memberid
     print(memberid)
     form = TblUsefulLinksForm(initial={'memberid':memberid})
@@ -888,21 +868,18 @@ def Useful_link_Add_form(request):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('usefullinks'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context )
 
 @login_required
 def Useful_link_Edit_form(request,linkid):
-    view_header = 'Details'
+    view_header,view_footer = 'details','usefullinks'
     template = 'CentralMI/dynamic_form.html'
     title = 'Add Link'
-    redirect_url = 'usefullinks'
+    redirect_url = view_footer
     template_type = 'template'
-
-    activetab, activetab1, username, info, sd = create_session(request, header='usefullinks',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblUsefulLinks.objects.get(linkid=linkid)
     form = TblUsefulLinksForm(instance=e)
     if request.method == 'POST':
@@ -910,34 +887,31 @@ def Useful_link_Edit_form(request,linkid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('usefullinks'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context )
 
 @login_required
 def Raw_Team_View(request):
-    view_header = 'RAW'
-    activetab, activetab1, username, info, sd= create_session(request, header='rawdetail',footer='rawdteamdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'rawdetail','rawdteamdetail'
+    template = 'CentralMI/raw_team_detail.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     data1 = TblRawTeamMemberMaster.objects.filter(raw_team=1).filter(raw_team__valid_invalid__in=[1])
     data2 = TblRawTeamMemberMaster.objects.filter(raw_team=2).filter(raw_team__valid_invalid__in=[1])
     data3 = TblRawTeamMemberMaster.objects.filter(raw_team=3).filter(raw_team__valid_invalid__in=[1])
     data4 = TblRawTeamMemberMaster.objects.filter(raw_team=4).filter(raw_team__valid_invalid__in=[1])
     data5 = TblRawTeamMemberMaster.objects.filter(raw_team=5).filter(raw_team__valid_invalid__in=[1])
-    return render(request, 'CentralMI/raw_team_detail.html', {'model1':data1,'model2':data2,'model3':data3,'model4':data4,'model5':data5,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context =  {'model1':data1,'model2':data2,'model3':data3,'model4':data4,'model5':data5,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 @login_required
 def Raw_Team_Edit_Form(request,teamid):
-    view_header = 'RAW'
+    view_header,view_footer = 'rawdetail','rawdteamdetail'
     title = 'Edit Team Member'
-    redirect_url = 'rawdteamdetail'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-
-    activetab, activetab1, username, info, sd = create_session(request, header='rawdetail',footer='timetracker')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblRawTeamMemberMaster.objects.get(raw_team_member_id=teamid)
     form = TblRawTeamMemberMasterForm(instance=e)
     if request.method == 'POST':
@@ -945,44 +919,39 @@ def Raw_Team_Edit_Form(request,teamid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('rawdteamdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context =  {'form':form,'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
 @login_required
 def Raw_Team_Add_Form(request):
-    view_header = 'RAW'
+    view_header,view_footer = 'rawdetail','rawdteamdetail'
     title = 'Add Team Member'
-    redirect_url = 'rawdteamdetail'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request, header='rawdetail',footer='timetracker')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     form = TblRawTeamMemberMasterForm()
     if request.method == 'POST':
         form = TblRawTeamMemberMasterForm(request.POST)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('rawdteamdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context =  {'form':form,'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
 
 @login_required
 def Ot_Add_Form(request,trackerid):
-    view_header = 'Time Tracker'
+    view_header,view_footer = 'timetracker','otdetail'
     title = 'Add OT Form'
-    redirect_url = 'timetracker'
+    redirect_url =view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='timetracker',footer='otdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     count = TblOtDetail.objects.filter(timetrackerid__in=[trackerid]).count()
     status = list(TblOtDetail.objects.filter(timetrackerid__in=[trackerid]).values_list('statusid',flat=True))
-    #print(status)
     if status == [2] or status == [3]:
         form = OtDetail1Form(instance=TblOtDetail.objects.get(pk=TblOtDetail.objects.get(timetrackerid=trackerid).pk))
         msg = 'OT field is disabled as OT request has already been Accepted/Rejected'
@@ -1023,7 +992,7 @@ from django.apps import apps
 
 #@login_required
 def Filter_Data(request):
-    view_header = 'data'
+    view_header,view_footer = 'data','filtertab'
     activetab, activetab1, username, info, sd = create_session(request, header='data',footer='filtertab')
     reportpage = "mainpage"
     group_name = is_group(request,username=username)
@@ -1040,16 +1009,16 @@ def Filter_Data(request):
             request.session['team'] = str(form.cleaned_data['team'])
             request.session['member'] = str(form.cleaned_data['member'])
             startdate, enddate, reportno, type, interval, team, member = Datarequiredforreport(request)
-            return HttpResponseRedirect(reverse('filtertab'))
+            return HttpResponseRedirect(reverse(view_footer))
 
 
-            return HttpResponseRedirect(reverse('filtertab'))
+            return HttpResponseRedirect(reverse(view_footer))
     return render(request, 'CentralMI/12a_filter_form.html',{'form':form,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'reportpage':reportpage,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 
 #@login_required
 def Data_anlayis(request):
-    view_header = 'data'
+    view_header,view_footer = 'data','filtertab'
     activetab, activetab1, username, info, sd = create_session(request, header='data',footer='filtertab')
     reportpage = "mainpage"
     group_name = is_group(request,username=username)
@@ -1234,21 +1203,16 @@ def Errorreportwise_View(request):
 
 @login_required
 def About_Team_View(request):
-    view_header = 'Home'
-    activetab, activetab1, username, info, sd= create_session(request, header='home',footer='aboutteam')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'home','aboutteam'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = TblMember.objects.all()
     #print(MEDIA_URL)
     return render(request, 'CentralMI/2a_about_team_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
 def What_We_Do_View(request):
-    view_header = 'Home'
-    activetab, activetab1, username, info, sd= create_session(request, header='home',footer='whatwedo')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header,view_footer = 'home','whatwedo'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = TblWhatwedo.objects.filter(type__in=['Skill'])
     model1 = TblWhatwedo.objects.filter(type__in=['Geograhic'])
     return render(request, 'CentralMI/2b_what_we_do_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model,'model1':model1,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
@@ -1256,64 +1220,51 @@ def What_We_Do_View(request):
 
 @login_required
 def What_We_Do_Add(request):
-    view_header = 'Home'
+    view_header,view_footer = 'home','whatwedo'
     template = 'CentralMI/dynamic_form.html'
     title = 'Add'
     redirect_url = 'whatwedo'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     form = WhatwedoForm()
     if request.method == 'POST':
         form = WhatwedoForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('whatwedo'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request,template,context)
 
 @login_required
 def Governance_Process_View(request):
-    view_header = 'Home'
-    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='governanceprocess')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header,view_footer = 'home','governanceprocess'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = TblGovernance.objects.all()
     return render(request, 'CentralMI/2c_governance_process_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
 def Success_Stories_View(request):
-    view_header = 'Home'
-    activetab, activetab1, username, info, sd = create_session(request,  header='home',footer='successstories')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header,view_footer = 'home','successstories'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = TblSuccessStories.objects.all()
     return render(request, 'CentralMI/2d_success_stories_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
 def Success_Stories_Add(request):
-    view_header = 'Home'
+    view_header,view_footer = 'home','successstories'
     template = 'CentralMI/dynamic_form.html'
     title = 'Add Stories'
-    redirect_url = 'successstories'
+    redirect_url = view_footer
     template_type = 'template'
-
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     form = SuccessStoriesForm()
     if request.method == 'POST':
         form = SuccessStoriesForm(request.POST,request.FILES)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('successstories'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
@@ -1321,14 +1272,12 @@ def Success_Stories_Add(request):
 
 @login_required
 def Conversation_Form(request,requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','ty'
     template = 'CentralMI/dynamic_form.html'
     title = 'Add Your Point'
     redirect_url = 'ty'
     template_type = 'template_with_parameter'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     form = TblConversationForm(initial={'userid':userid,'requestid':requestid})
     if request.method == 'POST':
@@ -1336,7 +1285,7 @@ def Conversation_Form(request,requestid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('ty',args = (requestid,)))
+            return HttpResponseRedirect(reverse(view_footer,args = (requestid,)))
     context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'reverseid':requestid,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
@@ -1344,25 +1293,19 @@ def Conversation_Form(request,requestid):
 
 @login_required
 def Comm_Sugg_View(request):
-    view_header = 'Home'
-    activetab, activetab1, username, info, sd = create_session(request,header='home',footer='commsugg')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header,view_footer = 'home','commsugg'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = TblSuggestion.objects.all()
     return render(request, 'CentralMI/2e_comm_sugg_view.html',{'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'username':username,'model':model,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
 def Comm_Sugg_Add(request):
-    view_header = 'Home'
+    view_header,view_footer = 'home','commsugg'
     title = 'Add Suggestion'
     template ='CentralMI/dynamic_form.html'
     redirect_url = 'commsugg'
     template_type = 'template'
-
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     form = SuggestionForm(initial={'suggestedbyid':userid})
     if request.method == 'POST':
@@ -1378,10 +1321,8 @@ def Comm_Sugg_Add(request):
 
 @login_required
 def Check_Status_View(request):
-    view_header = 'Login Request'
-    activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'loginrequest','checkstatus'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     model = TblRequestdetail.objects.filter(userid__in=[userid])
     #filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedby','estimatedby__teamdetail'],value_list = [memberid,teamid])
@@ -1427,26 +1368,23 @@ def Check_Status_View(request):
 
 @login_required
 def Report_Detail_View(request):
-    view_header = 'Report'
-    oncancel = 'report'
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='reportsdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'report','reportsdetail'
+    template = 'CentralMI/5a_reports_detail_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['teamname'], value_list = [teamid])
     model = TblActivity.objects.filter(**(filterdict))
     if memberid !=None:
         model = TblActivity.objects.filter(Q(primaryowner__in=memberid)|Q(secondaryowner__in=memberid))
-    return render(request, 'CentralMI/5a_reports_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 @login_required
 def Report_Add_Form(request):
-    view_header = 'Report'
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
-    oncancel = 'report'
-    form_header = 'Add Report'
-    group_name = is_group(request,username=username)
+    view_header,view_footer = 'reportsdetail','report'
+    template = 'CentralMI/5a_report_add_form.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
 
     form = ActivityForm()
@@ -1455,19 +1393,20 @@ def Report_Add_Form(request):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('report'))
+            return HttpResponseRedirect(reverse(view_footer))
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header,'oncancel':oncancel})
-    return render(request, 'CentralMI/5a_report_add_form.html',{'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header,'oncancel':oncancel})
+        context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header}
+        return render(request, template,context)
+    context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header}
+    return render(request, template,context)
 
 @login_required
 def Report_Edit_Form(request,requestid):
-    view_header = 'Report'
-    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'report','allreports'
+    template = 'CentralMI/5c_report_edit_form.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblActivity.objects.get(activityid=requestid)
     model = TblActivity.objects.filter(activityid=requestid)
     form = ActivityForm(instance=e)
@@ -1477,47 +1416,45 @@ def Report_Edit_Form(request,requestid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('allreports'))
-    return render(request, 'CentralMI/5c_report_edit_form.html', {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+            return HttpResponseRedirect(reverse(view_footer))
+    context =  {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 
 ######################## Feedback
 
 @login_required
 def Feedback_Question_View(request,activityid):
-    view_header = 'Report'
-    activetab, activetab1, username, info, sd= create_session(request, header='report',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'report','allreports'
+    template = 'CentralMI/6b_feedback_question_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model =  TblFeedbackQuestionMaster.objects.all()
     request.session['aid'] = activityid
-    return render(request, 'CentralMI/6b_feedback_question_view.html',{'model':model,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 @login_required
 def Feedback_Detail_View(request):
-    view_header = 'Report'
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'report','feedbackdetail'
+    template ='CentralMI/6a_feedback_detail_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['activityid__teamname'], value_list = [teamid])
     model = TblFeedback.objects.filter(**(filterdict))
     if memberid !=None:
         model = TblFeedback.objects.filter(Q(activityid__primaryowner__in=memberid)|Q(activityid__secondaryowner__in=memberid))
-    return render(request, 'CentralMI/6a_feedback_detail_view.html',{'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template ,context)
 
 @login_required
 def Feedback_Edit_Form(request,feedbackid):
-    view_header = 'Report'
+    view_header,view_footer = 'report','feedbackdetail'
     title = 'Edit Feedback'
     template ='CentralMI/dynamic_form.html'
-    redirect_url = 'feedbackdetail'
+    redirect_url = view_footer
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='feedbackdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblFeedback.objects.get(feedback_id=feedbackid)
     model = TblFeedback.objects.filter(feedback_id=feedbackid)
     form = FeedbackForm(instance=e)
@@ -1533,14 +1470,11 @@ def Feedback_Edit_Form(request,feedbackid):
 
 @login_required
 def Feedback_Add_Form(request,feedbackquestionid):
-    view_header = 'Report'
-    redirect_url = 'viewfeedbackquestion'
+    view_header,view_footer = 'report','viewfeedbackquestion'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form_with_parameter.html'
     template_type = 'template_with_parameter'
-    activetab, activetab1, username, info, sd = create_session(request,  header='report',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     activityid = request.session.get('aid')
     checkmember = TblFeedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activityid__in=[activityid]).count()
     model1 = TblFeedback.objects.filter(feedback_question__in=[feedbackquestionid]).filter(activityid__in=[activityid])
@@ -1557,7 +1491,7 @@ def Feedback_Add_Form(request,feedbackquestionid):
             if form.is_valid():
                 inst = form.save(commit=True)
                 inst.save()
-                return HttpResponseRedirect(reverse('viewfeedbackquestion',args = (activityid,)))
+                return HttpResponseRedirect(reverse(view_footer,args = (activityid,)))
             else:
                 context = {'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'activityid':activityid,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'reverseid':activityid,'template_type':template_type}
                 return render(request, template,context)
@@ -1569,7 +1503,7 @@ def Feedback_Add_Form(request,feedbackquestionid):
             if form.is_valid():
                 inst = form.save(commit=True)
                 inst.save()
-                return HttpResponseRedirect(reverse('viewfeedbackquestion',args = (activityid,)))
+                return HttpResponseRedirect(reverse(view_footer,args = (activityid,)))
             else:
                 context = {'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'activityid':activityid,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'reverseid':activityid,'template_type':template_type}
                 return render(request, template,context)
@@ -1579,10 +1513,9 @@ def Feedback_Add_Form(request,feedbackquestionid):
 ############## Staff
 @login_required
 def Staff_Detail_View(request):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='staffdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'details','staffdetail'
+    template =  'CentralMI/10a_staff_detail_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['memberid','teamid'], value_list = [memberid,teamid])
@@ -1590,33 +1523,30 @@ def Staff_Detail_View(request):
     model = TblMember.objects.filter(**(filterdict))
     data = zip(model1,model)
     #print(model)
-    return render(request, 'CentralMI/10a_staff_detail_view.html',{'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request,template,context)
 
 @login_required
 def My_Detail_View(request):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='mydetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'details','mydetail'
+    template = 'CentralMI/10a_my_detail_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     model1 = User.objects.filter(username__in=[username])
     model = TblMember.objects.filter(userid__in=[userid])
     data = zip(model1,model)
-    return render(request, 'CentralMI/10a_my_detail_view.html',{'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model,'model1':model1,'data':data,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 
 @login_required
 def Staff_Edit_Form(request):
-    view_header = 'Details'
+    view_header,view_footer = 'details','mydetail'
     title = 'Edit Details'
-    redirect_url = 'mydetail'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-
-    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='mydetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     e1 = User.objects.get(id=userid)
     e = TblMember.objects.get(userid=userid)
@@ -1640,15 +1570,13 @@ def Staff_Edit_Form(request):
 
 @login_required
 def Staff_Edit_Manager_Form(request,id):
-    view_header = 'Details'
+    view_header,view_footer = 'details','mydetail'
     detail = "managerview"
     title = 'Edit Details'
-    redirect_url = 'staffdetail'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='Details',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(id=id).pk
     e1 = User.objects.get(pk=userid)
     model1 = User.objects.filter(username__in=username)
@@ -1658,7 +1586,7 @@ def Staff_Edit_Manager_Form(request,id):
         if  form1.is_valid():
             inst1 = form1.save(commit=True)
             inst1.save()
-            return HttpResponseRedirect(reverse('staffdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template':template,'template_type':template_type,'detail':detail}
     return render(request, template,context)
 
@@ -1666,33 +1594,30 @@ def Staff_Edit_Manager_Form(request,id):
 ############### Internal Task detailview
 @login_required
 def Internal_Task_Detail_View(request):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'details','internaltaskdetail'
+    template = 'CentralMI/11a_internal_task_detail_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = TblInternaltask.objects.all()
-    return render(request, 'CentralMI/11a_internal_task_detail_view.html',{'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 def Internal_Task_Completion_View(request,internaltaskid):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header,view_footer = 'details','internaltaskdetail'
+    template = 'CentralMI/11g_internal_task_completion_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = Internaltaskstatus.objects.filter(internaltask_id__in=[internaltaskid])
-    return render(request, 'CentralMI/11g_internal_task_completion_view.html',{'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 
 @login_required
 def Internal_Task_Add_Form(request):
-    view_header = 'Details'
+    view_header,view_footer = 'details','internaltaskdetail'
     title = 'Internal Task'
-    redirect_url = 'internaltaskdetail'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     memberid = TblMember.objects.get(userid=userid).memberid
     form = InternaltaskForm(initial={'ownerid':memberid})
@@ -1701,17 +1626,15 @@ def Internal_Task_Add_Form(request):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('internaltaskdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template':template,'template_type':template_type}
     return render(request, template,context)
 
 @login_required
 def Internal_Task_Edit_Form(request,taskid):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header,view_footer = 'details','internaltaskdetail'
+    template = 'CentralMI/11b_internal_task_add_form.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblInternaltask.objects.get(internaltaskid=taskid)
     form = InternaltaskForm(instance=e)
     if request.method == 'POST':
@@ -1719,19 +1642,18 @@ def Internal_Task_Edit_Form(request,taskid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('internaltaskdetail'))
-    return render(request, 'CentralMI/11b_internal_task_add_form.html',{'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+            return HttpResponseRedirect(reverse(view_footer))
+    context = {'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 @login_required
 def Leave_Record_Form(request):
-    view_header = 'Details'
+    view_header,view_footer = 'details','leaverecorddetail'
     title = 'Add Leave record'
-    redirect_url = 'leaverecorddetail'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid  = User.objects.get(username=username).id
     memberid = TblMember.objects.get(userid=userid).memberid
     form = TblLeaveRecordForm(initial={'userid':memberid})
@@ -1740,20 +1662,18 @@ def Leave_Record_Form(request):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('leaverecorddetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template':template,'template_type':template_type}
     return render(request, template,context)
 
 @login_required
 def Leave_Record_Edit(request,leaveid):
-    view_header = 'Details'
+    view_header,view_footer = 'details','leaverecorddetail'
     title = 'Edit Leave record'
-    redirect_url = 'leaverecorddetail'
+    redirect_url = view_footer
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblLeaveRecord.objects.get(leaverecordid=leaveid)
     form = TblLeaveRecordForm(instance=e)
     if request.method == 'POST':
@@ -1761,41 +1681,39 @@ def Leave_Record_Edit(request,leaveid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('leaverecorddetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template':template,'template_type':template_type}
     return render(request, template,context)
 
 @login_required
 def Leave_Record_View(request):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='leaverecorddetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'details','leaverecorddetail'
+    template = 'CentralMI/11a_leave_detail.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     filterdict = create_dict_for_filter(request,field_name_list = ['userid','userid__teamid'], value_list = [memberid,teamid])
     model = TblLeaveRecord.objects.filter(**(filterdict))
     model1 = TblPublicHolidaysMaster.objects.all()
     count = model.values('leave_type__leave_type','userid__userid__username').annotate(dcount=Count('leave_type'))
-    return render(request, 'CentralMI/11a_leave_detail.html',{'model':model, 'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'count':count})
+    context = {'model':model, 'model1':model1,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'count':count}
+    return render(request, template,context)
 
 @login_required
 def Internal_Task_Choice_view(request,taskid):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'details','internaltaskdetail'
+    template ='CentralMI/11c_internal_task_choice_view.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     model = Internaltaskchoice.objects.filter(internaltaskid__in=[taskid])
-    return render(request, 'CentralMI/11c_internal_task_choice_view.html',{'model':model, 'taskid':taskid,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+    context = {'model':model, 'taskid':taskid,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 
 @login_required
 def Internal_Choice_Add_Form(request,taskid):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header,view_footer = 'details','viewinternaltaskoption'
+    template = 'CentralMI/11d_internal_task_choice_add_form.html'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     id = taskid
     form =  InternaltaskchoiceForm(initial={'internaltask':taskid})
     if request.method == 'POST':
@@ -1803,20 +1721,21 @@ def Internal_Choice_Add_Form(request,taskid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (id,)))
+            return HttpResponseRedirect(reverse(view_footer,args = (id,)))
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'id':id,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
-    return render(request, 'CentralMI/11d_internal_task_choice_add_form.html',{'form':form,'taskid':taskid,'id':id,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
+        context = {'form':form,'taskid':taskid,'id':id,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+        return render(request, template,context)
+    context = {'form':form,'taskid':taskid,'id':id,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    return render(request, template,context)
 
 
 @login_required
 def Internal_Choice_Edit_Form(request,choiceid):
-    view_header = 'Details'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'details','viewinternaltaskoption'
+    template
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
 
     e = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid)
     question = Internaltaskchoice.objects.get(internaltaskchoiceid=choiceid).internaltask
@@ -1830,7 +1749,7 @@ def Internal_Choice_Edit_Form(request,choiceid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('viewinternaltaskoption',args = (taskid,)))
+            return HttpResponseRedirect(reverse(view_footer,args = (taskid,)))
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
@@ -1842,14 +1761,12 @@ def Internal_Choice_Edit_Form(request,choiceid):
 
 @login_required
 def Internal_Task_And_Choice_View(request,taskid):
-    view_header = 'Details'
+    view_header,view_footer = 'details','internaltaskdetail'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'internaltaskwithchoiceedit'
     title = 'Edit Internal Choice'
     template_type = 'template_with_choice'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
 
     userid = User.objects.get(username=username).id
     memberid = TblMember.objects.get(userid=userid).memberid
@@ -1873,7 +1790,7 @@ def Internal_Task_And_Choice_View(request,taskid):
                 inst = form.save(commit=True)
                 inst.internaltaskchoice = e
                 inst.save()
-                return HttpResponseRedirect(reverse('internaltaskdetail'))
+                return HttpResponseRedirect(reverse(view_footer))
             else:
                 return render(request, template,{'form':form,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url,'reverseid':taskstatusid,'template_type':template_type})
     else:
@@ -1892,19 +1809,17 @@ def Internal_Task_And_Choice_View(request,taskid):
                 inst = form.save(commit=True)
                 inst.internaltaskchoice = e
                 inst.save()
-                return HttpResponseRedirect(reverse('internaltaskdetail'))
+                return HttpResponseRedirect(reverse(view_footer))
     return render(request, template,{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url,'template_type':template_type,'reverseid':taskstatusid})
 
 @login_required
 def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
-    view_header = 'Details'
+    view_header,view_footer = 'details','internaltaskwithchoice'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'internaltaskdetail'
     title = 'Edit Internal Choice'
     template_type = 'template_with_choice'
-    activetab, activetab1, username, info, sd = create_session(request,  header='details',footer='internaltaskdetail')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     memberid = TblMember.objects.get(userid=userid).memberid
     internaltaskchoice = TblInternaltaskstatus.objects.filter(internaltaskstatusid__in=[taskstatusid]).values_list('internaltaskchoiceid', flat=True)
@@ -1931,7 +1846,7 @@ def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
             inst = form.save(commit=True)
             inst.internaltaskchoiceid = f
             inst.save()
-            return HttpResponseRedirect(reverse('internaltaskwithchoice',args = (internaltaskid,)))
+            return HttpResponseRedirect(reverse(view_footer,args = (internaltaskid,)))
     context = {'form':form,'model':model,'model1':model1,'choice':choice_string,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'reverseid':internaltaskid,'template_type':template_type}
     return render(request, template,context)
 
@@ -1942,14 +1857,12 @@ def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
 
 @login_required
 def Request_Form(request):
-    view_header = 'Login Request'
+    view_header,view_footer = 'loginrequest','ty'
     title = 'Request Form'
     redirect_url = 'home'
     template = 'CentralMI/4a_request_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='addrequest')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     form = RequestdetailForm(initial={'userid':userid})
     form1 = StatusdetailForm(initial={'statusid':1,'userid':userid,'requestid':None})
@@ -1963,7 +1876,7 @@ def Request_Form(request):
             inst1 = form1.save(commit=False)
             inst1.requestid = inst
             inst1.save()
-            return HttpResponseRedirect(reverse('ty',args = (newid,)))
+            return HttpResponseRedirect(reverse(view_footer,args = (newid,)))
     else:
         context = {'form':form,'form1':form1,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list': footer_navbar_list,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
         return render(request, template,context)
@@ -1972,18 +1885,16 @@ def Request_Form(request):
 
 @login_required
 def Authorised_Form(request,requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','unapproved'
     title = 'Authorised Form'
     redirect_url = 'unapproved'
     template = 'CentralMI/dynamic_form.html'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='unapproved')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     try:
         DataModel= TblAuthorisedetail.objects.all().get(requestid=requestid)
-        return HttpResponseRedirect(reverse('unapproved'))
+        return HttpResponseRedirect(reverse(view_footer))
     except:
         requestfilter = TblRequestdetail.objects.get(requestid=requestid)
         request_owner = TblRequestdetail.objects.get(requestid=requestid).userid
@@ -2008,25 +1919,23 @@ def Authorised_Form(request,requestid):
         #                sub_manager='Request ID ' + str(requestid) + ' need to be assigned ' if str(inst1.statusdetail)=='Approved' else 'Request ID ' + str(requestid) + ' has been ' + str(inst1.statusdetail) + ' , hence no futher action required',
         #                L1_manager='Request has authorised and it is with MI-Team to assign',
         #                request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('unapproved'))
+                return HttpResponseRedirect(reverse(view_footer))
         context = {'form':form, 'form1':form1,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
         return render(request,template ,context)
 
 @login_required
 def Requestassigneddetail_Form(request, requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','approved'
     title = "Assigned Form"
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'approved'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='approved')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     memberid = TblMember.objects.get(userid=userid).memberid
     try:
         DataModel= TblAssigneddetail.objects.all().get(requestid=requestid)
-        return HttpResponseRedirect(reverse('approved'))
+        return HttpResponseRedirect(reverse(view_footer))
     except:
         requestfilter = TblRequestdetail.objects.get(requestid=requestid)
         request_owner = TblRequestdetail.objects.get(requestid=requestid).userid
@@ -2052,21 +1961,18 @@ def Requestassigneddetail_Form(request, requestid):
         #                L1_manager='Next Step is to take overview of request',
         #                request_status=str(inst1.statusdetail))
 
-                return HttpResponseRedirect(reverse('approved'))
+                return HttpResponseRedirect(reverse(view_footer))
         context = {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
         return render(request, template,context)
 
 @login_required
 def Overview_Form(request,requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','assigned'
     title = 'Overview Form'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'assigned'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='assigned')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     memberid = TblMember.objects.get(userid=userid).memberid
     try:
@@ -2096,7 +2002,7 @@ def Overview_Form(request,requestid):
         #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
         #                L1_manager='Next Step is with MI-Team to provide estimation in hours',
         #                request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('assigned'))
+                return HttpResponseRedirect(reverse(view_footer))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
         context = {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
@@ -2104,15 +2010,12 @@ def Overview_Form(request,requestid):
 
 @login_required
 def Estimation_Form(request,requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','overview'
     title = 'Estimation Form'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'overview'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='overview')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     memberid = TblMember.objects.get(userid=userid).memberid
     #print(userid)
@@ -2143,7 +2046,7 @@ def Estimation_Form(request,requestid):
         #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
         #                L1_manager='Next Step is with Requester to Accept/Reject estimation',
         #                request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('overview'))
+                return HttpResponseRedirect(reverse(view_footer))
             else:
                 pagename = "estimate"
                 errormsg1 = "Something went Wrong"
@@ -2153,14 +2056,12 @@ def Estimation_Form(request,requestid):
 
 @login_required
 def EstimationAcceptance_Form(request,requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','estimate'
     title = 'Estimation Acceptance/Rejection Form'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'estimate'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
 
     userid = User.objects.get(username=username).id
     try:
@@ -2190,7 +2091,7 @@ def EstimationAcceptance_Form(request,requestid):
         #                sub_manager= str(inst1.statusdetail) + 'for Request ID' + str(requestid) ,
         #                L1_manager="Estimation has been Accepted, it's moved to WIP bucket"  if str(inst1.statusdetail)=='Estimation Accepted' else 'Estimation has been' +  str(inst1.statusdetail) + 'for Request ID' + str(requestid) + ' , hence no futher action required',
         #                request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('estimate'))
+                return HttpResponseRedirect(reverse(view_footer))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
         context = {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
@@ -2199,15 +2100,12 @@ def EstimationAcceptance_Form(request,requestid):
 
 @login_required
 def WIP_Form(request,requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','wip'
     title = 'UAT Form'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'wip'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     try:
         DataModel= TblUatDetail.objects.filter(uat_statusid__in=1).get(requestid=requestid)
@@ -2236,7 +2134,7 @@ def WIP_Form(request,requestid):
         #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
         #                L1_manager='Request been completed',
         #                request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('wip'))
+                return HttpResponseRedirect(reverse(view_footer))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
         context = {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
@@ -2247,14 +2145,12 @@ def WIP_Form(request,requestid):
 
 @login_required
 def UAT_Form(request,requestid):
-    view_header = 'Workflow'
+    view_header,view_footer = 'workflow','uat'
     title = 'UAT Form'
     template = 'CentralMI/dynamic_form.html'
     redirect_url = 'uat'
     template_type = 'template'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='uat')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     userid = User.objects.get(username=username).id
     authuserinstance = AuthUser.objects.get(username=username)
     e = TblUatDetail.objects.filter(uat_statusid=None).get(requestid=requestid)
@@ -2283,17 +2179,15 @@ def UAT_Form(request,requestid):
             ins = TblRequeststatusdetail.objects.get(requeststatusid=inst1.requeststatusid)
             ins.statusid = stageinst
             ins.save()
-            return HttpResponseRedirect(reverse('uat'))
+            return HttpResponseRedirect(reverse(view_footer))
     context = {'form':form,'form1':form1,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'title':title,'redirect_url':redirect_url,'template_type':template_type}
     return render(request, template,context)
 
 
 @login_required
 def Completed_Form(request,requestid):
-    view_header = 'Workflow'
-    activetab, activetab1, username, info, sd = create_session(request,  header='workflow',footer='wip')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'workflow','wip'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
 
     userid = User.objects.get(username=username).id
     try:
@@ -2324,7 +2218,7 @@ def Completed_Form(request,requestid):
         #                sub_manager='Request ID ' + str(requestid) + 'has been' + str(inst1.statusdetail),
         #                L1_manager='Request been completed',
         #                request_status=str(inst1.statusdetail))
-                return HttpResponseRedirect(reverse('wip'))
+                return HttpResponseRedirect(reverse(view_footer))
             else:
                 return render(request, 'CentralMI/15a_ErrorPage.html')
         return render(request, 'CentralMI/4g_completed_form.html',{'form':form, 'form1':form1, 'username': username,'activetab1':activetab1,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
@@ -2333,10 +2227,8 @@ def Completed_Form(request,requestid):
 
 @login_required
 def Thank_You_Page_View(request,requestid):
-    view_header = 'Login Request'
-    activetab, activetab1, username, info, sd = create_session(request,  header='loginrequest',footer='checkstatus')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
+    view_header,view_footer = 'loginrequest','checkstatus'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     try:
         model1 = TblRequestdetail.objects.all().get(requestid=requestid)
         try:
@@ -2866,11 +2758,8 @@ def TimeTracker_View(request):
 
 @login_required
 def Tracker_Edit_Form(request,requestid):
-    view_header = 'Time Tracker'
-    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header, view_footer =  'timetracker', 'timetracker'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblTimeTracker.objects.get(pk=requestid)
     model = TblTimeTracker.objects.filter(pk=requestid)
     form = TimetrackersForm(instance=e)
@@ -2880,17 +2769,14 @@ def Tracker_Edit_Form(request,requestid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('timetracker'))
+            return HttpResponseRedirect(reverse(view_footer))
     return render(request, 'CentralMI/8b_tracker_edit_form.html', {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 
 @login_required
 def Ot_Edit_Form(request,requestid):
-    view_header = 'Time Tracker'
-    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
-    group_name = is_group(request,username=username)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
-
+    view_header, view_footer =  'timetracker', 'otdetail'
+    group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblOtDetail.objects.get(pk=requestid)
     model = TblOtDetail.objects.filter(pk=requestid)
     form = OtDetailForm(instance=e)
@@ -2900,7 +2786,7 @@ def Ot_Edit_Form(request,requestid):
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
-            return HttpResponseRedirect(reverse('otdetail'))
+            return HttpResponseRedirect(reverse(view_footer))
     return render(request, 'CentralMI/9c_ot_edit_form.html', {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list})
 
 @login_required
