@@ -19,7 +19,11 @@
     <table  id="example" class="table" style="width:100%">
       <thead class="">
       <tr class="fontstyle4 fontsize15 fontfamilycambria widthsize25per backgroundcolor1" >
-        <td >ID <a href="{% url 'usefullinkaddform' %}" class="glyphicon glyphicon-plus fontstyle12"></a></td>
+        <td >ID
+          {% if can_add.0 == True %}
+          <a href="{% url 'usefullinkaddform' %}" class="glyphicon glyphicon-plus fontstyle12"></a></td>
+          {% else %}
+          {% endif %}
         <td >Date Time</td>
         <td >Team </td>
         <td >Updated By</td>
@@ -29,7 +33,11 @@
       <tbody class="">
     {%for data in model %}
       <tr class="">
+      {% if can_edit.0 == True %}
       <td><a href="{% url 'usefullinkeditform' data.linkid %}" class="fontstyle12">{{data.linkid}}</a></td>
+      {% else %}
+      <td>{{data.linkid}}</td>
+      {% endif %}
       <td>{{data.date_time }}</td>
       <td>{{data.teamid }}</td>
       <td>{{data.memberid }}</td>

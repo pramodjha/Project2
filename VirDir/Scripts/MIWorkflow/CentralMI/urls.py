@@ -41,7 +41,7 @@ urlpatterns = [
 	url(r'^request_completed_view/',views.Completed_View, name = 'completed'),
 
 	url(r'^request_rejected_view/',views.Rejected_View, name = 'rejected'),
-	url(r'^conversation_form/(?P<requestid>\d+)$',views.Conversation_Form, name = 'conversationform'),
+	url(r'^conversation_form_view/(?P<requestid>\d+)$',views.Conversation_Form, name = 'conversationform'),
 	url(r'^check_status_view/',views.Check_Status_View, name = 'checkstatus'),
 	url(r'^thankyou_view/(?P<requestid>\d+)$',views.Thank_You_Page_View, name = 'ty'),
 

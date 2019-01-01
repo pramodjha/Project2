@@ -16,8 +16,10 @@
 
 {% block content %}
 <div class="col-sm-12 col-md-12 col-lg-12">
+{% if can_add.0 == True %}
 <div class="col-sm-12 col-md-12 col-lg-6 "><a href="{% url 'rawdteamdaddform' %}" id="rawteamadd" name="Add" class="glyphicon glyphicon-plus fontstyle12"></a></div>
-
+{% else %}
+{% endif %}
 </div>
 
 <div class="col-sm-12 col-md-12 col-lg-12">
@@ -25,7 +27,11 @@
     <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">Management</div>
     <div class="col-sm-12 col-md-12 col-lg-12 card1">
     {%for data in model5 %}
+    {% if can_edit.0 == True %}
     <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" >{{data.raw_member }}</a></li>
+    {% else %}
+    <li>   <a>{{data.raw_member }}</a></li>
+    {% endif %}
    {% endfor %}
   </div>
 </div>
@@ -36,7 +42,11 @@
     <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">Funtastic 7</div>
     <div class="col-sm-12 col-md-12 col-lg-12 card1">
     {%for data in model1 %}
+    {% if can_edit.0 == True %}
     <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" >{{data.raw_member }}</a></li>
+    {% else %}
+    <li>   <a>{{data.raw_member }}</a></li>
+    {% endif %}
    {% endfor %}
   </div>
 </div>
@@ -45,7 +55,11 @@
   <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">MH-007</div>
   <div class="col-sm-12 col-md-12 col-lg-12 card1">
   {%for data in model2 %}
+  {% if can_edit.0 == True %}
   <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" class="fontstyle1">{{data.raw_member }}</a></li>
+  {% else %}
+  <li>   <a>{{data.raw_member }}</a></li>
+  {% endif %}
  {% endfor %}
 </div>
 </div>
@@ -53,9 +67,12 @@
 <div class="col-sm-3 col-md-3 col-lg-2">
   <div class="col-sm-12 col-md-12 col-lg-12 card  fontstyle4">Fun Squard</div>
   <div class="col-sm-12 col-md-12 col-lg-12 card1">
-
   {%for data in model3 %}
+  {% if can_edit.0 == True %}
   <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" >{{data.raw_member }}</a></li>
+  {% else %}
+  <li>   <a>{{data.raw_member }}</a></li>
+  {% endif %}
  {% endfor %}
 </div>
 </div>
@@ -63,9 +80,12 @@
 <div class="col-sm-3 col-md-3 col-lg-2 ">
   <div class="col-sm-12 col-md-12 col-lg-12 card fontstyle4">ISI</div>
   <div class="col-sm-12 col-md-12 col-lg-12 card1">
-
   {%for data in model4 %}
+  {% if can_edit.0 == True %}
   <li>   <a href="{% url 'rawdteameditform' data.raw_team_member_id %}" >{{data.raw_member }}</a></li>
+  {% else %}
+  <li>   <a>{{data.raw_member }}</a></li>
+  {% endif %}
  {% endfor %}
 </div>
 </div>

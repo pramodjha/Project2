@@ -14,39 +14,36 @@
 {% block navblockfilterform %}
 {% endblock %}
 
-
 {% block content %}
-<div class="col-sm-12 col-md-12 col-lg-12">
-<div class="col-sm-6 col-md-6 col-lg-6">
-{% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" or group_name == "mi_team" %}
-<div class="header fontstyle4 fontsize20"><a href="{% url 'whatwedoadd' %}" class="glyphicon glyphicon-plus fontstyle12"></a><h> Skill we have</h></div>
-{% else %}
-<div class="header  fontstyle4 fontsize20"><h> Skill we have</h></div>
-{% endif %}
-{%for data in model %}
-<div class="col-sm-4 col-md-4 col-lg-4">
-  <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content"> {{ data.data}} </div>
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="col-sm-6 col-md-6 col-lg-6">
+    {% if can_edit.0 == True %}
+    <div class="header fontstyle4 fontsize20"><a href="{% url 'whatwedoadd' %}" class="glyphicon glyphicon-plus fontstyle12"></a><h> Skill we have</h></div>
+    {% else %}
+    <div class="header  fontstyle4 fontsize20"><h> Skill we have</h></div>
+    {% endif %}
+    {%for data in model %}
+    <div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content"> {{ data.data}} </div>
+    </div>
+    {% endfor %}
+    </div>
 
-</div>
-{% endfor %}
+    <div class="col-sm-6 col-md-6 col-lg-6">
+    {% if can_edit.0 == True %}
+    <div class="header fontstyle4 fontsize20"><a href="{% url 'whatwedoadd' %}" class="glyphicon glyphicon-plus fontstyle12"></a><h> Geography we Cover</h></div>
+    {% else %}
+    <div class="header fontstyle4 fontsize20"><h> Geography we Cover</h></div>
+    {% endif %}
 
-</div>
-<div class="col-sm-6 col-md-6 col-lg-6">
-{% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" or group_name == "mi_team" %}
-<div class="header fontstyle4 fontsize20"><a href="{% url 'whatwedoadd' %}" class="glyphicon glyphicon-plus fontstyle12"></a><h> Geography we Cover</h></div>
-{% else %}
-<div class="header fontstyle4 fontsize20"><h> Geography we Cover</h></div>
+    {%for data1 in model1 %}
+    <div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content"> {{ data1.data}} </div>
+    </div>
+    {% endfor %}
 
-{% endif %}
-
-{%for data1 in model1 %}
-<div class="col-sm-4 col-md-4 col-lg-4">
-  <div class="fontstyle1 fontsize15 fontfamilycambria widthsize25per content"> {{ data1.data}} </div>
-</div>
-{% endfor %}
-
-</div>
-</div>
+    </div>
+    </div>
 {% endblock %}
 
 {% block footer %}

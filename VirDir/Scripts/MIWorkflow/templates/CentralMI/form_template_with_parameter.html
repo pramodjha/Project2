@@ -1,5 +1,6 @@
 {% extends "basetemplate.html" %}
 {% load bootstrap3 %}
+{% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load staticfiles %}
@@ -11,8 +12,10 @@
 {% block modelcontent %}
 <!-- Button trigger modal -->
 <button type="button" id="modal" class="btn btn-info btn-lg hidden" data-toggle="modal" data-target="#exampleModalLong" data-backdrop="static" data-keyboard="false">Open Modal</button>
+<form class="form" method="POST" action="" class='form-inline' enctype="multipart/form-data" >
+  {% csrf_token %}
 <!-- Modal -->
-<div class="btn btn-info btn-lg hidden" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-keyboard="false">
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-keyboard="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -53,8 +56,14 @@
     </div>
   </div>
 </div>
+</form>
 <script> $("#modal").trigger('click'); </script>
-
+<script>
+$('#modal').submit( function(event) {
+    // disable to avoid double submission
+    $('#submit_button').attr('disabled', true);
+});
+</script>
 {% endblock %}
 {% block footer %}
 {% include "userprofilefootertest1.html" %}

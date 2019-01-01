@@ -15,23 +15,21 @@
 {% endblock %}
 
 {% block content %}
+{% if can_add.0 == True %}
 <div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'commsuggadd' %}" id="comments_suggestion" name="Add" class="glyphicon glyphicon-plus fontstyle12"></a></div>
-
+{% else %}
+{% endif %}
 {% for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4 ">
 <div class="">
-    <!-- Avatar -->
     <div class="card fontstyle4 fontsize18">
-        <!-- Name -->
         {{ data.suggestiondatetime}} |  | {{ data.suggestedby}}
     </div>
-        <!-- Quotation -->
     <div class="card1 ">
       <div class="fontstyle4 fontsize18"> {{ data.subject}} </div>
       <div class="fontstyle1 fontsize15"> {{ data.suggestion}}</div>
     </div>
 </div>
-<!-- Card -->
 </div>
 
 {% endfor %}

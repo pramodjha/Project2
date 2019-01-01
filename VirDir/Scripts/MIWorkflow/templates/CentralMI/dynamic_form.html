@@ -1,5 +1,6 @@
 {% load static %}
 <form class="form" method="POST" action="" class='form-inline' enctype="multipart/form-data" >
+  {{template_type}}
   {% csrf_token %}
   {% if template_type == 'template_with_parameter' %}
   {% include 'CentralMI/form_template_with_parameter.html' with form=form %}

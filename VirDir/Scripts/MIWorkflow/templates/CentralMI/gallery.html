@@ -15,15 +15,21 @@
 {% endblock %}
 
 {% block content %}
+{% if can_add.0 == True %}
 <div class="col-sm-12 col-md-12 col-lg-12 "><a href="{% url 'galleryadd' %}" id="gallery" name="Add" class="glyphicon glyphicon-plus fontstyle12"></a></div>
-
+{% else %}
+{% endif %}
 {% for data in model %}
 <div class="col-sm-4 col-md-4 col-lg-4 ">
 <div class="">
     <!-- Avatar -->
     <div class="card fontstyle4 fontsize18">
         <!-- Name -->
-        {{ data.date_time}} | {{ data.uploadedby}} | <a href="{% url 'galleryedit' data.imgid %}" id="galleryedit" name="edit" class="glyphicon glyphicon-pencil fontstyle12"></a>
+        {{ data.date_time}} | {{ data.uploadedby}} |
+        {% if can_edit.0 == True %}
+        <a href="{% url 'galleryedit' data.imgid %}" id="galleryedit" name="edit" class="glyphicon glyphicon-pencil fontstyle12"></a>
+        {% else %}
+        {% endif %}
     </div>
         <!-- Quotation -->
     <div class="card1 ">

@@ -34,7 +34,12 @@
     <table  class="table" id="example" style="width:100%">
       <thead class="">
       <tr class="fontstyle4 fontsize18 fontfamilycambria  backgroundcolor1 " >
-        <td >ID<a href="{% url 'leaverecordform' %}" class="glyphicon glyphicon-plus fontstyle12"></a></td>
+        <td >ID
+          {% if can_edit.0 == True %}
+          <a href="{% url 'leaverecordform' %}" class="glyphicon glyphicon-plus fontstyle12"></a>
+          {% else %}
+          {% endif %}
+        </td>
         <td >Date Time</td>
         <td >Leave Date</td>
         <td >Leave Taken By</td>

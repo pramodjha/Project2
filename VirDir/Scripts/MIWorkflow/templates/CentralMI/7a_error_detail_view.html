@@ -26,7 +26,10 @@
         <td >Reported To</td>
         <td >Error Type</td>
         <td >Error Description</td>
+        {% if can_edit.0 == True %}
         <td >Edit</td>
+        {% else %}
+        {% endif %}
         </tr>
       </thead>
       <tbody class="">
@@ -39,7 +42,10 @@
         <td>{{data.reportedtoid }}</td>
         <td>{{data.errortypeid }}</td>
         <td>{{data.description }}</td>
+        {% if can_edit.0 == True %}
         <td> <a href="{% url 'editerrorlog' data.error_id %}" class="glyphicon glyphicon-pencil fontstyle12"></a> </td>
+        {% else %}
+        {% endif %}
         {% endfor %}
       </tr></br>
     </tbody>

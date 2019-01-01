@@ -15,16 +15,15 @@
 {% endblock %}
 
 {% block content %}
-{%for data in model %}
-
-<div class="process_container">
+  {%for data in model %}
+  <div class="process_container">
   <img src="{{ MEDIA_URL}}/{{data.processimg}}" height='450px' width='100%' alt="Avatar" />
   <div class="text-block">
   <h4>{{data.teamdetail}}</h4>
   <p>{{data.description}}</p>
   </div>
-</div>
-{% endfor %}
+  </div>
+  {% endfor %}
 {% endblock %}
 
 {% block footer %}

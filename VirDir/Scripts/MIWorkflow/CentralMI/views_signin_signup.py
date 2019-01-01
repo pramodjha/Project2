@@ -54,10 +54,9 @@ def Sign_Up_View_Version1(request):
 def Sign_Up_View_Version2(request):
     activetab = 'signup'
     system_username = request.META['REMOTE_USER']
-    system_username = system_username.replace('$','')
-
-    #system_username = system_username.lower()
-    #system_username = system_username[4:]
+    system_username = system_username.replace('$',"")
+    system_username = system_username.replace("INT\\", "")
+    system_username = system_username.replace(".sa", "")
     form = UserRegistrationForm(initial={'username':system_username})
     Authusercount = User.objects.filter(username__in=[system_username]).count()
     if Authusercount >= 1:
@@ -102,8 +101,9 @@ def Sign_In_View_Version1(request):
         activetab = 'signin'
     tab = request.session.get('tabname')
     system_username = getpass.getuser()
-    system_username = system_username.replace('$','')
-    #system_username = system_username.replace(" ", "")
+    system_username = system_username.replace('$',"")
+    system_username = system_username.replace("INT\\", "")
+    system_username = system_username.replace(".sa", "")
     form = UsersigninForm(initial={'username':system_username})
     if request.method == 'POST':
         form =  UsersigninForm(request.POST)
@@ -124,8 +124,10 @@ def Sign_In_View_Version2(request):
     except:
         activetab = 'signin'
     tab = request.session.get('tabname')
-    system_username = request.META['REMOTE_USER']
-    system_username = system_username.replace('$','')
+    system_username = request.META['HTTP_REMOTE_USER']
+    system_username = system_username.replace('$',"")
+    system_username = system_username.replace("INT\\", "")
+    system_username = system_username.replace(".sa", "")
     form = UsersigninForm(initial={'username':system_username})
     if request.method == 'POST':
         form =  UsersigninForm(request.POST)
@@ -168,9 +170,9 @@ def Sign_In_View_Version3(request):
     except:
         activetab = 'signin'
     tab = request.session.get('tabname')
-    system_username = getpass.getuser()
-    system_username = system_username.replace(' ','')
-    system_username = system_username.replace('$','')
+    system_username = system_username.replace('$',"")
+    system_username = system_username.replace("INT\\", "")
+    system_username = system_username.replace(".sa", "")
     if (User.objects.filter(username=system_username).exists()):
         user = User.objects.get(username = system_username)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
@@ -178,7 +180,6 @@ def Sign_In_View_Version3(request):
         return HttpResponseRedirect(reverse('home'))
     context = {'form' : form,'activetab':activetab,'system_username':system_username}
     return render(request, 'CentralMI/15a_ErrorPage.html', context)
-
 
 def Sign_In_View_Version4(request):
     try:

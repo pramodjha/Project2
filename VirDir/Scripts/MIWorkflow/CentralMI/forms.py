@@ -5,9 +5,8 @@ from django.contrib.auth import authenticate, login
 from datetime import datetime, timedelta
 
 class ViewListForm():
-    navbar_footer_name = forms.ModelChoiceField(queryset=TblNavbarFooterMaster.objects.all(),required=False)
     class Meta():
-        model = TblNavbarFooterMaster
+        model = TblTeamMetrics
         fields = '__all__'
 
 
@@ -536,6 +535,11 @@ class TblTeamMetricsForm(forms.ModelForm):
     class Meta():
         model = TblTeamMetrics
         fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(TblTeamMetricsForm, self).__init__(*args, **kwargs)
+        self.fields['date_time'].widget = forms.HiddenInput()
+        self.fields['teamid'].widget = forms.HiddenInput()
+        self.fields['requesttypeid'].widget = forms.HiddenInput()
 
 class TblRawScoreForm(forms.ModelForm):
     class Meta():
@@ -589,10 +593,19 @@ class IssueActionForm(forms.ModelForm):
         model = TblIssueAction
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(IssueActionForm, self).__init__(*args, **kwargs)
+        self.fields['date_time'].widget = forms.HiddenInput()
+        self.fields['updatedbyid'].widget  = forms.HiddenInput()
+    
 class ShiftupdateForm(forms.ModelForm):
     class Meta():
         model = TblShiftUpdate
         fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(ShiftupdateForm, self).__init__(*args, **kwargs)
+        self.fields['date_time'].widget = forms.HiddenInput()
+        self.fields['recordedbyid'].widget = forms.HiddenInput()
 
 class GalleryForm(forms.ModelForm):
     class Meta():

@@ -16,9 +16,8 @@
 
 {% block content %}
 <div class="col-sm-12 col-md-12 col-lg-12 about_conai">
-
 {%for data in model %}
-<div class="col-xm-6 col-sm-4 col-md-3 col-lg-2 about_container">
+ <div class="col-xm-6 col-sm-4 col-md-3 col-lg-2 about_container">
     <div>
     {% if data.avatar == None or data.avatar == ""  %}
     <img class="image1" src="{{ MEDIA_URL}}/about_team/default.gif" height='100%' width='100%'alt="Avatar" />
@@ -32,13 +31,7 @@
   </div>
 {% endfor %}
 </div>
-</body>
-</html>
-
-
-
 {% endblock %}
-
 {% block footer %}
 {% include "userprofilefootertest1.html" %}
 {% endblock %}

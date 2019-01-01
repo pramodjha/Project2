@@ -115,27 +115,28 @@
       <td >Request Owner</td>
       <td >Request Description</td>
       <td >Details</td>
-
       {% endif %}
     </tr>
-
     </thead>
     <tbody class="">
   {%for data in model %}
   <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
-
-  {% if activetab1 == "allrequest" %}
+    {% if activetab1 == "allrequest" %}
+      {% if can_edit.0 == True %}
       <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid %}">{{data.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
       <td>{{data.requestraiseddate }}</td>
       <td>{{data.requesttypeid }}</td>
       <td>{{data.priorityid }}</td>
       <td>{{data.userid }}</td>
       <td>{{data.requestdescription }}</td>
       {% elif activetab1 == "unapproved" %}
-      {% if group_name == 'authoriser' %}
+      {% if can_edit.0 == True %}
       <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'authform' data.requestid %}">{{data.requestid }} </a> </td>
       {% else %}
-      <td ><a>{{data.requestid }} </a> </td>
+      <td>{{data.requestid }}</td>
       {% endif %}
       <td>{{data.requestraiseddate }}</td>
       <td>{{data.requesttypeid }}</td>
@@ -143,9 +144,12 @@
       <td>{{data.userid }}</td>
       <td>{{data.requestdescription }}</td>
       <td ><a href="{% url 'ty' data.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
       {% elif activetab1 == "approved" %}
+      {% if can_edit.0 == True %}
       <td><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'assignedform' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
       <td>{{data.requestid.requestraiseddate }}</td>
       <td>{{data.requestid.requesttypeid }}</td>
       <td>{{data.requestid.priorityid }}</td>
@@ -153,9 +157,12 @@
       <td>{{data.authoriseddate }}</td>
       <td>{{data.authoriserid.username }}</td>
       <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
       {% elif activetab1 == "assigned" %}
+      {% if can_edit.0 == True %}
       <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'overviewform' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
       <td>{{data.requestid.requestraiseddate }}</td>
       <td>{{data.requestid.requesttypeid }}</td>
       <td>{{data.requestid.priorityid }}</td>
@@ -164,9 +171,12 @@
       <td>{{data.assignedbyid }}</td>
       <td>{{data.assignedtoid }}</td>
       <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
       {% elif activetab1 == "overview" %}
+      {% if can_edit.0 == True %}
       <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'estimationform' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
       <td>{{data.requestid.requestraiseddate }}</td>
       <td>{{data.requestid.requesttypeid }}</td>
       <td>{{data.requestid.priorityid }}</td>
@@ -175,9 +185,12 @@
       <td>{{data.providedbyid }}</td>
       <td>{{data.giventoid }}</td>
       <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
-    {% elif activetab1 == "estimate" %}
+      {% elif activetab1 == "estimate" %}
+      {% if can_edit.0 == True %}
       <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 " href="{% url 'estimationformar' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
       <td>{{data.requestid.requestraiseddate }}</td>
       <td>{{data.requestid.requesttypeid }}</td>
       <td>{{data.requestid.priorityid }}</td>
@@ -187,10 +200,12 @@
       <td>{{data.estimatedbyid }}</td>
       <td>{{data.estimateddays }}</td>
       <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
-
       {% elif activetab1 == "wip" %}
+      {% if can_edit.0 == True %}
       <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'wipform' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
       <td>{{data.requestid.requestraiseddate }}</td>
       <td>{{data.requestid.requesttypeid }}</td>
       <td>{{data.requestid.priorityid }}</td>
@@ -198,39 +213,46 @@
       <td>{{data.requestid.requestdescription }}</td>
       <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
       {% elif activetab1 == "uat" %}
+      {% if can_edit.0 == True %}
       <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'uatform' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
-      <td>{{data.requestid.requestraiseddate }}</td>
-      <td>{{data.requestid.requesttypeid }}</td>
-      <td>{{data.requestid.priorityid }}</td>
-      <td>{{data.requestid.userid }}</td>
-      <td>{{data.requestid.requestdescription }}</td>
-      <td>{{data.testedbyid }}</td>
-      <td>{{data.uat_statusid }}</td>
-      <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
-      {% elif activetab1 == "completed" %}
-      <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
-      <td>{{data.requestid.requestraiseddate }}</td>
-      <td>{{data.requestid.requesttypeid }}</td>
-      <td>{{data.requestid.priorityid }}</td>
-      <td>{{data.requestid.userid }}</td>
-      <td>{{data.requestid.requestdescription }}</td>
-      <td>{{data.testedbyid }}</td>
-      <td>{{data.uat_statusid }}</td>
-
-      <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
-      {% elif activetab1 == "rejected" %}
-      <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
-      <td>{{data.requestid.requestraiseddate }}</td>
-      <td>{{data.requestid.requesttypeid }}</td>
-      <td>{{data.requestid.priorityid }}</td>
-      <td>{{data.requestid.userid }}</td>
-      <td>{{data.requestid.requestdescription }}</td>
-      <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
-
+      {% else %}
+      <td>{{data.requestid }}</td>
       {% endif %}
-
+      <td>{{data.requestid.requestraiseddate }}</td>
+      <td>{{data.requestid.requesttypeid }}</td>
+      <td>{{data.requestid.priorityid }}</td>
+      <td>{{data.requestid.userid }}</td>
+      <td>{{data.requestid.requestdescription }}</td>
+      <td>{{data.testedbyid }}</td>
+      <td>{{data.uat_statusid }}</td>
+      <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
+      {% elif activetab1 == "completed" %}
+      {% if can_edit.0 == True %}
+      <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
+      <td>{{data.requestid.requestraiseddate }}</td>
+      <td>{{data.requestid.requesttypeid }}</td>
+      <td>{{data.requestid.priorityid }}</td>
+      <td>{{data.requestid.userid }}</td>
+      <td>{{data.requestid.requestdescription }}</td>
+      <td>{{data.testedbyid }}</td>
+      <td>{{data.uat_statusid }}</td>
+      <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
+      {% elif activetab1 == "rejected" %}
+      {% if can_edit.0 == True %}
+      <td ><a class="fontstyle12 fontsize15 fontfamilycambria widthsize25per backgroundcolor2" href="{% url 'ty' data.requestid.requestid %}">{{data.requestid.requestid }} </a> </td>
+      {% else %}
+      <td>{{data.requestid }}</td>
+      {% endif %}
+      <td>{{data.requestid.requestraiseddate }}</td>
+      <td>{{data.requestid.requesttypeid }}</td>
+      <td>{{data.requestid.priorityid }}</td>
+      <td>{{data.requestid.userid }}</td>
+      <td>{{data.requestid.requestdescription }}</td>
+      <td ><a href="{% url 'ty' data.requestid.requestid %}" class="glyphicon glyphicon-eye-open fontstyle12"></a></td>
+      {% endif %}
       {% endfor %}
     </tr></br>
   </tbody>

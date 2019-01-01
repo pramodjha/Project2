@@ -177,13 +177,20 @@ table td {
 
      <td class="hidden">Start-Time</td>
      <td class="hidden">Stop-Time</td>
+     {% if can_edit.0 == True or can_add.0 == True   %}
      <td>OT (Add/Edit)</td>
+     {% else %}
+     {% endif %}
      </tr>
    </thead>
    <tbody class="">
    {%for data in model %}
    <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2">
+     {% if can_edit.0 == True %}
      <td ><a  href="{% url 'edittracker' data.timetrackerid %}" class="fontstyle12">{{data.timetrackerid }} </a> </td>
+     {% else %}
+     <a  class="fontstyle12">{{data.timetrackerid }} </a>
+     {% endif %}
      <td class="hidden">{{data.registerdatetime    }}</td>
      <td class="hidden">{{data.trackingdatetime }}</td>
      <td class="hidden">{{data.memberid }}</td>
@@ -191,7 +198,6 @@ table td {
      <td>{{data.categorysid }}</td>
      <td>{{data.subcategoryid  }}</td>
      <td>{{data.subcategoryid.core_noncore  }}</td>
-     <!--       <td>{{form.requestdetail }}</td> -->
      <td>{{data.activityid }}</td>
      <td>{{data.task  }}</td>
      <td class="hidden">{{data.description_text   }}</td>
@@ -199,7 +205,10 @@ table td {
      <td>{{data.otid.statusid }}</td>
      <td class="hidden">{{data.startdatetime  }}</td>
      <td class="hidden">{{data.stopdatetime   }}</td>
+     {% if can_edit.0 == True or can_add.0 == True   %}
      <td> <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-pencil fontstyle12"></a> | <a href="{% url 'otform' data.timetrackerid %}" class="glyphicon glyphicon-plus fontstyle12"></a> </td>
+     {% else %}
+     {% endif %}
      {% endfor %}
    </tr></br>
    </tbody>

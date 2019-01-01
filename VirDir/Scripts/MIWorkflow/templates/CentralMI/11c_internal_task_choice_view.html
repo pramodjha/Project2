@@ -33,19 +33,30 @@
   <table  class="table " id="example" style="width:100%">
     <thead class="thead tableheaderformat">
     <tr class="" >
-      <td >ID <a href="{% url 'addinternaltaskoption' taskid  %}" class="glyphicon glyphicon-plus fontstyle12"></td>
+
+      <td >ID
+        {% if can_add.0 == True %}
+         <a href="{% url 'addinternaltaskoption' taskid  %}" class="glyphicon glyphicon-plus fontstyle12"></td>
+        {% else %}
+        {% endif %}
       <td> Internal Task </td>
       <td >Choice</td>
+      {% if can_edit.0 == True %}
       <td >Edit </td>
+      {% else %}
+      {% endif %}
       </tr>
     </thead>
     <tbody class="tbody">
   {%for data in model %}
     <tr class="tablebodyformat">
       <td >{{data.internaltaskchoiceid }} </td>
-      <td >{{data.internaltask }}</td>
+      <td >{{data.internaltaskid }}</td>
       <td >{{data.internaltaskchoice }}</td>
+      {% if can_edit.0 == True %}
       <td> <a href="{% url 'editinternaltaskoption' data.internaltaskchoiceid %}" class="glyphicon glyphicon-pencil"></a></td>
+      {% else %}
+      {% endif %}
       {% endfor %}
       </tr></br>
 

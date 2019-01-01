@@ -31,7 +31,7 @@
       <tbody class="">
     {%for data in model %}
       <tr class="fontstyle1 fontsize15 fontfamilycambria widthsize25per backgroundcolor2 ">
-        {% if group_name == "manager" or group_name == "team_leader" or group_name == "technical_leader" %}
+        {% if can_edit.0 == True %}
         <td > <a href="{% url 'editot' data.ot_id %}" class="fontstyle12">{{data.ot_id }}</a> </td>
         {% else %}
         <td > {{data.ot_id }}</td>

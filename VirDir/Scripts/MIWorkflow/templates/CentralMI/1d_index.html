@@ -162,8 +162,13 @@
     <tbody class="">
   {%for data in model_team_metrics %}
     <tr class="">
-    <td> <a href="{% url 'editmetrics' data.metrics_id %}" class="glyphicon glyphicon-pencil fontstyle12"></a> {{data.teamdetail}}</td>
-    <td>{{data.requesttype }}</td>
+    {% if can_edit.0 == True %}
+    <td> <a href="{% url 'editmetrics' data.metrics_id %}"  class="fontstyle4 fontsize15"> {{data.teamid}}</a></td>
+    {% else %}
+    <td> {{data.teamid}}</td>
+    {% endif %}
+
+    <td>{{data.requesttypeid }}</td>
     <td>{{data.total }}</td>
     <td>{{data.wip }}</td>
     <td>{{data.uat }}</td>
@@ -179,27 +184,42 @@
 
 <div class="col-sm-6 col-md-6 col-lg-6 fontsize15 middle">
   <div class="  col-sm-12 col-md-12 col-lg-12 box fontstyle4">
+    {% if can_add.0 == True %}
     <div class=" col-sm-12 col-md-12 col-lg-5 ">Date Time <a href="{% url 'updateadd' %}" class="glyphicon glyphicon-plus"></a></div>
+    {% else %}
+    <div class=" col-sm-12 col-md-12 col-lg-5 ">Date Time</div>
+    {% endif %}
     <div class=" col-sm-12 col-md-12 col-lg-7 ">Updates</div>
-</div>
+  </div>
     {%for data in model1 %}
-    <div class="  col-sm-12 col-md-12 col-lg-12">
-      <div class="  col-sm-12 col-md-12 col-lg-5"><a href="{% url 'updateedit' data.updateid %}" class="glyphicon glyphicon-pencil fontstyle12 "></a>{{data.date_time }}</div>
-      <div class="  col-sm-12 col-md-12 col-lg-7">{{data.updateinbrief }}</div>
-    </div>
-    {% endfor %}
-
+      <div class="  col-sm-12 col-md-12 col-lg-12">
+      {% if can_edit.0 == True %}
+      <div class="  col-sm-12 col-md-12 col-lg-5"><a href="{% url 'updateedit' data.updateid %}"  class="fontstyle4 fontsize15">{{data.date_time }}</a></div>
+      {% else %}
+      <div class="  col-sm-12 col-md-12 col-lg-5">{{data.date_time}}</div>
+      {% endif %}
+      <div class="  col-sm-12 col-md-12 col-lg-7">{{data.updateinbrief}}</div>
+      </div>
+      {% endfor %}
   </div>
 
   <div class="col-sm-6 col-md-6 col-lg-6 fontsize15 middle">
     <div class="  col-sm-12 col-md-12 col-lg-12 box fontstyle4">
+      {% if can_add.0 == True %}
       <div class=" col-sm-12 col-md-12 col-lg-4 ">Issue <a href="{% url 'issueactionadd' %}" class="glyphicon glyphicon-plus"></a></div>
+      {% else %}
+      <div class=" col-sm-12 col-md-12 col-lg-4 ">Issue </div>
+      {% endif %}
       <div class=" col-sm-12 col-md-12 col-lg-4 ">Action</div>
       <div class=" col-sm-12 col-md-12 col-lg-4 ">TargeDate</div>
   </div>
       {%for data in model2 %}
       <div class="  col-sm-12 col-md-12 col-lg-12">
-        <div class="  col-sm-12 col-md-12 col-lg-4"><a href="{% url 'issueactionedit' data.issue_action_id %}" class="glyphicon glyphicon-pencil fontstyle12"></a> {{data.issue}}</div>
+        {% if can_edit.0 == True %}
+        <div class="  col-sm-12 col-md-12 col-lg-4"><a href="{% url 'issueactionedit' data.issue_action_id %}"  class="fontstyle4 fontsize15">{{data.issue}}</a> </div>
+        {% else %}
+        <div class="  col-sm-12 col-md-12 col-lg-4">{{data.issue}}</div>
+        {% endif %}
         <div class="  col-sm-12 col-md-12 col-lg-4">{{data.action_taken }}</div>
         <div class="  col-sm-12 col-md-12 col-lg-4">{{data.targetdate }}</div>
       </div>
