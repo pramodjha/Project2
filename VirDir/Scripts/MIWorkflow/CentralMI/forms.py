@@ -11,12 +11,14 @@ class ViewListForm():
 
 
 class UserRegistrationForm(forms.Form):
-    username = forms.CharField(required = True, min_length=6,label = 'Username', max_length = 100, widget=forms.TextInput(attrs={'readonly':'readonly'}) )
+    username = forms.CharField(required = True, min_length=6,label = 'Username', max_length = 100 )
+    employeeid = forms.IntegerField(required=True)
     email = forms.EmailField(required = True, label = 'Email', max_length = 100, widget=forms.EmailInput(attrs={'placeholder': 'email@willistowerswatson.com'}))
-    password = forms.CharField(required = True, label = 'Password', max_length = 100, widget = forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    passwordagain = forms.CharField(required = True, label = 'Password1', max_length = 100, widget = forms.PasswordInput(attrs={'placeholder': 'Password (Again)'}))
     firstname = forms.CharField(required = True, label = 'firstname', max_length = 100, widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
     lastname = forms.CharField(required = True, label = 'lastname', max_length = 100, widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
+    designation = forms.ModelChoiceField(queryset=TblDesignationMaster.objects.all())
+    password = forms.CharField(required = True, label = 'Password', max_length = 100, widget = forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    passwordagain = forms.CharField(required = True, label = 'Password1', max_length = 100, widget = forms.PasswordInput(attrs={'placeholder': 'Password (Again)'}))
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
@@ -597,7 +599,7 @@ class IssueActionForm(forms.ModelForm):
         super(IssueActionForm, self).__init__(*args, **kwargs)
         self.fields['date_time'].widget = forms.HiddenInput()
         self.fields['updatedbyid'].widget  = forms.HiddenInput()
-    
+
 class ShiftupdateForm(forms.ModelForm):
     class Meta():
         model = TblShiftUpdate

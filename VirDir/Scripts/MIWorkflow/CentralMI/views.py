@@ -292,6 +292,7 @@ def Index(request):
             try:
                 bu_id = TblMember.objects.filter(userid__username__in=[username]).values_list('teamid__buid',flat=True)
                 bu_id = bu_id[0]
+                print(bu_id)
                 request.session['sessison_bu'] = str(bu_id)
                 buid = request.session.get('sessison_bu')
             except:
@@ -300,6 +301,7 @@ def Index(request):
             try:
                 teamdetail_id = TblMember.objects.filter(userid__username__in=[username]).values_list('teamid',flat=True)
                 teamdetail_id = teamdetail_id[0]
+                print(teamdetail_id)
                 request.session['sessison_team'] = str(teamdetail_id)
                 teamid = request.session.get('sessison_team')
             except:
@@ -708,7 +710,8 @@ def Assigned_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filter_dict = create_dict_for_filter(request,field_name_list = ['assignedtoid','assignedtoid__teamid'],value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+    filter_dict = create_dict_for_filter(request,field_name_list = ['assignedtoid','assignedtoid__teamid','teamid__buid'],value_list = [memberid,teamid,buid])
     overviewed = list(TblOverviewdetail.objects.all().values_list('requestid', flat=True))
     data = TblAssigneddetail.objects.select_related('requestid').exclude(requestid__in=overviewed).filter(**filter_dict)
     context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'can_edit':can_edit, 'can_view':can_view, 'can_delete':can_delete, 'can_add':can_add}
@@ -722,7 +725,8 @@ def Overview_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filter_dict = create_dict_for_filter(request,field_name_list = ['giventoid','giventoid__teamid'],value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+    filter_dict = create_dict_for_filter(request,field_name_list = ['giventoid','giventoid__teamid','teamid__buid'],value_list = [memberid,teamid,buid])
     Estimated = list(TblEstimationdetail.objects.all().values_list('requestid', flat=True))
     data = TblOverviewdetail.objects.select_related('requestid').exclude(requestid__in=Estimated).filter(**filter_dict)
     context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'can_edit':can_edit, 'can_view':can_view, 'can_delete':can_delete, 'can_add':can_add}
@@ -735,7 +739,9 @@ def Estimate_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid'],value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+
+    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid','teamid__buid'],value_list = [memberid,teamid,buid])
     Accepted = list(TblAcceptrejectdetail.objects.all().values_list('requestid', flat=True))
     data = TblEstimationdetail.objects.select_related('requestid').exclude(requestid__in=Accepted).filter(**filter_dict)
     context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'can_edit':can_edit, 'can_view':can_view, 'can_delete':can_delete, 'can_add':can_add}
@@ -749,7 +755,8 @@ def Wip_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid'],value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid','teamid__buid'],value_list = [memberid,teamid,buid])
     requestid = list(TblEstimationdetail.objects.filter(**filter_dict).values_list('requestid',flat=True))
     Accepted = list(TblCompleteddetail.objects.all().values_list('requestid', flat=True))
     UAT = list(TblUatDetail.objects.filter(Q(uat_statusid__isnull=True) | Q(uat_statusid__in=[1,None])).values_list('requestid', flat=True))
@@ -764,7 +771,9 @@ def UAT_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid'],value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+
+    filter_dict = create_dict_for_filter(request,field_name_list = ['estimatedbyid','estimatedbyid__teamid','teamid__buid'],value_list = [memberid,teamid,buid])
     requestid = TblEstimationdetail.objects.filter(**filter_dict).values_list('requestid',flat=True)
     print(requestid)
     Accepted = list(TblCompleteddetail.objects.all().values_list('requestid', flat=True))
@@ -818,7 +827,9 @@ def Errorlog_Detail_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filterdict = create_dict_for_filter(request,field_name_list = ['reportedtoid','reportedtoid__teamid'], value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+
+    filterdict = create_dict_for_filter(request,field_name_list = ['reportedtoid','reportedtoid__teamid','teamid__buid'], value_list = [memberid,teamid,buid])
     data = TblErrorlog.objects.filter(**(filterdict))
     context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'can_edit':can_edit, 'can_view':can_view, 'can_delete':can_delete, 'can_add':can_add}
     return render(request, template,context)
@@ -851,7 +862,8 @@ def Ot_Detail_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filterdict = create_dict_for_filter(request,field_name_list = ['timetrackerid__memberid','timetrackerid__teamid'], value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+    filterdict = create_dict_for_filter(request,field_name_list = ['timetrackerid__memberid','timetrackerid__teamid','teamid__buid'], value_list = [memberid,teamid,buid])
     data = TblOtDetail.objects.exclude(timetrackerid__valid_invalid__in=[2]).filter(**(filterdict))
     context = {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'can_edit':can_edit, 'can_view':can_view, 'can_delete':can_delete, 'can_add':can_add}
     return render(request, template,context )
@@ -1364,7 +1376,8 @@ def Report_Detail_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filterdict = create_dict_for_filter(request,field_name_list = ['teamname'], value_list = [teamid])
+    buid = request.session.get('sessison_bu')
+    filterdict = create_dict_for_filter(request,field_name_list = ['teamname','teamname__buid'], value_list = [teamid,buid])
     model = TblActivity.objects.filter(**(filterdict))
     if memberid !=None and memberid !='None':
         model = TblActivity.objects.filter(Q(primaryowner__in=memberid)|Q(secondaryowner__in=memberid))
@@ -1430,7 +1443,8 @@ def Feedback_Detail_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filterdict = create_dict_for_filter(request,field_name_list = ['activityid__teamname'], value_list = [teamid])
+    buid = request.session.get('sessison_bu')
+    filterdict = create_dict_for_filter(request,field_name_list = ['activityid__teamname','activityid__teamname__buid'], value_list = [teamid,buid])
     model = TblFeedback.objects.filter(**(filterdict))
     if memberid !=None and memberid !='None':
         model = TblFeedback.objects.filter(Q(activityid__primaryowner__in=memberid)|Q(activityid__secondaryowner__in=memberid))
@@ -1507,7 +1521,8 @@ def Staff_Detail_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filterdict = create_dict_for_filter(request,field_name_list = ['memberid','teamid'], value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+    filterdict = create_dict_for_filter(request,field_name_list = ['memberid','teamid','teamid__buid'], value_list = [memberid,teamid,buid])
     model1 = User.objects.all()
     model = TblMember.objects.filter(**(filterdict))
     data = zip(model1,model)
@@ -1680,7 +1695,8 @@ def Leave_Record_View(request):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
-    filterdict = create_dict_for_filter(request,field_name_list = ['userid','userid__teamid'], value_list = [memberid,teamid])
+    buid = request.session.get('sessison_bu')
+    filterdict = create_dict_for_filter(request,field_name_list = ['userid','userid__teamid','userid__teamid__buid'], value_list = [memberid,teamid,buid])
     model = TblLeaveRecord.objects.filter(**(filterdict))
     model1 = TblPublicHolidaysMaster.objects.all()
     count = model.values('leave_type__leave_type','userid__userid__username').annotate(dcount=Count('leave_type'))

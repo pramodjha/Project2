@@ -655,7 +655,7 @@ class TblLeaveTypeMaster(models.Model):
 class TblMember(models.Model):
     memberid = models.AutoField(primary_key=True)
     userid = models.OneToOneField(User, on_delete=models.CASCADE, db_column='userid')
-    teamid = models.ForeignKey('TblTeamMaster', models.DO_NOTHING, db_column='teamid')
+    teamid = models.ForeignKey('TblTeamMaster', models.DO_NOTHING, db_column='teamid', blank=True, null=True)
     designationid = models.ForeignKey(TblDesignationMaster, models.DO_NOTHING, db_column='designationid', blank=True, null=True)
     employeeid = models.IntegerField(blank=True, null=True)
     dateofjoining = models.DateField(db_column='DateofJoining', blank=True, null=True)  # Field name made lowercase.

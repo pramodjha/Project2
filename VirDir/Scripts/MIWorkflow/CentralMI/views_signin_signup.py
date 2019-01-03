@@ -3,12 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
-
+from .models import TblMember, TblViewTypeMaster
 from .forms import  UserRegistrationForm, UsersigninForm, UserForm, UsersigninasotherForm
 from django.urls import reverse
 import datetime
 import getpass
-
 
 def Sign_Up_View_Version1(request):
     activetab = 'signup'
@@ -16,6 +15,7 @@ def Sign_Up_View_Version1(request):
     system_username = system_username.replace('$','')
     system_username = system_username.replace(" ", "")
     form = UserRegistrationForm(initial={'username':system_username})
+    e  = TblViewTypeMaster.objects.get(view_id=4)
     Authusercount = User.objects.filter(username__in=[system_username]).count()
     if Authusercount >= 1:
         msg = "Username already Exists, you can't register with same username again"
@@ -31,15 +31,18 @@ def Sign_Up_View_Version1(request):
             passwordagain =  userObj['passwordagain']
             firstname =  userObj['firstname']
             lastname =  userObj['lastname']
+            employeeid =  userObj['employeeid']
+            designation =  userObj['designation']
             if password == passwordagain:
-                if not (User.objects.filter(username=username).exists() ):
+                if not (User.objects.filter(username=username).exists()):
                     new_user = User.objects.create_user(username, email, password)
                     new_user.is_active = True
                     new_user.first_name = firstname
                     new_user.last_name = lastname
                     new_user.save()
-                    my_group = Group.objects.get(name='others')
-                    new_user.groups.add(my_group)
+                    member = TblMember.objects.create(userid=new_user, employeeid=employeeid,designationid=designation,viewid=e)
+                #    my_group = Group.objects.get(name='others')
+                #    new_user.groups.add(my_group)
                     try:
                         user = authenticate(username = username, password = password)
                         login(request, user)
@@ -58,6 +61,8 @@ def Sign_Up_View_Version2(request):
     system_username = system_username.replace("INT\\", "")
     system_username = system_username.replace(".sa", "")
     form = UserRegistrationForm(initial={'username':system_username})
+    e  = TblViewTypeMaster.objects.get(view_id=4)
+
     Authusercount = User.objects.filter(username__in=[system_username]).count()
     if Authusercount >= 1:
         msg = "Username already Exists, you can't register with same username again"
@@ -74,6 +79,8 @@ def Sign_Up_View_Version2(request):
             passwordagain =  userObj['passwordagain']
             firstname =  userObj['firstname']
             lastname =  userObj['lastname']
+            employeeid =  userObj['employeeid']
+            designation =  userObj['designation']
             if password == passwordagain:
                 if not (User.objects.filter(username=username).exists() ):
                     new_user = User.objects.create_user(username, email, password)
@@ -81,12 +88,11 @@ def Sign_Up_View_Version2(request):
                     new_user.first_name = firstname
                     new_user.last_name = lastname
                     new_user.save()
-                    my_group = Group.objects.get(name='others')
-                    new_user.groups.add(my_group)
+                    member = TblMember.objects.create(userid=new_user, employeeid=employeeid,designationid=designation,viewid=e)
                     try:
                         user = authenticate(username = username, password = password)
                         login(request, user)
-                        return HttpResponseRedirect(reverse('checkdetail'))
+                        return HttpResponseRedirect(reverse('home'))
                     except:
                         form =  UserRegistrationForm()
                         return render(request,'CentralMI/15a_ErrorPage.html')

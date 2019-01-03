@@ -34,19 +34,28 @@
   <div class="col-sm-12 col-md-12 col-lg-6" id="usercheck"></i></div>
   </div>
   <div class="col-sm-12 col-md-12 col-lg-12">
+  <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Employee ID'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.employeeid  show_label=False placeholder='Enter Employee ID'   %}</span>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'First Name'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.firstname  show_label=False placeholder='Enter Password'   %}</span>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.firstname  show_label=False placeholder='Enter First Name'   %}</span>
   </div>
   <div>
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Last Name'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.lastname  show_label=False placeholder='Enter Password'   %}</span>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.lastname  show_label=False placeholder='Enter Last Name'   %}</span>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Designation'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.designation  show_label=False placeholder='Enter Designation'   %}</span>
   </div>
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Email ID'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.email  show_label=False placeholder='Enter Password'   %}</span>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.email  show_label=False placeholder='Enter Email ID'   %}</span>
   <div class="col-sm-12 col-md-12 col-lg-6" id="emailcheck" ></i></div>
   </div>
+
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Password'  %}</label>
   <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.password  show_label=False placeholder='Enter Password'   %}</span>
@@ -112,6 +121,24 @@
          }
        });
      });
+
+     $("#id_passwordagain").keyup(function () {
+        var url = $("#signupform").attr("data-signup-url");  // get the url of the `load_cities` view
+        var passwordagain = $(this).val();  // get the selected country ID from the HTML input
+        var password = document.getElementById("id_password").value;
+        console.log(passwordagain)
+        console.log(password)
+        $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+          data: {
+            'passwordagain': passwordagain , 'password': password   // add the country id to the GET parameters
+          },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+            $("#passwordcheck").html(data);  // replace the contents of the city input with the data that came from the server
+          }
+        });
+      });
+
 
 </script>
 
