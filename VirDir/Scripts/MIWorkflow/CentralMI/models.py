@@ -243,7 +243,7 @@ class TblActivity(models.Model):
         db_table = 'tbl_activity'
 
     def __str__(self):
-        return str(self.activityid)
+        return str(self.name)
 
 
 class TblActivityCalendar(models.Model):
@@ -425,7 +425,7 @@ class TblDateTypesMaster(models.Model):
         db_table = 'tbl_date_types_master'
 
     def __str__(self):
-        return str(self.date_typesid)
+        return str(self.date_types)
 
 
 class TblDeliveryDaysMaster(models.Model):

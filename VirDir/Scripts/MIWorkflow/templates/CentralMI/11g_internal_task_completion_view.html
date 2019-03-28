@@ -30,7 +30,7 @@
 
 {% block content %}
 <div class="col-sm-12 col-md-12 col-lg-12">
-  <table  class="table " id="example" style="width:100%">
+  <table  class="table " id="example1" style="width:100%">
     <thead class="">
     <tr class="" >
       <td >ID </td>
@@ -61,22 +61,7 @@
 {% endblock %}
 
 {% block javascript %}
-<script>
-$(document).ready(function() {
-    $('#example').DataTable(
-    {
-      fixedHeader: true,
-      scrollY: '90vh',
-      scrollCollapse: true,
-      scrollX: true,
-      columnDefs: [
-            { width: 400, targets: 0 }
-        ],
-
-    });
-
-} );
-</script>
+<script type="text/javascript" src="{% static 'js/myscript.js' %}" charset="UTF-8"></script>
 {% endblock %}
 
 {% block footer %}

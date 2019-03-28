@@ -18,14 +18,14 @@
 
 <div class="col-sm-12 col-md-12 col-lg-12">
 
-  <div class="col-sm-8 col-md-8 col-lg-8">
+  <div class="col-sm-12 col-md-12 col-lg-12">
     <div class="col-sm-12 col-md-12 col-lg-12 box">
       <div class="col-sm-12 col-md-12 col-lg-12">
       <lable>Public Holiday</lable>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-12 box3">
     {%for data in model1 %}
-      <div class="col-sm-12 col-md-12 col-lg-4 ">
+      <div class="col-sm-12 col-md-12 col-lg-3 ">
         <div class="fontstyle4 ">{{data.holidays_name }} : <span class="fontstyle1"> {{data.date }} </span></div>
       </div>
       {% endfor %}
@@ -59,19 +59,6 @@
     </tbody>
     </table>
   </div>
-  <div class="col-sm-4 col-md-4 col-lg-4 box fontsize12">
-    <div class="col-sm-12 col-md-12 col-lg-12 box1">
-    <div class="col-sm-4 col-md-4 col-lg-5">Username </div>
-    <div class="col-sm-4 col-md-4 col-lg-5">Type</div>
-    <div class="col-sm-4 col-md-4 col-lg-2">Count</div>
-    </div>
-  {%for c in count %}
-  <div class="col-sm-12 col-md-12 col-lg-12 box">
-  <div class="col-sm-4 col-md-4 col-lg-5 box">{{c.userid__userid__username}} </div>
-  <div class="col-sm-4 col-md-4 col-lg-5 box">{{c.leave_type__leave_type}}  </div>
-  <div class="col-sm-4 col-md-4 col-lg-2 box">{{c.dcount}}</div>
-  </div>
-  {% endfor %}
   </div>
 </div>
 

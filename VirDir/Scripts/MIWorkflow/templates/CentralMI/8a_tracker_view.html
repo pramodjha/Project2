@@ -216,56 +216,55 @@ table td {
 </div>
 <script>
 
-$("#id_categorysid").change(function () {
-   var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
-   var category_id = $(this).val();  // get the selected country ID from the HTML input
-   console.log(category_id)
-   $.ajax({                       // initialize an AJAX request
-     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-     data: {
-       'categories': category_id     // add the country id to the GET parameters
-     },
-       success: function (data) {   // `data` is the return of the `load_cities` view function
-       $("#id_subcategoryid").html(data);  // replace the contents of the city input with the data that came from the server
-     }
+  $("#id_categorysid").change(function () {
+     var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
+     var category_id = $(this).val();  // get the selected country ID from the HTML input
+     console.log(category_id)
+     $.ajax({                       // initialize an AJAX request
+       url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+       data: {
+         'categories': category_id     // add the country id to the GET parameters
+       },
+         success: function (data) {   // `data` is the return of the `load_cities` view function
+         $("#id_subcategoryid").html(data);  // replace the contents of the city input with the data that came from the server
+       }
+     });
    });
- });
 
- $("#id_categorysid").change(function () {
-    var url = $("#trackingform").attr("data-activity-url");  // get the url of the `load_cities` view
-    var category_id = $(this).val();  // get the selected country ID from the HTML input
-    console.log(category_id)
-    $.ajax({                       // initialize an AJAX request
-      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-      data: {
-        'categories': category_id     // add the country id to the GET parameters
-      },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-        $("#id_teamfilter").html(data);  // replace the contents of the city input with the data that came from the server
-      }
+   $("#id_categorysid").change(function () {
+      var url = $("#trackingform").attr("data-activity-url");  // get the url of the `load_cities` view
+      var category_id = $(this).val();  // get the selected country ID from the HTML input
+      console.log(category_id)
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'categories': category_id     // add the country id to the GET parameters
+        },
+          success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_activityid").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
     });
-  });
 
 
 
-$("#submitbutton").click(function () {
-    var datevalue = $("#id_trackingdatetime").val() // get the selected country ID from the HTML input
-    $.ajax({
-        type: "GET",
-        url: "{% url 'ajax_load_datavalues' %}",  // URL to your view that serves new info
-        data: {'datev': datevalue}
-    })
-    .done(function(response) {
-        $('#table3').html(response);
-        console.log(response)
+  $("#submitbutton").click(function () {
+      var datevalue = $("#id_trackingdatetime").val() // get the selected country ID from the HTML input
+      $.ajax({
+          type: "GET",
+          url: "{% url 'ajax_load_datavalues' %}",  // URL to your view that serves new info
+          data: {'datev': datevalue}
+      })
+      .done(function(response) {
+          $('#table3').html(response);
+          console.log(response)
+      });
     });
-  });
 
 
 
 
 </script>
-
 {% endblock %}
 {% block javascript %}
 

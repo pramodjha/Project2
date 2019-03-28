@@ -22,20 +22,23 @@
   {% bootstrap_form_errors form type='non_fields' %}
 
   <div class="col-sm-12 col-md-12 col-lg-12">
+
 <div class="col-sm-12 col-md-12 col-lg-12">
   <div class="col-sm-12 col-md-12 col-lg-12 fontstyle1 fontsize25">
+    <div class="col-sm-12 col-md-12 col-lg-12 fontstyle4"><i> {{msg}}</i></div>
+
   <h3 >CREATE LOGIN CREDENTIAL</h3>
   </div>
 </div>
 
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2">{% bootstrap_label 'Username'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_field form.username  show_label=False  placeholder='Enter Username' %}</span>
+  <span class="col-sm-12 col-md-12 col-lg-4 ">{% bootstrap_field form.username  show_label=False  placeholder='Username' %}</span>
   <div class="col-sm-12 col-md-12 col-lg-6" id="usercheck"></i></div>
   </div>
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Employee ID'  %}</label>
-  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.employeeid  show_label=False placeholder='Enter Employee ID'   %}</span>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.employeeid  show_label=False placeholder='Employee ID'   %}</span>
   </div>
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'First Name'  %}</label>
@@ -50,6 +53,16 @@
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Designation'  %}</label>
   <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.designation  show_label=False placeholder='Enter Designation'   %}</span>
   </div>
+  <div  class="col-sm-12 col-md-12 col-lg-12">
+  <label class="col-sm-12 col-md-12 col-lg-2 " >{% bootstrap_label 'Team'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.Team  show_label=False placeholder='Enter Designation'   %}</span>
+  </div>
+
+  <div class="col-sm-12 col-md-12 col-lg-12">
+  <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Phone Number'  %}</label>
+  <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.phone_number  show_label=False placeholder='Enter Ph.No.'   %}</span>
+  </div>
+
   <div class="col-sm-12 col-md-12 col-lg-12">
   <label class="col-sm-12 col-md-12 col-lg-2 ">{% bootstrap_label 'Email ID'  %}</label>
   <span class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_field form.email  show_label=False placeholder='Enter Email ID'   %}</span>
@@ -68,81 +81,10 @@
 
   <div class="col-sm-12 col-md-12 col-lg-12">
     <div class="col-sm-12 col-md-12 col-lg-12 ">{% buttons %}<button type="submit" class="btn btn-success"> Submit</button>{% endbuttons %}</div>
-  <div class="col-sm-12 col-md-12 col-lg-12 fontstyle4"><i> {{msg}}</i></div>
 
   </div>
   </form>
-
-<script>
-  $("#id_username").keyup(function () {
-     var url = $("#signupform").attr("data-signup-url");  // get the url of the `load_cities` view
-     var username = $(this).val();  // get the selected country ID from the HTML input
-     console.log(username)
-     $.ajax({                       // initialize an AJAX request
-       url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-       data: {
-         'username': username     // add the country id to the GET parameters
-       },
-         success: function (data) {   // `data` is the return of the `load_cities` view function
-         $("#usercheck").html(data);  // replace the contents of the city input with the data that came from the server
-       }
-     });
-   });
-
-
-   $("#id_email").keyup(function () {
-      var url = $("#signupform").attr("data-signup-url");  // get the url of the `load_cities` view
-      var emailid = $(this).val();  // get the selected country ID from the HTML input
-      console.log(emailid)
-      $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-        data: {
-          'emailid': emailid     // add the country id to the GET parameters
-        },
-          success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#emailcheck").html(data);  // replace the contents of the city input with the data that came from the server
-        }
-      });
-    });
-
-    $("#id_passwordagain").keyup(function () {
-       var url = $("#signupform").attr("data-signup-url");  // get the url of the `load_cities` view
-       var passwordagain = $(this).val();  // get the selected country ID from the HTML input
-       var password = document.getElementById("id_password").value;
-       console.log(passwordagain)
-       console.log(password)
-       $.ajax({                       // initialize an AJAX request
-         url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-         data: {
-           'passwordagain': passwordagain , 'password': password   // add the country id to the GET parameters
-         },
-           success: function (data) {   // `data` is the return of the `load_cities` view function
-           $("#passwordcheck").html(data);  // replace the contents of the city input with the data that came from the server
-         }
-       });
-     });
-
-     $("#id_passwordagain").keyup(function () {
-        var url = $("#signupform").attr("data-signup-url");  // get the url of the `load_cities` view
-        var passwordagain = $(this).val();  // get the selected country ID from the HTML input
-        var password = document.getElementById("id_password").value;
-        console.log(passwordagain)
-        console.log(password)
-        $.ajax({                       // initialize an AJAX request
-          url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-          data: {
-            'passwordagain': passwordagain , 'password': password   // add the country id to the GET parameters
-          },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-            $("#passwordcheck").html(data);  // replace the contents of the city input with the data that came from the server
-          }
-        });
-      });
-
-
-</script>
-
-
+  <script type="text/javascript" src="{% static 'js/myscript.js' %}" charset="UTF-8"></script>
 
 {% endblock %}
 <!-- _________________________________________________________________________ -->

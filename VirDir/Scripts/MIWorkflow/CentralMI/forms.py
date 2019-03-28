@@ -16,7 +16,9 @@ class UserRegistrationForm(forms.Form):
     email = forms.EmailField(required = True, label = 'Email', max_length = 100, widget=forms.EmailInput(attrs={'placeholder': 'email@willistowerswatson.com'}))
     firstname = forms.CharField(required = True, label = 'firstname', max_length = 100, widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
     lastname = forms.CharField(required = True, label = 'lastname', max_length = 100, widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
-    designation = forms.ModelChoiceField(queryset=TblDesignationMaster.objects.all())
+    designation = forms.ModelChoiceField(required = True, label = 'Designation',queryset=TblDesignationMaster.objects.all())
+    Team = forms.ModelChoiceField(queryset=TblTeamMaster.objects.all())
+    phone_number = forms.CharField(required = True, label = 'Ph.No.', max_length = 100, widget=forms.TextInput(attrs={'placeholder': 'Phone Number'}))
     password = forms.CharField(required = True, label = 'Password', max_length = 100, widget = forms.PasswordInput(attrs={'placeholder': 'Password'}))
     passwordagain = forms.CharField(required = True, label = 'Password1', max_length = 100, widget = forms.PasswordInput(attrs={'placeholder': 'Password (Again)'}))
 
@@ -231,6 +233,21 @@ class TimetrackersForm(forms.ModelForm):
         self.fields['task'].widget.attrs['class']  = 'form-control'
         self.fields['totaltime'].widget.attrs['class']  = 'form-control'
 
+class TimetrackersEditForm(forms.ModelForm):
+    class Meta():
+        model = TblTimeTracker
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(TimetrackersEditForm, self).__init__(*args, **kwargs)
+        self.fields['registerdatetime'].widget = forms.HiddenInput()
+        self.fields['trackingdatetime'].widget = forms.HiddenInput()
+        self.fields['memberid'].widget = forms.HiddenInput()
+        self.fields['teamid'].widget = forms.HiddenInput()
+        self.fields['startdatetime'].widget = forms.HiddenInput()
+        self.fields['stopdatetime'].widget = forms.HiddenInput()
+        self.fields['otid'].widget = forms.HiddenInput()
+
 
 class RequestcategorysForm(forms.ModelForm):
     class Meta():
@@ -262,7 +279,7 @@ class ErrorlogForm(forms.ModelForm):
         self.fields['activityid'].widget  = forms.HiddenInput()
         self.fields['occurancedate'].label = "Occurance Date"
         self.fields['occurancedate'].widget.attrs['class']  = 'date'
-        self.fields['reportedbyid'].label = "Reported By"
+        self.fields['reportedbyid'].widget  = forms.HiddenInput()
         self.fields['reportedtoid'].widget  = forms.HiddenInput()
         self.fields['errortypeid'].label = "Error Type"
         self.fields['document'].label = "Upload Document (If any)"
@@ -432,6 +449,15 @@ class InternaltaskForm(forms.ModelForm):
     class Meta():
         model = TblInternaltask
         fields = '__all__'
+    def __init__(self, *args, **kwargs):
+        super(InternaltaskForm, self).__init__(*args, **kwargs)
+        self.fields['internaltaskdatetime'].widget  = forms.HiddenInput()
+        self.fields['internaltaskquestion'].label = "Question"
+        self.fields['statusid'].label = "Status"
+        self.fields['ownerid'].widget =  forms.HiddenInput()
+        self.fields['targetdate'].label = "Target Date"
+        self.fields['targetdate'].widget.attrs['class']  = 'date form-control'
+        self.fields['link'].label = "Link"
 
 
 class InternaltaskchoiceForm(forms.ModelForm):
@@ -491,6 +517,8 @@ class TblLeaveRecordForm(forms.ModelForm):
         super(TblLeaveRecordForm, self).__init__(*args, **kwargs)
         self.fields['date_time'].widget = forms.HiddenInput()
         self.fields['userid'].widget = forms.HiddenInput()
+        self.fields['leave_date'].widget.attrs['class']  = 'date form-control'
+
 
 class TblAppreciationForm(forms.ModelForm):
     class Meta():

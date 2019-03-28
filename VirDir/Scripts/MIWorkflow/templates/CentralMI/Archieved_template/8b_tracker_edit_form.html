@@ -27,23 +27,23 @@
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Associate'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 hidden" >{% bootstrap_field form.mimember  show_label=False   %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden" >{% bootstrap_field form.memberid  show_label=False   %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'TeamName'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.teamdetail  show_label=False   %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.teamid  show_label=False   %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Category'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestcategorys  show_label=False %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.categorysid  show_label=False %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Sub-Category'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestsubcategory  show_label=False %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.subcategoryid  show_label=False %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Request Detail'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestdetail  show_label=False %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8">{% bootstrap_field form.requestid  show_label=False %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Task'  %}</label>
@@ -55,7 +55,7 @@
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Activity'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.reports  show_label=False  %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 ">{% bootstrap_field form.activityid  show_label=False  %}</span>
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4">{% bootstrap_label 'Total-Time'  %}</label>
@@ -75,7 +75,7 @@
 </div>
 <div>
 <label class="col-sm-12 col-md-12 col-lg-4 hidden">{% bootstrap_label 'Stop Date-time'  %}</label>
-<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.ot  show_label=False  %}</span>
+<span class="col-sm-12 col-md-12 col-lg-8 hidden">{% bootstrap_field form.otid  show_label=False  %}</span>
 </div>
 
 <div>
@@ -94,7 +94,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
-$("#id_requestcategorys").change(function () {
+$("#id_categorysid").change(function () {
    var url = $("#trackingform").attr("data-subcategories-url");  // get the url of the `load_cities` view
    var category_id = $(this).val();  // get the selected country ID from the HTML input
    console.log(category_id)
@@ -104,7 +104,7 @@ $("#id_requestcategorys").change(function () {
        'categories': category_id     // add the country id to the GET parameters
      },
        success: function (data) {   // `data` is the return of the `load_cities` view function
-       $("#id_requestsubcategory").html(data);  // replace the contents of the city input with the data that came from the server
+       $("#id_subcategoryid").html(data);  // replace the contents of the city input with the data that came from the server
      }
    });
  });

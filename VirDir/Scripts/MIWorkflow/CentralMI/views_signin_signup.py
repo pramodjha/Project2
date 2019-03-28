@@ -62,7 +62,6 @@ def Sign_Up_View_Version2(request):
     system_username = system_username.replace(".sa", "")
     form = UserRegistrationForm(initial={'username':system_username})
     e  = TblViewTypeMaster.objects.get(view_id=4)
-
     Authusercount = User.objects.filter(username__in=[system_username]).count()
     if Authusercount >= 1:
         msg = "Username already Exists, you can't register with same username again"
@@ -130,7 +129,7 @@ def Sign_In_View_Version2(request):
     except:
         activetab = 'signin'
     tab = request.session.get('tabname')
-    system_username = request.META['HTTP_REMOTE_USER']
+    system_username = request.META['REMOTE_USER']
     system_username = system_username.replace('$',"")
     system_username = system_username.replace("INT\\", "")
     system_username = system_username.replace(".sa", "")
@@ -144,30 +143,10 @@ def Sign_In_View_Version2(request):
                 user = User.objects.get(username = system_username)
                 user.backend = 'django.contrib.auth.backends.ModelBackend'
                 login(request, user)
-                return HttpResponseRedirect(reverse('checkdetail'))
+                return HttpResponseRedirect(reverse('home'))
     context = {'form' : form,'activetab':activetab,'system_username':system_username}
     return render(request, 'CentralMI/1b_signin_view.html', context)
 
-def Sign_In_As_Other_View_Version1(request):
-    try:
-        activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
-    except:
-        activetab = 'signin'
-    tab = request.session.get('tabname')
-    form = UsersigninasotherForm()
-    if request.method == 'POST':
-        form =  UsersigninasotherForm(request.POST)
-        if form.is_valid():
-            userObj = form.cleaned_data
-            username =  userObj['username']
-            password =  userObj['password']
-            if (User.objects.filter(username=username).exists()):
-                user = authenticate(username = username, password = password)
-                if user is not None:
-                    login(request, user)
-                    return HttpResponseRedirect(reverse('home'))
-    context = {'form' : form,'activetab':activetab}
-    return render(request, 'CentralMI/1b_signin_other_view.html',context)
 
 
 def Sign_In_View_Version3(request):
@@ -203,3 +182,24 @@ def Sign_In_View_Version4(request):
         return HttpResponseRedirect(reverse('home'))
     context = {'form' : form,'activetab':activetab,'system_username':system_username}
     return render(request, 'CentralMI/15a_ErrorPage.html', context)
+
+def Sign_In_As_Other_View_Version1(request):
+    try:
+        activetab, activetab1, username, info, sd = create_session(request, header='signin',footer='')
+    except:
+        activetab = 'signin'
+    tab = request.session.get('tabname')
+    form = UsersigninasotherForm()
+    if request.method == 'POST':
+        form =  UsersigninasotherForm(request.POST)
+        if form.is_valid():
+            userObj = form.cleaned_data
+            username =  userObj['username']
+            password =  userObj['password']
+            if (User.objects.filter(username=username).exists()):
+                user = authenticate(username = username, password = password)
+                if user is not None:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('home'))
+    context = {'form' : form,'activetab':activetab}
+    return render(request, 'CentralMI/1b_signin_other_view.html',context)

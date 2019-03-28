@@ -44,7 +44,7 @@ import csv
 from django.db.models import Q
 import getpass
 
-from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES, IssueActionForm, ShiftupdateForm, GalleryForm, UatDetail1Form,ViewListForm
+from .forms import RequestdetailForm , EstimationdetailForm, OverviewdetailForm, AuthorisedetailForm, RequeststatusdetailForm, AssigneddetailForm, AcceptrejectdetailForm, CompleteddetailForm, UserRegistrationForm, UsersigninForm,  RequestcategorysForm,  TimetrackersForm, RequestcategorysForm, RequestsubcategoryForm, TeamdetailForm, StatusdetailForm, UploadFileForm, EmaildetailForm,FilterForm, ErrorlogForm, OtDetailForm, FeedbackForm, SearchForm,FilteredForm,ActivityForm,  INTERVAL_CHOICES, MemberForm, UserForm, InternaltaskForm, InternaltaskchoiceForm, InternaltaskstatusForm, ActivitystatusCalendarForm, ViewForm, SuccessStoriesForm, GovernanceForm, SuggestionForm, ReplyForm, WhatwedoForm, TYPE_CHOICES, OtDetail1Form, TblConversationForm, TblLeaveRecordForm, TblAppreciationForm, TblRawActivityDetailForm, TblRawScoreForm, TblRawTeamMasterForm,TblRawTeamMemberMasterForm,TblTeamMetricsForm, TblRawScoreForm, SearchForm1, TblUsefulLinksForm, UatDetailForm, UsersigninasotherForm,AcceptRequeststatusdetailForm, AuthoriserstatusdetailForm, REPORT_CHOICES, TYPE_CHOICES, IssueActionForm, ShiftupdateForm, GalleryForm, UatDetail1Form,ViewListForm,TimetrackersEditForm
 
 from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaster, TblAcceptrejectdetail, TblActivity, TblActivityCalendar, TblActivitystatusCalendar, TblAppreciation, TblAssignView, TblAssigneddetail, TblCalendar, TblCalendarHolidays, TblCategorysMaster, TblCompleteddetail, TblConversation, TblDateTypesMaster, TblDeliveryDaysMaster, TblDesignationMaster, TblEmaildetail, TblErrorlog, TblErrortypeMaster, TblEstimationdetail, TblFeedback, TblFeedbackQuestionMaster, TblFrequency, TblGallery, TblGovernance, TblInternaltask, TblInternaltaskchoice, TblInternaltaskstatus, TblLeaveRecord, TblLeaveTypeMaster, TblMember, TblNavbarFooterMaster, TblNavbarHeaderMaster, TblNavbarMaster, TblNavbarView, TblOpenClose, TblYesNo, TblOtDetail, TblOtStatusMaster, TblOverviewdetail, TblPriorityMaster, TblPublicHolidaysMaster, TblRawActivityDetail, TblRawScore, TblRawTeamMaster, TblRawTeamMemberMaster, TblReply, TblRequestdetail, TblRequeststatusdetail, TblRequesttypeMaster, TblShiftUpdate, TblStatusMaster, TblSubcategoryMaster, TblSuccessStories, TblSuggestion, TblTeamMaster, TblTeamMetrics, TblTimeTracker, TblUsefulLinks, TblValidInvalidMaster, TblViewTypeMaster, TblAuthorisedetail, TblCategorysMaster, TblSubcategoryMaster, AuthUser
 from .views_signin_signup import Sign_Up_View_Version1,Sign_Up_View_Version2,Sign_In_View_Version1,Sign_In_View_Version3,Sign_In_View_Version4,Sign_In_View_Version2,Sign_In_As_Other_View_Version1
@@ -55,13 +55,13 @@ MEDIA_DIR = os.path.join(BASE_DIR, "media")
 #--------------- signin_signup-------------------------
 def Sign_Up_View(request):
     view_type = 'remote'
-    if view_type == 'remote':
+    if view_type == '':
         return  Sign_Up_View_Version2(request)
     else:
         return  Sign_Up_View_Version1(request)
 
 def Sign_In_View(request):
-    view_type = 'remote'
+    view_type = ''
     if view_type == 'remote':
         return  Sign_In_View_Version2(request)
     else:
@@ -807,10 +807,9 @@ def Errorlog_Add_Form(request,reportid):
     template = 'CentralMI/form_template.html'
     redirect_url = 'reportsdetail'
     template_type = 'template'
-    template = 'CentralMI/3a_request_view.html'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     memberid = TblMember.objects.get(userid__username__in=[username]).memberid
-    form = ErrorlogForm(initial={'activityid':reportid,'reportedtoid':memberid})
+    form = ErrorlogForm(initial={'activityid':reportid,'reportedtoid':memberid,'reportedbyid':memberid})
     if request.method == 'POST':
         form = ErrorlogForm(request.POST,request.FILES)
         if form.is_valid():
@@ -829,7 +828,7 @@ def Errorlog_Detail_View(request):
     memberid = request.session.get('sessison_member')
     buid = request.session.get('sessison_bu')
 
-    filterdict = create_dict_for_filter(request,field_name_list = ['reportedtoid','reportedtoid__teamid','teamid__buid'], value_list = [memberid,teamid,buid])
+    filterdict = create_dict_for_filter(request,field_name_list = ['reportedtoid','reportedtoid__teamid','reportedtoid__teamid__buid'], value_list = [memberid,teamid,buid])
     data = TblErrorlog.objects.filter(**(filterdict))
     context =  {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'can_edit':can_edit, 'can_view':can_view, 'can_delete':can_delete, 'can_add':can_add}
     return render(request, template,context)
@@ -841,7 +840,6 @@ def Errorlog_Edit_Form(request,requestid):
     title = 'Edit Error'
     redirect_url = view_footer
     template_type = 'template'
-    template = 'CentralMI/3a_request_view.html'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblErrorlog.objects.get(error_id=requestid)
     model = TblErrorlog.objects.filter(error_id=requestid)
@@ -863,7 +861,7 @@ def Ot_Detail_View(request):
     teamid = request.session.get('sessison_team')
     memberid = request.session.get('sessison_member')
     buid = request.session.get('sessison_bu')
-    filterdict = create_dict_for_filter(request,field_name_list = ['timetrackerid__memberid','timetrackerid__teamid','teamid__buid'], value_list = [memberid,teamid,buid])
+    filterdict = create_dict_for_filter(request,field_name_list = ['timetrackerid__memberid','timetrackerid__teamid','timetrackerid__teamid__buid'], value_list = [memberid,teamid,buid])
     data = TblOtDetail.objects.exclude(timetrackerid__valid_invalid__in=[2]).filter(**(filterdict))
     context = {'model':data,'activetab1':activetab1,'activetab':activetab,'username':username,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'can_edit':can_edit, 'can_view':can_view, 'can_delete':can_delete, 'can_add':can_add}
     return render(request, template,context )
@@ -988,7 +986,7 @@ def Ot_Add_Form(request,trackerid):
     if request.method == 'POST':
         form =  OtDetailForm(request.POST,request.FILES,instance=TblOtDetail.objects.get(ot_id=TblOtDetail.objects.get(timetrackerid=trackerid).ot_id)) if count > 0 else OtDetailForm(request.POST,request.FILES)
         if form.is_valid():
-            inst = form.save(commit=True)
+            inst = form.save(commit=False)
             startdate = form.cleaned_data['ot_startdatetime']
             enddate = form.cleaned_data['ot_enddatetime']
             try:
@@ -997,11 +995,10 @@ def Ot_Add_Form(request,trackerid):
                 timemin = time[1]
                 timesec = time[2]
                 Totalmin = (int(timehours) * 60) + int(timemin) + (int(timesec)/60)
-                inst.ot_time = Totalmin
             except:
-                inst.ot_time = 0
                 Totalmin = 0
-            if Totalmin > 0 and Totalmin != None :
+            if Totalmin > 0 and Totalmin != None and Totalmin<=1440:
+                inst.ot_time = Totalmin
                 inst.save()
                 inst1 =  TblTimeTracker.objects.get(timetrackerid=trackerid)
                 inst1.otid = inst
@@ -1009,7 +1006,7 @@ def Ot_Add_Form(request,trackerid):
                 return HttpResponseRedirect(reverse(view_footer))
                 msg = 'OT recorded'
             else:
-                msg = "OT time cannot be zero or less"
+                msg = "OT should be more than zero and less than 1441 min"
                 context = {'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg':msg,'title':title,'redirect_url':redirect_url,'template_type':template_type}
                 return render(request,template,context)
     context = {'form':form,'username':username, 'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'msg':msg,'title':title,'redirect_url':redirect_url,'template_type':template_type}
@@ -1387,9 +1384,11 @@ def Report_Detail_View(request):
 @login_required
 def Report_Add_Form(request):
     view_header,view_footer = 'reportsdetail','report'
-    template = 'CentralMI/5a_report_add_form.html'
+    form_header  = 'Add Report'
+    template = 'CentralMI/form_template.html'
+    redirect_url = 'reportsdetail'
+    template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
-    header_navbar_list, footer_navbar_list =navbar(request,view_header=view_header,username=username)
     form = ActivityForm()
     if request.method == 'POST':
         form = ActivityForm(request.POST,request.FILES)
@@ -1400,15 +1399,18 @@ def Report_Add_Form(request):
         else:
             return render(request, 'CentralMI/15a_ErrorPage.html')
     else:
-        context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header}
+        context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header,'redirect_url':redirect_url}
         return render(request, template,context)
-    context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header}
+    context = {'form':form,  'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'form_header':form_header,'redirect_url':redirect_url}
     return render(request, template,context)
 
 @login_required
 def Report_Edit_Form(request,requestid):
-    view_header,view_footer = 'report','allreports'
-    template = 'CentralMI/5c_report_edit_form.html'
+    view_header,view_footer = 'report','reportsdetail'
+    form_header  = 'Edit Report'
+    template = 'CentralMI/form_template.html'
+    redirect_url = 'reportsdetail'
+    template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblActivity.objects.get(activityid=requestid)
     model = TblActivity.objects.filter(activityid=requestid)
@@ -1420,7 +1422,7 @@ def Report_Edit_Form(request,requestid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse(view_footer))
-    context =  {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    context =  {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url}
     return render(request, template,context)
 
 
@@ -1476,7 +1478,7 @@ def Feedback_Edit_Form(request,feedbackid):
 def Feedback_Add_Form(request,feedbackquestionid):
     view_header,view_footer = 'report','viewfeedbackquestion'
     redirect_url = view_footer
-    template = 'CentralMI/dynamic_form_with_parameter.html'
+    template = 'CentralMI/form_template_with_parameter.html'
     template_type = 'template_with_parameter'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     activityid = request.session.get('aid')
@@ -1636,7 +1638,10 @@ def Internal_Task_Add_Form(request):
 @login_required
 def Internal_Task_Edit_Form(request,taskid):
     view_header,view_footer = 'details','internaltaskdetail'
-    template = 'CentralMI/11b_internal_task_add_form.html'
+    title = ' Edit Internal Task'
+    redirect_url = view_footer
+    template = 'CentralMI/form_template.html'
+    template_type = 'template'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblInternaltask.objects.get(internaltaskid=taskid)
     form = InternaltaskForm(instance=e)
@@ -1646,7 +1651,7 @@ def Internal_Task_Edit_Form(request,taskid):
             inst = form.save(commit=True)
             inst.save()
             return HttpResponseRedirect(reverse(view_footer))
-    context = {'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list}
+    context = {'form':form, 'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url}
     return render(request, template,context)
 
 @login_required
@@ -1719,7 +1724,7 @@ def Internal_Choice_Add_Form(request,taskid):
     template = 'CentralMI/11d_internal_task_choice_add_form.html'
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     id = taskid
-    form =  InternaltaskchoiceForm(initial={'internaltask':taskid})
+    form =  InternaltaskchoiceForm(initial={'internaltaskid':taskid})
     if request.method == 'POST':
         form =  InternaltaskchoiceForm(request.POST)
         if form.is_valid():
@@ -1810,7 +1815,7 @@ def Internal_Task_And_Choice_View(request,taskid):
                 inst.internaltaskchoice = e
                 inst.save()
                 return HttpResponseRedirect(reverse(view_footer))
-    return render(request, template,{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url,'template_type':template_type,'reverseid':taskstatusid})
+    return render(request, template,{'form':form,'checkmember':checkmember,'model':model,'model1':model1,'model2':model2,'username':username,'activetab':activetab,'activetab1':activetab1,'group_name':group_name,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url,'template_type':template_type,'reverseid':taskid})
 
 @login_required
 def Internal_Task_And_Choice_Edit_Form(request,taskstatusid):
@@ -2767,10 +2772,10 @@ def Tracker_Edit_Form(request,requestid):
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblTimeTracker.objects.get(pk=requestid)
     model = TblTimeTracker.objects.filter(pk=requestid)
-    form = TimetrackersForm(instance=e)
+    form = TimetrackersEditForm(instance=e)
     if request.method == 'POST':
         e = TblTimeTracker.objects.get(pk=requestid)
-        form = TimetrackersForm(request.POST, instance=e)
+        form = TimetrackersEditForm(request.POST, instance=e)
         if form.is_valid():
             inst = form.save(commit=True)
             inst.save()
@@ -2782,19 +2787,41 @@ def Tracker_Edit_Form(request,requestid):
 @login_required
 def Ot_Edit_Form(request,requestid):
     view_header, view_footer =  'timetracker', 'otdetail'
+    title = 'Edit OT'
     template = 'CentralMI/form_template.html'
     redirect_url = view_footer
     group_name, activetab, activetab1, username, info, sd, header_navbar_list, footer_navbar_list,can_edit, can_view, can_delete, can_add,template,template_type,individual_view, team_view, bu_view,user_id,team_id,bu_id = session_navbar_permission(request,view_header=view_header,view_footer=view_footer,template=template)
     e = TblOtDetail.objects.get(pk=requestid)
     model = TblOtDetail.objects.filter(pk=requestid)
+    trackerid = TblTimeTracker.objects.get(otid=requestid).timetrackerid
     form = OtDetailForm(instance=e)
     if request.method == 'POST':
         e = TblOtDetail.objects.get(pk=requestid)
         form = OtDetailForm(request.POST, instance=e)
         if form.is_valid():
-            inst = form.save(commit=True)
-            inst.save()
-            return HttpResponseRedirect(reverse(view_footer))
+            inst = form.save(commit=False)
+            startdate = form.cleaned_data['ot_startdatetime']
+            enddate = form.cleaned_data['ot_enddatetime']
+            try:
+                time = str(enddate-startdate).split(':')
+                timehours = time[0]
+                timemin = time[1]
+                timesec = time[2]
+                Totalmin = (int(timehours) * 60) + int(timemin) + (int(timesec)/60)
+            except:
+                Totalmin = 0
+            if Totalmin > 0 and Totalmin != None and Totalmin<=1440:
+                inst.ot_time = Totalmin
+                inst.save()
+                inst1 =  TblTimeTracker.objects.get(timetrackerid=trackerid)
+                inst1.otid = inst
+                inst1.save()
+                return HttpResponseRedirect(reverse(view_footer))
+                msg = 'OT recorded'
+            else:
+                msg = "OT should be more than zero and less than 1441 min"
+                context = {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url,'msg':msg}
+                return render(request, template, context)
     context = {'form':form,'model':model, 'username':username,'activetab':activetab,'header_navbar_list':header_navbar_list,'footer_navbar_list':footer_navbar_list,'redirect_url':redirect_url}
     return render(request, template, context)
 
@@ -2807,13 +2834,13 @@ def Load_Datevalues(request):
 
 @login_required
 def Load_Subcategories(request):
-    activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
+    #activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
     category_id = request.GET.get('categories')
     print(category_id)
     subcategories = TblSubcategoryMaster.objects.filter(categorysid=category_id)
     activities = TblActivity.objects.filter(requestcategorys=category_id)
     print(subcategories)
-    return render(request, 'CentralMI/13d_rebuilding_subcategories.html', {'subcategories': subcategories,'activities':activities,'activetab':activetab})
+    return render(request, 'CentralMI/13d_rebuilding_subcategories.html', {'subcategories': subcategories,'activities':activities})
 
 
 def Load_view(request):
@@ -2850,9 +2877,7 @@ def Load_Activity(request):
     try:
         activetab, activetab1, username, info, sd = create_session(request, header='timetracker',footer='timetracker')
         category_id = request.GET.get('categories')
-        #print(category_id)
         activities = TblActivity.objects.filter(requestcategorys=category_id)
-        #print(activities)
         return render(request, 'CentralMI/13a_rebuilding_activity.html', {'activities':activities,'activetab':activetab})
     except:
         pagename = "report"

@@ -9,11 +9,11 @@
 {% endblock %}
 
 {% block modelcontent %}
+
 <!-- Button trigger modal -->
 <button type="button" id="modal" class="btn btn-info btn-lg hidden" data-toggle="modal" data-target="#exampleModalLong" data-backdrop="static" data-keyboard="false">Open Modal</button>
 <!-- Modal -->
-
-<form class="form" method="POST" action="" class='form-inline' enctype="multipart/form-data" >
+<form class="form" id="dynamic_form" method="POST" action="" class='form-inline' enctype="multipart/form-data" data-subcategories-url="{% url 'ajax_load_subcategories' %}">
   {% csrf_token %}
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-keyboard="false">
   <div class="modal-dialog" role="document">
@@ -22,6 +22,7 @@
         <h3 class="modal-title" id="exampleModalLongTitle">{{title}}</h3>
       </div>
       <div class="modal-body">
+        <h4>{{msg}}<h4>
         <h2>{{form_header}}</h2>
           {% for hidden in form.hidden_fields %}
             {{ hidden }}
@@ -58,6 +59,38 @@
 </div>
 </form>
 <script> $("#modal").trigger('click'); </script>
+<script>
+$("#id_categorysid").change(function () {
+   var url = $("#dynamic_form").attr("data-subcategories-url");  // get the url of the `load_cities` view
+   var category_id = $(this).val();  // get the selected country ID from the HTML input
+   console.log(category_id)
+   $.ajax({                       // initialize an AJAX request
+     url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+     data: {
+       'categories': category_id     // add the country id to the GET parameters
+     },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+       $("#id_subcategoryid").html(data);  // replace the contents of the city input with the data that came from the server
+     }
+   });
+ });
+
+ $("#id_categorysid").change(function () {
+    var url = $("#dynamic_form").attr("data-activity-url");  // get the url of the `load_cities` view
+    var category_id = $(this).val();  // get the selected country ID from the HTML input
+    console.log(category_id)
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+      data: {
+        'categories': category_id     // add the country id to the GET parameters
+      },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+        $("#id_teamfilter").html(data);  // replace the contents of the city input with the data that came from the server
+      }
+    });
+  });
+
+</script>
 <script>
 $('#modal').submit( function(event) {
     // disable to avoid double submission
