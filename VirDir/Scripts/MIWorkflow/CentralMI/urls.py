@@ -3,6 +3,9 @@ from . import views
 
 urlpatterns = [
 # 1) Credential
+
+	url(r'^test_view/', views.datetime_test, name='datetimeview'),
+
 	url(r'^signup_view/', views.Sign_Up_View, name='signup'),
     url(r'^signin_view/', views.Sign_In_View, name='signin'),
     url(r'^signinasother_view/', views.Sign_In_As_Other_View, name='signinother'),

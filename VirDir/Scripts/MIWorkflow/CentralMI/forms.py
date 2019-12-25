@@ -3,6 +3,7 @@ from .models import TblWhatwedo, TblIssueAction, TblUatDetail, TblUatStatusMaste
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from datetime import datetime, timedelta
+from bootstrap3_datetime.widgets import DateTimePicker
 
 class ViewListForm():
     class Meta():
@@ -233,20 +234,30 @@ class TimetrackersForm(forms.ModelForm):
         self.fields['task'].widget.attrs['class']  = 'form-control'
         self.fields['totaltime'].widget.attrs['class']  = 'form-control'
 
+
 class TimetrackersEditForm(forms.ModelForm):
     class Meta():
         model = TblTimeTracker
-        fields = '__all__'
+        fields = ['trackingdatetime','categorysid','subcategoryid','requestid','activityid','requestid','task','totaltime','valid_invalid','registerdatetime','memberid','teamid','description_text','comments','startdatetime','stopdatetime','otid']
 
     def __init__(self, *args, **kwargs):
         super(TimetrackersEditForm, self).__init__(*args, **kwargs)
         self.fields['registerdatetime'].widget = forms.HiddenInput()
-        self.fields['trackingdatetime'].widget = forms.HiddenInput()
         self.fields['memberid'].widget = forms.HiddenInput()
         self.fields['teamid'].widget = forms.HiddenInput()
+        self.fields['description_text'].widget = forms.HiddenInput()
+        self.fields['comments'].widget = forms.HiddenInput()
         self.fields['startdatetime'].widget = forms.HiddenInput()
         self.fields['stopdatetime'].widget = forms.HiddenInput()
         self.fields['otid'].widget = forms.HiddenInput()
+        self.fields['trackingdatetime'].widget = forms.HiddenInput()
+        self.fields['categorysid'].label = "Category"
+        self.fields['subcategoryid'].label ="Sub-Category"
+        self.fields['activityid'].label = "Activity"
+        self.fields['requestid'].label = "Request ID"
+        self.fields['task'].label = "Task"
+        self.fields['totaltime'].label = "Total Time"
+        self.fields['valid_invalid'].label = "Valid Or Invalid"
 
 
 class RequestcategorysForm(forms.ModelForm):

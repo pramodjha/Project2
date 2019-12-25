@@ -1048,12 +1048,12 @@ class TblTimeTracker(models.Model):
     trackingdatetime = models.DateField(default= datetime.date.today)
     memberid = models.ForeignKey(TblMember, models.DO_NOTHING, db_column='memberid', blank=True, null=True)
     teamid = models.ForeignKey(TblTeamMaster, models.DO_NOTHING, db_column='teamid', blank=True, null=True)
-    categorysid = models.ForeignKey(TblCategorysMaster, models.DO_NOTHING, db_column='categorysid', blank=True, null=True)
-    subcategoryid = models.ForeignKey(TblSubcategoryMaster, models.DO_NOTHING, db_column='subcategoryid', blank=True, null=True)
-    task = models.CharField(max_length=100, blank=True, null=True)
+    categorysid = models.ForeignKey(TblCategorysMaster, models.DO_NOTHING, db_column='categorysid')
+    subcategoryid = models.ForeignKey(TblSubcategoryMaster, models.DO_NOTHING, db_column='subcategoryid')
+    task = models.CharField(max_length=100)
     requestid = models.ForeignKey(TblRequestdetail, models.DO_NOTHING, db_column='requestid', blank=True, null=True)
     description_text = models.CharField(max_length=255, blank=True, null=True)
-    totaltime = models.IntegerField(blank=True, null=True)
+    totaltime = models.IntegerField()
     comments = models.CharField(max_length=255, blank=True, null=True)
     startdatetime = models.DateTimeField(blank=True, null=True)
     stopdatetime = models.DateTimeField(blank=True, null=True)
@@ -1093,7 +1093,7 @@ class TblValidInvalidMaster(models.Model):
         db_table = 'tbl_valid_invalid_master'
 
     def __str__(self):
-        return str(self.valid_invaidid)
+        return str(self.type)
 
 
 class TblViewTypeMaster(models.Model):

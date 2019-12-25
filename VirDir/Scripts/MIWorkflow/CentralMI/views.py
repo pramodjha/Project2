@@ -18,6 +18,8 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.http import JsonResponse
+
+
 import datetime
 from datetime import datetime, timedelta, date
 from django.db.models import Count, Avg, Sum
@@ -102,6 +104,11 @@ def export_users_csv(request):
     except:
         return HttpResponseRedirect(reverse('filtertab'))
 #--------------group_identification------------------------------------
+def datetime_test(request):
+    template = 'CentralMI/datetime.html'
+    return render(request,template)
+
+
 @login_required
 def is_group(request,username):
     try:
