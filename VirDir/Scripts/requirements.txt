@@ -1,4 +1,4 @@
-Django==1.11
+Django==1.11.28
 django-bootstrap3==9.1.0
 django-pyodbc==0.2.8
 django-pyodbc-azure==1.11.0.0
