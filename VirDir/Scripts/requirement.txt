@@ -15,7 +15,7 @@ django-pyodbc==0.2.8
 django-pyodbc-azure==1.11.0.0
 django-report-builder==6.0.2
 django-widget-tweaks==1.4.2
-djangorestframework==3.8.2
+djangorestframework==3.11.2
 et-xmlfile==1.0.1
 httpie==0.9.9
 idna==2.7
