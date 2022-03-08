@@ -17,7 +17,7 @@ django-report-builder==6.0.2
 django-widget-tweaks==1.4.2
 djangorestframework==3.8.2
 et-xmlfile==1.0.1
-httpie==0.9.9
+httpie==3.1.0
 idna==2.7
 jdcal==1.4
 json-encoder==0.4.4
