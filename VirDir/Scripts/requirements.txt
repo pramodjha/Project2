@@ -2,6 +2,6 @@ Django==1.11
 django-bootstrap3==9.1.0
 django-pyodbc==0.2.8
 django-pyodbc-azure==1.11.0.0
-numpy==1.14.2
+numpy==1.22.0
 pyodbc==3.0.10
 pytz==2017.3
