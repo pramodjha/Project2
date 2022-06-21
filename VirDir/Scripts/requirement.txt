@@ -23,7 +23,7 @@ jdcal==1.4
 json-encoder==0.4.4
 lml==0.0.1
 Markdown==3.0.1
-numpy==1.14.2
+numpy==1.22.0
 openpyxl==2.5.4
 pandas==0.19.0
 pyexcel==0.5.8
